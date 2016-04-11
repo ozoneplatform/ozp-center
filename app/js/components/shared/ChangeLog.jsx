@@ -3,6 +3,7 @@ var React = require('react');
 var uuid = require('../../utils/uuid');
 var timeAgo = require('../../utils/timeAgo');
 var fieldName = require('ozp-react-commons/constants/index').listingFieldName;
+var GlobalListingStore = require('../../stores/GlobalListingStore');
 
 var { Navigation } = require('react-router');
 var ProfileLink = require('../profile/ProfileLink.jsx');
@@ -79,13 +80,15 @@ var RejectedChangeLog = React.createClass({
 });
 
 var OrgApprovalChangeLog = React.createClass({
+
     render: function() {
         var changeLog = this.props.changeLog;
+        var listing = GlobalListingStore.getById(changeLog.listing.id);
         return (
             <div>
                 <AuthorLink author={changeLog.author} />
                 <span> approved </span>
-                { this.props.listingName } for { changeLog.listing.agency }
+                { this.props.listingName } for { listing.agencyShort }
             </div>
         );
     }
