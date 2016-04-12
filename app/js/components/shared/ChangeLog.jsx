@@ -83,12 +83,12 @@ var OrgApprovalChangeLog = React.createClass({
 
     render: function() {
         var changeLog = this.props.changeLog;
-        var listing = GlobalListingStore.getById(changeLog.listing.id);
+        var listingAgencyShort = GlobalListingStore.getById(changeLog.listing.id).agencyShort;
         return (
             <div>
                 <AuthorLink author={changeLog.author} />
                 <span> approved </span>
-                { this.props.listingName } for { listing.agencyShort }
+                { this.props.listingName } for { listingAgencyShort }
             </div>
         );
     }
