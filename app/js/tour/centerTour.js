@@ -51,7 +51,7 @@ const meTour = new Tour({
     {
       element: "#tourstop-webtop",
       title: "Webtop",
-      content: "Opens the Webtop, a virtual desktop environment. It allows you to run web apps and widgets in a single window, and save your custom workflows as dashboards.",
+      content: "Opens the Webtop, a virtual desktop environment. It allows you to run widgets in a single window, and save your custom workflows as dashboards.",
       placement: "bottom",
       backdropContainer: ".navbar-fixed-top",
       backdropPadding: 0
