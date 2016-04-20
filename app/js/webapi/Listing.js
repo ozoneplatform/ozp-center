@@ -281,10 +281,10 @@ var ListingApi = {
                 }
 
                 delaySearch(function(){
-                    if (options.queryString) {
-                        var queryStringNoStar = options.queryString.replace(/[*]$/,"");
+                    if (options.search) {
+                        var queryStringNoStar = options.search.replace(/[*]$/,"");
                         if ((options.type && options.type.length > 0) ||
-                            (options.categories && options.categories.length > 0) ||
+                            (options.category && options.category.length > 0) ||
                             (options.agency && options.agency.length > 0)) {
                             queryStringNoStar = queryStringNoStar + ' (+)';
                         }
