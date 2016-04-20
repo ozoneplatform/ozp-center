@@ -7,6 +7,20 @@ var ProfileActions = require('../../actions/ProfileActions.js');
 var NotificationActions = require('../../actions/NotificationActions.js');
 var SelfActions = require('ozp-react-commons/actions/ProfileActions.js');
 
+var emojione = require('emojione');
+var marked = require('marked');
+var renderer = new marked.Renderer();
+
+// Disable heading tags
+renderer.heading = function (text, level) {
+  return '<span>' + text + '</span>';
+};
+
+renderer.link = function (href, title, text) {
+  return `<a href="${href}" target="_blank">${text}</a>`;
+};
+
+
 var NotificationsModal = React.createClass({
     mixins: [ Reflux.ListenerMixin ],
 
@@ -22,7 +36,10 @@ var NotificationsModal = React.createClass({
           this.setState({
             notificationList: n
           });
-          console.log(n);
+        });
+
+        this.listenTo(SelfActions.dismissNotificationCompleted, () => {
+          NotificationActions.fetchOwnNotifications();
         });
         NotificationActions.fetchOwnNotifications();
 
@@ -45,10 +62,12 @@ var NotificationsModal = React.createClass({
     },
 
     makeSidebar: function() {
-      return this.state.notificationList.map((n, i) => {
-        let date = new Date(n.createdDate);
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
-        let formattedDate = (months[date.getMonth() + 1]) + ' ' + date.getDate() + ', ' +  date.getFullYear();
+      var notis = this.state.notificationList.slice();
+
+      return notis.reverse().map((n, i) => {
+        var date = new Date(n.createdDate);
+        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+        var formattedDate = (months[date.getMonth() + 1]) + ' ' + date.getDate() + ', ' +  date.getFullYear();
         return (
           <li role="presentation" alt={`Notification ${i + 1} from ${n.author.user.username}`} tabIndex={i} onClick={() => {
               this.setState({
@@ -64,15 +83,18 @@ var NotificationsModal = React.createClass({
     },
 
     makeNotification: function(n) {
-      let date = new Date(n.createdDate);
-      const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
-      let formattedDate = (months[date.getMonth() + 1]) + ' ' + date.getDate() + ', ' +  date.getFullYear();
+      var createNotificationText = function() {
+        return {__html: marked(emojione.toImage(n.message), { renderer: renderer })};
+      };
+      var date = new Date(n.createdDate);
+      var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+      var formattedDate = (months[date.getMonth() + 1]) + ' ' + date.getDate() + ', ' +  date.getFullYear();
       return (
         <div>
           <div className="row" tabIndex={0}>
             <h4>{n.author.user.username} <small>{formattedDate}</small></h4>
             <p>
-              {n.message}
+              <div dangerouslySetInnerHTML={createNotificationText()} />
               <br /><br />
               <button className="btn btn-danger right" aria-label={`Remove notification from ${n.author.user.username}`} onClick={() => {
                   this.onDismiss(
