@@ -519,7 +519,8 @@ var CreateEditPage = React.createClass({
             scrollToError = true;
         }
         CreateEditActions.save();
-        this.setState({ scrollToError: scrollToError, lastUpdate: Date.now() });
+        //this.setState({ scrollToError: scrollToError, lastUpdate: Date.now() });
+        this.setState({ scrollToError: scrollToError }); // rjk
     },
 
     onClose: function () {
@@ -551,6 +552,7 @@ var CreateEditPage = React.createClass({
     },
 
     scrollToError: function () {
+        this.setState({ scrollToError: false }); // rjk
         var $target = $('div.form-group.has-error');
         var form = $(this.refs.form.getDOMNode());
         var $firstFormElement = form.find(':first-child');
