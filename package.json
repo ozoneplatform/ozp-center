@@ -85,7 +85,6 @@
     "bootstrap-tour": "git://github.com/ozone-utils/bootstrap-tour",
     "browser-pubsub": "^1.2.1",
     "console-polyfill": "^0.2.2",
-    "emojione": "^2.1.4",
     "es5-shim": "^4.0.5",
     "eslint": "^1.10.3",
     "eslint-loader": "^1.2.0",

@@ -7,7 +7,6 @@ var ProfileActions = require('../../actions/ProfileActions.js');
 var NotificationActions = require('../../actions/NotificationActions.js');
 var SelfActions = require('ozp-react-commons/actions/ProfileActions.js');
 
-var emojione = require('emojione');
 var marked = require('marked');
 var renderer = new marked.Renderer();
 
@@ -84,7 +83,7 @@ var NotificationsModal = React.createClass({
 
     makeNotification: function(n) {
       var createNotificationText = function() {
-        return {__html: marked(emojione.toImage(n.message), { renderer: renderer })};
+        return {__html: marked(n.message, { renderer: renderer })};
       };
       var date = new Date(n.createdDate);
       var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
@@ -140,6 +139,10 @@ var NotificationsModal = React.createClass({
                                       )
                                     }
                                   </div>
+                                }
+
+                                { !this.state.notificationList.length &&
+                                  <span>Loading...</span>
                                 }
                               </div>
                             </div>
