@@ -53,6 +53,14 @@ strong {
   clear: both;
 }
 
+[tabindex] {
+   outline: none !important;
+}
+
+[tabindex][input] {
+   outline: 'default';
+}
+
 a:focus {
     outline-color: $blue;
 }
