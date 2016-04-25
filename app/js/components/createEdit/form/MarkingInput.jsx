@@ -21,6 +21,8 @@ var MarkingInput = React.createClass({
     renderInput: function () {
         var textStyle = {
             fontWeight: 500,
+            cursor: 'default',
+            background: '#fff',
             color: '#625858'
         };
 
@@ -54,7 +56,7 @@ var MarkingInput = React.createClass({
         $.fn.classify(bsClassifyOptions);
 
         return (
-            <input rel="bs-classify" type="text" style={textStyle}/>
+            <input rel="bs-classify" type="text" readOnly style={textStyle}/>
         );
     }
 });
