@@ -108,7 +108,7 @@ var Notifications = React.createClass({
     render() {
         return (
             <div className="row">
-                <div className="col-md-4">
+                <div className="col-md-4 clearfix">
                     <CreateNotification />
                 </div>
                 <div className="col-md-4">

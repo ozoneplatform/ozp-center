@@ -95,6 +95,7 @@
     "jquery": "^2.2.0",
     "lodash-amd": "2.4.1",
     "magnific-popup": "^0.9.9",
+    "marked": "^0.3.5",
     "moment": "2.9.0",
     "object-assign": "1.0.0",
     "object-db": "^1.2.4",

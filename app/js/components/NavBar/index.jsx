@@ -3,6 +3,7 @@
 var React = require('react');
 var UserNotificationDropdown = require('ozp-react-commons/components/notification/UserNotificationDropdown.jsx');
 var HelpModal = require('./helpmodal.jsx');
+var NotificationsModal = require('./notificationsmodal.jsx');
 var ProfileLink = require('../profile/ProfileLink.jsx');
 var ModalLink = require('../ModalLink.jsx');
 var { HUD_URL, METRICS_URL, WEBTOP_URL, DEVELOPER_RESOURCES_URL} = require('ozp-react-commons/OzoneConfig');
@@ -56,7 +57,7 @@ var NavBar = React.createClass({
 
                     <div className="navbar-right">
                         <ul className="nav navbar-nav">
-                            <UserNotificationDropdown/>
+                            <UserNotificationDropdown moreNotifications={this.showNotificationsModal}/>
                             <li className="tooltiped" data-toggle="tooltip" data-placement="bottom" title="Help">
                                 <a href="#" id="tourstop-help" onClick={this.showHelpModal}><i className="icon-question-grayLightest"></i><span className="hidden-span">Help</span></a>
                             </li>
@@ -93,6 +94,9 @@ var NavBar = React.createClass({
                 {
                     this.state.showHelp && <HelpModal onHidden={this.onModalHidden} />
                 }
+                {
+                    this.state.showNotifications && <NotificationsModal onHidden={this.onModalHidden} />
+                }
             </nav>
         );
     },
@@ -109,8 +113,12 @@ var NavBar = React.createClass({
         this.setState({ showHelp: true });
     },
 
+    showNotificationsModal: function () {
+        this.setState({ showNotifications: true });
+    },
+
     onModalHidden: function () {
-        this.setState({ showHelp: false });
+        this.setState({ showHelp: false, showNotifications: false });
     }
 
 });

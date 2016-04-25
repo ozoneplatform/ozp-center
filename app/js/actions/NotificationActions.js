@@ -32,6 +32,12 @@ var NotificationActions = createActions({
             .fail(NotificationActions.fetchActiveFailed);
     },
 
+    fetchOwnNotifications() {
+      NotificationApi.fetchOwnNotifications()
+          .then(NotificationActions.fetchOwnNotificationsCompleted)
+          .fail(NotificationActions.fetchOwnNotificationsFailed);
+    },
+
     fetchPast(paginatedList) {
         var url;
         if (paginatedList && paginatedList.nextLink) {

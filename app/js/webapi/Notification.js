@@ -37,7 +37,15 @@ module.exports = {
 
     fetchActive() {
         return $.getJSON(`${API_URL}/api/notifications/pending/?offset=0&limit=${PAGINATION_MAX}`)
-            .then((response) => new PaginatedResponse(humps.camelizeKeys(response), this.parse));
+            .then((response) => {
+              return new PaginatedResponse(humps.camelizeKeys(response), this.parse);
+            });
+    },
+
+    fetchOwnNotifications: function () {
+      return $.getJSON(API_URL + '/api/self/notification/').then(function(response) {
+        return humps.camelizeKeys(response);
+      });
     },
 
     fetchPast(url) {
