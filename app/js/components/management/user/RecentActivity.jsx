@@ -106,11 +106,12 @@ var RecentActivity = React.createClass({
 
     renderChangeLogs: function () {
         var me = this;
+        var ttt = this.state.listing;
 
         return this.state.changeLogs.map(function (changeLog) {
             return [
                 <ChangeLog showListingName={true} changeLog={changeLog}>
-                    { changeLog.listing.iconUrl ? <img className="recent-activity-icon" alt="recent activity icon" src={ changeLog.listing.iconUrl } /> : <div></div> }
+                    { changeLog.listing.smallIcon ? <img className="recent-activity-icon" alt="recent activity icon" src={ changeLog.listing.smallIcon } /> : <div></div> }
                     { me.createLink(changeLog) }
                 </ChangeLog>,
                 <br/>
