@@ -22,6 +22,7 @@ var MarkingInput = React.createClass({
         var textStyle = {
             fontWeight: 500,
             cursor: 'default',
+            background: '#fff',
             color: '#625858'
         };
 
