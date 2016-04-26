@@ -106,7 +106,6 @@ var RecentActivity = React.createClass({
 
     renderChangeLogs: function () {
         var me = this;
-        var ttt = this.state.listing;
 
         return this.state.changeLogs.map(function (changeLog) {
             return [
