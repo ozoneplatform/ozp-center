@@ -53,25 +53,8 @@ strong {
   clear: both;
 }
 
-/*[tabindex] {
-   outline: none !important;
-   outline: 'default';
-}
-
-[tabindex][input] {
-   outline: none !important;
-}*/
-
-div:focus{
- outline: none !important;
-}
-
-section:focus{
- outline: none !important;
-}
-
-ul:focus{
- outline: none !important;
+[tabindex] {
+   outline: none;
 }
 
 a:focus {
