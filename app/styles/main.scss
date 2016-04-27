@@ -53,6 +53,10 @@ strong {
   clear: both;
 }
 
+[tabindex] {
+   outline: none;
+}
+
 a:focus {
     outline-color: $blue;
 }
