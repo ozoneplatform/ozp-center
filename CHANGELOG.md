@@ -1,3 +1,16 @@
+### 1.1.24 (2016-04-27)
+
+
+#### Bug Fixes
+
+* **Search:** Record searches in metrics. ([9242b302](https://github.com/ozone-development/ozp-center.git/commit/9242b302a18e925c81d4d10e5e10a58a340220c5))
+
+
+#### Features
+
+* **Notifications Modal:** Added notification modal and tweaks to dropdown ([9896601e](https://github.com/ozone-development/ozp-center.git/commit/9896601e5230e25910c9dc8ca2a78105fa5bab7f))
+
+
 ### 1.1.23 (2016-04-13)
 
 
