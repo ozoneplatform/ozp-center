@@ -116,6 +116,7 @@ var MyListings = React.createClass({
         this.setState({
             listings: this.getListings()
         });
+        ListingActions.fetchOwnedListings();
     },
 
     onFilterChanged: function (key, filter) {
