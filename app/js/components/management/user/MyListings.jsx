@@ -116,7 +116,6 @@ var MyListings = React.createClass({
         this.setState({
             listings: this.getListings()
         });
-        ListingActions.fetchOwnedListings();
     },
 
     onFilterChanged: function (key, filter) {
@@ -126,6 +125,7 @@ var MyListings = React.createClass({
         this.setState({
             filter: filter
         });
+        ListingActions.fetchOwnedListings();
     },
 
     componentWillMount: function () {
