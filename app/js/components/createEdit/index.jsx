@@ -339,14 +339,14 @@ var ListingForm = React.createClass({
             durl.value = (durl.value) ? decodeURI(durl.value) : '';
             return durl;
         })();
-
+        
         return (
             <form ref="form" className="CreateEdit__form col-xs-9 col-lg-10">
                 <h2 id={f.basicInformation.id}>Basic Information</h2>
 
-                <MarkingInput id={f.securityMarking.id} { ...p('securityMarking') } aria-label="Classification and Control Marking"/>
+                <MarkingInput id={f.securityMarking.id} { ...p('basicSecurityMarking') } aria-label={p('basicSecurityMarking').description}/>
 
-                <TextInput id={f.title.id} { ...p('title') } aria-label="Title of Listing"/>
+                <TextInput id={f.title.id} { ...p('title') } aria-label={p('title').description}/>
                 <Select2Input id={f.type.id} { ...p('type') }
                     options={ getOptionsForSystemObject(system.types) }/>
                 <Select2Input id={f.categories.id} { ...p('categories') } multiple
@@ -387,25 +387,25 @@ var ListingForm = React.createClass({
                     imageUri={this.props.value.imageSmallUrl}
                     serverError={this.props.imageErrors.smallIcon} />
                 <MarkingInput id={f.smallIcon.markingId} { ...p('smallIconMarking') }
-                              aria-label="Classification and Control Marking"/>
+                              aria-label={p('smallIconMarking').description}/>
 
                 <ImageInput id={f.largeIcon.id} { ...p('largeIcon') }
                     imageUri={this.props.value.imageMediumUrl}
                     serverError={this.props.imageErrors.largeIcon} />
                 <MarkingInput id={f.largeIcon.markingId} { ...p('largeIconMarking') }
-                              aria-label="Classification and Control Marking"/>
+                              aria-label={p('largeIconMarking').description}/>
 
                 <ImageInput id={f.bannerIcon.id} { ...p('bannerIcon') }
                     imageUri={this.props.value.imageLargeUrl}
                     serverError={this.props.imageErrors.bannerIcon} />
                 <MarkingInput id={f.bannerIcon.markingId} { ...p('bannerIconMarking') }
-                              aria-label="Classification and Control Marking"/>
+                              aria-label={p('bannerIconMarking').description}/>
 
                 <ImageInput id={f.featuredBannerIcon.id} { ...p('featuredBannerIcon') }
                     imageUri={this.props.value.imageXlargeUrl}
                     serverError={this.props.imageErrors.featuredBannerIcon} />
                 <MarkingInput id={f.featuredBannerIcon.markingId} { ...p('featuredBannerIconMarking') }
-                              aria-label="Classification and Control Marking"/>
+                              aria-label={p('featuredBannerIconMarking').description}/>
 
                 <ListInput id={f.screenshots.id} { ...this.getSubFormProps('screenshots') }
                     itemForm={ ScreenshotForm }/>
