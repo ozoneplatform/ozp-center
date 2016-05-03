@@ -202,6 +202,7 @@ var ChangeLog = React.createClass({
         'CREATED' : ActionChangeLog,
         'OUTSIDE' : SetToChangeLog,
         'INSIDE' : SetToChangeLog,
+        'DELETED' : ActionChangeLog,
         'REJECTED' : RejectedChangeLog,
         'APPROVED_ORG' : OrgApprovalChangeLog,
         'REVIEW_EDITED' : ReviewEditedChangeLog,

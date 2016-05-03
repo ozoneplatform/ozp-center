@@ -339,7 +339,7 @@ var ListingForm = React.createClass({
             durl.value = (durl.value) ? decodeURI(durl.value) : '';
             return durl;
         })();
-        
+
         return (
             <form ref="form" className="CreateEdit__form col-xs-9 col-lg-10">
                 <h2 id={f.basicInformation.id}>Basic Information</h2>

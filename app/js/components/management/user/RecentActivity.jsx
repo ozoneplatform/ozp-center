@@ -54,8 +54,7 @@ var RecentActivity = React.createClass({
             'ADD_RELATED_TO_ITEM',
             'REMOVE_RELATED_TO_ITEM',
             'REJECTED',
-            'TAG_CREATED',
-            'TAG_DELETED'
+            'TAG_CREATED'
         ];
 
         if (noActions.indexOf(action) > -1) {
@@ -69,7 +68,8 @@ var RecentActivity = React.createClass({
                 'CREATED' : 'View Draft',
                 'APPROVED_ORG' : 'Review Listing',
                 'REVIEW_EDITED' : 'View',
-                'REVIEW_DELETED' : 'View'
+                'REVIEW_DELETED' : 'View',
+                'DELETED' : 'View'
             };
 
             var href = this.makeHref(this.getActiveRoutePath(), this.getParams(), {

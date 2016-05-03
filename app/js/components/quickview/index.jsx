@@ -47,6 +47,8 @@ var Quickview = React.createClass({
       });
     },
 
+
+
     getDefaultProps: function () {
         return {
             tabs: [{
@@ -63,7 +65,7 @@ var Quickview = React.createClass({
     },
 
     getInitialState: function () {
-        return {shown: false};
+        return {shown: false, deleted:false};
     },
 
     render: function () {
@@ -95,6 +97,27 @@ var Quickview = React.createClass({
             }
         }
 
+      /*  if(this.props.state.listing.approvalStatus !== 'DELETED'){
+          var headerProps = {
+              listing: listing,
+              onCancel: this.close,
+              onEdit: this.edit,
+              currentUser: currentUser,
+              preview: this.props.preview,
+              allowEdit: CurrentListingStore.currentUserCanEdit()
+            };
+          }
+        else{
+          var headerProps = {
+              listing: listing,
+              onCancel: this.close,
+              onEdit: this.edit,
+              currentUser: currentUser,
+              preview: this.props.preview,
+            };
+        }*/
+
+
         var headerProps = {
             listing: listing,
             onCancel: this.close,
@@ -102,7 +125,7 @@ var Quickview = React.createClass({
             currentUser: currentUser,
             preview: this.props.preview,
             allowEdit: CurrentListingStore.currentUserCanEdit()
-        };
+          };
 
         return (
             <Modal ref="modal" className="quickview" onShown={this.onShown} onHidden={this.onHidden} tabIndex="0">
@@ -110,7 +133,7 @@ var Quickview = React.createClass({
                     !listing ?
                         <p>Loading...</p> :
                         [
-                            <Header { ...headerProps } key="header"></Header>,
+                            <Header { ...headerProps } deleted={this.state.deleted} key="header"></Header>,
                             <div className="tabs-container" key="tabs-container">
                             { this.renderTabs(tabs, listing.id) }
                                 <div className="tab-content" >
@@ -171,7 +194,9 @@ var Quickview = React.createClass({
     onShown: function () {
         // dont force focus causes infinite loop with overview tab's modal carousel
         $(document).off('focusin.bs.modal');
-
+        if(this.state.listing.approvalStatus === 'DELETED'){
+          this.setState({deleted : true});
+        }
         this.setState({
             shown: true
         });
@@ -197,6 +222,7 @@ var Quickview = React.createClass({
     },
 
     edit: function () {
+        var deleted = this.state.listing.approvalStatus;
         var listing = this.state.listing;
         this.setState({toEdit: true});
         this.close();
