@@ -599,6 +599,11 @@ var CreateEditPage = React.createClass({
     },
 
     componentDidUpdate: function () {
+        if (this.state.hasChanges){
+          window.addEventListener("beforeunload",this.newPage);
+        }else{
+          window.removeEventListener("beforeunload",this.newPage);
+        }
         if (this.state.scrollToError && !this.state.isValid) {
             this.scrollToError(this.state.firstError);
         }
@@ -673,6 +678,7 @@ var CreateEditPage = React.createClass({
     componentWillUnmount: function () {
         var main = $('#main');
         main.removeClass('create-edit-open');
+        window.removeEventListener("beforeunload",this.newPage);
     },
 
     // Ensures agency title corresponds to the short name selected by the user
@@ -682,6 +688,9 @@ var CreateEditPage = React.createClass({
                                { 'shortName': listing.agencyShort } ).title;
             listing.agency = title;
         }
+    },
+    newPage: function(event){
+       event.returnValue = "You have unsaved changes on this page. If you continue all changes will be lost."
     },
 
     render: function () {
