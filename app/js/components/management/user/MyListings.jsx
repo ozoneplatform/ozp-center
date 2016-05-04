@@ -125,6 +125,7 @@ var MyListings = React.createClass({
         this.setState({
             filter: filter
         });
+        ListingActions.fetchOwnedListings();
     },
 
     componentWillMount: function () {
