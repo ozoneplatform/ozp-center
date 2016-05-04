@@ -1,3 +1,27 @@
+### 1.1.25 (2016-05-04)
+
+
+#### Bug Fixes
+
+* **MyListings:** changed the fetch listing to filter change. previous modification caused infinit ([a0fb23cc](https://github.com/ozone-development/ozp-center.git/commit/a0fb23cca0174f1a399d8f722197e963b119aa2f))
+* **_quickview:** got rid of the height and width and added a no wrap for dashes and spaces ([50ebd9c8](https://github.com/ozone-development/ozp-center.git/commit/50ebd9c847aa493bc7ce1dc9d6ef057222432fba))
+* **_quickviewscss:** changed height and width and padding to make it fit the 8 character name ([027da438](https://github.com/ozone-development/ozp-center.git/commit/027da43848157bb0ac4f053cd94e142171c8e87e))
+* **index:**
+  * when saving the listner now is removed if successful ([0d71845d](https://github.com/ozone-development/ozp-center.git/commit/0d71845d123b11c8fbebad55a24e201ba058dbe2))
+  * made aria labels more dynamic it will pull info from the react-commons instead o ([2abb10de](https://github.com/ozone-development/ozp-center.git/commit/2abb10de00a6b67d6b98fd796d7fb6442c566df4))
+  * security marking was made more clear to the user ([306778e3](https://github.com/ozone-development/ozp-center.git/commit/306778e38b9709f910b2e6dbefe9a33cb4a24f52))
+* **myListings:**
+  * this should not have been included in this branch commit ([ab01b397](https://github.com/ozone-development/ozp-center.git/commit/ab01b3974c82ec54e1dbba23322d1266864687ef))
+  * users no longer have to refresh page to see latest reject comments ([f7486283](https://github.com/ozone-development/ozp-center.git/commit/f74862839adaccf9439337c3b262d8120469e72d))
+
+
+#### Features
+
+* **Shrinkwrap:**
+  * Brought back shrinkwrap to prevent futher issues with dependancy updates ([94c4a695](https://github.com/ozone-development/ozp-center.git/commit/94c4a695e479634c626e04eb22889f6c6c62c97d))
+  * Brought back shrinkwrap to prevent futher issues with dependancy updates ([1202a3f3](https://github.com/ozone-development/ozp-center.git/commit/1202a3f308f1426bf0d581584c067851ab2f1f6d))
+
+
 ### 1.1.24 (2016-04-27)
 
 
