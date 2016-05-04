@@ -24,9 +24,9 @@
     "tarDistVersion": "gulp tarDistVersion"
   },
   "devDependencies": {
-    "babel-core": "6.3.13",
-    "babel-loader": "6.2.1",
-    "babel-runtime": "6.3.13",
+    "babel-core": "^6.3.13",
+    "babel-loader": "^6.2.1",
+    "babel-runtime": "^6.3.13",
     "caroufredsel": "git://github.com/ozone-utils/caroufredsel",
     "chai": "1.10.0",
     "coffee-script": "1.8.0",
@@ -79,6 +79,7 @@
   },
   "dependencies": {
     "babel-plugin-syntax-object-rest-spread": "^6.3.13",
+    "babel-plugin-transform-es2015-classes":"^6.3.13",
     "babel-preset-es2015": "^6.3.13",
     "babel-preset-react": "^6.3.13",
     "bootstrap-classify": "git://github.com/ozone-development/bootstrap-classify#ozp-integ",
