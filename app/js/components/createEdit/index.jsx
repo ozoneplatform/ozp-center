@@ -601,6 +601,8 @@ var CreateEditPage = React.createClass({
     componentDidUpdate: function () {
         if (this.state.hasChanges){
           window.addEventListener("beforeunload",this.newPage);
+        }else{
+          window.removeEventListener("beforeunload",this.newPage);
         }
         if (this.state.scrollToError && !this.state.isValid) {
             this.scrollToError(this.state.firstError);
