@@ -15,7 +15,7 @@ var readyObject = {};
 // HACK: for some reason window.localstorage is lost in this file.
 setInterval(() => {
   readyObject = Object.assign({}, readyObject, tourCh.get());
-}, 1000);
+}, 10);
 
 const meTour = new Tour({
   backdrop: true,
@@ -91,16 +91,18 @@ const meTour = new Tour({
       backdropContainer: "#header"
     },
     {
-      element: "#tourstop-center-categories",
-      title: "Filter by Category",
-      content: "Use categories to reduce your search results. When you click a category, only listings in that category will appear on the page. If you select multiple categories, only listings associated with all of the selected categories will appear.",
-      placement: "right"
-    },
-    {
       element: "#tourstop-center-home",
       title: "Center Home",
       content: "After searching and filtering, click here to return to the Center Discovery page to see featured listings, new arrivals and most popular listings.",
       placement: "right"
+    },
+    {
+      element: "#tourstop-center-categories",
+      title: "Filter by Category",
+      content: "Use categories to reduce your search results. When you click a category, only listings in that category will appear on the page. If you select multiple categories, only listings associated with all of the selected categories will appear.",
+      placement: "right",
+      backdrop:".navbar-fixed-top",
+      Container: "facet-group-item"
     },
     {
       element: ".Discovery__SearchResults .listing:first, .infiniteScroll .listing:first",
@@ -119,6 +121,7 @@ const meTour = new Tour({
         };
         (function checkStatus() {
           if (readyObject.overviewLoaded) {
+
             nextStep();
           } else {
             setTimeout(checkStatus, 200);
@@ -134,6 +137,7 @@ const meTour = new Tour({
       placement: "left",
       backdropContainer: ".modal-content",
       backdropPadding: 0,
+      onRedirectError: function (){ meTour.goTo(15);},
       onNext: function() {
         var nextStep = function() {
           tourCh.publish({
@@ -162,6 +166,7 @@ const meTour = new Tour({
       placement: "bottom",
       backdropContainer: ".modal-content",
       backdropPadding: 0,
+      onRedirectError: function (){ meTour.goTo(16);},
       onNext: function() {
         var nextStep = function() {
           tourCh.publish({
@@ -198,6 +203,7 @@ const meTour = new Tour({
       placement: "bottom",
       backdropContainer: ".modal-content",
       backdropPadding: 0,
+      onRedirectError: function (){ meTour.goTo(17);},
       onNext: function() {
         var nextStep = function() {
           tourCh.publish({
@@ -234,6 +240,93 @@ const meTour = new Tour({
       placement: "bottom",
       backdropContainer: ".modal-content",
       backdropPadding: 0,
+      onRedirectError: function (){ meTour.goTo(18);},
+      onNext: function() {meTour.goTo(14);},
+      onPrev: function() {
+        var prevStep = function() {
+          meTour.goTo(13);
+        };
+        (function checkStatus() {
+          if (readyObject.detailsLoaded) {
+            prevStep();
+          } else {
+            setTimeout(checkStatus, 200);
+          }
+        })();
+      }
+    },
+    {
+      orphan: true,
+      template: '<div class="popover" role="tooltip"> <h1 class="popover-header">Thank you for using the tour.</h1><h3 class="popover-title popover-subtitle"></h3> <div class="popover-content"></div> <div class="popover-navigation"> <button class="btn btn-sm" id="end-tour-btn" data-role="end" tabIndex="0">End Tour</button></div> </div> </div>',
+      onNext: function() {meTour.end();}
+    },
+    //end of tour steps 14 next if if redirection loop occurs on modal windows
+    {
+      //overview
+      element: ".modal-body",
+      title: "Listing Overview",
+      content: "Within this view are screenshots, long descriptions, reviews, and other resources. Use the links at the top right of the listing to launch, bookmark or close it.",
+      placement: "left",
+      backdropContainer: ".modal-content",
+      backdropPadding: 0,
+      onNext: function() {meTour.goTo(12);},
+      onPrev: function() {
+        $(".quickview").modal("hide");
+
+      }
+    },
+    {
+      //reviews
+      element: ".modal-body .nav .active",
+      title: "Listing Reviews",
+      content: "Rate and review the listing, or read reviews from other users.",
+      placement: "bottom",
+      backdropContainer: ".modal-content",
+      backdropPadding: 0,
+      onNext: function() {meTour.goTo(13);},
+      onPrev: function() {
+        var prevStep = function() {
+          meTour.goTo(11);
+        };
+        (function checkStatus() {
+          if (readyObject.overviewLoaded) {
+            prevStep();
+          } else {
+            setTimeout(checkStatus, 200);
+          }
+        })();
+      }
+    },
+    {
+      //details
+      element: ".modal-body .nav .active",
+      title: "Listing Details",
+      content: "Here you'll find a list of new features, usage requirements, ownership information, tags, categories, etc.",
+      placement: "bottom",
+      backdropContainer: ".modal-content",
+      backdropPadding: 0,
+      onNext: function() {meTour.goTo(14);},
+      onPrev: function() {
+        var prevStep = function() {
+          meTour.goTo(12);
+        };
+        (function checkStatus() {
+          if (readyObject.reviewsLoaded) {
+            prevStep();
+          } else {
+            setTimeout(checkStatus, 200);
+          }
+        })();
+      }
+    },
+    {
+      //resources
+      element: ".modal-body .nav .active",
+      title: "Listing Resources",
+      content: "If the listing includes instructions like user manuals and contact information, you will find it here. Thank you for taking the time to tour AppsMall.",
+      placement: "bottom",
+      backdropContainer: ".modal-content",
+      backdropPadding: 0,
       onPrev: function() {
         var prevStep = function() {
           meTour.goTo(13);
@@ -247,6 +340,7 @@ const meTour = new Tour({
         })();
       }
     }
+
   ]
 });
 
