@@ -81,6 +81,9 @@ const meTour = new Tour({
       backdropPadding: 0,
       onShown: function() {
         $("#tourstop-global-menu").addClass("open");
+      },
+      onHide:function(){
+        $("#tourstop-global-menu").removeClass("open");
       }
     },
     {
