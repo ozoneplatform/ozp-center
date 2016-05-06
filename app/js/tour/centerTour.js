@@ -21,17 +21,20 @@ const meTour = new Tour({
   backdrop: true,
   backdropPadding: 10,
   storage: false,
+  debug:true,
   onEnd: function() {
     ProfileSearchActions.goHome();
   },
   template: '<div class="popover" role="tooltip"> <div class="arrow"></div> <h3 class="popover-title"></h3> <div class="popover-content"></div> <div class="popover-navigation"> <button class="btn btn-sm" id="end-tour-btn" data-role="end">End tour</button> <div class="btn-group"> <button class="btn btn-sm btn-default" data-role="prev">&laquo; Prev</button> <button class="btn btn-sm btn-default" data-role="next">Next &raquo;</button> <button class="btn btn-sm btn-default" data-role="pause-resume" data-pause-text="Pause" data-resume-text="Resume">Pause</button> </div> </div> </div>',
   steps: [
+    //1
     {
       title: "Welcome. ",
       content: "This simple tour guides you through the toolbar items and introduces you to the primary components of the system: The Center, HUD, and Webtop. These three components enable you to discover, bookmark, rate, review, organize and launch mission and business applications from across the enterprise.",
       orphan: true,
       template: '<div class="popover" role="tooltip"> <h1 class="popover-header">Welcome to <img src="./images/marketplace-logo.png"></h1><h3 class="popover-title popover-subtitle"></h3> <div class="popover-content"></div> <div class="popover-navigation"> <button class="btn btn-sm" id="end-tour-btn" data-role="end" tabIndex="0">No thanks</button> <div class="btn-group"> <button class="btn btn-sm btn-default" data-role="next">Start the tour &raquo;</button></div> </div> </div>'
     },
+    //2
     {
       element: "#tourstop-hud",
       title: "HUD",
@@ -40,6 +43,7 @@ const meTour = new Tour({
       backdropContainer: ".navbar-fixed-top",
       backdropPadding: 0
     },
+    //3
     {
       element: "#tourstop-center",
       title: "Center",
@@ -48,6 +52,7 @@ const meTour = new Tour({
       backdropContainer: ".navbar-fixed-top",
       backdropPadding: 0
     },
+    //4
     {
       element: "#tourstop-webtop",
       title: "Webtop",
@@ -56,6 +61,7 @@ const meTour = new Tour({
       backdropContainer: ".navbar-fixed-top",
       backdropPadding: 0
     },
+    //5
     {
       element: "#tourstop-notifications",
       title: "Notifications",
@@ -64,6 +70,7 @@ const meTour = new Tour({
       backdropContainer: ".navbar-fixed-top",
       backdropPadding: 0
     },
+    //6
     {
       element: "#tourstop-help",
       title: "Help",
@@ -72,6 +79,7 @@ const meTour = new Tour({
       backdropContainer: ".navbar-fixed-top",
       backdropPadding: 0
     },
+    //7
     {
       element: "#tourstop-global-menu",
       title: "Global Menu",
@@ -86,6 +94,7 @@ const meTour = new Tour({
         $("#tourstop-global-menu").removeClass("open");
       }
     },
+    //8
     {
       element: "#tourstop-center-search",
       title: "Search and Filter",
@@ -93,12 +102,14 @@ const meTour = new Tour({
       placement: "bottom",
       backdropContainer: "#header"
     },
+    //9
     {
       element: "#tourstop-center-home",
       title: "Center Home",
       content: "After searching and filtering, click here to return to the Center Discovery page to see featured listings, new arrivals and most popular listings.",
       placement: "right"
     },
+    //10
     {
       element: "#tourstop-center-categories",
       title: "Filter by Category",
@@ -107,6 +118,7 @@ const meTour = new Tour({
       backdrop:".navbar-fixed-top",
       Container: "facet-group-item"
     },
+    //11
     {
       element: ".Discovery__SearchResults .listing:first, .infiniteScroll .listing:first",
       title: "Listing Tiles",
@@ -118,13 +130,13 @@ const meTour = new Tour({
       onHide: function() {
         $(".Discovery__SearchResults .listing:first .slide-up, .infiniteScroll .listing:first .slide-up").css("top", "137px");
       },
+      onRedirectError: function (){ meTour.goTo(16);},
       onNext: function() {
         var nextStep = function() {
-          meTour.goTo(11);
+          meTour.goTo(12);
         };
         (function checkStatus() {
           if (readyObject.overviewLoaded) {
-
             nextStep();
           } else {
             setTimeout(checkStatus, 200);
@@ -132,6 +144,7 @@ const meTour = new Tour({
         })();
       }
     },
+    //12
     {
       path: `${CENTER_URL}#/home/?%2F%3F=&listing=1&action=view&tab=overview`,
       element: ".modal-body",
@@ -140,13 +153,13 @@ const meTour = new Tour({
       placement: "left",
       backdropContainer: ".modal-content",
       backdropPadding: 0,
-      onRedirectError: function (){ meTour.goTo(15);},
+      onRedirectError: function (){ meTour.goTo(17);},
       onNext: function() {
         var nextStep = function() {
           tourCh.publish({
             overviewLoaded: false
           });
-          meTour.goTo(12);
+          meTour.goTo(13);
         };
         (function checkStatus() {
           if (readyObject.reviewsLoaded) {
@@ -156,11 +169,21 @@ const meTour = new Tour({
           }
         })();
       },
-      onPrev: function() {
-        $(".quickview").modal("hide");
-
-      }
-    },
+    onPrev: function() {
+      $(".quickview").modal("hide");
+      var prevStep = function() {
+        meTour.goTo(11);
+      };
+      (function checkStatus() {
+        if (readyObject.overviewLoaded) {
+          prevStep();
+        } else {
+          setTimeout(checkStatus, 200);
+        }
+      })();
+    }
+  },
+    //13
     {
       path: `${CENTER_URL}#/home/?%2F%3F=&listing=1&action=view&tab=reviews`,
       element: ".modal-body .nav .active",
@@ -169,13 +192,13 @@ const meTour = new Tour({
       placement: "bottom",
       backdropContainer: ".modal-content",
       backdropPadding: 0,
-      onRedirectError: function (){ meTour.goTo(16);},
+      //onRedirectError: function (){ meTour.goTo(18);},
       onNext: function() {
         var nextStep = function() {
           tourCh.publish({
             reviewsLoaded: false
           });
-          meTour.goTo(13);
+          meTour.goTo(14);
         };
         (function checkStatus() {
           if (readyObject.detailsLoaded) {
@@ -187,7 +210,7 @@ const meTour = new Tour({
       },
       onPrev: function() {
         var prevStep = function() {
-          meTour.goTo(11);
+          meTour.goTo(12);
         };
         (function checkStatus() {
           if (readyObject.overviewLoaded) {
@@ -198,6 +221,7 @@ const meTour = new Tour({
         })();
       }
     },
+    //14
     {
       path: `${CENTER_URL}#/home/?%2F%3F=&listing=1&action=view&tab=details`,
       element: ".modal-body .nav .active",
@@ -206,13 +230,13 @@ const meTour = new Tour({
       placement: "bottom",
       backdropContainer: ".modal-content",
       backdropPadding: 0,
-      onRedirectError: function (){ meTour.goTo(17);},
+      //onRedirectError: function (){ meTour.goTo(19);},
       onNext: function() {
         var nextStep = function() {
           tourCh.publish({
             detailsLoaded: false
           });
-          meTour.goTo(14);
+          meTour.goTo(15);
         };
         (function checkStatus() {
           if (readyObject.resourcesLoaded) {
@@ -224,7 +248,7 @@ const meTour = new Tour({
       },
       onPrev: function() {
         var prevStep = function() {
-          meTour.goTo(12);
+          meTour.goTo(13);
         };
         (function checkStatus() {
           if (readyObject.reviewsLoaded) {
@@ -235,6 +259,7 @@ const meTour = new Tour({
         })();
       }
     },
+    //15
     {
       path: `${CENTER_URL}#/home/?%2F%3F=&listing=1&action=view&tab=resources`,
       element: ".modal-body .nav .active",
@@ -243,11 +268,11 @@ const meTour = new Tour({
       placement: "bottom",
       backdropContainer: ".modal-content",
       backdropPadding: 0,
-      onRedirectError: function (){ meTour.goTo(18);},
-      onNext: function() {meTour.goTo(14);},
+      //onRedirectError: function (){ meTour.goTo(20);},
+      onNext: function(){meTour.end();},
       onPrev: function() {
         var prevStep = function() {
-          meTour.goTo(13);
+          meTour.goTo(14);
         };
         (function checkStatus() {
           if (readyObject.detailsLoaded) {
@@ -258,26 +283,67 @@ const meTour = new Tour({
         })();
       }
     },
+    //end of tour steps 16 next if if redirection loop occurs on modal windows
+    //16
     {
-      orphan: true,
-      template: '<div class="popover" role="tooltip"> <h1 class="popover-header">Thank you for using the tour.</h1><h3 class="popover-title popover-subtitle"></h3> <div class="popover-content"></div> <div class="popover-navigation"> <button class="btn btn-sm" id="end-tour-btn" data-role="end" tabIndex="0">End Tour</button></div> </div> </div>',
-      onNext: function() {meTour.end();}
+      //Tiles
+      element: ".Discovery__SearchResults .listing:first, .infiniteScroll .listing:first",
+      title: "Listing Tiles",
+      content: "Hover over a tile for a short description of the app, to bookmark it to your HUD, or to launch it into a new tab. Click the tile to open the listing overview for more listing details.",
+      placement: "top",
+      onShown: function() {
+        $(".Discovery__SearchResults .listing:first .slide-up, .infiniteScroll .listing:first .slide-up").css("top", "0px");
+      },
+      onHide: function() {
+        $(".Discovery__SearchResults .listing:first .slide-up, .infiniteScroll .listing:first .slide-up").css("top", "137px");
+      },
+      onNext: function() {
+        var nextStep = function() {meTour.goTo(11);}
+      },
+      onPrev: function() {
+        meTour.goTo(9);
+      }
     },
-    //end of tour steps 14 next if if redirection loop occurs on modal windows
+    //17
     {
       //overview
+      path: `${CENTER_URL}#/home/?%2F%3F=&listing=1&action=view&tab=overview`,
       element: ".modal-body",
       title: "Listing Overview",
       content: "Within this view are screenshots, long descriptions, reviews, and other resources. Use the links at the top right of the listing to launch, bookmark or close it.",
       placement: "left",
       backdropContainer: ".modal-content",
       backdropPadding: 0,
-      onNext: function() {meTour.goTo(12);},
-      onPrev: function() {
-        $(".quickview").modal("hide");
-
-      }
+      onNext: function() {
+        var nextStep = function() {
+          tourCh.publish({
+            overviewLoaded: false
+          });
+          meTour.goTo(13);
+        };
+        (function checkStatus() {
+          if (readyObject.reviewsLoaded) {
+            nextStep();
+          } else {
+            setTimeout(checkStatus, 200);
+          }
+        })();
+      },
+    onPrev: function() {
+      $(".quickview").modal("hide");
+      var prevStep = function() {
+        meTour.goTo(11);
+      };
+      (function checkStatus() {
+        if (readyObject.overviewLoaded) {
+          prevStep();
+        } else {
+          setTimeout(checkStatus, 200);
+        }
+      })();
+    }
     },
+    //18
     {
       //reviews
       element: ".modal-body .nav .active",
@@ -286,10 +352,24 @@ const meTour = new Tour({
       placement: "bottom",
       backdropContainer: ".modal-content",
       backdropPadding: 0,
-      onNext: function() {meTour.goTo(13);},
+      onNext: function() {
+        var nextStep = function() {
+          tourCh.publish({
+            reviewsLoaded: false
+          });
+          meTour.goTo(14);
+        };
+        (function checkStatus() {
+          if (readyObject.detailsLoaded) {
+            nextStep();
+          } else {
+            setTimeout(checkStatus, 200);
+          }
+        })();
+      },
       onPrev: function() {
         var prevStep = function() {
-          meTour.goTo(11);
+          meTour.goTo(12);
         };
         (function checkStatus() {
           if (readyObject.overviewLoaded) {
@@ -300,6 +380,7 @@ const meTour = new Tour({
         })();
       }
     },
+    //19
     {
       //details
       element: ".modal-body .nav .active",
@@ -308,10 +389,24 @@ const meTour = new Tour({
       placement: "bottom",
       backdropContainer: ".modal-content",
       backdropPadding: 0,
-      onNext: function() {meTour.goTo(14);},
+      onNext: function() {
+        var nextStep = function() {
+          tourCh.publish({
+            detailsLoaded: false
+          });
+          meTour.goTo(15);
+        };
+        (function checkStatus() {
+          if (readyObject.resourcesLoaded) {
+            nextStep();
+          } else {
+            setTimeout(checkStatus, 200);
+          }
+        })();
+      },
       onPrev: function() {
         var prevStep = function() {
-          meTour.goTo(12);
+          meTour.goTo(13);
         };
         (function checkStatus() {
           if (readyObject.reviewsLoaded) {
@@ -322,6 +417,7 @@ const meTour = new Tour({
         })();
       }
     },
+    //20
     {
       //resources
       element: ".modal-body .nav .active",
@@ -330,9 +426,10 @@ const meTour = new Tour({
       placement: "bottom",
       backdropContainer: ".modal-content",
       backdropPadding: 0,
+      onNext: function(){meTour.end();},
       onPrev: function() {
         var prevStep = function() {
-          meTour.goTo(13);
+          meTour.goTo(14);
         };
         (function checkStatus() {
           if (readyObject.detailsLoaded) {
