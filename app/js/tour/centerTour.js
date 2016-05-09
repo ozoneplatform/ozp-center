@@ -15,7 +15,7 @@ var readyObject = {};
 // HACK: for some reason window.localstorage is lost in this file.
 setInterval(() => {
   readyObject = Object.assign({}, readyObject, tourCh.get());
-}, 1000);
+}, 100);
 
 const meTour = new Tour({
   backdrop: true,
@@ -24,14 +24,17 @@ const meTour = new Tour({
   onEnd: function() {
     ProfileSearchActions.goHome();
   },
-  template: '<div class="popover" role="tooltip"> <div class="arrow"></div> <h3 class="popover-title"></h3> <div class="popover-content"></div> <div class="popover-navigation"> <button class="btn btn-sm" id="end-tour-btn" data-role="end">End tour</button> <div class="btn-group"> <button class="btn btn-sm btn-default" data-role="prev">&laquo; Prev</button> <button class="btn btn-sm btn-default" data-role="next">Next &raquo;</button> <button class="btn btn-sm btn-default" data-role="pause-resume" data-pause-text="Pause" data-resume-text="Resume">Pause</button> </div> </div> </div>',
+  template: '<div class="popover" role="tooltip" tabIndex="0"> <div class="arrow"></div> <h3 class="popover-title"></h3> <div class="popover-content"></div> <div class="popover-navigation"> <button class="btn btn-sm" id="end-tour-btn" data-role="end" tabIndex="0">End tour</button> <div class="btn-group"> <button class="btn btn-sm btn-default" data-role="prev" tabIndex="0">&laquo; Prev</button> <button class="btn btn-sm btn-default" data-role="next" tabIndex="0">Next &raquo;</button> <button class="btn btn-sm btn-default" data-role="pause-resume" data-pause-text="Pause" data-resume-text="Resume" tabIndex="0">Pause</button> </div> </div> </div>',
   steps: [
     //0
     {
       title: "Welcome. ",
       content: "This simple tour guides you through the toolbar items and introduces you to the primary components of the system: The Center, HUD, and Webtop. These three components enable you to discover, bookmark, rate, review, organize and launch mission and business applications from across the enterprise.",
       orphan: true,
-      template: '<div class="popover" role="tooltip"> <h1 class="popover-header">Welcome to <img src="./images/marketplace-logo.png"></h1><h3 class="popover-title popover-subtitle"></h3> <div class="popover-content"></div> <div class="popover-navigation"> <button class="btn btn-sm" id="end-tour-btn" data-role="end" tabIndex="0">No thanks</button> <div class="btn-group"> <button class="btn btn-sm btn-default" data-role="next">Start the tour &raquo;</button></div> </div> </div>'
+      onShown: function(){
+        $('#welcome').focus();
+      },
+      template: '<div id="welcome" class="popover" role="tooltip" tabIndex="0" aria-labelledby="tourTitle" aria-describedby="tourContent"> <h1 class="popover-header">Welcome to <img src="./images/marketplace-logo.png" alt="AppsMall Marketplace"></h1><h3 id="tourTitle" class="popover-title popover-subtitle"></h3> <div id="tourContent" class="popover-content"></div> <div class="popover-navigation"> <button class="btn btn-sm" id="end-tour-btn" data-role="end" tabIndex="0">No thanks</button> <div class="btn-group"> <button class="btn btn-sm btn-default" data-role="next" tabIndex="0">Start the tour &raquo;</button></div> </div> </div>'
     },
     //1
     {
@@ -39,6 +42,9 @@ const meTour = new Tour({
       title: "HUD",
       content: "Opens HUD (heads up display) where your bookmarked apps are stored, and can easily be organized and launched. Think of HUD as your homepage for favorite apps.",
       placement: "bottom",
+      onShown: function(){
+        $('#tourstop-hud').focus();
+      },
       backdropContainer: ".navbar-fixed-top",
       backdropPadding: 0
     },
@@ -48,6 +54,9 @@ const meTour = new Tour({
       title: "Center",
       content: "Opens the Center where you can search and discover app listings from across the IC. You can bookmark listings to your HUD and you can also launch apps into a seperate tab directly from the Center.",
       placement: "bottom",
+      onShown: function(){
+        $('#tourstop-center').focus();
+      },
       backdropContainer: ".navbar-fixed-top",
       backdropPadding: 0
     },
@@ -57,6 +66,9 @@ const meTour = new Tour({
       title: "Webtop",
       content: "Opens the Webtop, a virtual desktop environment. It allows you to run widgets in a single window, and save your custom workflows as dashboards.",
       placement: "bottom",
+      onShown: function(){
+        $('#tourstop-webtop').focus();
+      },
       backdropContainer: ".navbar-fixed-top",
       backdropPadding: 0
     },
@@ -66,6 +78,9 @@ const meTour = new Tour({
       title: "Notifications",
       content: "Receive AppsMall notifications here. If you have an unread notification, the icon will change to blue to alert you. Once you've read a notification, you can click the X to dismiss it. Otherwise, it will disappear from the list when it expires.",
       placement: "bottom",
+      onShown: function(){
+        $('#tourstop-notifications').focus();
+      },
       backdropContainer: ".navbar-fixed-top",
       backdropPadding: 0
     },
@@ -75,6 +90,9 @@ const meTour = new Tour({
       title: "Help",
       content: "Access help videos and articles explaining how to use the platform. You can also contact the Help Desk or take this tour again from here.",
       placement: "left",
+      onShown: function(){
+        $('#tourstop-help').focus();
+      },
       backdropContainer: ".navbar-fixed-top",
       backdropPadding: 0
     },
@@ -88,6 +106,7 @@ const meTour = new Tour({
       backdropPadding: 0,
       onShown: function() {
         $("#tourstop-global-menu").addClass("open");
+        $('#tourstop-global-menu').focus();
       },
       onHidden: function() {
         $("#tourstop-global-menu").removeClass("open");
@@ -99,6 +118,9 @@ const meTour = new Tour({
       title: "Search and Filter",
       content: "Use keywords and filters to explore listings. When you enter a search term, the system looks for your term in the listing's name, description, tags, etc.",
       placement: "bottom",
+      onShown: function(){
+        $('#tourstop-center-search').focus();
+      },
       backdropContainer: "#header"
     },
     //8
@@ -106,7 +128,10 @@ const meTour = new Tour({
       element: "#tourstop-center-categories",
       title: "Filter by Category",
       content: "Use categories to reduce your search results. When you click a category, only listings in that category will appear on the page. If you select multiple categories, only listings associated with all of the selected categories will appear.",
-      placement: "right"
+      placement: "right",
+      onShown: function(){
+        $('#tourstop-center-categories').focus();
+      }
     },
     //9
     {
@@ -114,7 +139,10 @@ const meTour = new Tour({
       title: "Center Home",
       content: "After searching and filtering, click here to return to the Center Discovery page to see featured listings, new arrivals and most popular listings.",
       placement: "right",
-      onNext: function(){meTour.goTo(10)}
+      onNext: function(){meTour.goTo(10);},
+      onShown: function(){
+        $('#tourstop-center-home').focus();
+      }
     },
     //10
     {
@@ -152,7 +180,7 @@ const meTour = new Tour({
       placement: "left",
       backdropContainer: ".modal-content",
       backdropPadding: 0,
-      onRedirectError: function(){ meTour.goTo(16) },
+      onRedirectError: function(){ meTour.goTo(16); },
       onNext: function() {
         var nextStep = function() {
           tourCh.publish({
@@ -183,7 +211,7 @@ const meTour = new Tour({
       placement: "bottom",
       backdropContainer: ".modal-content",
       backdropPadding: 0,
-      onRedirectError: function(){ meTour.goTo(17) },
+      onRedirectError: function(){ meTour.goTo(17); },
       onNext: function() {
         var nextStep = function() {
           tourCh.publish({
@@ -221,7 +249,7 @@ const meTour = new Tour({
       placement: "bottom",
       backdropContainer: ".modal-content",
       backdropPadding: 0,
-      onRedirectError: function(){ meTour.goTo(18) },
+      onRedirectError: function(){ meTour.goTo(18); },
       onNext: function() {
         var nextStep = function() {
           tourCh.publish({
@@ -260,7 +288,7 @@ const meTour = new Tour({
       backdropContainer: ".modal-content",
       backdropPadding: 0,
       template: '<div class="popover" role="tooltip"> <div class="arrow"></div> <h3 class="popover-title"></h3> <div class="popover-content"></div> <div class="popover-navigation"> <button class="btn btn-sm" id="end-tour-btn" data-role="end">End tour</button> <div class="btn-group"> <button class="btn btn-sm btn-default" data-role="prev">&laquo; Prev</button> <button class="btn btn-sm btn-default" data-role="pause-resume" data-pause-text="Pause" data-resume-text="Resume">Pause</button> </div> </div> </div>',
-      onRedirectError: function(){ meTour.goTo(19) },
+      onRedirectError: function(){ meTour.goTo(19); },
       onNext: function(){ meTour.end();},
       onPrev: function() {
         var prevStep = function() {
