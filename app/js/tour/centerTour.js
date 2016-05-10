@@ -15,7 +15,7 @@ var readyObject = {};
 // HACK: for some reason window.localstorage is lost in this file.
 setInterval(() => {
   readyObject = Object.assign({}, readyObject, tourCh.get());
-}, 1000);
+}, 100);
 
 const meTour = new Tour({
   backdrop: true,
@@ -26,6 +26,7 @@ const meTour = new Tour({
   },
   template: '<div class="popover" role="tooltip" tabIndex="0"> <div class="arrow"></div> <h3 class="popover-title"></h3> <div class="popover-content"></div> <div class="popover-navigation"> <button class="btn btn-sm" id="end-tour-btn" data-role="end" tabIndex="0">End tour</button> <div class="btn-group"> <button class="btn btn-sm btn-default" data-role="prev" tabIndex="0">&laquo; Prev</button> <button class="btn btn-sm btn-default" data-role="next" tabIndex="0">Next &raquo;</button> <button class="btn btn-sm btn-default" data-role="pause-resume" data-pause-text="Pause" data-resume-text="Resume" tabIndex="0">Pause</button> </div> </div> </div>',
   steps: [
+    //0
     {
       title: "Welcome. ",
       content: "This simple tour guides you through the toolbar items and introduces you to the primary components of the system: The Center, HUD, and Webtop. These three components enable you to discover, bookmark, rate, review, organize and launch mission and business applications from across the enterprise.",
@@ -35,6 +36,7 @@ const meTour = new Tour({
       },
       template: '<div id="welcome" class="popover" role="tooltip" tabIndex="0" aria-labelledby="tourTitle" aria-describedby="tourContent"> <h1 class="popover-header">Welcome to <img src="./images/marketplace-logo.png" alt="AppsMall Marketplace"></h1><h3 id="tourTitle" class="popover-title popover-subtitle"></h3> <div id="tourContent" class="popover-content"></div> <div class="popover-navigation"> <button class="btn btn-sm" id="end-tour-btn" data-role="end" tabIndex="0">No thanks</button> <div class="btn-group"> <button class="btn btn-sm btn-default" data-role="next" tabIndex="0">Start the tour &raquo;</button></div> </div> </div>'
     },
+    //1
     {
       element: "#tourstop-hud",
       title: "HUD",
@@ -46,6 +48,7 @@ const meTour = new Tour({
       backdropContainer: ".navbar-fixed-top",
       backdropPadding: 0
     },
+    //2
     {
       element: "#tourstop-center",
       title: "Center",
@@ -57,6 +60,7 @@ const meTour = new Tour({
       backdropContainer: ".navbar-fixed-top",
       backdropPadding: 0
     },
+    //3
     {
       element: "#tourstop-webtop",
       title: "Webtop",
@@ -68,6 +72,7 @@ const meTour = new Tour({
       backdropContainer: ".navbar-fixed-top",
       backdropPadding: 0
     },
+    //4
     {
       element: "#tourstop-notifications",
       title: "Notifications",
@@ -79,6 +84,7 @@ const meTour = new Tour({
       backdropContainer: ".navbar-fixed-top",
       backdropPadding: 0
     },
+    //5
     {
       element: "#tourstop-help",
       title: "Help",
@@ -90,6 +96,7 @@ const meTour = new Tour({
       backdropContainer: ".navbar-fixed-top",
       backdropPadding: 0
     },
+    //6
     {
       element: "#tourstop-global-menu",
       title: "Global Menu",
@@ -100,8 +107,12 @@ const meTour = new Tour({
       onShown: function() {
         $("#tourstop-global-menu").addClass("open");
         $('#tourstop-global-menu').focus();
+      },
+      onHidden: function() {
+        $("#tourstop-global-menu").removeClass("open");
       }
     },
+    //7
     {
       element: "#tourstop-center-search",
       title: "Search and Filter",
@@ -112,6 +123,7 @@ const meTour = new Tour({
       },
       backdropContainer: "#header"
     },
+    //8
     {
       element: "#tourstop-center-categories",
       title: "Filter by Category",
@@ -119,22 +131,27 @@ const meTour = new Tour({
       placement: "right",
       onShown: function(){
         $('#tourstop-center-categories').focus();
-      },
+      }
     },
+    //9
     {
       element: "#tourstop-center-home",
       title: "Center Home",
       content: "After searching and filtering, click here to return to the Center Discovery page to see featured listings, new arrivals and most popular listings.",
       placement: "right",
+      onNext: function(){meTour.goTo(10);},
       onShown: function(){
         $('#tourstop-center-home').focus();
-      },
+      }
     },
+    //10
     {
+      path: `${CENTER_URL}#/home/?%2F%3F=`,
       element: ".Discovery__SearchResults .listing:first, .infiniteScroll .listing:first",
       title: "Listing Tiles",
       content: "Hover over a tile for a short description of the app, to bookmark it to your HUD, or to launch it into a new tab. Click the tile to open the listing overview for more listing details.",
       placement: "top",
+      onRedirectError: function(){ meTour.goTo(15); },
       onShown: function() {
         $(".Discovery__SearchResults .listing:first .slide-up, .infiniteScroll .listing:first .slide-up").css("top", "0px");
       },
@@ -154,6 +171,7 @@ const meTour = new Tour({
         })();
       }
     },
+    //11
     {
       path: `${CENTER_URL}#/home/?%2F%3F=&listing=1&action=view&tab=overview`,
       element: ".modal-body",
@@ -162,6 +180,7 @@ const meTour = new Tour({
       placement: "left",
       backdropContainer: ".modal-content",
       backdropPadding: 0,
+      onRedirectError: function(){ meTour.goTo(16); },
       onNext: function() {
         var nextStep = function() {
           tourCh.publish({
@@ -179,9 +198,11 @@ const meTour = new Tour({
       },
       onPrev: function() {
         $(".quickview").modal("hide");
+        meTour.goTo(10);
 
       }
     },
+    //12
     {
       path: `${CENTER_URL}#/home/?%2F%3F=&listing=1&action=view&tab=reviews`,
       element: ".modal-body .nav .active",
@@ -190,6 +211,7 @@ const meTour = new Tour({
       placement: "bottom",
       backdropContainer: ".modal-content",
       backdropPadding: 0,
+      onRedirectError: function(){ meTour.goTo(17); },
       onNext: function() {
         var nextStep = function() {
           tourCh.publish({
@@ -218,6 +240,7 @@ const meTour = new Tour({
         })();
       }
     },
+    //13
     {
       path: `${CENTER_URL}#/home/?%2F%3F=&listing=1&action=view&tab=details`,
       element: ".modal-body .nav .active",
@@ -226,6 +249,7 @@ const meTour = new Tour({
       placement: "bottom",
       backdropContainer: ".modal-content",
       backdropPadding: 0,
+      onRedirectError: function(){ meTour.goTo(18); },
       onNext: function() {
         var nextStep = function() {
           tourCh.publish({
@@ -254,6 +278,7 @@ const meTour = new Tour({
         })();
       }
     },
+    //14
     {
       path: `${CENTER_URL}#/home/?%2F%3F=&listing=1&action=view&tab=resources`,
       element: ".modal-body .nav .active",
@@ -262,6 +287,9 @@ const meTour = new Tour({
       placement: "bottom",
       backdropContainer: ".modal-content",
       backdropPadding: 0,
+      template: '<div class="popover" role="tooltip"> <div class="arrow"></div> <h3 class="popover-title"></h3> <div class="popover-content"></div> <div class="popover-navigation"> <button class="btn btn-sm" id="end-tour-btn" data-role="end">End tour</button> <div class="btn-group"> <button class="btn btn-sm btn-default" data-role="prev">&laquo; Prev</button> <button class="btn btn-sm btn-default" data-role="pause-resume" data-pause-text="Pause" data-resume-text="Resume">Pause</button> </div> </div> </div>',
+      onRedirectError: function(){ meTour.goTo(19); },
+      onNext: function(){ meTour.end();},
       onPrev: function() {
         var prevStep = function() {
           meTour.goTo(13);
@@ -274,6 +302,90 @@ const meTour = new Tour({
           }
         })();
       }
+    },
+    /// HACK: Browsers that do not support the path key will automatically skip the above paths and jump to this step instead
+    //15
+    {
+      title: "Listing Tiles",
+      element: ".Discovery__SearchResults .listing:first, .infiniteScroll .listing:first",
+      content: "Hover over a tile for a short description of the app, to bookmark it to your HUD, or to launch it into a new tab. Click the tile to open the listing overview for more listing details.",
+      placement: "top",
+      onShown: function() {
+        $(".Discovery__SearchResults .listing:first .slide-up, .infiniteScroll .listing:first .slide-up").css("top", "0px");
+      },
+      onHide: function() {
+        $(".Discovery__SearchResults .listing:first .slide-up, .infiniteScroll .listing:first .slide-up").css("top", "137px");
+      },
+      orphan:true,
+      onNext: function() {
+          meTour.goTo(11);
+        }
+    },
+    //16
+    {
+      element: ".modal-body",
+      title: "Listing Overview",
+      content: "Within this view are screenshots, long descriptions, reviews, and other resources. Use the links at the top right of the listing to launch, bookmark or close it.",
+      placement: "left",
+      backdropContainer: ".modal-content",
+      backdropPadding: 0,
+      orphan:true,
+      delay:200,
+      onNext: function() {
+          meTour.goTo(12);
+      },
+      onPrev: function() {
+        $(".quickview").modal("hide");
+        meTour.goTo(10);
+
+      }
+    },
+    //17
+    {
+      element: ".modal-body .nav .active",
+      title: "Listing Reviews",
+      content: "Rate and review the listing, or read reviews from other users.",
+      placement: "bottom",
+      backdropContainer: ".modal-content",
+      backdropPadding: 0,
+      orphan:true,
+      onNext: function() {
+          meTour.goTo(13);
+      },
+      onPrev: function() {
+          meTour.goTo(11);
+      }
+    },
+    //18
+    {
+      element: ".modal-body .nav .active",
+      title: "Listing Details",
+      content: "Here you'll find a list of new features, usage requirements, ownership information, tags, categories, etc.",
+      placement: "bottom",
+      backdropContainer: ".modal-content",
+      backdropPadding: 0,
+      orphan:true,
+      onNext: function() {
+          meTour.goTo(14);
+      },
+      onPrev: function() {
+          meTour.goTo(12);
+        }
+    },
+    //19
+    {
+      element: ".modal-body .nav .active",
+      title: "Listing Resources",
+      content: "If the listing includes instructions like user manuals and contact information, you will find it here. Thank you for taking the time to tour AppsMall.",
+      placement: "bottom",
+      backdropContainer: ".modal-content",
+      backdropPadding: 0,
+      orphan:true,
+      template: '<div class="popover" role="tooltip"> <div class="arrow"></div> <h3 class="popover-title"></h3> <div class="popover-content"></div> <div class="popover-navigation"> <button class="btn btn-sm" id="end-tour-btn" data-role="end">End tour</button> <div class="btn-group"> <button class="btn btn-sm btn-default" data-role="prev">&laquo; Prev</button> <button class="btn btn-sm btn-default" data-role="pause-resume" data-pause-text="Pause" data-resume-text="Resume">Pause</button> </div> </div> </div>',
+      onNext: function(){ meTour.end();},
+      onPrev: function() {
+          meTour.goTo(13);
+        }
     }
   ]
 });
