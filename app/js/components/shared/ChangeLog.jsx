@@ -202,6 +202,7 @@ var ChangeLog = React.createClass({
         'CREATED' : ActionChangeLog,
         'OUTSIDE' : SetToChangeLog,
         'INSIDE' : SetToChangeLog,
+        'DELETED' : ActionChangeLog,
         'REJECTED' : RejectedChangeLog,
         'APPROVED_ORG' : OrgApprovalChangeLog,
         'REVIEW_EDITED' : ReviewEditedChangeLog,
@@ -216,9 +217,16 @@ var ChangeLog = React.createClass({
                 action: 'view',
                 tab: 'overview'
             });
-            return (
-                <a href={ href }>{ this.props.changeLog.listing.title }</a>
-            );
+            if(!this.props.changeLog.listing.isDeleted){
+              return (
+                  <a href={ href }>{ this.props.changeLog.listing.title }</a>
+              );
+            }
+            else {
+              return(
+                <span>{this.props.changeLog.listing.title + " (Deleted)"}</span>
+              );
+            }
         } else {
             return 'the listing';
         }

@@ -50,6 +50,9 @@ var ActionMenu = React.createClass({
             case 'REJECTED':
                 links = [edit, feedback, preview, del];
                 break;
+            case 'DELETED':
+                links = [view];
+                break;
             case 'DRAFT':
                 /* falls through */
             default:
@@ -150,6 +153,7 @@ var AdminOwnerListingTile = React.createClass({
                 'needs-action': approvalStatus === 'APPROVED_ORG',
                 'published': approvalStatus === 'APPROVED',
                 'rejected': approvalStatus === 'REJECTED',
+                'deleted': approvalStatus === 'DELETED',
                 'AdminOwnerListingTile': true
             };
         }
@@ -160,6 +164,7 @@ var AdminOwnerListingTile = React.createClass({
                 'needs-action': approvalStatus === 'PENDING',
                 'published': approvalStatus === 'APPROVED',
                 'rejected': approvalStatus === 'REJECTED',
+                'deleted': approvalStatus === 'DELETED',
                 'AdminOwnerListingTile': true
             };
         }
@@ -169,6 +174,7 @@ var AdminOwnerListingTile = React.createClass({
                 'pending': approvalStatus === 'PENDING' || approvalStatus === 'APPROVED_ORG',
                 'needs-action': approvalStatus === 'REJECTED',
                 'published': approvalStatus === 'APPROVED',
+                'deleted': approvalStatus === 'DELETED',
                 'AdminOwnerListingTile': true
             };
         }

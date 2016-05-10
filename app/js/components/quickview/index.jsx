@@ -47,6 +47,8 @@ var Quickview = React.createClass({
       });
     },
 
+
+
     getDefaultProps: function () {
         return {
             tabs: [{
@@ -95,6 +97,8 @@ var Quickview = React.createClass({
             }
         }
 
+
+
         var headerProps = {
             listing: listing,
             onCancel: this.close,
@@ -102,7 +106,7 @@ var Quickview = React.createClass({
             currentUser: currentUser,
             preview: this.props.preview,
             allowEdit: CurrentListingStore.currentUserCanEdit()
-        };
+          };
 
         return (
             <Modal ref="modal" className="quickview" onShown={this.onShown} onHidden={this.onHidden} tabIndex="0">
@@ -110,7 +114,7 @@ var Quickview = React.createClass({
                     !listing ?
                         <p>Loading...</p> :
                         [
-                            <Header { ...headerProps } key="header"></Header>,
+                            <Header { ...headerProps }  key="header"></Header>,
                             <div className="tabs-container" key="tabs-container">
                             { this.renderTabs(tabs, listing.id) }
                                 <div className="tab-content" >
@@ -171,7 +175,6 @@ var Quickview = React.createClass({
     onShown: function () {
         // dont force focus causes infinite loop with overview tab's modal carousel
         $(document).off('focusin.bs.modal');
-
         this.setState({
             shown: true
         });
