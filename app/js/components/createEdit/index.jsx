@@ -339,12 +339,12 @@ var ListingForm = React.createClass({
             durl.value = (durl.value) ? decodeURI(durl.value) : '';
             return durl;
         })();
-        
+
         return (
             <form ref="form" className="CreateEdit__form col-xs-9 col-lg-10">
                 <h2 id={f.basicInformation.id}>Basic Information</h2>
 
-                <MarkingInput id={f.securityMarking.id} { ...p('basicSecurityMarking') } aria-label={p('basicSecurityMarking').description}/>
+                <MarkingInput id={f.securityMarking.id} { ...p('securityMarking') } aria-label={p('securityMarking').description}/>
 
                 <TextInput id={f.title.id} { ...p('title') } aria-label={p('title').description}/>
                 <Select2Input id={f.type.id} { ...p('type') }
