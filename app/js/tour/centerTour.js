@@ -21,7 +21,6 @@ const meTour = new Tour({
   backdrop: true,
   backdropPadding: 10,
   storage: false,
-  debug:true,
   onEnd: function() {
     ProfileSearchActions.goHome();
   },
@@ -124,7 +123,7 @@ const meTour = new Tour({
       title: "Listing Tiles",
       content: "Hover over a tile for a short description of the app, to bookmark it to your HUD, or to launch it into a new tab. Click the tile to open the listing overview for more listing details.",
       placement: "top",
-      onRedirectError: function(){ meTour.goTo(15) },
+      onRedirectError: function(){ meTour.goTo(15); },
       onShown: function() {
         $(".Discovery__SearchResults .listing:first .slide-up, .infiniteScroll .listing:first .slide-up").css("top", "0px");
       },
@@ -276,7 +275,7 @@ const meTour = new Tour({
         })();
       }
     },
-    // end of tour the next following steps handle redirection errors
+    /// HACK: Browsers that do not support the path key will automatically skip the above paths and jump to this step instead
     //15
     {
       title: "Listing Tiles",
