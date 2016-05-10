@@ -210,16 +210,23 @@ var ChangeLog = React.createClass({
     },
 
     getListingName: function() {
-
+        console.log(this.props.changeLog);
         if(this.props.showListingName) {
             var href = this.makeHref(this.getActiveRoutePath(), this.getParams(), {
                 listing: this.props.changeLog.listing.id,
                 action: 'view',
                 tab: 'overview'
             });
-            return (
-                <a href={ href }>{ this.props.changeLog.listing.title }</a>
-            );
+            if(!this.props.changeLog.listing.isDeleted){
+              return (
+                  <a href={ href }>{ this.props.changeLog.listing.title }</a>
+              );
+            }
+            else {
+              return(
+                <span>{this.props.changeLog.listing.title + " (Deleted)"}</span>
+              );
+            }
         } else {
             return 'the listing';
         }

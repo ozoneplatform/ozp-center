@@ -176,6 +176,7 @@ var TableView = React.createClass({
             { field: 'featured', caption: 'Featured', sortable: true, size: '5%',
                 render: function (record) {
                     if (thisTable.props.isAdmin===true) {
+                      if(record.featured !== null){
                         if (record.featured) {
                             return '<input type="checkbox" checked/>';
                         } else {
@@ -188,7 +189,12 @@ var TableView = React.createClass({
                             return '<input type="checkbox" disabled="false" />';
                         }
                     }
+                  }
+                  else{
+                    return '<input type="checkbox" style= "display:none" disabled="true" checked/>';
+                  }
                 }
+
             },
             { field: 'actions', caption: 'Actions', size: '5%',
                 render: function (record) {
@@ -209,10 +215,11 @@ var TableView = React.createClass({
                         });
 
                     var status = record.status,
+
                         actions = '<label class="AdminOwnerListingTable__actionMenu">';
 
                     actions += '<a key="link" href="'+editHref+'" title="Edit"><i class="icon-pencil-12-blueDark"/></a>';
-
+                    if(status !== 'DELETED'){
                     if (status === 'APPROVED') {
                         actions += '<a key="view" href="'+overviewHref+'" title="View"><i class="icon-eye-12-blueDark"/></a>';
                     } else {
@@ -226,6 +233,10 @@ var TableView = React.createClass({
                     actions += '<a key="del" href="'+deleteHref+'" title="Delete"><i class="icon-trash-12-blueDark"/></a>';
                     actions += '</label>';
                     return actions;
+                    }
+                    else{
+                      return null;
+                    }
                 }
             }
         );
@@ -244,6 +255,8 @@ var TableView = React.createClass({
             displayStatus = "Draft";
         } else if (status === "REJECTED") {
             displayStatus = "Returned";
+        }else if (status === "DELETED") {
+            displayStatus = "Deleted";
         }
         return displayStatus;
     },
@@ -270,20 +283,38 @@ var TableView = React.createClass({
         var {data, counts } = unpaginatedList;
 
         var records = data.map( function (listing) {
-            return {
-                recid: listing.id,
-                title: listing.title,
-                owners: listing.owners,
-                organization: listing.agency ? listing.agency : '',
-                comments: listing.whatIsNew ? listing.whatIsNew : '',
-                status: listing.approvalStatus,
-                updated: listing.editedDate,
-                enabled: listing.isEnabled ? "Enabled" : "Disabled",
-                featured: listing.isFeatured,
-                actions: null,
-                private: listing.isPrivate,
-                securityMarking: listing.securityMarking
-            };
+            if(listing.approvalStatus !== 'DELETED'){
+              return {
+                  recid: listing.id,
+                  title: listing.title,
+                  owners: listing.owners,
+                  organization: listing.agency ? listing.agency : '',
+                  comments: listing.whatIsNew ? listing.whatIsNew : '',
+                  status: listing.approvalStatus,
+                  updated: listing.editedDate,
+                  enabled: listing.isEnabled ? "Enabled" : "Disabled",
+                  featured: listing.isFeatured,
+                  actions: null,
+                  private: listing.isPrivate,
+                  securityMarking: listing.securityMarking
+              };
+            }
+            else{
+              return {
+                  recid: listing.id,
+                  title: listing.title,
+                  owners: listing.owners,
+                  organization: listing.agency ? listing.agency : '',
+                  comments: listing.whatIsNew ? listing.whatIsNew : '',
+                  status: listing.approvalStatus,
+                  updated: listing.editedDate,
+                  enabled: null,
+                  featured: null,
+                  actions: null,
+                  private: listing.isPrivate,
+                  securityMarking: listing.securityMarking
+              };
+            }
         });
 
         if (this.grid) {

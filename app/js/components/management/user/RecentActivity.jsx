@@ -48,13 +48,12 @@ var RecentActivity = React.createClass({
 
     createLink: function (changeLog) {
         var action = changeLog.action;
-
         var noActions = [
             'MODIFIED',
             'ADD_RELATED_TO_ITEM',
             'REMOVE_RELATED_TO_ITEM',
             'REJECTED',
-            'TAG_CREATED'
+            'TAG_CREATED',
         ];
 
         if (noActions.indexOf(action) > -1) {
@@ -69,7 +68,6 @@ var RecentActivity = React.createClass({
                 'APPROVED_ORG' : 'Review Listing',
                 'REVIEW_EDITED' : 'View',
                 'REVIEW_DELETED' : 'View',
-                'DELETED' : 'View'
             };
 
             var href = this.makeHref(this.getActiveRoutePath(), this.getParams(), {
@@ -85,10 +83,16 @@ var RecentActivity = React.createClass({
             if (this.state.currentUser.highestRole === 'ORG_STEWARD') {
                 linkMap.SUBMITTED = 'Review Listing';
             }
-
-            return (
-                <a href={href}>{ linkMap[action] } <i className="icon-caret-right-blueDark"></i></a>
-            );
+            if(!changeLog.listing.isDeleted){
+              return (
+                  <a href={href}>{ linkMap[action] } <i className="icon-caret-right-blueDark"></i></a>
+              )
+            }
+            else{
+              return (
+                  <p>'application was deleted'</p>
+              );
+            }
         }
     },
 
@@ -108,6 +112,8 @@ var RecentActivity = React.createClass({
         var me = this;
 
         return this.state.changeLogs.map(function (changeLog) {
+            //console.log(changeLog);
+            if(!changeLog.listing.isDeleted){
             return [
                 <ChangeLog showListingName={true} changeLog={changeLog}>
                     { changeLog.listing.smallIcon ? <img className="recent-activity-icon" alt="recent activity icon" src={ changeLog.listing.smallIcon } /> : <div></div> }
@@ -115,12 +121,24 @@ var RecentActivity = React.createClass({
                 </ChangeLog>,
                 <br/>
             ];
+
+          }
+          else{
+            return [
+
+                <ChangeLog showListingName={true} changeLog={changeLog}>
+                    { changeLog.listing.smallIcon ? <img className="recent-activity-icon" alt="recent activity icon" src={ changeLog.listing.smallIcon } /> : <div></div> }
+                </ChangeLog>,
+                <br/>
+            ];
+          }
         });
     },
 
     render: function () {
         var hasMore = this.state.hasMore || false;
         var logs = this.renderChangeLogs();
+        //console.log(logs);
 
         return (
             <div className="RecentActivity row">

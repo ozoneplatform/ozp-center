@@ -127,7 +127,6 @@ var AdministrationTab = React.createClass({
             isAdmin = UserRole[this.props.currentUser.highestRole] >= UserRole.APPS_MALL_STEWARD,
             isStewardOfOrg = _.contains(this.props.currentUser.stewardedOrganizations, listing.agencyShort),
             controls, statusClass, iconClass;
-            console.log(listingStatus[listing.approvalStatus]);
         switch (status) {
             case 'Published':
                 var enabledControl =
@@ -172,12 +171,13 @@ var AdministrationTab = React.createClass({
 
                 }
                 break;
+                /*
             case 'Deleted':
-                console.log('i am gone');
+                //console.log('i am gone');
                 statusClass = 'label-deleted';
                 iconClass = 'icon-exclamation-14';
                 controls = this.renderReviewSection();
-                break;
+                break;*/
             case 'Returned to Owner':
                 statusClass = 'label-needs-action';
                 iconClass= 'icon-exclamation-14';
