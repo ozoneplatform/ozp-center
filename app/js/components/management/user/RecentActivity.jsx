@@ -54,6 +54,7 @@ var RecentActivity = React.createClass({
             'REMOVE_RELATED_TO_ITEM',
             'REJECTED',
             'TAG_CREATED',
+            'DELETED'
         ];
 
         if (noActions.indexOf(action) > -1) {
@@ -88,11 +89,6 @@ var RecentActivity = React.createClass({
                   <a href={href}>{ linkMap[action] } <i className="icon-caret-right-blueDark"></i></a>
               )
             }
-            else{
-              return (
-                  <p>'application was deleted'</p>
-              );
-            }
         }
     },
 
@@ -112,7 +108,6 @@ var RecentActivity = React.createClass({
         var me = this;
 
         return this.state.changeLogs.map(function (changeLog) {
-            //console.log(changeLog);
             if(!changeLog.listing.isDeleted){
             return [
                 <ChangeLog showListingName={true} changeLog={changeLog}>

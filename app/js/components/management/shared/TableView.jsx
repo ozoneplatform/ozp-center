@@ -131,7 +131,12 @@ var TableView = React.createClass({
                         tab: 'overview'
                     });
                     var title = record.title;
-                    return '<a href='+encodeURI(overview)+'>'+title+'</a>';
+                    if(record.status !== 'DELETED'){
+                      return '<a href='+encodeURI(overview)+'>'+title+'</a>';
+                    }
+                    else{
+                      return title;
+                    }
                 }
             },
             { field: 'owners', caption: 'Owners', sortable: true, size: '10%',
