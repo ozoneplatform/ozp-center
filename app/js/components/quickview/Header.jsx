@@ -6,7 +6,6 @@ var IconRating = require('../shared/IconRating.jsx');
 var BookmarkButton = require('../BookmarkButton.jsx');
 var CenterLaunchLink = require('../CenterLaunchLink.jsx');
 
-
 var QuickviewHeader = React.createClass({
 
     propTypes: {
