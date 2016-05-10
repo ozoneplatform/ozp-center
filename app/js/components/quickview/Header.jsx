@@ -79,7 +79,7 @@ var QuickviewHeader = React.createClass({
                     this.props.listing.approvalStatus === "APPROVED" &&
                     <BookmarkButton listing={this.props.listing} />
                 }
-              {(this.props.allowEdit && !this.props.deleted) && <button data-toggle="tooltip" data-placement="top" title="Edit" type="button" aria-label={`Edit ${this.props.listing.title}`} className="tooltiped btn btn-default" onClick={ this.props.onEdit }><i className="icon-pencil-grayDark"></i></button>}
+              {(this.props.allowEdit) && <button data-toggle="tooltip" data-placement="top" title="Edit" type="button" aria-label={`Edit ${this.props.listing.title}`} className="tooltiped btn btn-default" onClick={ this.props.onEdit }><i className="icon-pencil-grayDark"></i></button>}
             </div>
         );
     }
