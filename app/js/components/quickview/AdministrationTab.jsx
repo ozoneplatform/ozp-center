@@ -171,13 +171,6 @@ var AdministrationTab = React.createClass({
 
                 }
                 break;
-                /*
-            case 'Deleted':
-                //console.log('i am gone');
-                statusClass = 'label-deleted';
-                iconClass = 'icon-exclamation-14';
-                controls = this.renderReviewSection();
-                break;*/
             case 'Returned to Owner':
                 statusClass = 'label-needs-action';
                 iconClass= 'icon-exclamation-14';
