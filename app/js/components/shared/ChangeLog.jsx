@@ -210,7 +210,7 @@ var ChangeLog = React.createClass({
     },
 
     getListingName: function() {
-        console.log(this.props.changeLog);
+
         if(this.props.showListingName) {
             var href = this.makeHref(this.getActiveRoutePath(), this.getParams(), {
                 listing: this.props.changeLog.listing.id,
