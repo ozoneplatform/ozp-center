@@ -639,7 +639,6 @@
     "bootstrap-classify": {
       "version": "1.0.0",
       "from": "git://github.com/ozone-development/bootstrap-classify.git#ozp-integ",
-      "resolved": "git://github.com/ozone-development/bootstrap-classify.git#28cbe8d6d8d03d9292da6b6980ae4e680e85677e",
       "dependencies": {
         "jquery": {
           "version": "2.1.4",
@@ -650,8 +649,7 @@
     },
     "bootstrap-sass": {
       "version": "3.3.1",
-      "from": "git://github.com/ozone-development/bootstrap-sass.git",
-      "resolved": "git://github.com/ozone-development/bootstrap-sass.git#c4da0820643d60e9103d049d4ab9979f9ed861ac"
+      "from": "git://github.com/ozone-development/bootstrap-sass.git"
     },
     "bootstrap-tour": {
       "version": "0.10.2",
@@ -2340,7 +2338,6 @@
     "icons": {
       "version": "0.0.2",
       "from": "git://github.com/ozone-development/ozp-icons.git",
-      "resolved": "git://github.com/ozone-development/ozp-icons.git#b9cc64e95ccbcd5d65ff06118e6d452bc8684275",
       "dependencies": {
         "ansi-regex": {
           "version": "0.2.1",
@@ -7231,12 +7228,10 @@
     "ozp-react-commons": {
       "version": "1.1.7",
       "from": "git://github.com/ozone-development/ozp-react-commons.git#master",
-      "resolved": "git://github.com/ozone-development/ozp-react-commons.git#c67cee4c3b32d8210772cacc2ebfac0aa394717a",
       "dependencies": {
         "bootstrap-sass": {
           "version": "3.3.1",
-          "from": "git://github.com/ozone-development/bootstrap-sass.git#master",
-          "resolved": "git://github.com/ozone-development/bootstrap-sass.git#c4da0820643d60e9103d049d4ab9979f9ed861ac"
+          "from": "git://github.com/ozone-development/bootstrap-sass.git#master"
         }
       }
     },
@@ -7541,8 +7536,7 @@
     },
     "react-select-box": {
       "version": "2.0.1",
-      "from": "git://github.com/ozone-development/react-select-box.git#master",
-      "resolved": "git://github.com/ozone-development/react-select-box.git#c359a9960ea2765d2c140ee7fea677cd0e5bd379"
+      "from": "git://github.com/ozone-development/react-select-box.git#master"
     },
     "react-tools": {
       "version": "0.13.3",
