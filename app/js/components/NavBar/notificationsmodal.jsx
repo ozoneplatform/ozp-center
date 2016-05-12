@@ -63,7 +63,7 @@ var NotificationsModal = React.createClass({
     makeSidebar: function() {
       var notis = this.state.notificationList.slice();
 
-      return notis.reverse().map((n, i) => {
+      return notis.map((n, i) => {
         var date = new Date(n.createdDate);
         var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
         var formattedDate = (months[date.getMonth() + 1]) + ' ' + date.getDate() + ', ' +  date.getFullYear();
