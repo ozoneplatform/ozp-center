@@ -5,7 +5,7 @@ var moment = require('moment');
 var { Link, Navigation } = require('react-router');
 var ActiveState = require('../../mixins/ActiveStateMixin');
 var { UserRole } = require('ozp-react-commons/constants');
-var deleated = './images/deleted_360.png';
+var deleted = './images/deleted_360.png';
 
 var ActionMenu = React.createClass({
 
@@ -192,28 +192,18 @@ var AdminOwnerListingTile = React.createClass({
       });
       var classSet = React.addons.classSet(this._getApprovalStatusClass());
       var imageLargeUrl = listing.imageLargeUrl;
-        if(this.props.listing.approvalStatus !== "DELETED"){
             return (
                 <li className={classSet}>
-                    <ActionMenu listing={listing} />
+                  { (this.props.listing.approvalStatus !== "DELETED")  &&
+                      <ActionMenu listing={listing} />
+                    }
                     <a href={overview}>
-                        <img alt={`Click to manage ${listing.title}`} className="AdminOwnerListingTile__img" src={imageLargeUrl} />
+                        <img alt={`Click to manage ${listing.title}`} className="AdminOwnerListingTile__img" src={(this.props.listing.approvalStatus !== "DELETED") ? imageLargeUrl : deleted} />
                         <span className="hidden-span">{listing.title}</span>
                     </a>
                     <InfoBar listing={listing} />
                 </li>
             );
-        }
-        else{
-
-            return (
-                <li className={classSet}>
-                        <img alt={`Click to manage ${listing.title}`} className="AdminOwnerListingTile__img" src={deleated} />
-                        <span className="hidden-span">{listing.title}</span>
-                    <InfoBar listing={listing} />
-                </li>
-            );
-        }
       }
 });
 

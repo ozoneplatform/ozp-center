@@ -158,3 +158,7 @@
     @extend .icon-reload-14-blueDark;
     color: $blue-dark;
 }
+.AdminOwnerListingTile.deleted .approvalStatus {
+    @extend .icon-trash-12-grayDark;
+    color: $gray-dark;
+}
