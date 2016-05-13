@@ -45,35 +45,43 @@ var AllListingsSidebarFilter = React.createClass({
     render: function () {
         return (
             <RadioGroup name="recent-activity-all-listings" onChange={this.props.handleChange}>
-                <Link id="recent-activity-returned" to="all-listings" query={{approvalStatus: "APPROVED_ORG"}}>
-                    <label htmlFor="recent-activity-all-returned" className="label-needs-action">
+                <Link id="recent-activity-returned" to="all-listings" query={{approval_status: "APPROVED_ORG"}}>
+                    <label htmlFor="recent-activity-returned" className="label-needs-action">
                         <i className="icon-caret-right"></i>
                         <i className="icon-exclamation-14"></i>
                         Pending Review
                     </label>
                 </Link>
 
-                <Link id="recent-activity-returned" to="all-listings" query={{approvalStatus: "PENDING"}}>
-                    <label htmlFor="recent-activity-all-pending" className="label-pending">
+                <Link id="recent-activity-returned" to="all-listings" query={{approval_status: "PENDING"}}>
+                    <label htmlFor="recent-activity-pending" className="label-pending">
                         <i className="icon-caret-right"></i>
                         <i className="icon-loader-14"></i>
                         Pending Organization Review
                     </label>
                 </Link>
 
-                <Link id="recent-activity-returned" to="all-listings" query={{approvalStatus: "APPROVED"}}>
-                    <label htmlFor="recent-activity-all-published" className="label-published">
+                <Link id="recent-activity-returned" to="all-listings" query={{approval_status: "APPROVED"}}>
+                    <label htmlFor="recent-activity-published" className="label-published">
                         <i className="icon-caret-right"></i>
                         <i className="icon-thumbs-up-14"></i>
                         Published
                     </label>
                 </Link>
 
-                <Link id="recent-activity-returned" to="all-listings" query={{approvalStatus: "REJECTED"}}>
-                    <label htmlFor="recent-activity-all-returned" className="label-rejected">
+                <Link id="recent-activity-returned" to="all-listings" query={{approval_status: "REJECTED"}}>
+                    <label htmlFor="recent-activity-returned" className="label-rejected">
                         <i className="icon-caret-right"></i>
                         <i className="icon-reload-14"></i>
                         Returned to Owner
+                    </label>
+                </Link>
+
+                <Link id="recent-activity-deleted" to="all-listings" query={{approval_status: "DELETED"}}>
+                    <label htmlFor="recent-activity-deleted" className="label-deleted">
+                        <i className="icon-caret-right"></i>
+                        <i className="icon-reload-14"></i>
+                        Deleted
                     </label>
                 </Link>
             </RadioGroup>
@@ -116,6 +124,14 @@ var OrgListingsSidebarFilter = React.createClass({
                     <label htmlFor="recent-activity-org-returned" className="label-rejected">
                         <i className="icon-reload-14"></i>
                         Returned to Owner
+                        <i className="icon-caret-right"></i>
+                    </label>
+                </Link>
+
+                <Link id="recent-activity-deleted" to="org-listings" query={{approvalStatus: "DELETED"}} params={{org: this.props.org.title}}>
+                    <label htmlFor="recent-activity-org-deleted" className="label-deleted">
+                        <i className="icon-reload-14"></i>
+                        Deleted
                         <i className="icon-caret-right"></i>
                     </label>
                 </Link>

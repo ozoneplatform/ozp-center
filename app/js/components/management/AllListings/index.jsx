@@ -39,7 +39,7 @@ var AllListings = React.createClass({
         this.state.filter[key] = value;
         if(this.state.tableView){
             UnpaginatedListingsStore.filterChange(this.state.filter);
-        } else {     
+        } else {
             PaginatedListingsStore.filterChange(this.state.filter);
         }
         this.setState({

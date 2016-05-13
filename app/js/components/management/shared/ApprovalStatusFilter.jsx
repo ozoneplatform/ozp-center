@@ -5,6 +5,7 @@ var RadioGroup = require('react-radio-group');
 var { UserRole } = require('ozp-react-commons/constants');
 
 function filterOption (currentValue, label, value, count, htmlFor, className, iconClass) {
+    //console.log(currentValue + " " +label + " "  + value+ " "+  count+ " "+ htmlFor+ " " +className+ " "+ iconClass);
     var badge;
     var statusIcon;
 
@@ -40,6 +41,7 @@ var ApprovalStatusFilter = React.createClass({
 
     handleChange: function (evt) {
         var { value } = evt.target;
+        console.log(value);
         if (value === 'all') {
             value = null;
         }
@@ -70,7 +72,8 @@ var ApprovalStatusFilter = React.createClass({
         }
         components.push(
             filterOption(value, 'Returned', 'REJECTED', counts.REJECTED, 'all-listings-filter-rejected', 'label-rejected', 'icon-reload-12-blueDark'),
-            filterOption(value, 'Draft', 'IN_PROGRESS', counts.IN_PROGRESS, 'all-listings-filter-draft', 'label-draft', 'icon-paper-12-grayDark')
+            filterOption(value, 'Draft', 'IN_PROGRESS', counts.IN_PROGRESS, 'all-listings-filter-draft', 'label-draft', 'icon-paper-12-grayDark'),
+            filterOption(value, 'Deleted', 'DELETED', counts.DELETED, 'all-listings-filter-deleted', 'label-deleted', 'icon-reload-12-blueDark')
         );
         return components;
     },
