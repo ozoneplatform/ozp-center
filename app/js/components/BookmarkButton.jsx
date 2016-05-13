@@ -2,9 +2,13 @@
 
 var React = require('react');
 var Reflux = require('reflux');
-
 var _ = require('../utils/_');
 
+var ChangeLogs = require('./quickview/ChangeLogs.jsx');
+var ListingActions = require('../actions/ListingActions');
+var fetchChangeLogs = ListingActions.fetchChangeLogs;
+var enableBookmarkedLocal = ListingActions.enableBookmarked;
+var disableBookmarkedLocal = ListingActions.disableBookmarked;
 var LibraryStore = require('../stores/LibraryStore');
 var { addToLibrary, removeFromLibrary } = require('../actions/LibraryActions');
 
@@ -16,11 +20,12 @@ var BookmarkButton = React.createClass({
     },
 
     getInitialState: function() {
-        return {library: []};
+        return {library: [], listing: this.props.listing};
     },
 
     toggleInLibrary: function (e) {
         var that = this;
+        var listing = this.props.listing;
 
         e.preventDefault();
         e.stopPropagation();
@@ -31,14 +36,27 @@ var BookmarkButton = React.createClass({
             }).id;
 
             removeFromLibrary(this.props.listing, libId);
+            var newData = {isBookmarked: false};
+            this.setState({listing: newData});
+            disableBookmarkedLocal.bind(null, listing);
         }
         else {
             addToLibrary(this.props.listing);
+            var newData2 = {isBookmarked: true};
+            this.setState({listing: newData2});
+            enableBookmarkedLocal.bind(null, listing);
         }
     },
 
     inLibrary: function() {
-        return !!_.find(this.state.library, e => e.listing.id === this.props.listing.id);
+        var ttt = !!_.find(this.state.library, e => e.listing.id === this.props.listing.id);
+
+        if(ttt || this.props.listing.isBookmarked){
+          return true;
+        }else{
+          return false;
+        }
+        return this.state.listing.isBookmarked;
     },
 
     componentDidMount: function(){
@@ -58,11 +76,19 @@ var BookmarkButton = React.createClass({
         });
 
         return (
-          <button ref="tooltipped" data-toggle="tooltip" data-placement="top" title="Bookmark" type="button" aria-label={(this.inLibrary()) ? 'This app is Bookmarked' : 'Click to bookmark this app'} className={bookmarkBtnStyles} onClick={this.toggleInLibrary}>
+          <button
+            ref="tooltipped"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Bookmark"
+            type="button"
+            aria-label={(this.inLibrary()) ? 'This app is Bookmarked' : 'Click to bookmark this app'}
+            className={bookmarkBtnStyles}
+            onClick={this.toggleInLibrary}>
               <i className={bookmarkIcon}/><span className="hidden-span">Bookmark</span>
           </button>
         );
-    }
+      }
     });
 
 module.exports = BookmarkButton;

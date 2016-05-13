@@ -37,7 +37,7 @@ var Toggle = React.createClass({
     }
 });
 
-var EnabledControl = React.createClass({
+var EnabledControl = React.createClass({ 
     shouldComponentUpdate: function (newProps) {
         return newProps.listing.isEnabled !== this.props.isEnabled;
     },
