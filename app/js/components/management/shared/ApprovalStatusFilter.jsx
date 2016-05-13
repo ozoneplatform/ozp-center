@@ -5,7 +5,6 @@ var RadioGroup = require('react-radio-group');
 var { UserRole } = require('ozp-react-commons/constants');
 
 function filterOption (currentValue, label, value, count, htmlFor, className, iconClass) {
-    //console.log(currentValue + " " +label + " "  + value+ " "+  count+ " "+ htmlFor+ " " +className+ " "+ iconClass);
     var badge;
     var statusIcon;
 
@@ -41,7 +40,6 @@ var ApprovalStatusFilter = React.createClass({
 
     handleChange: function (evt) {
         var { value } = evt.target;
-        console.log(value);
         if (value === 'all') {
             value = null;
         }
