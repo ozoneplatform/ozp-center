@@ -5,6 +5,7 @@ var moment = require('moment');
 var { Link, Navigation } = require('react-router');
 var ActiveState = require('../../mixins/ActiveStateMixin');
 var { UserRole } = require('ozp-react-commons/constants');
+var deleted = './images/deleted_360.png';
 
 var ActionMenu = React.createClass({
 
@@ -182,27 +183,28 @@ var AdminOwnerListingTile = React.createClass({
     },
 
     render: function () {
-        var { listing } = this.props;
+      var { listing } = this.props;
 
-        var overview = this.makeHref(this.getActiveRoutePath(), this.getParams(), {
-            listing: listing.id,
-            action: 'view',
-            tab: 'overview'
-        });
-        var classSet = React.addons.classSet(this._getApprovalStatusClass());
-        var imageLargeUrl = listing.imageLargeUrl;
-
-        return (
-            <li className={classSet}>
-                <ActionMenu listing={listing} />
-                <a href={overview}>
-                    <img alt={`Click to manage ${listing.title}`} className="AdminOwnerListingTile__img" src={imageLargeUrl} />
-                    <span className="hidden-span">{listing.title}</span>
-                </a>
-                <InfoBar listing={listing} />
-            </li>
-        );
-    }
+      var overview = this.makeHref(this.getActiveRoutePath(), this.getParams(), {
+          listing: listing.id,
+          action: 'view',
+          tab: 'overview'
+      });
+      var classSet = React.addons.classSet(this._getApprovalStatusClass());
+      var imageLargeUrl = listing.imageLargeUrl;
+            return (
+                <li className={classSet}>
+                  { (this.props.listing.approvalStatus !== "DELETED")  &&
+                      <ActionMenu listing={listing} />
+                    }
+                    <a href={overview}>
+                        <img alt={`Click to manage ${listing.title}`} className="AdminOwnerListingTile__img" src={(this.props.listing.approvalStatus !== "DELETED") ? imageLargeUrl : deleted} />
+                        <span className="hidden-span">{listing.title}</span>
+                    </a>
+                    <InfoBar listing={listing} />
+                </li>
+            );
+      }
 });
 
 module.exports = AdminOwnerListingTile;
