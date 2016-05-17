@@ -429,7 +429,7 @@ var ListingApi = {
             if (profile.isAdmin() || profile.highestRole === 'ORG_STEWARD' ){
                 url = API_URL + '/api/listings/activity/?' + $.param(options);
             } else {
-                url = API_URL + '/api/self/profile/' + profile.id + '/listing/activity/?' + $.param(options);
+                url = API_URL + '/api/self/listings/activity/?' + $.param(options);
             }
         }
         return $.getJSON(url).then(
