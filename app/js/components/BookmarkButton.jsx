@@ -11,6 +11,7 @@ var enableBookmarkedLocal = ListingActions.enableBookmarked;
 var disableBookmarkedLocal = ListingActions.disableBookmarked;
 var LibraryStore = require('../stores/LibraryStore');
 var { addToLibrary, removeFromLibrary } = require('../actions/LibraryActions');
+//var browserUrl = window.location.href;
 
 var BookmarkButton = React.createClass({
     mixins: [Reflux.connect(LibraryStore, 'library')],
@@ -49,14 +50,26 @@ var BookmarkButton = React.createClass({
     },
 
     inLibrary: function() {
-        var ttt = !!_.find(this.state.library, e => e.listing.id === this.props.listing.id);
-
-        if(ttt || this.props.listing.isBookmarked){
+      if(this.props.listing.id == this.getParameterByName("listing")){
+        var testLibrary = !!_.find(this.state.library, e => e.listing.id === this.props.listing.id);
+        if(testLibrary || this.props.listing.id.isBookmarked){
           return true;
         }else{
           return false;
         }
-        return this.state.listing.isBookmarked;
+      }else{
+        return !!_.find(this.state.library, e => e.listing.id === this.props.listing.id);
+      }
+    },
+
+    getParameterByName: function(name, url) {
+      if (!url) url = window.location.href;
+      name = name.replace(/[\[\]]/g, "\\$&");
+      var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
     },
 
     componentDidMount: function(){
