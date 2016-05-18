@@ -66,7 +66,7 @@ var NotificationsModal = React.createClass({
       return notis.map((n, i) => {
         var date = new Date(n.createdDate);
         var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
-        var formattedDate = (months[date.getMonth() + 1]) + ' ' + date.getDate() + ', ' +  date.getFullYear();
+        var formattedDate = (months[date.getMonth()]) + ' ' + date.getDate() + ', ' +  date.getFullYear();
         return (
           <li role="presentation" alt={`Notification ${i + 1} from ${n.author.user.username}`} tabIndex={i} onClick={() => {
               this.setState({
@@ -87,7 +87,7 @@ var NotificationsModal = React.createClass({
       };
       var date = new Date(n.createdDate);
       var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
-      var formattedDate = (months[date.getMonth() + 1]) + ' ' + date.getDate() + ', ' +  date.getFullYear();
+      var formattedDate = (months[date.getMonth()]) + ' ' + date.getDate() + ', ' +  date.getFullYear();
       return (
         <div>
           <div className="row" tabIndex={0}>
