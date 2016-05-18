@@ -192,19 +192,32 @@ var AdminOwnerListingTile = React.createClass({
       });
       var classSet = React.addons.classSet(this._getApprovalStatusClass());
       var imageLargeUrl = listing.imageLargeUrl;
-            return (
-                <li className={classSet}>
-                  { (this.props.listing.approvalStatus !== "DELETED")  &&
-                      <ActionMenu listing={listing} />
-                    }
-                    <a href={overview}>
-                        <img alt={`Click to manage ${listing.title}`} className="AdminOwnerListingTile__img" src={(this.props.listing.approvalStatus !== "DELETED") ? imageLargeUrl : deleted} />
-                        <span className="hidden-span">{listing.title}</span>
-                    </a>
-                    <InfoBar listing={listing} />
+      if(this.props.listing.approvalStatus !== 'DELETED'){
+          return (
+              <li className={classSet}>
+                { (this.props.listing.approvalStatus !== "DELETED")  &&
+                    <ActionMenu listing={listing} />
+                }
+                <a href={overview}>
+                  <img alt={`Click to manage ${listing.title}`} className="AdminOwnerListingTile__img" src={(this.props.listing.approvalStatus !== "DELETED") ? imageLargeUrl : deleted} />
+                    <span className="hidden-span">{listing.title}</span>
+                </a>
+                <InfoBar listing={listing} />
                 </li>
-            );
+          );
       }
-});
+      else{
+        return (
+            <li className={classSet}>
+              <a >
+                <img className="AdminOwnerListingTile__img" src={deleted} />
+                  <span className="hidden-span">{listing.title}</span>
+              </a>
+              <InfoBar listing={listing} />
+              </li>
+            );
+          }
+      }
+      });
 
 module.exports = AdminOwnerListingTile;

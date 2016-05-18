@@ -80,7 +80,7 @@ var AllListingsSidebarFilter = React.createClass({
                 <Link id="recent-activity-deleted" to="all-listings" query={{approval_status: "DELETED"}}>
                     <label htmlFor="recent-activity-deleted" className="label-deleted">
                         <i className="icon-caret-right"></i>
-                        <i className="icon-reload-14"></i>
+                        <i className="icon-trash-blue"></i>
                         Deleted
                     </label>
                 </Link>
