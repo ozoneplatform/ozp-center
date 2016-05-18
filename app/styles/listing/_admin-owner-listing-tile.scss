@@ -159,6 +159,6 @@
     color: $blue-dark;
 }
 .AdminOwnerListingTile.deleted .approvalStatus {
-    @extend .icon-trash-12-grayDark;
+    @extend .icon-trash-12-blueDarker;
     color: $gray-dark;
 }

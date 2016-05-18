@@ -200,7 +200,7 @@ button.btn.image-remove {
 
     > .icon-trash {
 
-        @extend .icon-trash-grayDark;
+      @extend .icon-trash-grayDark;
     }
 
     &:hover, &:focus {
