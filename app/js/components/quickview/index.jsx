@@ -2,8 +2,9 @@
 
 var React = require('react');
 var Reflux = require('reflux');
-var { Navigation } = require('react-router');
+var { Navigation, CurrentPath } = require('react-router');
 
+var ActiveState = require('../../mixins/ActiveStateMixin');
 var State = require('../../mixins/ActiveStateMixin');
 var _ = require('../../utils/_');
 
@@ -38,8 +39,13 @@ var Quickview = React.createClass({
     mixins: [
       Reflux.connect(CurrentListingStore),
       Navigation,
+      CurrentPath,
       State
     ],
+
+    propTypes: {
+        listing: React.PropTypes.object
+    },
 
     componentDidMount: function() {
       this.listenTo(ProfileSearchActions.goHome, () => {
@@ -70,7 +76,6 @@ var Quickview = React.createClass({
 
     render: function () {
         var currentUser = this.props.currentUser;
-
         var { shown, listing } = this.state;
         var ActiveRouteHandler = this.getActiveRouteHandler();
         var owners, tabs;

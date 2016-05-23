@@ -40,7 +40,7 @@ var LoadMore = React.createClass({
     },
 
     renderList: function () {
-        var children = this.generateChildren(); 
+        var children = this.generateChildren();
 
         if (children && children.length > 0) {
             return <ol className="list-unstyled">{ children }</ol>;

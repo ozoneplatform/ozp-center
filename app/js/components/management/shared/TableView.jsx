@@ -26,7 +26,7 @@ var TableView = React.createClass({
         onCountsChanged: PropTypes.func.isRequired,
         tableName: PropTypes.string.isRequired,
         isAdmin: PropTypes.bool,
-        showOrg: PropTypes.bool,
+        showOrg: PropTypes.bool
     },
 
     render: function () {

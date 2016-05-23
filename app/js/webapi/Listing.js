@@ -56,7 +56,6 @@ function Listing (json) {
     }
 
     if (viewingExistingListing(json)) {
-        // console.log('viewing existing listing (data comes from API) ');
         this.type = json.listingType ? json.listingType.title : "";
         this.categories = _.map(json.categories, 'title') || [];
         this.tags = _.map(json.tags, 'name') || [];
@@ -100,7 +99,6 @@ function Listing (json) {
         this.uuid = json.uniqueName;
 
     } else if (creatingFreshListing(json)) {
-        // console.log('creating fresh listing (in create/edit page)' );
         this.owners = _.map(json.owners, function (o) {
             return {displayName: o.displayName,
                     id: o.id,
@@ -114,7 +112,6 @@ function Listing (json) {
         this.contacts = this.contacts || [];
 
     } else {
-        // console.log('editing listing (data comes from create/edit page)');
         this.title = json.title || "";
         this.type = json.type || "";
         this.owners = json.owners || [];
@@ -129,8 +126,6 @@ function Listing (json) {
     this.screenshots = this.screenshots || [];
     this.docUrls = this.docUrls || [];
     this.changeLogs = [];
-
-    // console.log('object Listing', this);
 
     return this;
 }
