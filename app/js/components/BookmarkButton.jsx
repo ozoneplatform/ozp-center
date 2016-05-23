@@ -11,7 +11,6 @@ var enableBookmarkedLocal = ListingActions.enableBookmarked;
 var disableBookmarkedLocal = ListingActions.disableBookmarked;
 var LibraryStore = require('../stores/LibraryStore');
 var { addToLibrary, removeFromLibrary } = require('../actions/LibraryActions');
-//var browserUrl = window.location.href;
 
 var BookmarkButton = React.createClass({
     mixins: [Reflux.connect(LibraryStore, 'library')],
@@ -36,23 +35,23 @@ var BookmarkButton = React.createClass({
                 return x.listing.id === that.props.listing.id;
             }).id;
 
-            removeFromLibrary(this.props.listing, libId);
             var newData = {isBookmarked: false};
             this.setState({listing: newData});
             disableBookmarkedLocal.bind(null, listing);
+            removeFromLibrary(this.props.listing, libId);
         }
         else {
-            addToLibrary(this.props.listing);
             var newData2 = {isBookmarked: true};
             this.setState({listing: newData2});
             enableBookmarkedLocal.bind(null, listing);
+            addToLibrary(this.props.listing);
         }
     },
 
     inLibrary: function() {
+      var testLibrary = !!_.find(this.state.library, e => e.listing.id === this.props.listing.id);
       if(this.props.listing.id == this.getParameterByName("listing")){
-        var testLibrary = !!_.find(this.state.library, e => e.listing.id === this.props.listing.id);
-        if(testLibrary || this.props.listing.id.isBookmarked){
+        if(this.state.listing.isBookmarked || testLibrary){
           return true;
         }else{
           return false;
