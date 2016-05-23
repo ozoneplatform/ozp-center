@@ -30,6 +30,9 @@ var BookmarkButton = React.createClass({
         e.preventDefault();
         e.stopPropagation();
 
+        if(this.state.listing.id == "23"){console.log(this.state.listing);}
+
+
         if (this.inLibrary()) {
             var libId = _.find(this.state.library, function(x) {
                 return x.listing.id === that.props.listing.id;
@@ -49,6 +52,7 @@ var BookmarkButton = React.createClass({
     },
 
     inLibrary: function() {
+      //if(this.state.listing.id == "23"){console.log(this.props.listing);console.log(this.state.library);}
       var testLibrary = !!_.find(this.state.library, e => e.listing.id === this.props.listing.id);
       if(this.props.listing.id == this.getParameterByName("listing")){
         if(this.state.listing.isBookmarked || testLibrary){

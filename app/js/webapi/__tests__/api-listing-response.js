@@ -142,6 +142,7 @@ var listing = {
     "requirements": "None",
     "approval_status": "APPROVED",
     "is_enabled": true,
+    "is_bookmarked": true,
     "is_featured": true,
     "avg_rate": "0.0",
     "total_votes": 0,

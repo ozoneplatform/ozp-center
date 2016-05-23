@@ -29,7 +29,7 @@ var SAVE_FORMAT_FIELDS = [
     'requirements', 'screenshots', 'singleton', 'tags', 'title', 'total_comments', 'total_rate1',
     'total_rate2', 'total_rate3', 'total_rate4', 'total_rate5', 'total_votes', 'unique_name',
     'version_name', 'what_is_new', 'small_icon', 'large_icon', 'banner_icon', 'large_banner_icon',
-    'security_marking', 'isBookmarked'
+    'security_marking', 'is_bookmarked'
 ];
 
 function Listing (json) {
