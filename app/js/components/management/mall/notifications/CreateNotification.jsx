@@ -57,7 +57,7 @@ var CreateNotification = React.createClass({
 
     onMessageChange(event) {
         var { value } = event.target;
-        this.setState({message: value.substring(0, 150)});
+        this.setState({message: value.substring(0, 600)});
     },
 
     onSend(event) {
