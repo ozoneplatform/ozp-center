@@ -1,3 +1,11 @@
+### 1.1.28 (2016-05-25)
+
+
+#### Features
+
+* **Notifications:** increase notification length to 600 characters ([aad1540b](https://github.com/ozone-development/ozp-center.git/commit/aad1540bdc7d921b9876f5257d0cee3e8bc78143))
+
+
 ### 1.1.25 (2016-05-04)
 
 
