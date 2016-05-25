@@ -8,6 +8,7 @@ var IMAGE_URL = API_URL + '/api/image/';
 
 var TIMEOUT = 10000; //10 seconds
 var UNKN0WN_ERROR_MESSAGE = 'Unknown error saving image';
+require('sweetalert');
 
 /**
  * Read the response from the hidden iframe.  This function gets called in response
@@ -79,7 +80,8 @@ function cleanupDom(containerEl, placeholderInput) {
 /**
  * API for uploading images to the server.  In modern browsers, this uses the File API and
  * XMLHttpRequest 2 in order to upload the file contents as the raw HTTP request contents.
- * In browsers that don't support that mechanism (IE9), creates a hidden <form> and <iframe> to
+ * In browsers that don't support that require('sweetalert');
+mechanism (IE9), creates a hidden <form> and <iframe> to
  * perform the submission as multipart/form-data.
  *
  * NOTE: The form-data upload only works if the API server is not cross domain.  If it is,
@@ -99,35 +101,45 @@ var ImageApi = {
     save: function(file, marking) {
         //File API supported
         if (window.Blob && file instanceof Blob) {
-            var form = new FormData();
-            form.append("file_extension", file.type.split('/')[1]);
-            form.append("security_marking", marking);
-            form.append("image", file);
+          if(file.type === 'image/gif' || file.type === 'image/png' || file.type === 'image/jpeg'){
+            if(file.size <= 1024000){
+                var form = new FormData();
+                form.append("file_extension", file.type.split('/')[1]);
+                form.append("security_marking", marking);
+                form.append("image", file);
 
-            // TODO: When size validation is ready, make this variable (new parameter)
-            form.append("image_type", "large_screenshot");
+                // TODO: When size validation is ready, make this variable (new parameter)
+                form.append("image_type", "large_screenshot");
 
-            var postForReal = function() {
+                var postForReal = function() {
+                    return $.ajax({
+                        "async": true,
+                        "crossDomain": true,
+                        "url": IMAGE_URL,
+                        "method": "POST",
+                        "headers": {},
+                        "processData": false,
+                        "contentType": false,
+                        "mimeType": "multipart/form-data",
+                        "data": form
+                    }).then(resp => resp); //only capture first arg
+                };
+
                 return $.ajax({
-                    "async": true,
-                    "crossDomain": true,
                     "url": IMAGE_URL,
                     "method": "POST",
-                    "headers": {},
-                    "processData": false,
-                    "contentType": false,
-                    "mimeType": "multipart/form-data",
-                    "data": form
-                }).then(resp => resp); //only capture first arg
-            };
-
-            return $.ajax({
-                "url": IMAGE_URL,
-                "method": "POST",
-                data: JSON.stringify({ "cuz_ie": "Dummy empty first post for IE11" }),
-                contentType: "application/json; charset=utf-8",
-                dataType: "json"
-            }).then(() => postForReal());
+                    data: JSON.stringify({ "cuz_ie": "Dummy empty first post for IE11" }),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json"
+                }).then(() => postForReal());
+              }
+              else {
+                throw new Error('The file needs to be less than 1 MB.');
+              }
+          }
+          else{
+            throw new Error('The file needs to be a Jpeg, Gif, or Png.');
+          }
         }
         //File API not supported, use form upload and iframe
         else if (file instanceof HTMLInputElement) {

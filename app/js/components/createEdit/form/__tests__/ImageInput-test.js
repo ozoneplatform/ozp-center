@@ -119,7 +119,7 @@ describe('ImageInput', function() {
             evt = {
                 preventDefault: sinon.stub(),
                 target: {
-                    files: ['new file']
+                    files: [{name:'image', type: 'image/jpeg', size: 1024000}]
                 }
             };
 
@@ -133,20 +133,37 @@ describe('ImageInput', function() {
         expect(imageInput.state.changedSinceUpdate).to.be.true();
         expect(evt.preventDefault.calledOnce).to.be.true();
         expect(setter.calledOnce).to.be.true();
-        expect(setter.calledWith('new file')).to.be.true();
+        expect(setter.calledWith({name:'image', type: 'image/jpeg', size: 1024000})).to.be.true();
 
-        //test alternate path for when the File API isn't supported
-        evt.target.files = undefined;
 
-        imageInput.state.changedSinceUpdate = false;
+    });
+
+    it('passes the bmp file to its setter when onChange is called', function() {
+        var ImageInput = requireInputMixin({
+                './InputMixin.jsx': inputMixinStub
+            }),
+            setter = sinon.stub(),
+            evt = {
+                preventDefault: sinon.stub(),
+                target: {
+                    files: [{name:'image', type: 'image/bmp', size: 1024000}]
+                }
+            };
+
+
+        var imageInput = TestUtils.renderIntoDocument(
+            <ImageInput setter={setter} />
+        );
+
         imageInput.onChange(evt);
 
         expect(imageInput.state.changedSinceUpdate).to.be.true();
-        expect(evt.preventDefault.calledTwice).to.be.true();
-        expect(setter.calledTwice).to.be.true();
-        expect(setter.calledWith(evt.target)).to.be.true();
-    });
+        expect(evt.preventDefault.calledOnce).to.be.false();
+        expect(setter.calledOnce).to.be.true();
+        //expect(setter.calledWith(null)).to.be.true();
 
+
+    });
     it('sets to null when the file is removed', function() {
         var ImageInput = requireInputMixin({
                 './InputMixin.jsx': inputMixinStub
