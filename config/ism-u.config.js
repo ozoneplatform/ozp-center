@@ -29,8 +29,8 @@ window.ISMConfig = window.ISMConfig || {};
     },
 
     lookup: {
-        FDR: ['NF', 'REL', 'RELIDO', 'NV'],
-        expandable: ['ACGU', 'FVEY']
+        FDR: ['NF', 'REL'],
+        expandable: ['ALL']
     },
 
     classification: {
@@ -66,34 +66,6 @@ window.ISMConfig = window.ISMConfig || {};
             clsf: ['S', 'TS'],
             yes: [],
             no: []
-        },
-        SR: {
-            bl: 'SIERRA',
-            pm: 'SR',
-            clsf: ['C', 'S', 'TS'],
-            yes: [],
-            no: []
-        },
-        TN: {
-            bl: 'TANGO',
-            pm: 'TN',
-            clsf: ['S', 'TS'],
-            yes: [],
-            no: []
-        },
-        GF: {
-            bl: 'GOLF',
-            pm: 'TN',
-            clsf: ['S', 'TS'],
-            yes: [],
-            no: []
-        },
-        HT: {
-            bl: 'HOTEL',
-            pm: 'HT',
-            clsf: ['S', 'TS'],
-            yes: [],
-            no: []
         }
     },
 
@@ -108,55 +80,25 @@ window.ISMConfig = window.ISMConfig || {};
       NF: {
         bl: 'NOFORN',
         pm: 'NF',
-        clsf: ['U', 'C', 'S', 'TS'],
+        clsf: ['C', 'S', 'TS'],
         yes: [],
-        no: ['REL', 'RELIDO', 'EYES']
+        no: ['REL']
       },
       REL: {
         bl: 'RELTO',
         pm: 'REL',
-        clsf: ['U', 'C', 'S', 'TS'],
+        clsf: ['C', 'S', 'TS'],
         yes: [],
         no: ['NF']
-      },
-      RELIDO: {
-        bl: 'RELIDO',
-        pm: 'RELIDO',
-        clsf: ['U', 'C', 'S', 'TS'],
-        yes: [],
-        no: ['NF']
-      },
-      NV: {
-        bl: 'NOVEMBER',
-        pm: 'NV',
-        clsf: ['U', 'C', 'S', 'TS'],
-        yes: [],
-        no: ['REL', 'RELIDO', 'EYES']
       }
     },
 
-    dissemPriority: ['NF', 'RELIDO', 'REL', 'FOUO'],
+    dissemPriority: ['NF', 'REL', 'FOUO'],
 
     nonicmarkings: {
-      ABCDE: {
-        bl: 'ABCDE',
-        pm: 'ABCDE',
-        clsf: ['U', 'C', 'S', 'TS'],
-        yes: [],
-        no: ['NF']
-      }
     },
 
     types: {
-      USONLY: {
-        label: 'US ONLY',
-        clsf: ['U'],
-        ownerproducer: ['USA'],
-        fgisourceopen: [],
-        fgisourceprotected: [],
-        yes: [],
-        no: []
-      }
     },
 
     trigraphs: {
@@ -164,24 +106,35 @@ window.ISMConfig = window.ISMConfig || {};
             name: 'United States of America',
             id: 'USA'
         },
-        AUS: {
-            name: 'Australia',
-            id: 'AUS'
+        STE: {
+            name: 'Storms End',
+            id: 'STE'
+        },
+        RVR: {
+            name: 'Riverrun',
+            id: 'RVR'
+        },
+        TWN: {
+            name: 'The Twins',
+            id: 'TWN'
+        },
+        DRS: {
+            name: 'Dragonstone',
+            id: 'DRS'
+        },
+        RED: {
+            name: 'Red Keep',
+            id: 'RED'
         }
     },
 
     tetragraphs: {
-        FEYE: {
-            name: 'FOR EYES',
-            id: 'FEYE',
-            trigraphs: ['AUS']
-        },
-        NATO: {
-            name: 'North Atlantic Treaty Organiztion',
-            id: 'NATO'
+        ALL: {
+            name: 'ALL',
+            id: 'ALL',
+            trigraphs: ['STE','RVR','TWN','DRS','RED']
         }
     }
-
   });
 
   /*!
