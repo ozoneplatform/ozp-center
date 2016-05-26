@@ -160,7 +160,7 @@ describe('ImageInput', function() {
         expect(imageInput.state.changedSinceUpdate).to.be.true();
         expect(evt.preventDefault.calledOnce).to.be.false();
         expect(setter.calledOnce).to.be.true();
-        //expect(setter.calledWith(null)).to.be.true();
+        expect(setter.calledWith(null)).to.be.true();
 
 
     });
