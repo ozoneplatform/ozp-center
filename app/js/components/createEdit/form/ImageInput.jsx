@@ -5,10 +5,13 @@ var { cloneWithProps, classSet } = React.addons;
 var _ = require('../../../utils/_');
 
 var InputMixin = require('./InputMixin.jsx');
+require('sweetalert');
 
 var ImageInput = React.createClass({
     mixins: [_.omit(InputMixin,
         'render', 'shouldComponentUpdate', 'showError', 'showWarning', 'getInitialState')],
+
+
 
     getInitialState: function() {
         //if the input has received a new value since the last props update, we should not show
@@ -63,9 +66,37 @@ var ImageInput = React.createClass({
         var value = typeof e.target.files !== 'undefined' ? e.target.files[0] : e.target;
 
         e.preventDefault();
-        this.props.setter(value);
+        if(value.type === 'image/gif' || value.type === 'image/png' || value.type === 'image/jpeg'){
+          if ( value.size <= 1024000){
+            this.props.setter(value);
 
-        this.setState({changedSinceUpdate: true});
+            this.setState({changedSinceUpdate: true});
+          }
+          else{
+              sweetAlert({
+                title: "Could not Upload!",
+                text: "The image you tried to upload does not meet the requirements. Please upload an image less than 1MB .",
+                type: "error",
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Ok",
+                closeOnConfirm: true,
+                html: false
+              });
+              this.removeImage(e);
+            }
+        }
+        else{
+          sweetAlert({
+            title: "Could not Upload!",
+            text: "The image you tried to upload does not meet the requirements. Please upload a Jpeg, Png, or Gif .",
+            type: "error",
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Ok",
+            closeOnConfirm: true,
+            html: false
+          });
+          this.removeImage(e);
+        }
     },
 
     removeImage: function(evt) {
