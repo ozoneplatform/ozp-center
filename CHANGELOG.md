@@ -1,3 +1,12 @@
+### 1.1.29 (2016-06-01)
+
+
+#### Bug Fixes
+
+* **createedit:** made changes to message according to beth #188 ([303b2657](https://github.com/ozone-development/ozp-center.git/commit/303b26570b483014ef7c2851a772b7a9434513a6))
+* **imageInput:** Image input was not checking what file was being uploaded. now if a user tries t ([30dcc8e1](https://github.com/ozone-development/ozp-center.git/commit/30dcc8e163c28ba10f619ffa923c61684fd1751d))
+
+
 ### 1.1.28 (2016-05-25)
 
 
