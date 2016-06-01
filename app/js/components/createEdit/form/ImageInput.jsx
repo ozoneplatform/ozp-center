@@ -74,8 +74,8 @@ var ImageInput = React.createClass({
           }
           else{
               sweetAlert({
-                title: "Could not Upload!",
-                text: "The image you tried to upload does not meet the requirements. Please upload an image less than 1MB .",
+                title: "Could not upload!",
+                text: "The image you tried to upload does not meet the requirements. Please upload an image less than 1MB.",
                 type: "error",
                 confirmButtonColor: "#DD6B55",
                 confirmButtonText: "Ok",
@@ -87,8 +87,8 @@ var ImageInput = React.createClass({
         }
         else{
           sweetAlert({
-            title: "Could not Upload!",
-            text: "The image you tried to upload does not meet the requirements. Please upload a Jpeg, Png, or Gif .",
+            title: "Could not upload!",
+            text: "The image you tried to upload does not meet the requirements. Please upload a JPG, PNG, or GIF.",
             type: "error",
             confirmButtonColor: "#DD6B55",
             confirmButtonText: "Ok",
