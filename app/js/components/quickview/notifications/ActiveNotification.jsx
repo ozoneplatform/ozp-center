@@ -1,11 +1,11 @@
 'use strict';
 
 var React = require('react');
-var _ = require('../../../../utils/_');
+var _ = require('../../../utils/_');
 
 var _Date = require('ozp-react-commons/components/Date.jsx');
 var Time = require('ozp-react-commons/components/Time.jsx');
-var NotificationActions = require('../../../../actions/NotificationActions.js');
+var NotificationActions = require('../../../actions/NotificationActions.js');
 
 var ActiveNotification = React.createClass({
     mixins: [React.addons.PureRenderMixin],
@@ -27,8 +27,7 @@ var ActiveNotification = React.createClass({
     },
 
     render() {
-        var { listing, expiresDate, message  } = this.props.notification;
-        
+        var { expiresDate, message, listing } = this.props.notification;
         return (
             <div className="PastNotification">
                 <div className="PastNotification__Header">

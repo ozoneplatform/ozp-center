@@ -515,14 +515,39 @@ $icons: (
   top: -10px;
 }
 
-.offscreen
-{
-position: absolute;
-clip: rect(1px 1px 1px 1px); /* for Internet Explorer */
-clip: rect(1px, 1px, 1px, 1px);
-padding: 0;
-border: 0;
-height: 1px;
-width: 1px;
-overflow: hidden;
+.offscreen{
+  position: absolute;
+  clip: rect(1px 1px 1px 1px); /* for Internet Explorer */
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 0;
+  border: 0;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+}
+
+.CreateNotification .datepicker__input { /*add .form-control styles to datepicker input */
+    display: block;
+    width: 100%;
+    height: 34px;
+    padding: 6px 12px;
+    font-size: 14px;
+    line-height: 1.428571429;
+    color: #3b4246;
+    background-color: #ffffff;
+    background-image: none;
+    border: 1px solid #b5b6b8;
+    border-radius: 0px;
+    -webkit-box-shadow: inset 0 1px 1px rgba(25, 31, 37, 0.075);
+    box-shadow: inset 0 1px 1px rgba(25, 31, 37, 0.075);
+    -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+    -o-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+    transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+}
+
+.notificationsScroller {
+  height: 360px;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  word-wrap:break-word;
 }
