@@ -18,13 +18,15 @@ var ReviewsTab = require('./reviews/index.jsx');
 var DetailsTab = require('./DetailsTab.jsx');
 var ResourcesTab = require('./ResourcesTab.jsx');
 var AdministrationTab = require('./AdministrationTab.jsx');
+var NotificationsTab = require('./NotificationsTab.jsx');
 
 var tabs = {
     'overview': OverviewTab,
     'reviews': ReviewsTab,
     'details': DetailsTab,
     'resources': ResourcesTab,
-    'administration': AdministrationTab
+    'administration': AdministrationTab,
+    'notifications': NotificationsTab
 };
 
 /**
@@ -92,6 +94,10 @@ var Quickview = React.createClass({
                         tabs.push({
                             to: 'administration',
                             name: 'Administration'
+                        });
+                        tabs.push({
+                            to: 'notifications',
+                            name: 'Send Notifications'
                         });
                 }
             }
