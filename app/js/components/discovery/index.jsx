@@ -276,6 +276,8 @@ var Discovery = React.createClass({
             lastSearchCompleted: Date.now(),
             searching: false
         });
+        $(this.refs.searchResults.getDOMNode()).attr("tabindex",-1).focus();
+
     },
 
     renderFeaturedListings() {
@@ -304,7 +306,7 @@ var Discovery = React.createClass({
         );
     },
 
-handleLoadMore() {
+    handleLoadMore() {
         if (this.isMounted()) {
           this.setState({
               mostPopularTiles: this.state.mostPopularTiles += 12
@@ -369,7 +371,7 @@ handleLoadMore() {
         var searchLink = `${CENTER_URL}/#/home/${encodeURIComponent(this.state.queryString)}/${(this.state.categories.length) ? encodeURIComponent(this.state.categories.toString()).replace(/%2C/g,'+') : ''}/${(this.state.type.length) ? encodeURIComponent(this.state.type.toString()).replace(/%2C/g,'+') : ''}/${(this.state.agency.length) ? encodeURIComponent(this.state.agency.toString()).replace(/%2C/g,'+') : ''}`;
         return (
             <section className="Discovery__SearchResults">
-                <h4>Search Results &nbsp;
+                <h4 ref="searchResults">Search Results &nbsp;
                   <span tabIndex="0"
                     className="shareLink"
                     ref="shareResults"
