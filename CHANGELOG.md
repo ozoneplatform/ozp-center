@@ -1,3 +1,11 @@
+### 1.1.30 (2016-06-08)
+
+
+#### Bug Fixes
+
+* **Index:** componenet will mount and will receive props were both running when the app load ([2fb102b5](https://github.com/ozone-development/ozp-center.git/commit/2fb102b549b7e2fc0d55334ba69f0cd0229ace07))
+
+
 ### 1.1.29 (2016-06-01)
 
 
