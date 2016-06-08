@@ -141,7 +141,7 @@ var Discovery = React.createClass({
                         placeholder="Search"
                         value={ this.state.queryString || ''}
                         onChange={ this.onSearchInputChange }
-                        onKeyPress={ this.ignoreEnterKey }
+                        onKeyPress={this.onSearchTextCompleted }
                         />
                       <i className="icon-cross-14-grayDark clearButton" onClick={this.searchBarReset}></i>
                     </div>
@@ -276,8 +276,15 @@ var Discovery = React.createClass({
             lastSearchCompleted: Date.now(),
             searching: false
         });
-        $(this.refs.searchResults.getDOMNode()).attr("tabindex",-1).focus();
+    },
 
+    onSearchTextCompleted(e){
+        if(e.charCode == 13){
+          e.preventDefault();
+          e.stopPropagation();
+          $(this.refs.searchResults.getDOMNode()).attr("tabindex",-1).focus();
+        }
+        
     },
 
     renderFeaturedListings() {
