@@ -141,7 +141,7 @@ var Discovery = React.createClass({
                         placeholder="Search"
                         value={ this.state.queryString || ''}
                         onChange={ this.onSearchInputChange }
-                        onKeyPress={ this.ignoreEnterKey }
+                        onKeyPress={this.onSearchTextCompleted }
                         />
                       <i className="icon-cross-14-grayDark clearButton" onClick={this.searchBarReset}></i>
                     </div>
@@ -278,6 +278,15 @@ var Discovery = React.createClass({
         });
     },
 
+    onSearchTextCompleted(e){
+        if(e.charCode == 13){
+          e.preventDefault();
+          e.stopPropagation();
+          $(this.refs.searchResults.getDOMNode()).attr("tabindex",-1).focus();
+        }
+        
+    },
+
     renderFeaturedListings() {
         if(!this.state.featured.length) {
             return;
@@ -304,7 +313,7 @@ var Discovery = React.createClass({
         );
     },
 
-handleLoadMore() {
+    handleLoadMore() {
         if (this.isMounted()) {
           this.setState({
               mostPopularTiles: this.state.mostPopularTiles += 12
@@ -369,7 +378,7 @@ handleLoadMore() {
         var searchLink = `${CENTER_URL}/#/home/${encodeURIComponent(this.state.queryString)}/${(this.state.categories.length) ? encodeURIComponent(this.state.categories.toString()).replace(/%2C/g,'+') : ''}/${(this.state.type.length) ? encodeURIComponent(this.state.type.toString()).replace(/%2C/g,'+') : ''}/${(this.state.agency.length) ? encodeURIComponent(this.state.agency.toString()).replace(/%2C/g,'+') : ''}`;
         return (
             <section className="Discovery__SearchResults">
-                <h4>Search Results &nbsp;
+                <h4 ref="searchResults">Search Results &nbsp;
                   <span tabIndex="0"
                     className="shareLink"
                     ref="shareResults"
