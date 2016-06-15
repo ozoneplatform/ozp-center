@@ -2,11 +2,19 @@
 
 var React = require('react');
 var Reflux = require('reflux');
-
 var _ = require('../utils/_');
+var $ = require('jquery');
 
+var LibraryApi = require('../webapi/Library');
+
+var ChangeLogs = require('./quickview/ChangeLogs.jsx');
+var ListingActions = require('../actions/ListingActions');
+var fetchChangeLogs = ListingActions.fetchChangeLogs;
+var enableBookmarkedLocal = ListingActions.enableBookmarked;
+var disableBookmarkedLocal = ListingActions.disableBookmarked;
 var LibraryStore = require('../stores/LibraryStore');
-var { addToLibrary, removeFromLibrary } = require('../actions/LibraryActions');
+var { addToLibrary, removeFromLibrary, fetchLibrary } = require('../actions/LibraryActions');
+var url = window.location.href;
 
 var BookmarkButton = React.createClass({
     mixins: [Reflux.connect(LibraryStore, 'library')],
@@ -16,29 +24,90 @@ var BookmarkButton = React.createClass({
     },
 
     getInitialState: function() {
-        return {library: []};
+        return {library: [], listing: this.props.listing};
     },
 
     toggleInLibrary: function (e) {
         var that = this;
+        var listing = this.props.listing;
 
         e.preventDefault();
         e.stopPropagation();
 
-        if (this.inLibrary()) {
-            var libId = _.find(this.state.library, function(x) {
-                return x.listing.id === that.props.listing.id;
-            }).id;
+        if(that.props.listing.isEnabled === true){
+          if (that.inLibrary()) {
 
-            removeFromLibrary(this.props.listing, libId);
-        }
-        else {
-            addToLibrary(this.props.listing);
+            if(_.find(that.state.library, e => e.listing.id === that.props.listing.id)){
+              var newData = {id: that.props.listing.id, isBookmarked: false, ttt: false};
+              that.setState({listing: newData});
+              disableBookmarkedLocal.bind(null, listing);
+
+              var libId = _.find(that.state.library, function(x) {
+                  return x.listing.id === that.props.listing.id;
+              }).id;
+              removeFromLibrary(that.props.listing, libId);
+            }else{
+              if(that.props.listing.isEnabled === true && this.state.library2.responseJSON){
+                if(this.state.library2.responseJSON){
+                  var newData2 = {id: that.props.listing.id, isBookmarked: false, ttt: false};
+                  that.setState({listing: newData2});
+                  disableBookmarkedLocal.bind(null, listing);
+
+                  var libId2 = _.find(that.state.library2.responseJSON, function(x) {
+                      return x.listing.id === that.props.listing.id;
+                  }).id;
+                  removeFromLibrary(that.props.listing, libId2);
+                  this.state.library2 = LibraryApi.getLibrary().done(function(library2){return library2;});
+                }
+              }
+            }
+          }
+          else {
+              var newData3 = {id: this.props.listing.id, isBookmarked: true, ttt: true};
+              this.setState({listing: newData3});
+              enableBookmarkedLocal.bind(null, listing);
+
+              addToLibrary(this.props.listing);
+          }
         }
     },
 
     inLibrary: function() {
+      var testLibrary = !!_.find(this.state.library, e => e.listing.id === this.props.listing.id);
+      var url = window.location.href;
+      var userMngmt = url.includes("user-management/all-listings");
+      if(this.props.listing.id == this.getParameterByName("listing")){
+        if( (this.state.listing.isBookmarked && this.state.listing.ttt) |
+            (userMngmt && this.props.listing.isBookmarked && this.state.listing.isBookmarked) ||
+            testLibrary ){
+          return true;
+        }else{
+          return false;
+        }
+      }else{
         return !!_.find(this.state.library, e => e.listing.id === this.props.listing.id);
+      }
+    },
+
+    getParameterByName: function(name, url) {
+      if (!url) url = window.location.href;
+      name = name.replace(/[\[\]]/g, "\\$&");
+      var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+        results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    },
+
+    componentWillUpdate: function(nextProps,nextState){
+      this.state.library2 = LibraryApi.getLibrary().done(function(library){return library;});
+    },
+
+    componentWillMount: function(){
+      if(this.props.listing.isBookmarked){
+      var newData0 = {id: this.props.listing.id, isBookmarked: true, ttt: true};
+      this.setState({listing: newData0});
+      }
     },
 
     componentDidMount: function(){
@@ -58,11 +127,19 @@ var BookmarkButton = React.createClass({
         });
 
         return (
-          <button ref="tooltipped" data-toggle="tooltip" data-placement="top" title="Bookmark" type="button" aria-label={(this.inLibrary()) ? 'This app is Bookmarked' : 'Click to bookmark this app'} className={bookmarkBtnStyles} onClick={this.toggleInLibrary}>
+          <button
+            ref="tooltipped"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Bookmark"
+            type="button"
+            aria-label={(this.inLibrary()) ? 'This app is Bookmarked' : 'Click to bookmark this app'}
+            className={bookmarkBtnStyles}
+            onClick={this.toggleInLibrary}>
               <i className={bookmarkIcon}/><span className="hidden-span">Bookmark</span>
           </button>
         );
-    }
+      }
     });
 
 module.exports = BookmarkButton;

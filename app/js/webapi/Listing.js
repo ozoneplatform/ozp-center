@@ -18,7 +18,7 @@ var FIELDS = [
     'isEnabled', 'categories', 'releaseDate', 'editedDate', 'intents', 'docUrls', 'approvalStatus',
     'isFeatured', 'smallIconId', 'largeIconId', 'bannerIconId', 'featuredBannerIconId',
     'currentRejection', 'isPrivate', 'securityMarking', 'smallIconMarking',
-    'largeIconMarking', 'bannerIconMarking', 'featuredBannerIconMarking'
+    'largeIconMarking', 'bannerIconMarking', 'featuredBannerIconMarking', 'isBookmarked'
 ];
 
 // These don't have the icons, access_control
@@ -29,7 +29,7 @@ var SAVE_FORMAT_FIELDS = [
     'requirements', 'screenshots', 'singleton', 'tags', 'title', 'total_comments', 'total_rate1',
     'total_rate2', 'total_rate3', 'total_rate4', 'total_rate5', 'total_votes', 'unique_name',
     'version_name', 'what_is_new', 'small_icon', 'large_icon', 'banner_icon', 'large_banner_icon',
-    'security_marking'
+    'security_marking', 'is_bookmarked'
 ];
 
 function Listing (json) {
@@ -56,7 +56,6 @@ function Listing (json) {
     }
 
     if (viewingExistingListing(json)) {
-        // console.log('viewing existing listing (data comes from API) ');
         this.type = json.listingType ? json.listingType.title : "";
         this.categories = _.map(json.categories, 'title') || [];
         this.tags = _.map(json.tags, 'name') || [];
@@ -100,7 +99,6 @@ function Listing (json) {
         this.uuid = json.uniqueName;
 
     } else if (creatingFreshListing(json)) {
-        // console.log('creating fresh listing (in create/edit page)' );
         this.owners = _.map(json.owners, function (o) {
             return {displayName: o.displayName,
                     id: o.id,
@@ -114,7 +112,6 @@ function Listing (json) {
         this.contacts = this.contacts || [];
 
     } else {
-        // console.log('editing listing (data comes from create/edit page)');
         this.title = json.title || "";
         this.type = json.type || "";
         this.owners = json.owners || [];
@@ -129,8 +126,6 @@ function Listing (json) {
     this.screenshots = this.screenshots || [];
     this.docUrls = this.docUrls || [];
     this.changeLogs = [];
-
-    // console.log('object Listing', this);
 
     return this;
 }

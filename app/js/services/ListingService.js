@@ -15,6 +15,7 @@ function updateListingProperty(propName, value, listing) {
 }
 
 var setEnabled = updateListingProperty.bind(null, 'isEnabled');
+var setEnabledBookmarked = updateListingProperty.bind(null, 'isBookmarked');
 
 ListingActions.fetchAllListings.listen(function (filter) {
     var paginatedList = PaginatedListingsStore.getListingsByFilter(filter),
@@ -209,6 +210,9 @@ ListingActions.reject.listen(function (listingId, description) {
 
 ListingActions.enable.listen(setEnabled.bind(null, true));
 ListingActions.disable.listen(setEnabled.bind(null, false));
+
+ListingActions.enableBookmarked.listen(setEnabledBookmarked.bind(null, true));
+ListingActions.disableBookmarked.listen(setEnabledBookmarked.bind(null, false));
 
 ListingActions.approve.listen(function (listing) {
     OzpAnalytics.trackListingApproval(listing.title, listing.agencyShort);

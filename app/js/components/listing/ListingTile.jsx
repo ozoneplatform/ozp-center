@@ -12,7 +12,6 @@ var ActionMenu = React.createClass({
     mixins: [ Navigation, ActiveState ],
 
     render: function () {
-
         //TODO fill in hrefs
         var listing = this.props.listing,
             activeRoutePath = this.getActiveRoutePath(),
@@ -126,7 +125,6 @@ var InfoBar = React.createClass({
 });
 
 var AdminOwnerListingTile = React.createClass({
-
     propTypes: {
         role: React.PropTypes.oneOf([UserRole.APPS_MALL_STEWARD, UserRole.ORG_STEWARD, null]),
         listing: React.PropTypes.object

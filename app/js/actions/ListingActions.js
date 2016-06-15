@@ -28,6 +28,8 @@ var ListingActions = createActions({
     reject: null,
     enable: null,
     disable: null,
+    enableBookmarked: null,
+    disableBookmarked: null,
     approve: null,
     approveByOrg: null,
     setFeatured: null,
