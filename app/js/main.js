@@ -132,17 +132,8 @@ We have detected that you are using an unsupported browser and some features may
 window.open(IE_REDIRECT_URL);
 }
 
-if (!String.prototype.includes) {
-  String.prototype.includes = function(search, start) {
-    'use strict';
-    if (typeof start !== 'number') {
-      start = 0;
-    }
-
-    if (start + search.length > this.length) {
-      return false;
-    } else {
-      return this.indexOf(search, start) !== -1;
-    }
+if (!String.includes) {
+  String.prototype.includes = function(value) {
+    return this.valueOf().indexOf(value) > - 1;
   };
 }
