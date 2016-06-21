@@ -131,3 +131,9 @@ We have detected that you are using an unsupported browser and some features may
 `);
 window.open(IE_REDIRECT_URL);
 }
+
+if (!String.includes) {
+  String.prototype.includes = function(value) {
+    return this.valueOf().indexOf(value) > - 1;
+  };
+}
