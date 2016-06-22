@@ -1,3 +1,16 @@
+### 1.1.32 (2016-06-22)
+
+
+#### Bug Fixes
+
+* **styling:** Move tour css to ozp-react-commons ([36e1cb4e](https://github.com/ozone-development/ozp-center.git/commit/36e1cb4edb7f77d99fe2d3906944b380a0b3dbca))
+
+
+#### Features
+
+* **App Notifications:** added ability to send notifications to app users ([8c912232](https://github.com/ozone-development/ozp-center.git/commit/8c9122324b310cbe6c0ddbd0f3bbebde5660f5d2))
+
+
 ### 1.1.31 (2016-06-15)
 
 
