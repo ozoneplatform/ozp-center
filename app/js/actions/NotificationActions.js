@@ -32,6 +32,12 @@ var NotificationActions = createActions({
             .fail(NotificationActions.fetchActiveFailed);
     },
 
+    fetchActiveById(id) {
+        NotificationApi.fetchActiveById(id)
+            .then(NotificationActions.fetchActiveCompleted)
+            .fail(NotificationActions.fetchActiveFailed);
+    },
+
     fetchOwnNotifications() {
       NotificationApi.fetchOwnNotifications()
           .then(NotificationActions.fetchOwnNotificationsCompleted)
@@ -47,6 +53,17 @@ var NotificationActions = createActions({
         NotificationApi.fetchPast(url)
             .then(NotificationActions.fetchPastCompleted)
             .fail(NotificationActions.fetchPastFailed);
+    },
+
+    fetchPastById(paginatedList, id) {
+      var url;
+      if (paginatedList && paginatedList.nextLink) {
+          url = paginatedList.nextLink;
+      }
+
+      NotificationApi.fetchPast(url, id)
+          .then(NotificationActions.fetchPastCompleted)
+          .fail(NotificationActions.fetchPastFailed);
     }
 
 });

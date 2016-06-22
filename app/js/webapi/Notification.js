@@ -42,14 +42,25 @@ module.exports = {
             });
     },
 
+    fetchActiveById(id) {
+        return $.getJSON(`${API_URL}/api/notifications/pending/?listing=${id}&offset=0&limit=${PAGINATION_MAX}`)
+            .then((response) => {
+              return new PaginatedResponse(humps.camelizeKeys(response), this.parse);
+            });
+    },
+
     fetchOwnNotifications: function () {
       return $.getJSON(API_URL + '/api/self/notification/').then(function(response) {
         return humps.camelizeKeys(response);
       });
     },
 
-    fetchPast(url) {
+    fetchPast(url, id) {
         url = url || `${API_URL}/api/notifications/expired/?offset=0&limit=${PAGINATION_MAX}`;
+
+        if (id) {
+          url += `&id=${id}`;
+        }
         return $.getJSON(url)
             .then((response) => new PaginatedResponse(humps.camelizeKeys(response), this.parse));
     }
