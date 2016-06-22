@@ -45,6 +45,7 @@ var AllListings = React.createClass({
         this.setState({
             filter: this.state.filter
         });
+        w2ui['grid'].searchReset();
     },
 
     onViewToggle: function (event) {
