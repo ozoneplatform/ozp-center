@@ -15,6 +15,7 @@ var disableBookmarkedLocal = ListingActions.disableBookmarked;
 var LibraryStore = require('../stores/LibraryStore');
 var { addToLibrary, removeFromLibrary, fetchLibrary } = require('../actions/LibraryActions');
 var url = window.location.href;
+var library3 = '';
 
 var BookmarkButton = React.createClass({
     mixins: [Reflux.connect(LibraryStore, 'library')],
@@ -47,17 +48,21 @@ var BookmarkButton = React.createClass({
               }).id;
               removeFromLibrary(that.props.listing, libId);
             }else{
-              if(that.props.listing.isEnabled === true && this.state.library2.responseJSON){
-                if(this.state.library2.responseJSON){
+              //if(that.props.listing.isEnabled === true && this.state.library2.responseJSON){
+              if(that.props.listing.isEnabled === true && library3.responseJSON){
+                if(library3.responseJSON){
+                //if(this.state.library2.responseJSON){
                   var newData2 = {id: that.props.listing.id, isBookmarked: false, ttt: false};
                   that.setState({listing: newData2});
                   disableBookmarkedLocal.bind(null, listing);
 
-                  var libId2 = _.find(that.state.library2.responseJSON, function(x) {
+                  //var libId2 = _.find(that.state.library2.responseJSON, function(x) {
+                  var libId2 = _.find(library3.responseJSON, function(x) {
                       return x.listing.id === that.props.listing.id;
                   }).id;
                   removeFromLibrary(that.props.listing, libId2);
-                  this.state.library2 = LibraryApi.getLibrary();
+                  //this.state.library2 = LibraryApi.getLibrary();
+                  library3 = LibraryApi.getLibrary();
                 }
               }
             }
@@ -102,9 +107,10 @@ var BookmarkButton = React.createClass({
     componentDidUpdate: function(nextProps,nextState){
       var userMngmt = url.includes("user-management/all-listings");
       if(this.props.listing.id == this.getParameterByName("listing")){
-        this.state.library2 = LibraryApi.getLibrary();
+        //this.state.library2 = LibraryApi.getLibrary();
+        library3 = LibraryApi.getLibrary();
       }
-      console.log(this.state.library2);
+      //console.log(this.state.library2);
     },
 
     componentWillMount: function(){
