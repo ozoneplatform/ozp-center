@@ -57,7 +57,7 @@ var BookmarkButton = React.createClass({
                       return x.listing.id === that.props.listing.id;
                   }).id;
                   removeFromLibrary(that.props.listing, libId2);
-                  this.state.library2 = LibraryApi.getLibrary().done(function(library2){return library2;});
+                  this.state.library2 = LibraryApi.getLibrary();
                 }
               }
             }
@@ -99,8 +99,12 @@ var BookmarkButton = React.createClass({
         return decodeURIComponent(results[2].replace(/\+/g, " "));
     },
 
-    componentWillUpdate: function(nextProps,nextState){
-      this.state.library2 = LibraryApi.getLibrary().done(function(library){return library;});
+    componentDidUpdate: function(nextProps,nextState){
+      var userMngmt = url.includes("user-management/all-listings");
+      if(this.props.listing.id == this.getParameterByName("listing")){
+        this.state.library2 = LibraryApi.getLibrary();
+      }
+      console.log(this.state.library2);
     },
 
     componentWillMount: function(){
