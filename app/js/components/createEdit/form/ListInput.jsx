@@ -31,7 +31,6 @@ var ListInput = React.createClass({
         }, this);
 
         var labelClasses = classSet({'input-optional': this.props.optional});
-
         return (
             <div id={this.props.id}>
                 <div className={this.getClasses()}>
@@ -43,7 +42,9 @@ var ListInput = React.createClass({
                     {itemForms}
                 </div>
                 <div className="clear"></div>
-                <button className="btn btn-sm btn-primary addNew" onClick={this.handleNew}><i className="icon-plus-14-white"></i> Add New</button>
+                { (itemForms.length < 10) &&
+                  <button className="btn btn-sm btn-primary addNew" onClick={this.handleNew}><i className="icon-plus-14-white"></i> Add New</button>
+                }
             </div>
         );
     },
