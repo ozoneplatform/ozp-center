@@ -38,6 +38,7 @@ var BookmarkButton = React.createClass({
 
         if(that.props.listing.isEnabled === true){
           if (that.inLibrary()) {
+            console.log("tg-in");
             var newData = {id: this.props.listing.id, isBookmarked: false, ttt: false};
             that.setState({listing: newData});
             if(_.find(that.state.library, e => e.listing.id === that.props.listing.id)){
@@ -52,6 +53,7 @@ var BookmarkButton = React.createClass({
                       return x.listing.id === that.props.listing.id;
                   }).id;
                   removeFromLibrary(that.props.listing, libId2);
+                  library3 = LibraryApi.getLibrary().done(function(library){return library;});
             }
           }
           else {
@@ -69,14 +71,18 @@ var BookmarkButton = React.createClass({
       var url = window.location.href;
       var userMngmt = url.includes("user-management/all-listings");
       if(this.props.listing.id == this.getParameterByName("listing")){
+        console.log(this);
         if( (this.state.listing.isBookmarked && this.state.listing.ttt) |
             (userMngmt && this.props.listing.isBookmarked && this.state.listing.isBookmarked) ||
             testLibrary ){
+
+              console.log("in1");
           return true;
         }else{
           return false;
         }
       }else{
+        console.log("in2");
         return !!_.find(this.state.library, e => e.listing.id === this.props.listing.id);
       }
     },
@@ -95,13 +101,6 @@ var BookmarkButton = React.createClass({
       if(this.props.listing.id == this.getParameterByName("listing") && this.props.listing.isEnabled === true && library3Done == true){
         library3 = LibraryApi.getLibrary().done(function(library){return library;});
         library3Done = false;
-      }
-    },
-
-    componentWillMount: function(){
-      if(this.props.listing.isBookmarked){
-        var newData0 = {id: this.props.listing.id, isBookmarked: true, ttt: true};
-        this.setState({listing: newData0});
       }
     },
 
