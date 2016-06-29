@@ -269,9 +269,9 @@ var ListingApi = {
         var params = $.param(options, true);
         return $.getJSON(API_URL + '/api/listings/search/?' + params).then(
             (response) => {
-                if (options.categories && options.categories.length > 0) {
-                    for(var index = 0; index < options.categories.length; index++) {
-                        OzpAnalytics.trackCategorization('Categorization', options.categories[index], response.count);
+                if (options.category && options.category.length > 0) {
+                    for(var index = 0; index < options.category.length; index++) {
+                        OzpAnalytics.trackCategorization('Categorization', options.category[index], response.count);
                     }
                 }
 
