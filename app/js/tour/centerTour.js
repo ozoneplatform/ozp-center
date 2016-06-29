@@ -21,7 +21,6 @@ const meTour = new Tour({
   backdrop: true,
   backdropPadding: 10,
   storage: false,
-  debug:true,
   onEnd: function() {
     ProfileSearchActions.goHome();
   },
