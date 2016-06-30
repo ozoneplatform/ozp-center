@@ -182,7 +182,6 @@ const meTour = new Tour({
       backdropContainer: ".modal-content",
       backdropPadding: 0,
       orphan:true,
-      delay:100,
       onNext: function() {
         var nextStep = function() {
           tourCh.publish({
@@ -292,7 +291,21 @@ const meTour = new Tour({
       orphan:true,
       template: '<div class="popover" role="tooltip"> <div class="arrow"></div> <h3 class="popover-title"></h3> <div class="popover-content"></div> <div class="popover-navigation"> <button class="btn btn-sm" id="end-tour-btn" data-role="end">End tour</button> <div class="btn-group"> <button class="btn btn-sm btn-default" data-role="prev">&laquo; Prev</button> <button class="btn btn-sm btn-default" data-role="pause-resume" data-pause-text="Pause" data-resume-text="Resume">Pause</button> </div> </div> </div>',
       onNext: function() {meTour.end();},
-      onPrev: function() {meTour.goTo(13);}
+      onPrev: function() {
+        var prevStep = function() {
+          tourCh.publish({
+            resourcesLoaded: false
+          });
+          meTour.goTo(13);
+        };
+        (function checkStatus() {
+          if (readyObject.detailsLoaded) {
+            prevStep();
+          } else {
+            setTimeout(checkStatus, 200);
+          }
+        })();
+      }
     }
   ]
 });
