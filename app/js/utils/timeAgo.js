@@ -23,7 +23,7 @@ module.exports = function timeAgo (date) {
     }
     timePassed = Math.round(timePassed);
 
-    if (timeDiff > 24 && !timePassed) {
+    if (timeDiff > 24) {
         quantity = '';
         var mS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
         timePassed = originalDate.split('T')[0];
