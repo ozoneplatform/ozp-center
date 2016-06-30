@@ -39,7 +39,7 @@ module.exports = function timeAgo (date) {
         return 'a ' + quantity + ' ago';
     }
 
-    if (quantity.length) {
+    if (quantity && quantity.length) {
       return timePassed + ' ' + quantity + 's ago';
     } else {
       return timePassed;
