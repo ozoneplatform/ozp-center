@@ -653,7 +653,7 @@
     },
     "bootstrap-tour": {
       "version": "0.10.2",
-      "from": "git://github.com/ozone-utils/bootstrap-tour.git",
+      "from": "git://github.com/ozone-utils/bootstrap-tour.git"
     },
     "brace-expansion": {
       "version": "1.1.4",
