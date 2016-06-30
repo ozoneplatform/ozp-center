@@ -1,6 +1,7 @@
 'use strict';
 
 module.exports = function timeAgo (date) {
+    var originalDate = date;
     date = date.replace('+0000', 'Z');
     date = new Date(date).getTime();
     var timeDiff = (Date.now() - date) / 1000;
@@ -20,26 +21,16 @@ module.exports = function timeAgo (date) {
         quantity = 'hour';
         timePassed = timeDiff;
     }
-    timeDiff /= 24;
-    if(timeDiff < 7 && !timePassed) {
-        quantity = 'day';
-        timePassed = timeDiff;
-    }
-    timeDiff /= 7;
-    if(timeDiff < 4 && !timePassed) {
-        quantity = 'week';
-        timePassed = timeDiff;
-    }
-    timeDiff = (timeDiff / 52) * 12;
-    if(timeDiff < 11.5 && !timePassed) {
-        quantity = 'month';
-        timePassed = timeDiff;
-    } else if (!timePassed) {
-        quantity = 'year';
-        timePassed = timeDiff / 12;
+    timePassed = Math.round(timePassed);
+
+    if (timeDiff > 24 && !timePassed) {
+        quantity = '';
+        var mS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+        timePassed = originalDate.split('T')[0];
+        var formattedDate = `${mS[parseInt(timePassed.split('-')[1])]} ${timePassed.split('-')[2]}, ${timePassed.split('-')[0]}`;
+        timePassed = formattedDate;
     }
 
-    timePassed = Math.round(timePassed);
 
     if(timePassed === 1) {
         if(quantity === 'hour') {
@@ -48,5 +39,9 @@ module.exports = function timeAgo (date) {
         return 'a ' + quantity + ' ago';
     }
 
-    return timePassed + ' ' + quantity + 's ago';
+    if (quantity.length) {
+      return timePassed + ' ' + quantity + 's ago';
+    } else {
+      return timePassed;
+    }
 };
