@@ -24,6 +24,7 @@ const meTour = new Tour({
   onEnd: function() {
     ProfileSearchActions.goHome();
   },
+
   template: '<div class="popover" role="tooltip" tabIndex="0"> <div class="arrow"></div> <h3 class="popover-title"></h3> <div class="popover-content"></div> <div class="popover-navigation"> <button class="btn btn-sm" id="end-tour-btn" data-role="end" tabIndex="0">End tour</button> <div class="btn-group"> <button class="btn btn-sm btn-default" data-role="prev" tabIndex="0">&laquo; Prev</button> <button class="btn btn-sm btn-default" data-role="next" tabIndex="0">Next &raquo;</button> <button class="btn btn-sm btn-default" data-role="pause-resume" data-pause-text="Pause" data-resume-text="Resume" tabIndex="0">Pause</button> </div> </div> </div>',
   steps: [
     //0
@@ -151,7 +152,7 @@ const meTour = new Tour({
       title: "Listing Tiles",
       content: "Hover over a tile for a short description of the app, to bookmark it to your HUD, or to launch it into a new tab. Click the tile to open the listing overview for more listing details.",
       placement: "top",
-      onRedirectError: function(){ meTour.goTo(15); },
+      orphan:true,
       onShown: function() {
         $(".Discovery__SearchResults .listing:first .slide-up, .infiniteScroll .listing:first .slide-up").css("top", "0px");
       },
@@ -166,7 +167,7 @@ const meTour = new Tour({
           if (readyObject.overviewLoaded) {
             nextStep();
           } else {
-            setTimeout(checkStatus, 200);
+            setTimeout(checkStatus, 100);
           }
         })();
       }
@@ -180,7 +181,7 @@ const meTour = new Tour({
       placement: "left",
       backdropContainer: ".modal-content",
       backdropPadding: 0,
-      onRedirectError: function(){ meTour.goTo(16); },
+      orphan:true,
       onNext: function() {
         var nextStep = function() {
           tourCh.publish({
@@ -211,7 +212,7 @@ const meTour = new Tour({
       placement: "bottom",
       backdropContainer: ".modal-content",
       backdropPadding: 0,
-      onRedirectError: function(){ meTour.goTo(17); },
+      orphan:true,
       onNext: function() {
         var nextStep = function() {
           tourCh.publish({
@@ -249,7 +250,7 @@ const meTour = new Tour({
       placement: "bottom",
       backdropContainer: ".modal-content",
       backdropPadding: 0,
-      onRedirectError: function(){ meTour.goTo(18); },
+      orphan:true,
       onNext: function() {
         var nextStep = function() {
           tourCh.publish({
@@ -283,15 +284,18 @@ const meTour = new Tour({
       path: `${CENTER_URL}#/home/?%2F%3F=&listing=1&action=view&tab=resources`,
       element: ".modal-body .nav .active",
       title: "Listing Resources",
-      content: "If the listing includes instructions like user manuals and contact information, you will find it here. Thank you for taking the time to tour AppsMall.",
+      content: "If the listing includes instructions like user manuals and contact information, you will find it here.Thank you for taking the time to tour AppsMall.",
       placement: "bottom",
       backdropContainer: ".modal-content",
       backdropPadding: 0,
+      orphan:true,
       template: '<div class="popover" role="tooltip"> <div class="arrow"></div> <h3 class="popover-title"></h3> <div class="popover-content"></div> <div class="popover-navigation"> <button class="btn btn-sm" id="end-tour-btn" data-role="end">End tour</button> <div class="btn-group"> <button class="btn btn-sm btn-default" data-role="prev">&laquo; Prev</button> <button class="btn btn-sm btn-default" data-role="pause-resume" data-pause-text="Pause" data-resume-text="Resume">Pause</button> </div> </div> </div>',
-      onRedirectError: function(){ meTour.goTo(19); },
-      onNext: function(){ meTour.end();},
+      onNext: function() {meTour.end();},
       onPrev: function() {
         var prevStep = function() {
+          tourCh.publish({
+            resourcesLoaded: false
+          });
           meTour.goTo(13);
         };
         (function checkStatus() {
@@ -302,90 +306,6 @@ const meTour = new Tour({
           }
         })();
       }
-    },
-    /// HACK: Browsers that do not support the path key will automatically skip the above paths and jump to this step instead
-    //15
-    {
-      title: "Listing Tiles",
-      element: ".Discovery__SearchResults .listing:first, .infiniteScroll .listing:first",
-      content: "Hover over a tile for a short description of the app, to bookmark it to your HUD, or to launch it into a new tab. Click the tile to open the listing overview for more listing details.",
-      placement: "top",
-      onShown: function() {
-        $(".Discovery__SearchResults .listing:first .slide-up, .infiniteScroll .listing:first .slide-up").css("top", "0px");
-      },
-      onHide: function() {
-        $(".Discovery__SearchResults .listing:first .slide-up, .infiniteScroll .listing:first .slide-up").css("top", "137px");
-      },
-      orphan:true,
-      onNext: function() {
-          meTour.goTo(11);
-        }
-    },
-    //16
-    {
-      element: ".modal-body",
-      title: "Listing Overview",
-      content: "Within this view are screenshots, long descriptions, reviews, and other resources. Use the links at the top right of the listing to launch, bookmark or close it.",
-      placement: "left",
-      backdropContainer: ".modal-content",
-      backdropPadding: 0,
-      orphan:true,
-      delay:200,
-      onNext: function() {
-          meTour.goTo(12);
-      },
-      onPrev: function() {
-        $(".quickview").modal("hide");
-        meTour.goTo(10);
-
-      }
-    },
-    //17
-    {
-      element: ".modal-body .nav .active",
-      title: "Listing Reviews",
-      content: "Rate and review the listing, or read reviews from other users.",
-      placement: "bottom",
-      backdropContainer: ".modal-content",
-      backdropPadding: 0,
-      orphan:true,
-      onNext: function() {
-          meTour.goTo(13);
-      },
-      onPrev: function() {
-          meTour.goTo(11);
-      }
-    },
-    //18
-    {
-      element: ".modal-body .nav .active",
-      title: "Listing Details",
-      content: "Here you'll find a list of new features, usage requirements, ownership information, tags, categories, etc.",
-      placement: "bottom",
-      backdropContainer: ".modal-content",
-      backdropPadding: 0,
-      orphan:true,
-      onNext: function() {
-          meTour.goTo(14);
-      },
-      onPrev: function() {
-          meTour.goTo(12);
-        }
-    },
-    //19
-    {
-      element: ".modal-body .nav .active",
-      title: "Listing Resources",
-      content: "If the listing includes instructions like user manuals and contact information, you will find it here. Thank you for taking the time to tour AppsMall.",
-      placement: "bottom",
-      backdropContainer: ".modal-content",
-      backdropPadding: 0,
-      orphan:true,
-      template: '<div class="popover" role="tooltip"> <div class="arrow"></div> <h3 class="popover-title"></h3> <div class="popover-content"></div> <div class="popover-navigation"> <button class="btn btn-sm" id="end-tour-btn" data-role="end">End tour</button> <div class="btn-group"> <button class="btn btn-sm btn-default" data-role="prev">&laquo; Prev</button> <button class="btn btn-sm btn-default" data-role="pause-resume" data-pause-text="Pause" data-resume-text="Resume">Pause</button> </div> </div> </div>',
-      onNext: function(){ meTour.end();},
-      onPrev: function() {
-          meTour.goTo(13);
-        }
     }
   ]
 });

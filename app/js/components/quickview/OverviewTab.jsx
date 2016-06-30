@@ -19,6 +19,14 @@ var OverviewTab = React.createClass({
         };
     },
 
+    componentDidMount: function(){
+        var PubSub = require('browser-pubsub');
+        var tourCh = new PubSub('tour');
+        tourCh.publish({
+            overviewLoaded: true
+        });
+    },
+
     render: function () {
         var description = 'No description provided!';
         if(this.props.listing.description){
@@ -30,15 +38,6 @@ var OverviewTab = React.createClass({
             'text-muted': !this.props.listing.description
         });
 
-
-        setTimeout(() => {
-          var PubSub = require('browser-pubsub');
-          var tourCh = new PubSub('tour');
-          tourCh.publish({
-              overviewLoaded: true
-          });
-        }, 1000);
-        
         return (
             <div className="tab-pane active row quickview-overview" tabIndex="0">
                 { this.renderScreenshots() }
