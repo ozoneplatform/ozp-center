@@ -27,7 +27,7 @@ module.exports = function timeAgo (date) {
         quantity = '';
         var mS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
         timePassed = originalDate.split('T')[0];
-        var formattedDate = `${mS[parseInt(timePassed.split('-')[1])]} ${timePassed.split('-')[2]}, ${timePassed.split('-')[0]}`;
+        var formattedDate = `${mS[parseInt(timePassed.split('-')[1]) - 1]} ${timePassed.split('-')[2]}, ${timePassed.split('-')[0]}`;
         timePassed = formattedDate;
     }
 
