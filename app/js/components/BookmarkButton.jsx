@@ -69,9 +69,9 @@ var BookmarkButton = React.createClass({
       var libraryIn = !!_.find(this.state.library, e => e.listing.id === this.props.listing.id);
       var url = window.location.href;
       var userMngmt = url.includes("user-management/all-listings");
-      if(this.props.listing.id === this.getParameterByName("listing")){
+      if(this.props.listing.id == this.getParameterByName("listing")){
         if( (this.state.listing.isBookmarked === true && this.state.listing.ttt === true) ||
-            (userMngmt && this.props.listing.isBookmarked === true && this.state.listing.isBookmarked === true) ||
+            (userMngmt === true && this.props.listing.isBookmarked === true && this.state.listing.isBookmarked === true) ||
             libraryIn ){
           return true;
         }else{
