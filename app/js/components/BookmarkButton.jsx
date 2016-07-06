@@ -15,6 +15,8 @@ var disableBookmarkedLocal = ListingActions.disableBookmarked;
 var LibraryStore = require('../stores/LibraryStore');
 var { addToLibrary, removeFromLibrary, fetchLibrary } = require('../actions/LibraryActions');
 var url = window.location.href;
+var libraryCurrent = '';
+var libraryGet = true;
 
 var BookmarkButton = React.createClass({
     mixins: [Reflux.connect(LibraryStore, 'library')],
@@ -24,6 +26,7 @@ var BookmarkButton = React.createClass({
     },
 
     getInitialState: function() {
+        //console.dir(this);
         return {library: [], listing: this.props.listing};
     },
 
@@ -36,55 +39,50 @@ var BookmarkButton = React.createClass({
 
         if(that.props.listing.isEnabled === true){
           if (that.inLibrary()) {
-
+            var newData = {id: this.props.listing.id, isBookmarked: false, ttt: false};
+            that.setState({listing: newData});
             if(_.find(that.state.library, e => e.listing.id === that.props.listing.id)){
-              var newData = {id: that.props.listing.id, isBookmarked: false, ttt: false};
-              that.setState({listing: newData});
               disableBookmarkedLocal.bind(null, listing);
-
-              var libId = _.find(that.state.library, function(x) {
+              var libId = _.find(this.state.library, function(x) {
                   return x.listing.id === that.props.listing.id;
               }).id;
               removeFromLibrary(that.props.listing, libId);
-            }else{
-              if(that.props.listing.isEnabled === true && this.state.library2.responseJSON){
-                if(this.state.library2.responseJSON){
-                  var newData2 = {id: that.props.listing.id, isBookmarked: false, ttt: false};
-                  that.setState({listing: newData2});
+            }else if(libraryCurrent.responseJSON){
                   disableBookmarkedLocal.bind(null, listing);
-
-                  var libId2 = _.find(that.state.library2.responseJSON, function(x) {
+                  var libId2 = _.find(libraryCurrent.responseJSON, function(x) {
                       return x.listing.id === that.props.listing.id;
                   }).id;
                   removeFromLibrary(that.props.listing, libId2);
-                  this.state.library2 = LibraryApi.getLibrary().done(function(library2){return library2;});
-                }
-              }
+                  libraryCurrent = LibraryApi.getLibrary().done(function(library){return library;});
             }
           }
           else {
-              var newData3 = {id: this.props.listing.id, isBookmarked: true, ttt: true};
-              this.setState({listing: newData3});
+              var newData3 = {id: that.props.listing.id, isBookmarked: true, ttt: true};
+              that.setState({listing: newData3});
               enableBookmarkedLocal.bind(null, listing);
-
-              addToLibrary(this.props.listing);
+              addToLibrary(that.props.listing);
           }
+          libraryGet = true;
         }
     },
 
     inLibrary: function() {
-      var testLibrary = !!_.find(this.state.library, e => e.listing.id === this.props.listing.id);
+      var libraryIn = !!_.find(this.state.library, e => e.listing.id === this.props.listing.id);
       var url = window.location.href;
       var userMngmt = url.includes("user-management/all-listings");
       if(this.props.listing.id == this.getParameterByName("listing")){
-        if( (this.state.listing.isBookmarked && this.state.listing.ttt) |
-            (userMngmt && this.props.listing.isBookmarked && this.state.listing.isBookmarked) ||
-            testLibrary ){
+        //console.dir(this);
+        if( (this.state.listing.isBookmarked === true && this.state.listing.ttt === true) ||
+            (userMngmt === true && this.props.listing.isBookmarked === true && this.state.listing.isBookmarked === true) ||
+            libraryIn ){
+          //console.log('y');
           return true;
         }else{
+          //console.log('xx');
           return false;
         }
       }else{
+        //console.log('x');
         return !!_.find(this.state.library, e => e.listing.id === this.props.listing.id);
       }
     },
@@ -99,14 +97,10 @@ var BookmarkButton = React.createClass({
         return decodeURIComponent(results[2].replace(/\+/g, " "));
     },
 
-    componentWillUpdate: function(nextProps,nextState){
-      this.state.library2 = LibraryApi.getLibrary().done(function(library){return library;});
-    },
-
-    componentWillMount: function(){
-      if(this.props.listing.isBookmarked){
-      var newData0 = {id: this.props.listing.id, isBookmarked: true, ttt: true};
-      this.setState({listing: newData0});
+    componentDidUpdate: function(nextProps,nextState){
+      if(this.props.listing.id == this.getParameterByName("listing") && this.props.listing.isEnabled === true && libraryGet == true){
+        libraryCurrent = LibraryApi.getLibrary().done(function(library){return library;});
+        libraryGet = false;
       }
     },
 
