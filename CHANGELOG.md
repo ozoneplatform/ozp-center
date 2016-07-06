@@ -1,3 +1,17 @@
+### 1.1.34 (2016-07-06)
+
+
+#### Bug Fixes
+
+* **Bookmark:** #656: change ([511e4182](https://github.com/ozone-development/ozp-center.git/commit/511e41823381cd9bc641a98baa3ac33e4b150550))
+* **Notifications Modal:** Show listing name, don't show authors. ([682cfc04](https://github.com/ozone-development/ozp-center.git/commit/682cfc0479cdd49d63475f44c99c8ded5cbff37e))
+
+
+#### Features
+
+* **TimeDate:** If timestamp is more than 24 hours old show date ([13d0628d](https://github.com/ozone-development/ozp-center.git/commit/13d0628deb76366257377f65cb2528473271bed7))
+
+
 ### 1.1.33 (2016-06-30)
 
 
