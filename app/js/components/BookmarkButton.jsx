@@ -26,6 +26,7 @@ var BookmarkButton = React.createClass({
     },
 
     getInitialState: function() {
+        //console.dir(this);
         return {library: [], listing: this.props.listing};
     },
 
@@ -70,14 +71,18 @@ var BookmarkButton = React.createClass({
       var url = window.location.href;
       var userMngmt = url.includes("user-management/all-listings");
       if(this.props.listing.id == this.getParameterByName("listing")){
+        //console.dir(this);
         if( (this.state.listing.isBookmarked === true && this.state.listing.ttt === true) ||
             (userMngmt === true && this.props.listing.isBookmarked === true && this.state.listing.isBookmarked === true) ||
             libraryIn ){
+          //console.log('y');
           return true;
         }else{
+          //console.log('xx');
           return false;
         }
       }else{
+        //console.log('x');
         return !!_.find(this.state.library, e => e.listing.id === this.props.listing.id);
       }
     },
