@@ -68,13 +68,13 @@ var NotificationsModal = React.createClass({
         var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
         var formattedDate = months[date.getMonth()] + ' ' + date.getDate() + ', ' +  date.getFullYear();
         return (
-          <li role="presentation" alt={`Notification ${i + 1} from ${n.author.user.username}`} tabIndex={i} onClick={() => {
+          <li role="presentation" alt={`Notification ${i + 1} from ${(n.listing) ? n.listing.title : 'AppsMall'}`} tabIndex={i} onClick={() => {
               this.setState({
                 activeNotification: i
               });
             }}>
             <a href="#" onClick={(e) => {e.preventDefault()}}>
-              {n.author.user.username} <small>{formattedDate}</small>
+              {(n.listing) ? n.listing.title : 'AppsMall'} <small>{formattedDate}</small>
             </a>
           </li>
         );
@@ -91,11 +91,11 @@ var NotificationsModal = React.createClass({
       return (
         <div>
           <div className="row" tabIndex={0}>
-            <h4>{n.author.user.username} <small>{formattedDate}</small></h4>
+            <h4>{(n.listing) ? n.listing.title : 'AppsMall'} <small>{formattedDate}</small></h4>
             <p>
               <div dangerouslySetInnerHTML={createNotificationText()} />
               <br /><br />
-              <button className="btn btn-danger right" aria-label={`Remove notification from ${n.author.user.username}`} onClick={() => {
+              <button className="btn btn-danger right" aria-label={`Remove notification from ${(n.listing) ? n.listing.title : 'AppsMall'}`} onClick={() => {
                   this.onDismiss(
                     this.state.notificationList[this.state.activeNotification]
                   );
