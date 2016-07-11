@@ -1,5 +1,7 @@
 'use strict';
 
+var {CENTER_URL} = require('ozp-react-commons/OzoneConfig');
+CENTER_URL = `/${CENTER_URL.match(/http.?:\/\/[^/]*\/(.*?)\/?$/)[1]}/`;
 var React = require('react');
 var EmptyFieldValue = require('../shared/EmptyFieldValue.jsx');
 
@@ -29,7 +31,7 @@ var DetailsTab = React.createClass({
         var updatedDate = this.props.listing.editedDate;
         var versionNumber = this.props.listing.versionName;
         var categories = this.props.listing.categories.join(', ');
-        var tags = this.props.listing.tags.join(', ');
+        var tags = this.props.listing.tags;
         var requirements = this.props.listing.requirements;
 
         return (
@@ -62,7 +64,7 @@ var DetailsTab = React.createClass({
                             <p className="forceWrap"><label>URL:</label><span> <a className="forceWrap" href={URL}>{ URL }</a></span></p>
 
                             <p><label>Categories:</label><span> { categories ? categories : <EmptyFieldValue inline /> }</span></p>
-                            <p><label>Tags:</label><span> { tags ? tags : <EmptyFieldValue inline /> }</span></p>
+                            <p><label>Tags:</label><span> {this.renderTags() } </span></p>
                             <p><label>Last Updated:</label><span> { updatedDate }</span></p>
                             <p><label>Version Number:</label><span> { versionNumber } </span></p>
                         </p>
@@ -83,6 +85,17 @@ var DetailsTab = React.createClass({
                 </div>
             </div>
         );
+    },
+
+    renderTags:function(){
+        var tagName = this.props.listing.tags;
+        return tagName.map(function (tagName) {
+          var URL= CENTER_URL + '#/home/' + tagName;
+          console.log(URL);
+          return(
+            <a className='tag' href={URL}>{tagName}, </a>
+          );
+        });
     },
 
     renderOwners: function () {
