@@ -28,12 +28,12 @@ var ActiveNotification = React.createClass({
 
     render() {
         var { listing, expiresDate, message  } = this.props.notification;
-        
+
         return (
             <div className="PastNotification">
                 <div className="PastNotification__Header">
                     <h5 style={{margin: 0, fontWeight: 400}}>{(listing) ? listing.title : 'AppsMall'}</h5>
-                    <em>Expired: <_Date date={expiresDate} /> at <Time date={expiresDate} /></em>
+                    <em>Expires: <_Date date={expiresDate} /> at <Time date={expiresDate} /></em>
                 </div>
                 <p>{ message }</p>
             </div>
