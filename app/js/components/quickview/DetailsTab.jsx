@@ -4,6 +4,7 @@ var {CENTER_URL} = require('ozp-react-commons/OzoneConfig');
 CENTER_URL = `/${CENTER_URL.match(/http.?:\/\/[^/]*\/(.*?)\/?$/)[1]}/`;
 var React = require('react');
 var EmptyFieldValue = require('../shared/EmptyFieldValue.jsx');
+var { Link } = require('react-router');
 
 var PubSub = require('browser-pubsub');
 var tourCh = new PubSub('tour');
@@ -15,6 +16,12 @@ var DetailsTab = React.createClass({
     propTypes: {
         listing: React.PropTypes.object
     },
+
+    getDefaultProps() {
+        return {
+          refresh: false
+        };
+      },
 
     componentDidMount: function() {
       tourCh.publish({
@@ -64,7 +71,7 @@ var DetailsTab = React.createClass({
                             <p className="forceWrap"><label>URL:</label><span> <a className="forceWrap" href={URL}>{ URL }</a></span></p>
 
                             <p><label>Categories:</label><span> { categories ? categories : <EmptyFieldValue inline /> }</span></p>
-                            <p><label>Tags:</label><span> {this.renderTags() } </span></p>
+                            <p><label>Tags:</label><span> {this.renderTags(this) }</span></p>
                             <p><label>Last Updated:</label><span> { updatedDate }</span></p>
                             <p><label>Version Number:</label><span> { versionNumber } </span></p>
                         </p>
@@ -87,15 +94,23 @@ var DetailsTab = React.createClass({
         );
     },
 
-    renderTags:function(){
-        var tagName = this.props.listing.tags;
-        return tagName.map(function (tagName) {
-          var URL= CENTER_URL + '#/home/' + tagName;
-          console.log(URL);
+    renderTags:function(that){
+        var tags= that.props.listing.tags;
+        return tags.map(function (tags) {
+          var URL= CENTER_URL + '#/home/' + tags;
           return(
-            <a className='tag' href={URL}>{tagName}, </a>
+                       <Link to="home" className='tag' params={{
+                          searchString: tags,
+                          categories: '',
+                          type: '',
+                            org: ''
+                          }} onClick={that.handLinkClick} >{tags}, </Link>
           );
         });
+    },
+
+    handLinkClick (e) {
+        location.reload();
     },
 
     renderOwners: function () {
