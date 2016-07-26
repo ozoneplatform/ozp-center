@@ -104,7 +104,7 @@ var DetailsTab = React.createClass({
                           categories: '',
                           type: '',
                             org: ''
-                          }} onClick={that.handLinkClick} >{tags}, </Link>
+                          }} onClick={that.handLinkClick} >{tags}  </Link>
           );
         });
     },
