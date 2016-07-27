@@ -4,7 +4,7 @@ var React = require('react');
 var Reflux = require('reflux');
 var Router = require('react-router');
 var _ = require('../../utils/_');
-var {CENTER_URL} = require('ozp-react-commons/OzoneConfig');
+var {CENTER_URL, API_URL} = require('ozp-react-commons/OzoneConfig');
 var { PAGINATION_MAX } = require('ozp-react-commons/constants');
 
 // actions
@@ -20,6 +20,10 @@ var Carousel = require('../carousel/index.jsx');
 var Types = require('./Types.jsx');
 var Organizations = require('./Organizations.jsx');
 var DetailedQuery = require('./DetailedQuery.jsx');
+
+
+var $ = require('jquery');
+require('../../utils/typeahead.js');
 
 // store dependencies
 var DiscoveryPageStore = require('../../stores/DiscoveryPageStore');
@@ -175,6 +179,47 @@ var Discovery = React.createClass({
     },
 
     componentDidMount(){
+        var substringMatcher = function(strs) {
+          return function findMatches(q, cb) {
+            // an array that will be populated with substring matches
+            var matches = [];
+
+            // regex used to determine if a string contains the substring `q`
+            var substrRegex = new RegExp(q, 'i');
+
+            // iterate through the pool of strings and for any string that
+            // contains the substring `q`, add it to the `matches` array
+            $.each(strs, function(i, str) {
+              if (substrRegex.test(str)) {
+                matches.push(str);
+              }
+            });
+
+            cb(matches);
+          };
+        };
+
+        $.get(`${API_URL}/api/metadata/`, data => {
+          var listings = data.listing_titles;
+
+          $(this.refs.search.getDOMNode()).typeahead({
+            hint: true,
+            highlight: true,
+            minLength: 1,
+          },
+          {
+            name: 'listings',
+            source: substringMatcher(listings)
+          }).on('typeahead:selected', (evt, item) => {
+            this.onSearchInputChange({
+              target: {
+                value: item
+              }
+            });
+          });
+        });
+
+
         $(window).scroll(() => {
            if ($(window).scrollTop() + $(window).height() == $(document).height()) {
              if (!this.state.loadingMore) {
@@ -284,7 +329,7 @@ var Discovery = React.createClass({
           e.stopPropagation();
           $(this.refs.searchResults.getDOMNode()).attr("tabindex",-1).focus();
         }
-        
+
     },
 
     renderFeaturedListings() {
