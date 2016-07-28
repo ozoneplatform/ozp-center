@@ -1,3 +1,12 @@
+### 1.1.36 (2016-07-28)
+
+
+#### Features
+
+* **TypeAhead:** Added typeahead to center ([13897ee8](https://github.com/ozone-development/ozp-center.git/commit/13897ee82bccb03c685d657c6fd11c98f1b61cfc))
+* **detailstab:** took out the comma ([09c25de9](https://github.com/ozone-development/ozp-center.git/commit/09c25de959c4f0d4d321cf1694194cba845d33fb))
+
+
 ### 1.1.35 (2016-07-14)
 
 
