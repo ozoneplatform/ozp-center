@@ -96,7 +96,7 @@ var NotificationsModal = React.createClass({
             <div>
 
               { !(n.notificationType === "PEER.BOOKMARK") &&
-                <p className="message small" dangerouslySetInnerHTML={createNotificationText()}></p>
+                <span className="message small" dangerouslySetInnerHTML={createNotificationText()}></span>
               }
               { n.notificationType === "PEER.BOOKMARK" &&
                 <div>
