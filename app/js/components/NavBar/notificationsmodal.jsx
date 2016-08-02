@@ -93,7 +93,7 @@ var NotificationsModal = React.createClass({
         <div>
           <div className="row" tabIndex={0}>
             <h4>{(n.listing) ? n.listing.title : 'AppsMall'} <small>{formattedDate}</small></h4>
-            <p>
+            <div>
 
               { !(n.notificationType === "PEER.BOOKMARK") &&
                 <p className="message small" dangerouslySetInnerHTML={createNotificationText()}></p>
@@ -122,7 +122,7 @@ var NotificationsModal = React.createClass({
                   </div>
                 </div>
               }
-            <br /><br />
+              <br /><br />
               <button className="btn btn-danger right" aria-label={`Remove notification from ${(n.listing) ? n.listing.title : 'AppsMall'}`} onClick={() => {
                   this.onDismiss(
                     this.state.notificationList[this.state.activeNotification]
@@ -130,7 +130,7 @@ var NotificationsModal = React.createClass({
                 }}>
                 Remove Notification
               </button>
-            </p>
+            </div>
           </div>
         </div>
       );
