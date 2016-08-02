@@ -62,7 +62,7 @@ var NotificationsModal = React.createClass({
     },
 
     makeSidebar: function() {
-      var notis = this.state.notificationList.slice();
+      var notis = this.state.notificationList.slice(0);
 
       return notis.map((n, i) => {
         var date = new Date(n.createdDate);
@@ -104,7 +104,7 @@ var NotificationsModal = React.createClass({
                   <p className="message small">{n.message}</p>
                   <div>
                     <button className="btn btn-default btn-sm" onClick={() => {
-                      this.onDismiss(this.state.notificationList[this.state.activeNotification])
+                      this.onDismiss(n);
                     }}>Ignore</button>
                     <button className="btn btn-success btn-sm" onClick={() => {
                         $.ajax({
@@ -116,7 +116,7 @@ var NotificationsModal = React.createClass({
                               "bookmark_notification_id": n.id
                             })
                         }).done(() => {
-                          this.onDismiss(this.state.notificationList[this.state.activeNotification]);
+                          this.onDismiss(n);
                         });
                       }}>Add {n.peer.folderName}</button>
                   </div>
@@ -159,7 +159,7 @@ var NotificationsModal = React.createClass({
                                 </ul>
                               </div>
                               <div className="col-xs-8">
-                                { (this.state.notificationList && this.state.notificationList.length)  &&
+                                { this.state.notificationList.length &&
                                   <div>
                                     {
                                       this.makeNotification(
