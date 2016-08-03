@@ -115,7 +115,7 @@ var DetailsTab = React.createClass({
 
     renderOwners: function () {
         var owners = this.props.listing.owners;
-
+        if(!owners){
         return owners.map(function (owner, i) {
             return (
                 <p className="listing-owner" key={`renderOwners.${i}`}>
@@ -126,6 +126,7 @@ var DetailsTab = React.createClass({
                 </p>
             );
         });
+      }
     },
 
     renderIntents: function () {
