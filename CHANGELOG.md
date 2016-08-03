@@ -1,3 +1,12 @@
+### 1.1.37 (2016-08-03)
+
+
+#### Features
+
+* **Shared Folders:** Shared folders additions ([ee95bac2](https://github.com/ozone-development/ozp-center.git/commit/ee95bac2e9beca6e78b3b4fd57a689b46548c357))
+* **Shared folder:** added tweaks to notifications modal ([6aee0fff](https://github.com/ozone-development/ozp-center.git/commit/6aee0fff22c443babb01dd329f828be67a6db406))
+
+
 ### 1.1.36 (2016-07-28)
 
 
