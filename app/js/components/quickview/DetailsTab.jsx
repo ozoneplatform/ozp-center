@@ -115,18 +115,18 @@ var DetailsTab = React.createClass({
 
     renderOwners: function () {
         var owners = this.props.listing.owners;
-        if(!owners){
-        return owners.map(function (owner, i) {
-            return (
-                <p className="listing-owner" key={`renderOwners.${i}`}>
-                    <span> </span>
-                    <ProfileLink profileId={owner.id}>
-                        {owner.displayName}
-                    </ProfileLink>
-                </p>
-            );
-        });
-      }
+            return owners.map(function (owner, i) {
+              if(owner.displayName !== "Masked Display Name"){
+                return (
+                    <p className="listing-owner" key={`renderOwners.${i}`}>
+                        <span> </span>
+                        <ProfileLink profileId={owner.id}>
+                            {owner.displayName}
+                        </ProfileLink>
+                    </p>
+                );
+              }
+            });
     },
 
     renderIntents: function () {

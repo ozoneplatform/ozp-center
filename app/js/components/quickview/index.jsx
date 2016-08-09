@@ -81,7 +81,6 @@ var Quickview = React.createClass({
         var { shown, listing } = this.state;
         var ActiveRouteHandler = this.getActiveRouteHandler();
         var owners, tabs;
-        console.log(owners)
         if (listing) {
             tabs = _.cloneDeep(this.props.tabs);
             owners = listing.owners.map(function (owner) {
@@ -93,7 +92,7 @@ var Quickview = React.createClass({
                     to: 'reviews',
                     name: 'Reviews'
                 });
-                if (currentUser.isAdmin() || _.contains(owners, currentUser.username) && !owners ||
+                if (currentUser.isAdmin() || (_.contains(owners, currentUser.username) && currentUser.username !== "Masked Username") ||
                     _.contains(currentUser.stewardedOrganizations, listing.agencyShort)) {
                         tabs.push({
                             to: 'administration',
