@@ -7,7 +7,6 @@ var LibraryApi = require('../webapi/Library');
 var LibraryActions = require('../actions/LibraryActions');
 var ObjectDB = require('object-db');
 var tourDB = new ObjectDB('ozp_tour').init();
-//var centerStatus = tourDB.get('center');
 
 var LibraryStore = Reflux.createStore({
     listenables: LibraryActions,
@@ -20,12 +19,12 @@ var LibraryStore = Reflux.createStore({
         LibraryApi.getLibrary().then(function(library) {
             me.library = library;
             me.doTrigger();
+            var tourDB = new ObjectDB('ozp_tour').init();
             tourDB.set({
-              center: {
-                library: true
+              library: {
+                exists: true
               }
             });
-            console.log(tourDB);
         });
     },
 

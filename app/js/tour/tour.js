@@ -3,10 +3,12 @@ var ProfileSearchActions = require('../actions/ProfileSearchActions');
 var $ = require('jquery');
 
 var ObjectDB = require('object-db');
+var tourDB = new ObjectDB('ozp_tour').init();
 
 // Setup our LocalstorageDB we will use this to talk between Center,
 // Webtop and Hud tours.
-var tourDB = new ObjectDB('ozp_tour').init({
+//var tourDB = new ObjectDB('ozp_tour').init({
+tourDB.set({
   center: {
     ran: false,
     startCenterTour: false
@@ -15,7 +17,6 @@ var tourDB = new ObjectDB('ozp_tour').init({
 
 
 var { globalTour, centerTour } = require('./');
-
 var centerStatus = tourDB.get('center');
 
 var initTour = function() {
