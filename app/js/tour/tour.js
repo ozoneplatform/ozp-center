@@ -12,6 +12,9 @@ tourDB.set({
   center: {
     ran: false,
     startCenterTour: false
+  },
+  library: {
+    exists: false
   }
 });
 

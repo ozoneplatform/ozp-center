@@ -17,6 +17,8 @@ var { addToLibrary, removeFromLibrary, fetchLibrary } = require('../actions/Libr
 var url = window.location.href;
 var libraryCurrent = '';
 var libraryGet = true;
+var ObjectDB = require('object-db');
+var tourDB = new ObjectDB('ozp_tour').init();
 
 var BookmarkButton = React.createClass({
     mixins: [Reflux.connect(LibraryStore, 'library')],
@@ -76,6 +78,7 @@ var BookmarkButton = React.createClass({
             (userMngmt === true && this.props.listing.isBookmarked === true && this.state.listing.isBookmarked === true) ||
             libraryIn ){
           //console.log('y');
+
           return true;
         }else{
           //console.log('xx');
@@ -119,6 +122,17 @@ var BookmarkButton = React.createClass({
             'icon-ribbon-grayDark': !this.inLibrary(),
             'icon-ribbon-filled-yellow': this.inLibrary()
         });
+
+        if(this.inLibrary()){
+          //console.log('yes');
+          tourDB.set({
+            library: {
+              exists: true
+            }
+          });
+        }
+
+        //console.log(this);
 
         return (
           <button
