@@ -43,7 +43,7 @@ var NavBar = React.createClass({
         var contactHref = this.makeHref( this.getActiveRoutePath(), this.getParams(), {
             contacts:true
         });
-
+        console.log(this);
         return (
             <nav ref="hastooltips" className="navbar navbar-inverse navbar-fixed-top" id="globalNav">
                 <div className="container-fluid" id="centered">
@@ -71,17 +71,24 @@ var NavBar = React.createClass({
                                             <i className="icon-head-grayLightest"/>Profile
                                         </ProfileLink>
                                     </li>
-                                    <li className="divider"></li>
-                                    <li className="dropdown-header">Create</li>
-                                    <li><a href={'#/edit'} onClick={()=>{
-                                          CreateEditActions.resetForm();
-                                      }}><i className="icon-square-plus-grayLightest"></i>Submit a Listing</a></li>
-                                    <li><a href={DEVELOPER_RESOURCES_URL} target="_blank"><i className="icon-cloud-grayLightest"></i>Developer Resources</a></li>
+                                    { this.state.currentUser.displayName !== "Masked Display Name" || this.isAdmin() &&
+                                        <li className="divider"></li>
+                                    }
+                                    { this.state.currentUser.displayName !== "Masked Display Name" || this.isAdmin() &&
+                                        <li className="dropdown-header">Create</li>
+                                    }
+                                    { this.state.currentUser.displayName !== "Masked Display Name" || this.isAdmin() &&
+                                        <li><a href={'#/edit'} onClick={()=>{
+                                              CreateEditActions.resetForm();
+                                          }}><i className="icon-square-plus-grayLightest"></i>Submit a Listing</a></li>
+                                    }
+                                    { this.state.currentUser.displayName !== "Masked Display Name" || this.isAdmin() &&
+                                        <li><a href={DEVELOPER_RESOURCES_URL} target="_blank"><i className="icon-cloud-grayLightest"></i>Developer Resources</a></li>
+                                    }
                                     <li className="divider"></li>
                                     <li className="dropdown-header">Manage</li>
                                     <li><a href={'#/user-management/my-listings'}><i className="icon-layers-grayLightest"></i>Listing Management</a></li>
-                                    {
-                                        this.isAdmin() &&
+                                    { this.isAdmin() &&
                                         <li><a href={'#/mall-management/categories'}><i className="icon-shopping-settings-grayLightest"></i>Center Settings</a></li>
                                     }
                                     { Metrics }
