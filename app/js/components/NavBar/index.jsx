@@ -43,7 +43,7 @@ var NavBar = React.createClass({
         var contactHref = this.makeHref( this.getActiveRoutePath(), this.getParams(), {
             contacts:true
         });
-        console.log(this);
+        var userName = "Masked Display Name";
         return (
             <nav ref="hastooltips" className="navbar navbar-inverse navbar-fixed-top" id="globalNav">
                 <div className="container-fluid" id="centered">
@@ -71,18 +71,18 @@ var NavBar = React.createClass({
                                             <i className="icon-head-grayLightest"/>Profile
                                         </ProfileLink>
                                     </li>
-                                    { this.state.currentUser.displayName !== "Masked Display Name" || this.isAdmin() &&
+                                    { this.state.currentUser.displayName !== userName &&
                                         <li className="divider"></li>
                                     }
-                                    { this.state.currentUser.displayName !== "Masked Display Name" || this.isAdmin() &&
+                                    { this.state.currentUser.displayName !== userName &&
                                         <li className="dropdown-header">Create</li>
                                     }
-                                    { this.state.currentUser.displayName !== "Masked Display Name" || this.isAdmin() &&
+                                    { this.state.currentUser.displayName !== userName &&
                                         <li><a href={'#/edit'} onClick={()=>{
                                               CreateEditActions.resetForm();
                                           }}><i className="icon-square-plus-grayLightest"></i>Submit a Listing</a></li>
                                     }
-                                    { this.state.currentUser.displayName !== "Masked Display Name" || this.isAdmin() &&
+                                    { this.state.currentUser.displayName !== userName &&
                                         <li><a href={DEVELOPER_RESOURCES_URL} target="_blank"><i className="icon-cloud-grayLightest"></i>Developer Resources</a></li>
                                     }
                                     <li className="divider"></li>
