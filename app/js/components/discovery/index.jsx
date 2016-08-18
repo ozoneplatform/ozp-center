@@ -205,7 +205,7 @@ var Discovery = React.createClass({
           $(this.refs.search.getDOMNode()).typeahead({
             hint: true,
             highlight: true,
-            minLength: 1,
+            minLength: 1
           },
           {
             name: 'listings',
@@ -291,7 +291,7 @@ var Discovery = React.createClass({
 
     debounceSearch: _.debounce(function () {
         this.search();
-    }, 500),
+    }, 1500),
 
     search() {
         var { type, agency } = this.state;
