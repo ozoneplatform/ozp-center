@@ -285,7 +285,14 @@ var CurrentListingStore = createStore({
     },
 
     currentUserCanEdit: function () {
-        return this.currentUser && this.currentUser.canEdit(_listing);
+
+        if((this.currentUser.displayName === "Masked Display Name")){
+          return false;
+        }
+        else{
+          return this.currentUser && this.currentUser.canEdit(_listing);
+
+        }
     },
 
     getChangeLogs: function () {
