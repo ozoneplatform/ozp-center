@@ -90,8 +90,14 @@ var EditReview = React.createClass({
     },
 
     isEditingRateAllowed: function () {
-        // TODO: This needs to be re-thought. See #OZBE53
-        return this.state.review.author.user.username === this.props.user.username;
+        var reviewername = this.state.review.author.user.username;
+        var username = this.props.user.username;
+        if (this.props.user.isAdmin() || this.props.user.isOrgSteward()|| (reviewername === username && username !== "Masked Username")){
+          return true;
+        }
+        else{
+          return false;
+        }
     },
 
     render: function () {
@@ -99,7 +105,6 @@ var EditReview = React.createClass({
         var isEditingRateAllowed = this.isEditingRateAllowed();
         var limit = CENTER_REVIEWS_CHAR_LIMIT.toString();
         var hasError = classSet({'has-error': this.state.errors});
-
         return (
             <div className="EditReview">
                 <h5>Edit Review</h5>
@@ -129,7 +134,9 @@ var EditReview = React.createClass({
                     onConfirm={ this.onDeleteConfirm } />
                 <div className="pull-right">
                     <button className="btn btn-default btn-sm" onClick={ this.props.onCancel }>Cancel</button>
-                    <button className="btn btn-success btn-sm" onClick={ this.onSave }>Submit</button>
+                    {this.state.review.author.displayName === this.props.user.displayName &&
+                      <button className="btn btn-success btn-sm" onClick={ this.onSave }>Submit</button>
+                      }
                 </div>
             </div>
         );
