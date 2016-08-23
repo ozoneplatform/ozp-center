@@ -34,7 +34,6 @@
     "css-loader": "0.9.1",
     "eslint-plugin-react": "^3.15.0",
     "file-loader": "0.5.1",
-    "fs": "0.0.2",
     "gulp": "3.9.0",
     "gulp-bless": "~3.0.1",
     "gulp-clean": "0.3.1",
