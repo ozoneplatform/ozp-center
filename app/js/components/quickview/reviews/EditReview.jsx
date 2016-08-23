@@ -90,9 +90,10 @@ var EditReview = React.createClass({
     },
 
     isEditingRateAllowed: function () {
-        var reviewername = this.state.review.author.user.username;
-        var username = this.props.user.username;
-        if ((reviewername === username && username !== "Masked Username")){
+        var reviewerId = this.state.review.author.id;
+        var userId = this.props.user.id;
+        console.log(this)
+        if ((reviewerId === userId )){
           return true;
         }
         else{
@@ -134,7 +135,7 @@ var EditReview = React.createClass({
                     onConfirm={ this.onDeleteConfirm } />
                 <div className="pull-right">
                     <button className="btn btn-default btn-sm" onClick={ this.props.onCancel }>Cancel</button>
-                    {this.state.review.author.displayName === this.props.user.displayName &&
+                    {this.state.review.author.id === this.props.user.id &&
                       <button className="btn btn-success btn-sm" onClick={ this.onSave }>Submit</button>
                       }
                 </div>
