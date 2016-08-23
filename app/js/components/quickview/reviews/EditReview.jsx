@@ -93,7 +93,7 @@ var EditReview = React.createClass({
         var reviewerId = this.state.review.author.id;
         var userId = this.props.user.id;
 
-        if ((reviewerId === userId )){
+        if (reviewerId === userId){
           return true;
         }
         else{
@@ -137,7 +137,7 @@ var EditReview = React.createClass({
                     <button className="btn btn-default btn-sm" onClick={ this.props.onCancel }>Cancel</button>
                     {this.state.review.author.id === this.props.user.id &&
                       <button className="btn btn-success btn-sm" onClick={ this.onSave }>Submit</button>
-                      }
+                    }
                 </div>
             </div>
         );
