@@ -92,7 +92,7 @@ var EditReview = React.createClass({
     isEditingRateAllowed: function () {
         var reviewername = this.state.review.author.user.username;
         var username = this.props.user.username;
-        if (this.props.user.isAdmin() || this.props.user.isOrgSteward()|| (reviewername === username && username !== "Masked Username")){
+        if ((reviewername === username && username !== "Masked Username")){
           return true;
         }
         else{
