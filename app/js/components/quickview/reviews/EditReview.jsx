@@ -116,7 +116,6 @@ var EditReview = React.createClass({
                         onChange={ this.onRatingChange }
                         viewOnly={ !isEditingRateAllowed }/>
                     {
-                        // TODO: This needs to be re-thought. See #OZBE53
                         !isEditingRateAllowed &&
                             <i className="icon-lock"></i>
                     }
@@ -135,7 +134,7 @@ var EditReview = React.createClass({
                     onConfirm={ this.onDeleteConfirm } />
                 <div className="pull-right">
                     <button className="btn btn-default btn-sm" onClick={ this.props.onCancel }>Cancel</button>
-                    {this.state.review.author.id === this.props.user.id &&
+                    {this.isEditingRateAllowed() &&
                       <button className="btn btn-success btn-sm" onClick={ this.onSave }>Submit</button>
                     }
                 </div>
