@@ -92,7 +92,7 @@ var EditReview = React.createClass({
     isEditingRateAllowed: function () {
         var reviewerId = this.state.review.author.id;
         var userId = this.props.user.id;
-        console.log(this)
+
         if ((reviewerId === userId )){
           return true;
         }
