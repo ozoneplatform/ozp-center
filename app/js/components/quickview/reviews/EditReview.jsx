@@ -90,8 +90,15 @@ var EditReview = React.createClass({
     },
 
     isEditingRateAllowed: function () {
-        // TODO: This needs to be re-thought. See #OZBE53
-        return this.state.review.author.user.username === this.props.user.username;
+        var reviewerId = this.state.review.author.id;
+        var userId = this.props.user.id;
+
+        if (reviewerId === userId){
+          return true;
+        }
+        else{
+          return false;
+        }
     },
 
     render: function () {
@@ -99,7 +106,6 @@ var EditReview = React.createClass({
         var isEditingRateAllowed = this.isEditingRateAllowed();
         var limit = CENTER_REVIEWS_CHAR_LIMIT.toString();
         var hasError = classSet({'has-error': this.state.errors});
-
         return (
             <div className="EditReview">
                 <h5>Edit Review</h5>
@@ -110,7 +116,6 @@ var EditReview = React.createClass({
                         onChange={ this.onRatingChange }
                         viewOnly={ !isEditingRateAllowed }/>
                     {
-                        // TODO: This needs to be re-thought. See #OZBE53
                         !isEditingRateAllowed &&
                             <i className="icon-lock"></i>
                     }
@@ -129,7 +134,9 @@ var EditReview = React.createClass({
                     onConfirm={ this.onDeleteConfirm } />
                 <div className="pull-right">
                     <button className="btn btn-default btn-sm" onClick={ this.props.onCancel }>Cancel</button>
-                    <button className="btn btn-success btn-sm" onClick={ this.onSave }>Submit</button>
+                    {this.isEditingRateAllowed() &&
+                      <button className="btn btn-success btn-sm" onClick={ this.onSave }>Submit</button>
+                    }
                 </div>
             </div>
         );

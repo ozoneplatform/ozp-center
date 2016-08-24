@@ -74,18 +74,6 @@ describe('UserReviews', function () {
         );
 
         expect($(review.getDOMNode()).find('.icon-pencil').length).to.equal(1);
-
-        review = TestUtils.renderIntoDocument(
-            <UserReviews.UserReview review={orgStewardReview} user={profile}
-                listing={{}} onEdit={$.noop} />
-        );
-        expect($(review.getDOMNode()).find('.icon-pencil').length).to.equal(0);
-
-        review = TestUtils.renderIntoDocument(
-            <UserReviews.UserReview review={adminReview} user={profile}
-                listing={{}} onEdit={$.noop} />
-        );
-        expect($(review.getDOMNode()).find('.icon-pencil').length).to.equal(0);
     });
 
 });

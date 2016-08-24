@@ -21,7 +21,7 @@ var UserReview = React.createClass({
         var { review, user, listing } = this.props;
         return (
             user.isAdmin() ||
-            review.author.user.username === user.username ||
+            (review.author.id === user.id ) ||
             user.isOrgSteward(listing.agency)
         );
     },
