@@ -1,3 +1,11 @@
+### 1.1.40 (2016-08-24)
+
+
+#### Bug Fixes
+
+* **editreview:** reviews will now look for user id instead of username ([55f71428](https://github.com/ozone-development/ozp-center.git/commit/55f7142899e4705b4e7112ebc6378e3fc3f049ae))
+
+
 ### 1.1.39 (2016-08-19)
 
 
