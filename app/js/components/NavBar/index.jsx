@@ -43,7 +43,7 @@ var NavBar = React.createClass({
         var contactHref = this.makeHref( this.getActiveRoutePath(), this.getParams(), {
             contacts:true
         });
-        var userName = "Masked Display Name";
+        var secondParty = this.state.currentUser.secondPartyUser;
         return (
             <nav ref="hastooltips" className="navbar navbar-inverse navbar-fixed-top" id="globalNav">
                 <div className="container-fluid" id="centered">
@@ -71,23 +71,29 @@ var NavBar = React.createClass({
                                             <i className="icon-head-grayLightest"/>Profile
                                         </ProfileLink>
                                     </li>
-                                    { this.state.currentUser.displayName !== userName &&
+                                    { !secondParty &&
                                         <li className="divider"></li>
                                     }
-                                    { this.state.currentUser.displayName !== userName &&
+                                    { !secondParty &&
                                         <li className="dropdown-header">Create</li>
                                     }
-                                    { this.state.currentUser.displayName !== userName &&
+                                    { !secondParty &&
                                         <li><a href={'#/edit'} onClick={()=>{
                                               CreateEditActions.resetForm();
                                           }}><i className="icon-square-plus-grayLightest"></i>Submit a Listing</a></li>
                                     }
-                                    { this.state.currentUser.displayName !== userName &&
+                                    { !secondParty &&
                                         <li><a href={DEVELOPER_RESOURCES_URL} target="_blank"><i className="icon-cloud-grayLightest"></i>Developer Resources</a></li>
                                     }
-                                    <li className="divider"></li>
-                                    <li className="dropdown-header">Manage</li>
-                                    <li><a href={'#/user-management/my-listings'}><i className="icon-layers-grayLightest"></i>Listing Management</a></li>
+                                    {!secondParty &&
+                                      <li className="divider"></li>
+                                    }
+                                    { !secondParty &&
+                                      <li className="dropdown-header">Manage</li>
+                                    }
+                                    { !secondParty &&
+                                      <li><a href={'#/user-management/my-listings'}><i className="icon-layers-grayLightest"></i>Listing Management</a></li>
+                                    }
                                     { this.isAdmin() &&
                                         <li><a href={'#/mall-management/categories'}><i className="icon-shopping-settings-grayLightest"></i>Center Settings</a></li>
                                     }
