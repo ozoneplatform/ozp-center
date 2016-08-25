@@ -44,7 +44,6 @@ var NavBar = React.createClass({
             contacts:true
         });
         var secondParty = this.state.currentUser.secondPartyUser;
-        console.log(this);
         return (
             <nav ref="hastooltips" className="navbar navbar-inverse navbar-fixed-top" id="globalNav">
                 <div className="container-fluid" id="centered">
