@@ -123,7 +123,12 @@ var EditReview = React.createClass({
                 <div className={hasError}>
                     <h6>Description</h6>
                     <SystemHighMessage />
+                    {isEditingRateAllowed &&
                     <textarea ref="text" value={ text } onChange={ this.onTextChange }></textarea>
+                    }
+                    {!isEditingRateAllowed &&
+                    <textarea ref="text" value={ text } onChange={ this.onTextChange } disabled='disabled'></textarea>
+                    }
                     <p className="help-block small">Must have more than {limit} characters</p>
                 </div>
                 <PopoverConfirmationButton
@@ -134,7 +139,7 @@ var EditReview = React.createClass({
                     onConfirm={ this.onDeleteConfirm } />
                 <div className="pull-right">
                     <button className="btn btn-default btn-sm" onClick={ this.props.onCancel }>Cancel</button>
-                    {this.isEditingRateAllowed() &&
+                    {isEditingRateAllowed &&
                       <button className="btn btn-success btn-sm" onClick={ this.onSave }>Submit</button>
                     }
                 </div>
