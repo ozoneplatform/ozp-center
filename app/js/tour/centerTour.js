@@ -31,7 +31,7 @@ const meTour = new Tour({
     //0
     {
       title: "Welcome. ",
-      content: "This simple tour guides you through the toolbar items and introduces you to the primary components of the system: The Center, HUD, and Webtop. These three components enable you to discover, bookmark, rate, review, organize and launch mission and business applications from across the enterprise.",
+      content: "This simple tour guides you through the toolbar items and introduces you to the primary components of the system: The HUD, Center and Webtop. These three components enable you to discover, bookmark, rate, review, organize and launch mission and business applications from across the enterprise.",
       orphan: true,
       onShown: function(){
         $('#welcome').focus();
@@ -171,7 +171,35 @@ const meTour = new Tour({
       },
       onNext: function() {
         var nextStep = function() {
-          meTour.goTo(11);
+          meTour.goTo(12);
+        };
+        (function checkStatus() {
+          if (readyObject.overviewLoaded) {
+            nextStep();
+          } else {
+            setTimeout(checkStatus, 100);
+          }
+        })();
+      }
+    },
+    //10b
+    {
+      path: `${CENTER_URL}#/home/?%2F%3F=`,
+      element: ".Discovery__SearchResults .listing:first, .infiniteScroll",
+      title: "Listing Tiles",
+      content: "Hover over a tile for a short description of the app, to bookmark it to your HUD, or to launch it into a new tab. Click the tile to open the listing overview for more listing details.",
+      placement: "top",
+      orphan:true,
+      //backdrop: false,
+      onShown: function() {
+        $(".Discovery__SearchResults .listing:first .slide-up, .infiniteScroll .listing:first .slide-up").css("top", "0px");
+      },
+      onHide: function() {
+        $(".Discovery__SearchResults .listing:first .slide-up, .infiniteScroll .listing:first .slide-up").css("top", "137px");
+      },
+      onNext: function() {
+        var nextStep = function() {
+          meTour.goTo(12);
         };
         (function checkStatus() {
           if (readyObject.overviewLoaded) {
@@ -210,7 +238,6 @@ const meTour = new Tour({
       onPrev: function() {
         $(".quickview").modal("hide");
         meTour.goTo(10);
-
       }
     },
     //12
