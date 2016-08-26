@@ -4,6 +4,7 @@ var $ = require('jquery');
 
 var ObjectDB = require('object-db');
 var tourDB = new ObjectDB('ozp_tour').init();
+console.log(tourDB);
 
 // Setup our LocalstorageDB we will use this to talk between Center,
 // Webtop and Hud tours.

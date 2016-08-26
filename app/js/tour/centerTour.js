@@ -6,10 +6,11 @@ CENTER_URL = `/${CENTER_URL.match(/http.?:\/\/[^/]*\/(.*?)\/?$/)[1]}/`;
 var PubSub = require('browser-pubsub');
 var tourCh = new PubSub('tour');
 var ObjectDB = require('object-db');
-var tourDB = new ObjectDB('ozp_tour');
+//var tourDB = new ObjectDB('ozp_tour');
+var tourDBMain = new ObjectDB('ozp_tour').init();
+var tourDB = tourDBMain.get();
 
 var ProfileSearchActions = require('../actions/ProfileSearchActions');
-
 var readyObject = {};
 
 // HACK: for some reason window.localstorage is lost in this file.
@@ -45,6 +46,9 @@ const meTour = new Tour({
       placement: "bottom",
       onShown: function(){
         $('#tourstop-hud').focus();
+        if(tourDB.global_ran===true){
+            meTour.goTo(7);
+        }
       },
       backdropContainer: ".navbar-fixed-top",
       backdropPadding: 0
@@ -111,6 +115,12 @@ const meTour = new Tour({
       },
       onHidden: function() {
         $("#tourstop-global-menu").removeClass("open");
+      },
+      onNext: function() {
+        tourDBMain.set({
+          global_ran: true
+        });
+        console.log(tourDBMain);
       }
     },
     //7
