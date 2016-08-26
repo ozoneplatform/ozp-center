@@ -6,16 +6,18 @@ var ObjectDB = require('object-db');
 
 // Setup our LocalstorageDB we will use this to talk between Center,
 // Webtop and Hud tours.
-var tourDB = new ObjectDB('ozp_tour').set({
+var tourDB = new ObjectDB('ozp_tour').init({
   center: {
     ran: false,
     startCenterTour: false
   }
 });
+console.dir(tourDB);
 
 
 var { globalTour, centerTour } = require('./');
 var centerStatus = tourDB.get('center');
+console.dir(centerStatus);
 
 var initTour = function() {
   // If tour has never run before, start it.
