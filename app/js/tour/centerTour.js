@@ -182,7 +182,7 @@ const meTour = new Tour({
         })();
       }
     },
-    //10b
+    //11
     {
       path: `${CENTER_URL}#/home/?%2F%3F=`,
       element: ".Discovery__SearchResults .listing:first, .infiniteScroll",
@@ -210,7 +210,7 @@ const meTour = new Tour({
         })();
       }
     },
-    //11
+    //12
     {
       path: `${CENTER_URL}#/home/?%2F%3F=&listing=1&action=view&tab=overview`,
       element: ".modal-body",
@@ -225,7 +225,7 @@ const meTour = new Tour({
           tourCh.publish({
             overviewLoaded: false
           });
-          meTour.goTo(12);
+          meTour.goTo(13);
         };
         (function checkStatus() {
           if (readyObject.reviewsLoaded) {
@@ -240,7 +240,7 @@ const meTour = new Tour({
         meTour.goTo(10);
       }
     },
-    //12
+    //13
     {
       path: `${CENTER_URL}#/home/?%2F%3F=&listing=1&action=view&tab=reviews`,
       element: ".modal-body .nav .active",
@@ -255,7 +255,7 @@ const meTour = new Tour({
           tourCh.publish({
             reviewsLoaded: false
           });
-          meTour.goTo(13);
+          meTour.goTo(14);
         };
         (function checkStatus() {
           if (readyObject.detailsLoaded) {
@@ -267,7 +267,7 @@ const meTour = new Tour({
       },
       onPrev: function() {
         var prevStep = function() {
-          meTour.goTo(11);
+          meTour.goTo(12);
         };
         (function checkStatus() {
           if (readyObject.overviewLoaded) {
@@ -278,7 +278,7 @@ const meTour = new Tour({
         })();
       }
     },
-    //13
+    //14
     {
       path: `${CENTER_URL}#/home/?%2F%3F=&listing=1&action=view&tab=details`,
       element: ".modal-body .nav .active",
@@ -293,7 +293,7 @@ const meTour = new Tour({
           tourCh.publish({
             detailsLoaded: false
           });
-          meTour.goTo(14);
+          meTour.goTo(15);
         };
         (function checkStatus() {
           if (readyObject.resourcesLoaded) {
@@ -305,7 +305,7 @@ const meTour = new Tour({
       },
       onPrev: function() {
         var prevStep = function() {
-          meTour.goTo(12);
+          meTour.goTo(13);
         };
         (function checkStatus() {
           if (readyObject.reviewsLoaded) {
@@ -316,7 +316,7 @@ const meTour = new Tour({
         })();
       }
     },
-    //14
+    //15
     {
       path: `${CENTER_URL}#/home/?%2F%3F=&listing=1&action=view&tab=resources`,
       element: ".modal-body .nav .active",
@@ -333,7 +333,7 @@ const meTour = new Tour({
           tourCh.publish({
             resourcesLoaded: false
           });
-          meTour.goTo(13);
+          meTour.goTo(14);
         };
         (function checkStatus() {
           if (readyObject.detailsLoaded) {
