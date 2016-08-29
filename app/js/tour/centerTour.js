@@ -10,12 +10,12 @@ var ObjectDB = require('object-db');
 var tourDBMain = new ObjectDB('ozp_tour').init();
 var tourDB = tourDBMain.get();
 var contentLocalHUD = '';
-if (typeof tourDB.hud !== 'undefined' && tourDB.hud.ran === true){
-  contentLocalHUD = "";
-}else{
+//if (typeof tourDB.hud !== 'undefined' && tourDB.hud.ran === true){
+//  contentLocalHUD = "";
+//}else{
   //contentLocalHUD = '<button class="btn btn-sm btn-default" onclick="att.com">Next HUD &raquo;</button>';
   contentLocalHUD = '<button class="btn btn-sm btn-default" onclick="parent.location.href=\'' + HUD_URL + '\'">Next HUD &raquo;</button>';
-}
+//}
 
 var ProfileSearchActions = require('../actions/ProfileSearchActions');
 var readyObject = {};
