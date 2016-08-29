@@ -134,11 +134,12 @@ const meTour = new Tour({
       element: "#tourstop-center-search",
       title: "Search and Filter",
       content: "Use keywords and filters to explore listings. When you enter a search term, the system looks for your term in the listing's name, description, tags, etc.",
-      placement: "bottom",
+      placement: "left",
       onShown: function(){
         $('#tourstop-center-search').focus();
       },
       backdropContainer: "#header"
+      //backdropContainer: ".form-group .Search"
     },
     //8
     {
