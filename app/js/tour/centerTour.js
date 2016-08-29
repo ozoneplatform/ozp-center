@@ -2,7 +2,6 @@
 
 var {CENTER_URL, HUD_URL} = require('ozp-react-commons/OzoneConfig');
 CENTER_URL = `/${CENTER_URL.match(/http.?:\/\/[^/]*\/(.*?)\/?$/)[1]}/`;
-//HUD_URL = `/${HUD_URL.match(/http.?:\/\/[^/]*\/(.*?)\/?$/)[1]}/`;
 
 var PubSub = require('browser-pubsub');
 var tourCh = new PubSub('tour');
@@ -11,12 +10,17 @@ var ObjectDB = require('object-db');
 var tourDBMain = new ObjectDB('ozp_tour').init();
 var tourDB = tourDBMain.get();
 var contentLocalHUD = '';
-if(tourDB.library === true){
-  contentLocalHUD = "yes";
+if (typeof tourDB.hud !== 'undefined' && tourDB.hud.ran === true){
+  contentLocalHUD = "";
 }else{
-  //contentLocalHUD = "no";
-  contentLocalHUD = '<button class="btn btn-sm btn-default" onclick="att.com">Next HUD &raquo;</button>';
+  //contentLocalHUD = '<button class="btn btn-sm btn-default" onclick="att.com">Next HUD &raquo;</button>';
   contentLocalHUD = '<button class="btn btn-sm btn-default" onclick="parent.location.href=\'' + HUD_URL + '\'">Next HUD &raquo;</button>';
+  tourDBMain.set({
+    center: {
+      ran: false,
+      startCenterTour: false
+    }
+  });
 }
 
 var ProfileSearchActions = require('../actions/ProfileSearchActions');
