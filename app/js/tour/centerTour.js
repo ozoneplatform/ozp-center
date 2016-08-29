@@ -17,8 +17,8 @@ if (typeof tourDB.hud !== 'undefined' && tourDB.hud.ran === true){
   contentLocalHUD = '<button class="btn btn-sm btn-default" onclick="parent.location.href=\'' + HUD_URL + '\'">Next HUD &raquo;</button>';
   tourDBMain.set({
     center: {
-      ran: false,
-      startCenterTour: false
+      ran: true,
+      startCenterTour: true
     }
   });
 }
