@@ -48,5 +48,5 @@ ProfileSearchActions.tourCheck.listen(() => {
 
 $(document).on('click', '#tour-start', function(e){
   e.preventDefault();
-  centerTour.restart().goTo(1);
+  centerTour.restart().goTo(0);
 });

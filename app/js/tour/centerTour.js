@@ -1,14 +1,23 @@
 'use strict';
 
-var {CENTER_URL} = require('ozp-react-commons/OzoneConfig');
+var {CENTER_URL, HUD_URL} = require('ozp-react-commons/OzoneConfig');
 CENTER_URL = `/${CENTER_URL.match(/http.?:\/\/[^/]*\/(.*?)\/?$/)[1]}/`;
+//HUD_URL = `/${HUD_URL.match(/http.?:\/\/[^/]*\/(.*?)\/?$/)[1]}/`;
 
 var PubSub = require('browser-pubsub');
 var tourCh = new PubSub('tour');
 var ObjectDB = require('object-db');
-//var tourDB = new ObjectDB('ozp_tour');
+// rjk
 var tourDBMain = new ObjectDB('ozp_tour').init();
 var tourDB = tourDBMain.get();
+var contentLocalHUD = '';
+if(tourDB.library === true){
+  contentLocalHUD = "yes";
+}else{
+  //contentLocalHUD = "no";
+  contentLocalHUD = '<button class="btn btn-sm btn-default" onclick="att.com">Next HUD &raquo;</button>';
+  contentLocalHUD = '<button class="btn btn-sm btn-default" onclick="parent.location.href=\'' + HUD_URL + '\'">Next HUD &raquo;</button>';
+}
 
 var ProfileSearchActions = require('../actions/ProfileSearchActions');
 var readyObject = {};
@@ -120,7 +129,6 @@ const meTour = new Tour({
         tourDBMain.set({
           global_ran: true
         });
-        console.log(tourDBMain);
       }
     },
     //7
@@ -186,8 +194,8 @@ const meTour = new Tour({
     {
       path: `${CENTER_URL}#/home/?%2F%3F=`,
       element: ".Discovery__SearchResults .listing:first, .infiniteScroll",
-      title: "Listing Tiles",
-      content: "Hover over a tile for a short description of the app, to bookmark it to your HUD, or to launch it into a new tab. Click the tile to open the listing overview for more listing details.",
+      title: "Bookmark Listings for HUD tour steps",
+      content: "Hover over 3 tiles to bookmark them to your HUD. The tiles will be used to complete the tour in HUD.",
       placement: "top",
       orphan:true,
       //backdrop: false,
@@ -326,7 +334,7 @@ const meTour = new Tour({
       backdropContainer: ".modal-content",
       backdropPadding: 0,
       orphan:true,
-      template: '<div class="popover" role="tooltip"> <div class="arrow"></div> <h3 class="popover-title"></h3> <div class="popover-content"></div> <div class="popover-navigation"> <button class="btn btn-sm" id="end-tour-btn" data-role="end">End tour</button> <div class="btn-group"> <button class="btn btn-sm btn-default" data-role="prev">&laquo; Prev</button> <button class="btn btn-sm btn-default" data-role="pause-resume" data-pause-text="Pause" data-resume-text="Resume">Pause</button> </div> </div> </div>',
+      template: '<div class="popover" role="tooltip"> <div class="arrow"></div> <h3 class="popover-title"></h3> <div class="popover-content"></div> <div class="popover-navigation"> <button class="btn btn-sm" id="end-tour-btn" data-role="end">End tour</button> <div class="btn-group"> <button class="btn btn-sm btn-default" data-role="prev">&laquo; Prev</button> '+ contentLocalHUD +'<button class="btn btn-sm btn-default" data-role="pause-resume" data-pause-text="Pause" data-resume-text="Resume">Pause</button> </div> </div> </div>',
       onNext: function() {meTour.end();},
       onPrev: function() {
         var prevStep = function() {
