@@ -15,12 +15,6 @@ if (typeof tourDB.hud !== 'undefined' && tourDB.hud.ran === true){
 }else{
   //contentLocalHUD = '<button class="btn btn-sm btn-default" onclick="att.com">Next HUD &raquo;</button>';
   contentLocalHUD = '<button class="btn btn-sm btn-default" onclick="parent.location.href=\'' + HUD_URL + '\'">Next HUD &raquo;</button>';
-  tourDBMain.set({
-    center: {
-      ran: true,
-      startCenterTour: true
-    }
-  });
 }
 
 var ProfileSearchActions = require('../actions/ProfileSearchActions');
@@ -339,6 +333,14 @@ const meTour = new Tour({
       backdropPadding: 0,
       orphan:true,
       template: '<div class="popover" role="tooltip"> <div class="arrow"></div> <h3 class="popover-title"></h3> <div class="popover-content"></div> <div class="popover-navigation"> <button class="btn btn-sm" id="end-tour-btn" data-role="end">End tour</button> <div class="btn-group"> <button class="btn btn-sm btn-default" data-role="prev">&laquo; Prev</button> '+ contentLocalHUD +'<button class="btn btn-sm btn-default" data-role="pause-resume" data-pause-text="Pause" data-resume-text="Resume">Pause</button> </div> </div> </div>',
+      onShown: function() {
+        tourDBMain.set({
+          center: {
+            ran: true,
+            startCenterTour: true
+          }
+        });
+      },
       onNext: function() {meTour.end();},
       onPrev: function() {
         var prevStep = function() {
