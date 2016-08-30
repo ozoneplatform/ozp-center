@@ -12,6 +12,9 @@ var tourDB = tourDBMain.get();
 var contentLocalHUD = '';
 var contentLocalStart = '';
 
+console.log(tourDBMain);
+console.log(tourDB);
+
 if (typeof tourDB.hud !== 'undefined' && tourDB.hud.ran === true){
   contentLocalStart = "Continue tour";
 }else{
