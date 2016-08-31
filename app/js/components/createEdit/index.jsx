@@ -646,6 +646,15 @@ var CreateEditPage = React.createClass({
         msg = resp.banner_icon ? 'Small Banner ' + resp.banner_icon.security_marking[0].toLowerCase() : msg;
         msg = resp.large_banner_icon ? 'Large Banner ' + resp.large_banner_icon.security_marking[0].toLowerCase() : msg;
 
+        if(resp.non_field_errors){
+          if(resp.non_field_errors == "Permissions are invalid for current owner profile"){
+            msg= 'One of the listed owners cannot be added as a listing Owner.';
+          }
+          else{
+            msg = resp.non_field_errors;
+          }
+        }
+
         if (resp.screenshots) {
             if (resp.screenshots[0].small_image) {
                 msg = 'Preview Image ' + resp.screenshots[0].small_image.security_marking[0].toLowerCase();
