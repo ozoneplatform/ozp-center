@@ -1,3 +1,11 @@
+### 1.1.42 (2016-09-01)
+
+
+#### Features
+
+* **Private Listings:** Added private listings back in ([2496cc8e](https://github.com/ozone-development/ozp-center.git/commit/2496cc8e8146101bfc3c95e6993a343bdd089dd7))
+
+
 ### 1.1.41 (2016-08-26)
 
 
