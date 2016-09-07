@@ -369,6 +369,9 @@ const meTour = new Tour({
           }
         })();
       }
+    },
+    {
+      title: "end holder"
     }
   ]
 });
