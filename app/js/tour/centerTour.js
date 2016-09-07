@@ -1,15 +1,31 @@
 'use strict';
 
-var {CENTER_URL} = require('ozp-react-commons/OzoneConfig');
+var {CENTER_URL, HUD_URL} = require('ozp-react-commons/OzoneConfig');
 CENTER_URL = `/${CENTER_URL.match(/http.?:\/\/[^/]*\/(.*?)\/?$/)[1]}/`;
 
 var PubSub = require('browser-pubsub');
 var tourCh = new PubSub('tour');
 var ObjectDB = require('object-db');
-var tourDB = new ObjectDB('ozp_tour');
+// rjk
+var tourDBMain = new ObjectDB('ozp_tour').init();
+var tourDB = tourDBMain.get();
+var contentLocalHUD = '<button class="btn btn-sm btn-default" onclick="parent.location.href=\'' + HUD_URL + '\'">Next HUD &raquo;</button>';
+var contentLocalStart = '';
+
+console.log(tourDBMain);
+console.log(tourDB);
+
+if (typeof tourDB.hud !== 'undefined' && (tourDB.hud.ran === true || tourDB.hud.startHudTour === true)){
+  contentLocalStart = "Continue tour";
+}else{
+  contentLocalStart = "Start the tour";
+}
+
+if (typeof tourDB.hud !== 'undefined' && (tourDB.hud.ran === true)){
+  contentLocalHUD = '';
+}
 
 var ProfileSearchActions = require('../actions/ProfileSearchActions');
-
 var readyObject = {};
 
 // HACK: for some reason window.localstorage is lost in this file.
@@ -30,12 +46,12 @@ const meTour = new Tour({
     //0
     {
       title: "Welcome. ",
-      content: "This simple tour guides you through the toolbar items and introduces you to the primary components of the system: The Center, HUD, and Webtop. These three components enable you to discover, bookmark, rate, review, organize and launch mission and business applications from across the enterprise.",
+      content: "This simple tour guides you through the toolbar items and introduces you to the primary components of the system: The HUD, Center and Webtop. These three components enable you to discover, bookmark, rate, review, organize and launch mission and business applications from across the enterprise.",
       orphan: true,
       onShown: function(){
         $('#welcome').focus();
       },
-      template: '<div id="welcome" class="popover" role="tooltip" tabIndex="0" aria-labelledby="tourTitle" aria-describedby="tourContent"> <h1 class="popover-header">Welcome to <img src="./images/marketplace-logo.png" alt="AppsMall Marketplace"></h1><h3 id="tourTitle" class="popover-title popover-subtitle"></h3> <div id="tourContent" class="popover-content"></div> <div class="popover-navigation"> <button class="btn btn-sm" id="end-tour-btn" data-role="end" tabIndex="0">No thanks</button> <div class="btn-group"> <button class="btn btn-sm btn-default" data-role="next" tabIndex="0">Start the tour &raquo;</button></div> </div> </div>'
+      template: '<div id="welcome" class="popover" role="tooltip" tabIndex="0" aria-labelledby="tourTitle" aria-describedby="tourContent"> <h1 class="popover-header">Welcome to <img src="./images/marketplace-logo.png" alt="AppsMall Marketplace"></h1><h3 id="tourTitle" class="popover-title popover-subtitle"></h3> <div id="tourContent" class="popover-content"></div> <div class="popover-navigation"> <button class="btn btn-sm" id="end-tour-btn" data-role="end" tabIndex="0">No thanks</button> <div class="btn-group"> <button class="btn btn-sm btn-default" data-role="next" tabIndex="0">' + contentLocalStart + ' &raquo;</button></div> </div> </div>'
     },
     //1
     {
@@ -45,6 +61,9 @@ const meTour = new Tour({
       placement: "bottom",
       onShown: function(){
         $('#tourstop-hud').focus();
+        if(tourDB.global_ran===true){
+            meTour.goTo(7);
+        }
       },
       backdropContainer: ".navbar-fixed-top",
       backdropPadding: 0
@@ -111,18 +130,24 @@ const meTour = new Tour({
       },
       onHidden: function() {
         $("#tourstop-global-menu").removeClass("open");
+      },
+      onNext: function() {
+        tourDBMain.set({
+          global_ran: true
+        });
       }
     },
     //7
     {
       element: "#tourstop-center-search",
       title: "Search and Filter",
-      content: "Use keywords and filters to explore listings. When you enter a search term, the system looks for your term in the listing's name, description, tags, etc.",
-      placement: "bottom",
+      content: "Use keywords and filters like listings type and organizations to explore listings. When you enter a search term, the system looks for your term in the listing's name, description, tags, etc.",
+      placement: "left",
       onShown: function(){
         $('#tourstop-center-search').focus();
       },
       backdropContainer: "#header"
+      //backdropContainer: ".form-group .Search"
     },
     //8
     {
@@ -161,7 +186,7 @@ const meTour = new Tour({
       },
       onNext: function() {
         var nextStep = function() {
-          meTour.goTo(11);
+          meTour.goTo(12);
         };
         (function checkStatus() {
           if (readyObject.overviewLoaded) {
@@ -173,6 +198,34 @@ const meTour = new Tour({
       }
     },
     //11
+    {
+      path: `${CENTER_URL}#/home/?%2F%3F=`,
+      element: ".Discovery__SearchResults .listing:first, .infiniteScroll",
+      title: "Bookmark Listings for HUD tour steps",
+      content: "Hover over 3 tiles to bookmark them to your HUD. The tiles will be used to complete the tour in HUD.",
+      placement: "top",
+      orphan:true,
+      //backdrop: false,
+      onShown: function() {
+        $(".Discovery__SearchResults .listing:first .slide-up, .infiniteScroll .listing:first .slide-up").css("top", "0px");
+      },
+      onHide: function() {
+        $(".Discovery__SearchResults .listing:first .slide-up, .infiniteScroll .listing:first .slide-up").css("top", "137px");
+      },
+      onNext: function() {
+        var nextStep = function() {
+          meTour.goTo(12);
+        };
+        (function checkStatus() {
+          if (readyObject.overviewLoaded) {
+            nextStep();
+          } else {
+            setTimeout(checkStatus, 100);
+          }
+        })();
+      }
+    },
+    //12
     {
       path: `${CENTER_URL}#/home/?%2F%3F=&listing=1&action=view&tab=overview`,
       element: ".modal-body",
@@ -187,7 +240,7 @@ const meTour = new Tour({
           tourCh.publish({
             overviewLoaded: false
           });
-          meTour.goTo(12);
+          meTour.goTo(13);
         };
         (function checkStatus() {
           if (readyObject.reviewsLoaded) {
@@ -200,10 +253,9 @@ const meTour = new Tour({
       onPrev: function() {
         $(".quickview").modal("hide");
         meTour.goTo(10);
-
       }
     },
-    //12
+    //13
     {
       path: `${CENTER_URL}#/home/?%2F%3F=&listing=1&action=view&tab=reviews`,
       element: ".modal-body .nav .active",
@@ -218,7 +270,7 @@ const meTour = new Tour({
           tourCh.publish({
             reviewsLoaded: false
           });
-          meTour.goTo(13);
+          meTour.goTo(14);
         };
         (function checkStatus() {
           if (readyObject.detailsLoaded) {
@@ -230,7 +282,7 @@ const meTour = new Tour({
       },
       onPrev: function() {
         var prevStep = function() {
-          meTour.goTo(11);
+          meTour.goTo(12);
         };
         (function checkStatus() {
           if (readyObject.overviewLoaded) {
@@ -241,7 +293,7 @@ const meTour = new Tour({
         })();
       }
     },
-    //13
+    //14
     {
       path: `${CENTER_URL}#/home/?%2F%3F=&listing=1&action=view&tab=details`,
       element: ".modal-body .nav .active",
@@ -256,7 +308,7 @@ const meTour = new Tour({
           tourCh.publish({
             detailsLoaded: false
           });
-          meTour.goTo(14);
+          meTour.goTo(15);
         };
         (function checkStatus() {
           if (readyObject.resourcesLoaded) {
@@ -268,7 +320,7 @@ const meTour = new Tour({
       },
       onPrev: function() {
         var prevStep = function() {
-          meTour.goTo(12);
+          meTour.goTo(13);
         };
         (function checkStatus() {
           if (readyObject.reviewsLoaded) {
@@ -279,24 +331,32 @@ const meTour = new Tour({
         })();
       }
     },
-    //14
+    //15
     {
       path: `${CENTER_URL}#/home/?%2F%3F=&listing=1&action=view&tab=resources`,
       element: ".modal-body .nav .active",
       title: "Listing Resources",
-      content: "If the listing includes instructions like user manuals and contact information, you will find it here.Thank you for taking the time to tour AppsMall.",
+      content: "If the listing includes instructions like user manuals and contact information, you will find it here. Thank you for taking the time to tour AppsMall.",
       placement: "bottom",
       backdropContainer: ".modal-content",
       backdropPadding: 0,
       orphan:true,
-      template: '<div class="popover" role="tooltip"> <div class="arrow"></div> <h3 class="popover-title"></h3> <div class="popover-content"></div> <div class="popover-navigation"> <button class="btn btn-sm" id="end-tour-btn" data-role="end">End tour</button> <div class="btn-group"> <button class="btn btn-sm btn-default" data-role="prev">&laquo; Prev</button> <button class="btn btn-sm btn-default" data-role="pause-resume" data-pause-text="Pause" data-resume-text="Resume">Pause</button> </div> </div> </div>',
+      template: '<div class="popover" role="tooltip"> <div class="arrow"></div> <h3 class="popover-title"></h3> <div class="popover-content"></div> <div class="popover-navigation"> <button class="btn btn-sm" id="end-tour-btn" data-role="end">End tour</button> <div class="btn-group"> <button class="btn btn-sm btn-default" data-role="prev">&laquo; Prev</button> '+ contentLocalHUD +'<button class="btn btn-sm btn-default" data-role="pause-resume" data-pause-text="Pause" data-resume-text="Resume">Pause</button> </div> </div> </div>',
+      onShow: function() {
+        tourDBMain.set({
+          center: {
+            ran: true,
+            startCenterTour: true
+          }
+        });
+      },
       onNext: function() {meTour.end();},
       onPrev: function() {
         var prevStep = function() {
           tourCh.publish({
             resourcesLoaded: false
           });
-          meTour.goTo(13);
+          meTour.goTo(14);
         };
         (function checkStatus() {
           if (readyObject.detailsLoaded) {
