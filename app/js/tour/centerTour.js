@@ -12,9 +12,6 @@ var tourDB = tourDBMain.get();
 var contentLocalHUD = '<button class="btn btn-sm btn-default" onclick="parent.location.href=\'' + HUD_URL + '\'">Next HUD &raquo;</button>';
 var contentLocalStart = '';
 
-console.log(tourDBMain);
-console.log(tourDB);
-
 if (typeof tourDB.hud !== 'undefined' && (tourDB.hud.ran === true || tourDB.hud.startHudTour === true)){
   contentLocalStart = "Continue tour";
 }else{
@@ -350,7 +347,13 @@ const meTour = new Tour({
           }
         });
       },
-      onNext: function() {meTour.end();},
+      onNext: function(){
+        if (typeof tourDB.hud === 'undefined' || tourDB.hud.ran === false){
+          document.location.href = HUD_URL;
+        }else{
+          meTour.end();
+        }
+      },
       onPrev: function() {
         var prevStep = function() {
           tourCh.publish({
