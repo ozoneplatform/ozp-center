@@ -1,5 +1,5 @@
 /* This compontent depends on the bootstrap-classify jquery plugin
- * (https://github.com/ozone-development/bootstrap-classify). The
+ * (https://github.com/aml-development/bootstrap-classify). The
  * plugin is designed to allow users to override different aspects to
  * tailor the plugin for your specific application, and that's what's
  * going on with the $.fn.classify jazz below. The css for the
