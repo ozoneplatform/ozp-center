@@ -9,7 +9,7 @@ var ObjectDB = require('object-db');
 
 var tourDBMain = new ObjectDB('ozp_tour').init();
 var tourDB = tourDBMain.get();
-var contentLocalHUD = '<button class="btn btn-sm btn-default" onclick="parent.location.href=\'' + HUD_URL + '\'">Next HUD &raquo;</button>';
+var contentLocalHUD = `<button class="btn btn-sm btn-default" onclick="parent.location.href='${HUD_URL}'">Next HUD &raquo;</button>`;
 var contentLocalStart = '';
 
 if (typeof tourDB.hud !== 'undefined' && (tourDB.hud.ran === true || tourDB.hud.startHudTour === true)){
