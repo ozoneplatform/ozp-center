@@ -1,3 +1,12 @@
+### 1.1.43 (2016-09-09)
+
+
+#### Bug Fixes
+
+* centerTour.js ([e7e7da77](https://github.com/ozone-development/ozp-center.git/commit/e7e7da77f91936050eeb5080f5e5a136d0062a5d))
+* new code to redirect at end of center tour ([e69f8853](https://github.com/ozone-development/ozp-center.git/commit/e69f88539aa2cd6d12d83fdc6d5d33a0965642c6))
+
+
 ### 1.1.42 (2016-09-01)
 
 
