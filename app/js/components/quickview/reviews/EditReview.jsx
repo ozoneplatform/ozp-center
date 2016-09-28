@@ -3,7 +3,7 @@
 var React = require('react');
 var { classSet } = React.addons;
 var Reflux = require('reflux');
-var SystemHighMessage = require('../../shared/SystemHighMessage.jsx');
+var ReviewWarningMessage = require('../../shared/ReviewWarningMessage.jsx');
 var _ = require('../../../utils/_');
 var IconRating = require('../../shared/IconRating.jsx');
 var PopoverConfirmationButton = require('./../../shared/PopoverConfirmationButton.jsx');
@@ -122,7 +122,7 @@ var EditReview = React.createClass({
                 </div>
                 <div className={hasError}>
                     <h6>Description</h6>
-                    <SystemHighMessage />
+                    <ReviewWarningMessage />
                     {isEditingRateAllowed &&
                     <textarea ref="text" value={ text } onChange={ this.onTextChange }></textarea>
                     }
