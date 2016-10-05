@@ -1,3 +1,12 @@
+### 1.1.45 (2016-10-05)
+
+
+#### Bug Fixes
+
+* **Carousel:** Fixed arrows disappearing when tabbing into carousel #524 ([cedc7910](https://github.com/ozone-development/ozp-center.git/commit/cedc79100c1941c77d81e063c6197c59540a029b))
+* **reviews:** Changed variable name and text to reflect that reviews are not to be above FOUO  ([88e0dc90](https://github.com/ozone-development/ozp-center.git/commit/88e0dc90918dc7c3207451056c595a519b349175))
+
+
 ### 1.1.44 (2016-09-21)
 
 
