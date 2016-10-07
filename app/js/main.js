@@ -53,7 +53,6 @@ SelfStore.listen(_.once(function(profileData) {
 
     // Classification needs to run after the profileData is loaded
     $(function() {
-        console.log(profileData.currentUser);
         $(document).classification({
             level: profileData.currentUser.secondPartyUser?'U':'U-FOUO'
         });
