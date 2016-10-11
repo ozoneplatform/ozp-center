@@ -50,6 +50,14 @@ var Routes = require('./components/Routes.jsx'),
  * Render everything when we get our profile
  */
 SelfStore.listen(_.once(function(profileData) {
+
+    // Classification needs to run after the profileData is loaded
+    $(function() {
+        $(document).classification({
+            level: profileData.currentUser.secondPartyUser?'U':'U-FOUO'
+        });
+    });
+
     Router.run(routes, function (Handler) {
         var main = document.getElementById('main'),
             component;
@@ -91,12 +99,6 @@ ProfileActions.fetchSelf();
     window._paq = _paq;
 })();
 
-// Classification
-$(function() {
-    $(document).classification({
-        level: 'U'
-    });
-});
 
 
 require('tour');
