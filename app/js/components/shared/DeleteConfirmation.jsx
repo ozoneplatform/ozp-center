@@ -89,6 +89,9 @@ var ListingDeleteConfirmation = React.createClass({
     },
 
     onDeleteComplete: function () {
+                //Reload when a listing is deleted
+        ListingActions.fetchStorefrontListings.trigger();
+        
         this.close();
     },
 
@@ -111,7 +114,8 @@ var ListingDeleteConfirmation = React.createClass({
     },
 
     close: function () {
-        this.refs.modal.close();
+        if(this.refs.modal)
+            this.refs.modal.close();
         if (this.getActiveRoute().name === 'edit') {
             this.transitionTo('my-listings');
         }

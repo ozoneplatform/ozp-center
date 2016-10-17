@@ -17,8 +17,9 @@ function updateCache (listings) {
         if (prev) {
             listing.changeLogs = prev.changeLogs;
         }
-
-        _listingsCache[listing.id] = listing;
+        //if(!listing.isDeleted && listing.isEnabled)
+            _listingsCache[listing.id] = listing;
+      //  else {delete _listingsCache[listing.id]; console.log(listing.id);console.log(_listingsCache);}
 
         listing.owners.forEach(function (owner) {
             var cachedListings = _listingsByOwnerCache[owner.username] || [];
@@ -94,7 +95,6 @@ var GlobalListingStore = Reflux.createStore({
                 });
                 _listingsByOwnerCache[owner.username] = ownedListings;
             });
-
             this.trigger();
         });
 
