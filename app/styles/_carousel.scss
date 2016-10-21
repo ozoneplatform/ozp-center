@@ -1,6 +1,5 @@
 .carousel-wrapper {
     position: relative;
-    margin-left: -15px;
 
     .carousel  {
         margin: 0 !important;
@@ -13,7 +12,7 @@
         height: 100%;
         background: rgba(25, 31, 37, 0.4);
         top: 0;
-        left: 15px;
+        left: 0;
         color: $white;
         z-index:1;
 
