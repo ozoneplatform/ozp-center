@@ -1,3 +1,15 @@
+### 1.1.47 (2016-10-26)
+
+
+#### Bug Fixes
+
+* **Carousel:**
+  * Added newline because github was complaining #726 ([17fff233](https://github.com/ozone-development/ozp-center.git/commit/17fff2335a8c1aae010ac81bbe503d04420a7dba))
+  * Forgot new style sheet #726 ([9c54020d](https://github.com/ozone-development/ozp-center.git/commit/9c54020d312834bdb6a0f61232f3431e1ea9803b))
+  * Fixed styling for new listings so they don't appear out of the list #726 ([edab8279](https://github.com/ozone-development/ozp-center.git/commit/edab8279ccf7bf3e84774090edbcf1f285225f06))
+* **carousel:** correcting previous style change which prevented carousel animation ([de43acaf](https://github.com/ozone-development/ozp-center.git/commit/de43acafa01e7f76200e37758934a6d9c14d6f47))
+
+
 ### 1.1.46 (2016-10-20)
 
 
