@@ -7,6 +7,7 @@ var PaginatedListingsStore = require('../../../stores/PaginatedListingsStore');
 var UnpaginatedListingsStore = require('../../../stores/UnpaginatedListingsStore');
 var UserRoleMixin = require('../../../mixins/UserRoleMixin');
 var SystemStateMixin = require('../../../mixins/SystemStateMixin');
+var Crud = require('../../shared/Crud.jsx');
 
 var Sidebar = require('../shared/Sidebar.jsx');
 var ApprovalStatusFilter = require('../shared/ApprovalStatusFilter.jsx');
@@ -37,15 +38,15 @@ var AllListings = React.createClass({
 
     onFilterChanged: function (key, value) {
         this.state.filter[key] = value;
-        if(this.state.tableView){
-            UnpaginatedListingsStore.filterChange(this.state.filter);
-        } else {
-            PaginatedListingsStore.filterChange(this.state.filter);
-        }
         this.setState({
             filter: this.state.filter
         });
-        w2ui['grid'].searchReset();
+        if(this.state.tableView){
+            UnpaginatedListingsStore.filterChange(this.state.filter);
+            w2ui.grid.searchReset();
+        } else {
+            PaginatedListingsStore.filterChange(this.state.filter);
+        }
     },
 
     onViewToggle: function (event) {

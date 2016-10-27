@@ -100,7 +100,8 @@ var MyListings = React.createClass({
 
     getListings: function () {
         var profile = SelfStore.getDefaultData().currentUser;
-        return GlobalListingStore.getByOwner(profile);
+        var listings = GlobalListingStore.getByOwner(profile);
+        return listings;
     },
 
     getInitialState: function () {
@@ -133,7 +134,7 @@ var MyListings = React.createClass({
     },
 
     render: function () {
-        var filter = this.state.filter || '';
+        var filter = this.state.filter || 'all';
         var listings = this.state.listings || [];
         var filterProps = {
             value: {

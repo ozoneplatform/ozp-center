@@ -5,7 +5,7 @@ var ListingActions = require('../actions/ListingActions');
 var {listingCreated} = require('../actions/CreateEditActions');
 
 var _listingsCache = {};
-var _listingsByOwnerCache = {};
+var _listingsByOwnerCache = [];
 var _allListings = [];
 var _changeLogsCache = {};
 var _reviewsCache = {};
@@ -17,20 +17,12 @@ function updateCache (listings) {
         if (prev) {
             listing.changeLogs = prev.changeLogs;
         }
-        //if(!listing.isDeleted && listing.isEnabled)
             _listingsCache[listing.id] = listing;
-      //  else {delete _listingsCache[listing.id]; console.log(listing.id);console.log(_listingsCache);}
-
-        listing.owners.forEach(function (owner) {
-            var cachedListings = _listingsByOwnerCache[owner.username] || [];
-
-            cachedListings = cachedListings.filter(function (l) {
-                return l.id !== listing.id;
-            });
-
-            _listingsByOwnerCache[owner.username] = cachedListings.concat([listing]);
-        });
     });
+}
+
+function updateOwnerCache (listings) {
+    _listingsByOwnerCache = listings;
 }
 
 function updateCacheFromPaginatedResponse (listingsAsPaginatedResponse) {
@@ -64,8 +56,9 @@ var GlobalListingStore = Reflux.createStore({
             _reviewsCache[id] = reviews;
             this.trigger();
         });
-        this.listenTo(ListingActions.fetchOwnedListingsCompleted, (x)=>{
-            updateCache(x);
+        this.listenTo(ListingActions.fetchOwnedListingsCompleted, (listings)=>{
+            updateOwnerCache(listings);
+            this.trigger();
         });
         this.listenTo(ListingActions.saveCompleted, function (isNew, listing) {
             updateCache([listing]);
@@ -90,10 +83,10 @@ var GlobalListingStore = Reflux.createStore({
             var listing = _listingsCache[data.id];
 
             listing.owners.forEach(function (owner) {
-                var ownedListings = _listingsByOwnerCache[owner.username].filter(function (item) {
+                var ownedListings = _listingsByOwnerCache.filter(function (item) {
                     return item.id !== listing.id;
                 });
-                _listingsByOwnerCache[owner.username] = ownedListings;
+                _listingsByOwnerCache = ownedListings;
             });
             this.trigger();
         });
@@ -113,7 +106,7 @@ var GlobalListingStore = Reflux.createStore({
     },
 
     getByOwner: function (profile) {
-        return _listingsByOwnerCache[profile.username];
+        return _listingsByOwnerCache;
     },
 
     getAllListings: function () {
