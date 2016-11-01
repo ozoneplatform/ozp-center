@@ -89,9 +89,6 @@ var ListingDeleteConfirmation = React.createClass({
     },
 
     onDeleteComplete: function () {
-                //Reload when a listing is deleted
-        ListingActions.fetchStorefrontListings.trigger();
-        
         this.close();
     },
 

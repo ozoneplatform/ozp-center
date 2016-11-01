@@ -7,7 +7,6 @@ var PaginatedListingsStore = require('../../../stores/PaginatedListingsStore');
 var UnpaginatedListingsStore = require('../../../stores/UnpaginatedListingsStore');
 var UserRoleMixin = require('../../../mixins/UserRoleMixin');
 var SystemStateMixin = require('../../../mixins/SystemStateMixin');
-var Crud = require('../../shared/Crud.jsx');
 
 var Sidebar = require('../shared/Sidebar.jsx');
 var ApprovalStatusFilter = require('../shared/ApprovalStatusFilter.jsx');
