@@ -133,7 +133,7 @@ var MyListings = React.createClass({
     },
 
     render: function () {
-        var filter = this.state.filter || '';
+        var filter = this.state.filter || 'all';
         var listings = this.state.listings || [];
         var filterProps = {
             value: {

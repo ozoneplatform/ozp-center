@@ -37,15 +37,15 @@ var AllListings = React.createClass({
 
     onFilterChanged: function (key, value) {
         this.state.filter[key] = value;
-        if(this.state.tableView){
-            UnpaginatedListingsStore.filterChange(this.state.filter);
-        } else {
-            PaginatedListingsStore.filterChange(this.state.filter);
-        }
         this.setState({
             filter: this.state.filter
         });
-        w2ui['grid'].searchReset();
+        if(this.state.tableView){
+            UnpaginatedListingsStore.filterChange(this.state.filter);
+            w2ui.grid.searchReset();
+        } else {
+            PaginatedListingsStore.filterChange(this.state.filter);
+        }
     },
 
     onViewToggle: function (event) {

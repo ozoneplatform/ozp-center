@@ -26,6 +26,8 @@ var DiscoveryPageStore = Reflux.createStore({
                 this.onStorefrontListingsFetched);
 
         this.listenTo(ListingActions.searchCompleted, this.onSearchCompleted);
+        
+        this.listenTo(ListingActions.deleteListingCompleted, this.removeListing)
     },
 
     onStorefrontListingsFetched: function (storefrontListings) {
@@ -71,6 +73,18 @@ var DiscoveryPageStore = Reflux.createStore({
 
     getSearchResults: function () {
         return _searchResults;
+    },
+
+    removeListing: function(listing) {
+        _newArrivals =  _newArrivals.filter(function (item) {
+                    return item.id !== listing.id;
+                });
+        _mostPopular = _mostPopular.filter(function (item) {
+                    return item.id !== listing.id;
+                });
+        _featured = _featured.filter(function (item) {
+                    return item.id !== listing.id;
+                });
     }
 
 });

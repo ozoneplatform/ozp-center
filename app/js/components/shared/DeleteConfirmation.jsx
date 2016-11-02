@@ -111,7 +111,8 @@ var ListingDeleteConfirmation = React.createClass({
     },
 
     close: function () {
-        this.refs.modal.close();
+        if(this.refs.modal)
+            this.refs.modal.close();
         if (this.getActiveRoute().name === 'edit') {
             this.transitionTo('my-listings');
         }

@@ -27,6 +27,7 @@ require('../../utils/typeahead.js');
 
 // store dependencies
 var DiscoveryPageStore = require('../../stores/DiscoveryPageStore');
+var GlobalListingStore = require('../../stores/GlobalListingStore');
 
 
 var FILTERS = ['categories', 'type', 'agency'];
@@ -111,8 +112,9 @@ var Discovery = React.createClass({
         // Notice when a search is finished
         this.listenTo(ListingActions.searchCompleted, this.onSearchCompleted);
 
-        // Reload when a new review is added
-        this.listenTo(ListingActions.saveReviewCompleted, ListingActions.fetchStorefrontListings);
+        // // Reload when a new review is added
+        // this.listenTo(ListingActions.saveReviewCompleted, ListingActions.fetchStorefrontListings);
+        this.listenTo(GlobalListingStore, ListingActions.fetchStorefrontListings);
 
         // fetch data when instantiated
         ListingActions.fetchStorefrontListings();
