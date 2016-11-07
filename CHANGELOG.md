@@ -1,3 +1,12 @@
+### 1.1.48 (2016-11-07)
+
+
+#### Bug Fixes
+
+* **featuredListings:** Removed featured listings from the featured lists #631 ([4e4c8639](https://github.com/ozone-development/ozp-center.git/commit/4e4c8639a2778a0d02b6a61b632a8a8cfc5e9256))
+* **listings:** updated the way owned listings was being stored so that deleted listings are upd ([3c0a0bbf](https://github.com/ozone-development/ozp-center.git/commit/3c0a0bbf89539277a000e0d58b41f29d547ab904))
+
+
 ### 1.1.47 (2016-10-26)
 
 
