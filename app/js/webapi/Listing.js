@@ -18,7 +18,7 @@ var FIELDS = [
     'isEnabled', 'categories', 'releaseDate', 'editedDate', 'intents', 'docUrls', 'approvalStatus',
     'isFeatured', 'smallIconId', 'largeIconId', 'bannerIconId', 'featuredBannerIconId',
     'currentRejection', 'isPrivate', 'securityMarking', 'smallIconMarking',
-    'largeIconMarking', 'bannerIconMarking', 'featuredBannerIconMarking', 'isBookmarked'
+    'largeIconMarking', 'bannerIconMarking', 'featuredBannerIconMarking', 'isBookmarked', 'certIssues'
 ];
 
 // These don't have the icons, access_control

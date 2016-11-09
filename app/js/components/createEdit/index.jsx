@@ -328,7 +328,18 @@ var ListingForm = React.createClass({
                 return { username: u };
             }));
         };
-
+          if (listing.certIssues.length > 0){
+            sweetAlert({
+              title: "Warning!",
+              text: "the following users in in the owner field have invalid certifictes " + listing.certIssues + " please remove these owners or notify them of this issue. You will be unable to save your listing until these changes have been made.",
+              type: "error",
+              confirmButtonColor: "#DD6B55",
+              confirmButtonText: "show errors",
+              closeOnConfirm: true,
+              html: false
+            });
+            listing.certIssues=[];
+          }
         var p = this.getFormComponentProps;
         var f = formLinks;
 
@@ -359,7 +370,7 @@ var ListingForm = React.createClass({
 
 
                 <Toggle
-                    explanation={['This web application/widget is visible to all organizations in the community',
+                    explanation={['This web application/widget is visible to all agencies in the community',
                                     'This web application/widget is only visible to your agency']}
                     id={f.isPrivate.id} { ...p('isPrivate') } />
 
@@ -505,6 +516,7 @@ var CreateEditPage = React.createClass({
             hasChanges: false,
             scrollToError: false,
             imageErrors: {screenshots: []},
+            certIssues: [],
             timestamp: Date.now(),
             isValid: true
         };
