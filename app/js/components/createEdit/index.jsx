@@ -331,7 +331,7 @@ var ListingForm = React.createClass({
           if (listing.certIssues.length > 0){
             sweetAlert({
               title: "Warning!",
-              text: "The following users in in the owner field have invalid certifictes <font color='red'><b>" + listing.certIssues + " </b></font>please remove these owners or notify them of this issue. You will be unable to save your listing until these changes have been made.",
+              text: "The following users in in the owner field have invalid certificates <font color='red'><b>" + listing.certIssues + " </b></font>please remove these owners or notify them of this issue. You will be unable to save your listing until these changes have been made.",
               type: "error",
               confirmButtonColor: "#DD6B55",
               confirmButtonText: "show errors",
