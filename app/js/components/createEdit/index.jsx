@@ -563,10 +563,7 @@ var CreateEditPage = React.createClass({
         var lastUpdateState = this.state.lastUpdate || 'initial';
         return { lastUpdate: `${lastUpdateState}` };
     },
-    scrollToOwners: function () {
-      console.log(this)
 
-    },
     scrollToError: function () {
         this.setState({ scrollToError: false });
         var $target = $('div.form-group.has-error');
