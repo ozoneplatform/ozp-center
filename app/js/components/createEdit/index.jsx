@@ -328,18 +328,7 @@ var ListingForm = React.createClass({
                 return { username: u };
             }));
         };
-          if (listing.certIssues.length > 0){
-            sweetAlert({
-              title: "Warning!",
-              text: "The following users in in the owner field have invalid certificates <font color='red'><b>" + listing.certIssues + " </b></font>please remove these owners or notify them of this issue. You will be unable to save your listing until these changes have been made.",
-              type: "error",
-              confirmButtonColor: "#DD6B55",
-              confirmButtonText: "show errors",
-              closeOnConfirm: true,
-              html: true
-            });
-            listing.certIssues=[];
-          }
+
         var p = this.getFormComponentProps;
         var f = formLinks;
 
@@ -438,6 +427,21 @@ var ListingForm = React.createClass({
 
     componentDidMount: function() {
         this.setState({ currentNavTarget: this.getQuery().el });
+        var listing = this.props.value.certIssues
+        if (listing && listing.length > 0){
+          sweetAlert({
+            title: "Warning!",
+            text: "The following users in in the owner field have invalid certificates <font color='red'><b>" + listing + " </b></font>please remove these owners or notify them of this issue. You will be unable to save your listing until these changes have been made.",
+            type: "error",
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Ok",
+            closeOnConfirm: true,
+            html: true
+          });
+          listing=[];
+          this.setState({ currentNavTarget: 'create-edit-owners'});
+        }
+
     },
 
     componentDidUpdate: function(prevProps, prevState) {
@@ -559,7 +563,10 @@ var CreateEditPage = React.createClass({
         var lastUpdateState = this.state.lastUpdate || 'initial';
         return { lastUpdate: `${lastUpdateState}` };
     },
+    scrollToOwners: function () {
+      console.log(this)
 
+    },
     scrollToError: function () {
         this.setState({ scrollToError: false });
         var $target = $('div.form-group.has-error');
