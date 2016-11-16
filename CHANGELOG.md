@@ -1,3 +1,11 @@
+### 1.1.49 (2016-11-16)
+
+
+#### Features
+
+* **createedit:** added a check for the server certificate validity ([7ec91ea6](https://github.com/ozone-development/ozp-center.git/commit/7ec91ea633356c368bb05a465169da6b300cbf18))
+
+
 ### 1.1.48 (2016-11-07)
 
 
