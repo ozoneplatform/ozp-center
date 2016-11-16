@@ -427,6 +427,21 @@ var ListingForm = React.createClass({
 
     componentDidMount: function() {
         this.setState({ currentNavTarget: this.getQuery().el });
+        var listing = this.props.value.certIssues
+        if (listing && listing.length > 0){
+          sweetAlert({
+            title: "Warning!",
+            text: "The following users in in the owner field have invalid certificates <font color='red'><b>" + listing + " </b></font>please remove these owners or notify them of this issue. You will be unable to save your listing until these changes have been made.",
+            type: "error",
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Ok",
+            closeOnConfirm: true,
+            html: true
+          });
+          listing=[];
+          this.setState({ currentNavTarget: 'create-edit-owners'});
+        }
+
     },
 
     componentDidUpdate: function(prevProps, prevState) {
@@ -505,6 +520,7 @@ var CreateEditPage = React.createClass({
             hasChanges: false,
             scrollToError: false,
             imageErrors: {screenshots: []},
+            certIssues: [],
             timestamp: Date.now(),
             isValid: true
         };
