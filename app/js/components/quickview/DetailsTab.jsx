@@ -68,7 +68,7 @@ var DetailsTab = React.createClass({
                         <p>
                             <p><label>Type:</label><span> { type }</span></p>
 
-                            <p className="forceWrap"><label>URL:</label><span> <a className="forceWrap" href={URL}>{ URL }</a></span></p>
+                            <p className="forceWrap"><label>URL:</label><span> <a className="forceWrap" href={URL} target="_blank">{ URL } </a></span></p>
 
                             <p><label>Categories:</label><span> { categories ? categories : <EmptyFieldValue inline /> }</span></p>
                             <p className="forceWrap"><label>Tags:</label><span> {this.renderTags(this) }</span></p>
