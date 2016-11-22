@@ -99,18 +99,9 @@ var DetailsTab = React.createClass({
         return tags.map(function (tags) {
           var URL= CENTER_URL + '#/home/' + tags;
           return(
-                       <Link to="home" className='tag' params={{
-                          searchString: tags,
-                          categories: '',
-                          type: '',
-                            org: ''
-                          }} onClick={that.handLinkClick} >{tags}  </Link>
+            <a href={URL} onClick={function(){window.location.href=URL; window.location.reload();}}>{tags} </a>
           );
         });
-    },
-
-    handLinkClick (e) {
-        location.reload();
     },
 
     renderOwners: function () {
