@@ -341,7 +341,7 @@ var ListingForm = React.createClass({
         /*
         sweetAlert({
           title: "Warning!",
-          text: "AppsMall is under matainence. No changes can be made to the lisitings at this time.",
+          text: "AppsMall is under maintenance. No changes can be made to the lisitings at this time.",
           type: "error",
           confirmButtonColor: "#DD6B55",
           confirmButtonText: "Ok",
