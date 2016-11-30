@@ -337,7 +337,20 @@ var ListingForm = React.createClass({
             durl.value = (durl.value) ? decodeURI(durl.value) : '';
             return durl;
         })();
+        ///TODO uncomment alert and return and comment form return to cause the alert to display with no changes to the form allowed to be made
+        /*
+        sweetAlert({
+          title: "Warning!",
+          text: "AppsMall is under matainence. No changes can be made to the lisitings at this time.",
+          type: "error",
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Ok",
+          closeOnConfirm: true,
+          html: true
+        });
 
+        return(<h2 id={f.basicInformation.id}>Basic Information</h2>);
+        */
         return (
             <form ref="form" className="CreateEdit__form col-xs-9 col-lg-10">
                 <h2 id={f.basicInformation.id}>Basic Information</h2>
