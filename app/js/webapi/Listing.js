@@ -37,6 +37,14 @@ function Listing (json) {
     if (!(this instanceof Listing)) {
         throw new Error("This object must be created with new");
     }
+    //if object is already listing do not try to map listing again
+    if (json instanceof Listing)
+        return json;
+    if (json.isExistingListing ){
+        for(var i in json)
+            this[i] = json[i];
+        return this;
+    }
 
     json = json || {};
     json = humps.camelizeKeys(json);
@@ -46,16 +54,12 @@ function Listing (json) {
     });
 
     function viewingExistingListing(json) {
-        // This data comes from the API/listing endpoint
-        return ('listingType' in json);
-    }
-
-    function creatingFreshListing(json) {
-        // Fresh create/edit pages are prepopulated with owner info
-        return ('owners' in json) && !('listingType' in json) && !('type' in json);
+        // This data comes from the API/listing endpoint      
+        return json && json.id;
     }
 
     if (viewingExistingListing(json)) {
+        this.isExistingListing = true;
         this.type = json.listingType ? json.listingType.title : "";
         this.categories = _.map(json.categories, 'title') || [];
         this.tags = _.map(json.tags, 'name') || [];
@@ -64,8 +68,8 @@ function Listing (json) {
         this.owners = _.map(json.owners, function (o) {
             return {displayName: o.displayName,
                     id: o.id,
-                    username: o.user.username};
-        });
+                    username: o.user ? o.user.username : o.username};
+        }) || [];
         this.intents = _.map(this.intents, x => x.action);
         _.map(this.contacts, x => x.type = x.contactType.name);
 
@@ -98,35 +102,27 @@ function Listing (json) {
 
         this.uuid = json.uniqueName;
 
-    } else if (creatingFreshListing(json)) {
+    } else  {
         this.owners = _.map(json.owners, function (o) {
             return {displayName: o.displayName,
                     id: o.id,
                     username: o.username};
-        });
+        }) || [];
         this.categories = json.categories || [];
         this.tags = json.tags || [];
         this.agency = json.agency || "";
         this.agencyShort = json.agencyShort || "";
         this.intents = json.intents || [];
         this.contacts = this.contacts || [];
-
-    } else {
-        this.title = json.title || "";
         this.type = json.type || "";
-        this.owners = json.owners || [];
-        this.categories = json.categories || [];
-        this.tags = json.tags || [];
-        this.agency = json.agency || "";
-        this.agencyShort = json.agencyShort || "";
-        this.intents = json.intents || [];
-        this.contacts = this.contacts || [];
+        this.title = json.title || "";
+
+
     }
 
     this.screenshots = this.screenshots || [];
     this.docUrls = this.docUrls || [];
     this.changeLogs = [];
-
     return this;
 }
 
@@ -267,7 +263,7 @@ var ListingApi = {
 
     search: function (options) {
         var params = $.param(options, true);
-        return $.getJSON(API_URL + '/api/listings/search/?' + params).then(
+        return $.getJSON(API_URL + '/api/listings/essearch/?' + params).then(
             (response) => {
                 if (options.category && options.category.length > 0) {
                     for(var index = 0; index < options.category.length; index++) {
@@ -286,7 +282,6 @@ var ListingApi = {
                         OzpAnalytics.trackSiteSearch('Application Search', queryStringNoStar, response.count);
                     }
                 }, 800);
-
                 response.results = _.map(response.results, this.newListing);
                 return response;
 

@@ -130,7 +130,6 @@ var CurrentListingStore = createStore({
 
     refreshListing: function (listing) {
         revokeAllObjectURLs();
-
         _listing = listing;
         _submitting = false;
         var validation = this.doValidation();
@@ -150,11 +149,12 @@ var CurrentListingStore = createStore({
     },
 
     onCacheUpdated: function () {
+        
         if (_listing && _listing.id) {
-            var listing = GlobalListingStore.getById(_listing.id);
-            if (listing) {
-                this.refreshListing(cloneDeep(listing));
-            }
+             ListingApi.getById(_listing.id).then(l => {
+                    this.refreshListing(cloneDeep(l));
+                
+                });
         }
     },
 
@@ -300,7 +300,8 @@ var CurrentListingStore = createStore({
     },
 
     getReviews: function () {
-        return GlobalListingStore.getReviewsForListing(_listing);
+        var reviews = GlobalListingStore.getReviewsForListing(_listing);
+        return reviews;
     },
 
     loadListing: function (id) {
@@ -315,15 +316,16 @@ var CurrentListingStore = createStore({
             }
 
             var listing = GlobalListingStore.getCache()[id];
-            if (listing) {
-                this.refreshListing(cloneDeep(listing));
-                deferred.resolve(_listing);
-            } else {
+            _listing = listing;
+      ///      if (listing) {
+        ///        this.refreshListing(cloneDeep(listing));
+      //          deferred.resolve(_listing);
+        //    } else {
                 ListingApi.getById(id).then(l => {
                     this.refreshListing(cloneDeep(l));
                     deferred.resolve(_listing);
                 });
-            }
+         //   }
         } else {
             this.refreshListing(new Listing({ owners: [this.currentUser] }));
             deferred.resolve(_listing);

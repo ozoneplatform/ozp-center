@@ -28,6 +28,7 @@ require('../../utils/typeahead.js');
 // store dependencies
 var DiscoveryPageStore = require('../../stores/DiscoveryPageStore');
 var GlobalListingStore = require('../../stores/GlobalListingStore');
+var timeout;
 
 
 var FILTERS = ['categories', 'type', 'agency'];
@@ -181,29 +182,7 @@ var Discovery = React.createClass({
     },
 
     componentDidMount(){
-        var substringMatcher = function(strs) {
-          return function findMatches(q, cb) {
-            // an array that will be populated with substring matches
-            var matches = [];
-
-            // regex used to determine if a string contains the substring `q`
-            var substrRegex = new RegExp(q, 'i');
-
-            // iterate through the pool of strings and for any string that
-            // contains the substring `q`, add it to the `matches` array
-            $.each(strs, function(i, str) {
-              if (substrRegex.test(str)) {
-                matches.push(str);
-              }
-            });
-
-            cb(matches);
-          };
-        };
-
-        $.get(`${API_URL}/api/metadata/`, data => {
-          var listings = data.listing_titles;
-
+      
           $(this.refs.search.getDOMNode()).typeahead({
             hint: true,
             highlight: true,
@@ -211,7 +190,8 @@ var Discovery = React.createClass({
           },
           {
             name: 'listings',
-            source: substringMatcher(listings)
+            source: this.suggest,
+            async: true
           }).on('typeahead:selected', (evt, item) => {
             this.onSearchInputChange({
               target: {
@@ -219,7 +199,7 @@ var Discovery = React.createClass({
               }
             });
           });
-        });
+      
 
 
         $(window).scroll(() => {
@@ -294,6 +274,36 @@ var Discovery = React.createClass({
     debounceSearch: _.debounce(function () {
         this.search();
     }, 500),
+
+    suggest(q, ab, cb) {
+         var { type, agency } = this.state;
+        var combinedObj = _.assign(
+            { search: this.state.queryString,
+              offset: this.state.currentOffset,
+              category: this.state.categories,
+              limit: this.state.limit
+            },
+            { type, agency });
+            
+var get= function(){
+              if(timeout){
+                  clearTimeout(timeout);
+              }
+              timeout = setTimeout(function(){
+                 var results = [];
+                $.get(`${API_URL}/api/listings/essearch/suggest/`,
+                    combinedObj,
+                   function(result){
+                    
+                       results = result;
+                        cb(results);
+                    },
+                   'json'
+                );
+            },300);
+};
+get();
+    },
 
     search() {
         var { type, agency } = this.state;
