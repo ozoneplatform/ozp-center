@@ -1,3 +1,11 @@
+### 1.1.50 (2016-11-30)
+
+
+#### Features
+
+* **details:** when clicking url to listing it will open in a new tab ([33847c2d](https://github.com/ozone-development/ozp-center.git/commit/33847c2d54b409e87d48fc7803f1fc1a89beff9b))
+
+
 ### 1.1.49 (2016-11-16)
 
 
