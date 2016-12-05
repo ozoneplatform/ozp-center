@@ -292,7 +292,7 @@ var get= function(){
               timeout = setTimeout(function(){
                  var results = [];
                 $.get(`${API_URL}/api/listings/essearch/suggest/`,
-                    combinedObj,
+                    $.param(combinedObj,true),
                    function(result){
                     
                        results = result;
