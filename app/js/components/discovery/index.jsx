@@ -2,7 +2,7 @@
 
 var React = require('react');
 var Reflux = require('reflux');
-var Router = require('react-router');
+var { Navigation } = require('react-router');
 var _ = require('../../utils/_');
 var {CENTER_URL, API_URL} = require('ozp-react-commons/OzoneConfig');
 var { PAGINATION_MAX } = require('ozp-react-commons/constants');
@@ -20,6 +20,7 @@ var Carousel = require('../carousel/index.jsx');
 var Types = require('./Types.jsx');
 var Organizations = require('./Organizations.jsx');
 var DetailedQuery = require('./DetailedQuery.jsx');
+var ActiveStateMixin = require('../../mixins/ActiveStateMixin');
 
 
 var $ = require('jquery');
@@ -41,7 +42,7 @@ var areFiltersApplied = (state) => {
 
 var Discovery = React.createClass({
 
-    mixins: [ Router.State, Reflux.ListenerMixin ],
+    mixins: [ Reflux.ListenerMixin, ActiveStateMixin, Navigation],
 
     getInitialState() {
         return {
@@ -191,12 +192,20 @@ var Discovery = React.createClass({
           {
             name: 'listings',
             source: this.suggest,
-            async: true
+            async: true,
+            display: 'title',
+            limit: 10
           }).on('typeahead:selected', (evt, item) => {
-            this.onSearchInputChange({
-              target: {
-                value: item
-              }
+             this.onSearchInputChange({
+               target: {
+                 value: item.title
+               }
+             });
+             // when typeahead value is selected, it should open the details of the selected app
+            this.transitionTo(this.getActiveRoutePath(), null, {
+                listing: item.id,
+                action: 'view',
+                tab: 'overview'
             });
           });
       
