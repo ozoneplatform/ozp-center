@@ -39,6 +39,9 @@ var App = React.createClass({
             else if (action === 'delete') {
                 return <ListingDeleteConfirmation listing={listing} />;
             }
+            else if (action === 'PENDING_DELETION') {
+                return <ListingDeleteConfirmation listing={listing} />;
+            }
         }
         else if (profile) {
             return <CenterProfileWindow profileId={profile} />;

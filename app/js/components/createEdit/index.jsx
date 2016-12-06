@@ -743,6 +743,8 @@ var CreateEditPage = React.createClass({
         var saveText = showSave ? 'icon-save-white' : 'icon-check-white';
         var savingText = savingMessages[this.state.saveStatus];
         var idString = listing ? listing.id ? listing.id.toString() : '' : '';
+        var currentUser = this.props.currentUser
+        var owners = listing.owners.map(function (owner) {return owner.username;});
 
         var formProps = assign({},
             pick(this.state, ['errors', 'warnings', 'messages', 'firstError']),
@@ -755,6 +757,12 @@ var CreateEditPage = React.createClass({
                 imageErrors: this.state.imageErrors
             }
         );
+        console.log(currentUser.isAdmin())
+
+        var pendingDelete = this.makeHref(this.getActiveRoutePath(), this.getParams(), {
+            listing: listing.id,
+            action: 'PENDING_DELETION'
+        });
 
         var deleteHref = this.makeHref(this.getActiveRoutePath(), this.getParams(), {
             listing: listing.id,
@@ -779,8 +787,15 @@ var CreateEditPage = React.createClass({
                             </button>
                         }
                         {
-                            showDelete &&
+                            showDelete && currentUser.isAdmin() &&
                             <a href={deleteHref} className="btn btn-default tool delete-button">
+                                <span className="create-edit-button">Delete</span>
+                                <i className="icon-trash-grayDark"></i>
+                            </a>
+                        }
+                        {
+                            showDelete && (_.contains(owners, currentUser.username)) && !currentUser.isAdmin() &&
+                            <a href={pendingDelete} className="btn btn-default tool delete-button">
                                 <span className="create-edit-button">Delete</span>
                                 <i className="icon-trash-grayDark"></i>
                             </a>
