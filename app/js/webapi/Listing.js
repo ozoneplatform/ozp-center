@@ -63,8 +63,8 @@ function Listing (json) {
         this.type = json.listingType ? json.listingType.title : "";
         this.categories = _.map(json.categories, 'title') || [];
         this.tags = _.map(json.tags, 'name') || [];
-        this.agency = json.agency ? json.agency.title : "";
-        this.agencyShort = json.agency ? json.agency.shortName : "";
+        this.agency = json.agency ? json.agency.title : json.agencyTitle || "";
+        this.agencyShort = json.agency ? json.agency.shortName : json.agencyShortName || "";
         this.owners = _.map(json.owners, function (o) {
             return {displayName: o.displayName,
                     id: o.id,
