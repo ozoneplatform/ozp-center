@@ -1,3 +1,12 @@
+### 1.1.52 (2016-12-09)
+
+
+#### Bug Fixes
+
+* **Typeahead:** parameters are now correctly passed in to typeahead e… (#745) ([ac3003ea](https://github.com/ozone-development/ozp-center.git/commit/ac3003ea14f5cc962cfba9bb073a727ad5e796b2))
+* **search:** Agency name is now displayed AMLNG-188 (#747) ([7bb822d4](https://github.com/ozone-development/ozp-center.git/commit/7bb822d4c789ff6c786c25920ad54a59ee7fd51b))
+
+
 ### 1.1.51 (2016-11-30)
 
 
