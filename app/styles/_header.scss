@@ -273,3 +273,21 @@
         }
     }
 }
+
+.tt-menu { 
+  padding: 15px 0px !important;
+}
+ 
+.tt-suggestion {
+  border-left: 4px solid transparent;
+  padding: 5px 65px;
+}
+ 
+.tt-suggestion:hover {
+    color:#087399;
+    border-left: 4px solid #009DD3;
+}
+
+.tt-cursor {
+    background-color: #eeeeef;
+}
