@@ -193,8 +193,7 @@ var Discovery = React.createClass({
             name: 'listings',
             source: this.suggest,
             async: true,
-            display: 'title',
-            limit: 10
+            display: 'title'
           }).on('typeahead:selected', (evt, item) => {
              this.onSearchInputChange({
                target: {
@@ -285,33 +284,30 @@ var Discovery = React.createClass({
     }, 500),
 
     suggest(q, ab, cb) {
-         var { type, agency } = this.state;
+        var { type, agency } = this.state;
         var combinedObj = _.assign(
-            { search: this.state.queryString,
+            { search: q,
               offset: this.state.currentOffset,
               category: this.state.categories,
               limit: this.state.limit
             },
-            { type, agency });
-            
-var get= function(){
+            { type, agency }
+        );
+        var get= function(){
               if(timeout){
                   clearTimeout(timeout);
               }
               timeout = setTimeout(function(){
-                 var results = [];
                 $.get(`${API_URL}/api/listings/essearch/suggest/`,
                     $.param(combinedObj,true),
-                   function(result){
-                    
-                       results = result;
-                        cb(results);
+                    function(result){
+                        cb(result);
                     },
                    'json'
                 );
             },300);
-};
-get();
+        };
+        get();
     },
 
     search() {
