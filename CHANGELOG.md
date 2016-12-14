@@ -1,3 +1,11 @@
+### 1.1.53 (2016-12-14)
+
+
+#### Bug Fixes
+
+* **typeahead:** fixed issue with typeahead not correctly inputting AML-185 (#749) ([cba17834](https://github.com/ozone-development/ozp-center.git/commit/cba17834bbd3e4f58b838efbcc0be4ad217efbe5))
+
+
 ### 1.1.52 (2016-12-09)
 
 
