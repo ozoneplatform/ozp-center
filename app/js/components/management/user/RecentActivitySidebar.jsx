@@ -34,6 +34,14 @@ var MyListingsSidebarFilter = React.createClass({
                         Published
                     </label>
                 </Link>
+
+                <Link id="recent-activity-pending-deletion" to="my-listings" query={{approvalStatus: "PENDING_DELETION"}}>
+                    <label htmlFor="recent-activity-pending-deletion" className="label-pending-deletion">
+                        <i className="icon-caret-right"></i>
+                        <i className="icon-trash-blue"></i>
+                        Pending Deletion
+                    </label>
+                </Link>
             </RadioGroup>
         );
     }
@@ -74,6 +82,14 @@ var AllListingsSidebarFilter = React.createClass({
                         <i className="icon-caret-right"></i>
                         <i className="icon-reload-14"></i>
                         Returned to Owner
+                    </label>
+                </Link>
+
+                <Link id="recent-activity-pending-deletion" to="all-listings" query={{approval_status: "PENDING_DELETION"}}>
+                    <label htmlFor="recent-activity-pending-deletion" className="label-pending-deletion">
+                        <i className="icon-caret-right"></i>
+                        <i className="icon-trash-blue"></i>
+                        Pending Deletion
                     </label>
                 </Link>
 
@@ -130,9 +146,17 @@ var OrgListingsSidebarFilter = React.createClass({
 
                 <Link id="recent-activity-deleted" to="org-listings" query={{approvalStatus: "DELETED"}} params={{org: this.props.org.title}}>
                     <label htmlFor="recent-activity-org-deleted" className="label-deleted">
-                        <i className="icon-reload-14"></i>
+                        <i className="icon-trash-blue"></i>
                         Deleted
                         <i className="icon-caret-right"></i>
+                    </label>
+                </Link>
+
+                <Link id="recent-activity-pending-deletion" to="org-listings" query={{approvalStatus: "PENDING_DELETION"}} params={{org: this.props.org.title}}>
+                    <label htmlFor="recent-activity-org-pending-deletion" className="label-pending-deletion">
+                        <i className="icon-caret-right"></i>
+                        Pending Deletion
+                        <i className="icon-trash-blue"></i>
                     </label>
                 </Link>
             </RadioGroup>

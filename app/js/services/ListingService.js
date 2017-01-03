@@ -214,6 +214,13 @@ ListingActions.disable.listen(setEnabled.bind(null, false));
 ListingActions.enableBookmarked.listen(setEnabledBookmarked.bind(null, true));
 ListingActions.disableBookmarked.listen(setEnabledBookmarked.bind(null, false));
 
+ListingActions.pendingDelete.listen(function (listing) {
+    console.log('pended delete')
+    //OzpAnalytics.trackListingApproval(listing.title, listing.agencyShort);
+    updateListingProperty('approvalStatus', 'PENDING_DELETION', listing);
+    console.log(listing)
+});
+
 ListingActions.approve.listen(function (listing) {
     OzpAnalytics.trackListingApproval(listing.title, listing.agencyShort);
     updateListingProperty('approvalStatus', 'APPROVED', listing);

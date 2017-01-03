@@ -22,7 +22,9 @@ var MyListingsStatusFilter = React.createClass({
     },
 
     handleChange: function (key, evt) {
+        console.log(evt.target)
         var { value } = evt.target;
+        console.log(value)
         if (value === 'all') {
             value = null;
         }
@@ -38,7 +40,8 @@ var MyListingsStatusFilter = React.createClass({
             APPROVED_ORG: 0,
             REJECTED: 0,
             PENDING: 0,
-            IN_PROGRESS: 0
+            IN_PROGRESS: 0,
+            PENDING_DELETION: 0
         });
 
 
@@ -84,6 +87,13 @@ var MyListingsStatusFilter = React.createClass({
                             Draft
                             <strong className="badge">{counts.IN_PROGRESS || 0}</strong>
                         </label>
+                        <div className="clear"></div>
+                        <input id="my-listings-filter-pending-delete" type="radio" value="PENDING_DELETION"/>
+                        <label htmlFor="my-listings-filter-pending-delete" className="label-pending-delete">
+                            <i className="icon-exclamation-12-redOrangeDark" />
+                            Pending Deletion
+                            <strong className="badge">{counts.PENDING_DELETION || 0}</strong>
+                        </label>
                     </RadioGroup>
             </div>
         );
@@ -122,6 +132,7 @@ var MyListings = React.createClass({
         if (filter === null) {
             filter = 'all';
         }
+        console.log(filter)
         this.setState({
             filter: filter
         });

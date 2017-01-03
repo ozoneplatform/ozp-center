@@ -262,6 +262,8 @@ var TableView = React.createClass({
             displayStatus = "Returned";
         }else if (status === "DELETED") {
             displayStatus = "Deleted";
+        }else if (status === "PENDING_DELETION") {
+            displayStatus = "Pending Deletion";
         }
         return displayStatus;
     },

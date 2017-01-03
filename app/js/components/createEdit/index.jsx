@@ -526,6 +526,14 @@ var CreateEditPage = React.createClass({
         };
     },
 
+    pendDelete: function(event){
+      console.log(this)
+      console.log(event)
+      //event.preventDefault();
+      ListingActions.pendingDelete(this.state.listing);
+      console.log(this.state.listing)
+    },
+
     onSave: function () {
         var scrollToError = false;
 
@@ -759,10 +767,7 @@ var CreateEditPage = React.createClass({
         );
         console.log(currentUser.isAdmin())
 
-        var pendingDelete = this.makeHref(this.getActiveRoutePath(), this.getParams(), {
-            listing: listing.id,
-            action: 'PENDING_DELETION'
-        });
+
 
         var deleteHref = this.makeHref(this.getActiveRoutePath(), this.getParams(), {
             listing: listing.id,
@@ -795,10 +800,15 @@ var CreateEditPage = React.createClass({
                         }
                         {
                             showDelete && (_.contains(owners, currentUser.username)) && !currentUser.isAdmin() &&
-                            <a href={pendingDelete} className="btn btn-default tool delete-button">
+                            <button className="btn btn-default tool"
+                                    onClick={ this.pendDelete }>
+                                <span className="create-edit-button">Delete</span>
+                                <i className="icon-trash-grayDark"> </i>
+                            </button>
+                            /*<a href={pendingDelete} className="btn btn-default tool delete-button">
                                 <span className="create-edit-button">Delete</span>
                                 <i className="icon-trash-grayDark"></i>
-                            </a>
+                            </a>*/
                         }
                         {
                             showSubmit &&
