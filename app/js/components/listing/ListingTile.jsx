@@ -153,6 +153,7 @@ var AdminOwnerListingTile = React.createClass({
                 'published': approvalStatus === 'APPROVED',
                 'rejected': approvalStatus === 'REJECTED',
                 'deleted': approvalStatus === 'DELETED',
+                'pending-delete': approvalStatus === 'PENDING_DELETION',
                 'AdminOwnerListingTile': true
             };
         }
@@ -164,6 +165,7 @@ var AdminOwnerListingTile = React.createClass({
                 'published': approvalStatus === 'APPROVED',
                 'rejected': approvalStatus === 'REJECTED',
                 'deleted': approvalStatus === 'DELETED',
+                'pending-delete': approvalStatus === 'PENDING_DELETION',
                 'AdminOwnerListingTile': true
             };
         }
@@ -174,6 +176,7 @@ var AdminOwnerListingTile = React.createClass({
                 'needs-action': approvalStatus === 'REJECTED',
                 'published': approvalStatus === 'APPROVED',
                 'deleted': approvalStatus === 'DELETED',
+                'pending-delete': approvalStatus === 'PENDING_DELETION',
                 'AdminOwnerListingTile': true
             };
         }

@@ -527,11 +527,8 @@ var CreateEditPage = React.createClass({
     },
 
     pendDelete: function(event){
-      console.log(this)
-      console.log(event)
       //event.preventDefault();
       ListingActions.pendingDelete(this.state.listing);
-      console.log(this.state.listing)
     },
 
     onSave: function () {
@@ -765,7 +762,6 @@ var CreateEditPage = React.createClass({
                 imageErrors: this.state.imageErrors
             }
         );
-        console.log(currentUser.isAdmin())
 
 
 

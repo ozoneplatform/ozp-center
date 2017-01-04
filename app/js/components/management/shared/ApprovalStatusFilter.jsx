@@ -49,7 +49,6 @@ var ApprovalStatusFilter = React.createClass({
     _renderRadioGroupOptions: function () {
 
         var counts = this.props.counts;
-        console.log(counts)
         var value = this.props.value.approval_status || 'all';
 
         var components = [

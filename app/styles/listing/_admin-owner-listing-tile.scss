@@ -14,6 +14,7 @@
 .MyListings__listings.IN_PROGRESS .AdminOwnerListingTile.draft,
 .MyListings__listings.REJECTED .AdminOwnerListingTile.needs-action,
 .MyListings__listings.PENDING .AdminOwnerListingTile.pending,
+.MyListings__listings.PENDING_DELETION .AdminOwnerListingTile.pending-delete,
 .MyListings__listings.APPROVED .AdminOwnerListingTile.published {
     display: inline-block;
 }

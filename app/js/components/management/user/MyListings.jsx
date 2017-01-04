@@ -22,9 +22,7 @@ var MyListingsStatusFilter = React.createClass({
     },
 
     handleChange: function (key, evt) {
-        console.log(evt.target)
         var { value } = evt.target;
-        console.log(value)
         if (value === 'all') {
             value = null;
         }
@@ -50,8 +48,8 @@ var MyListingsStatusFilter = React.createClass({
                 <h4>State</h4>
                 <RadioGroup
                     name="approval-status"
-                    value={this.props.value.approvalStatus || 'all' }
-                    onChange={ _.partial(this.handleChange, "approvalStatus") }
+                    value={this.props.value.approval_status || 'all' }
+                    onChange={ _.partial(this.handleChange, "approval_status") }
                 >
                         <input id="my-listings-filter-all" type="radio" value="all"/>
                         <label htmlFor="my-listings-filter-all" className="label-all">
@@ -114,7 +112,7 @@ var MyListings = React.createClass({
     },
 
     getInitialState: function () {
-        var filter = this.getQuery().approvalStatus || 'all';
+        var filter = this.getQuery().approval_status || 'all';
 
         return {
             listings: this.getListings(),
@@ -132,7 +130,6 @@ var MyListings = React.createClass({
         if (filter === null) {
             filter = 'all';
         }
-        console.log(filter)
         this.setState({
             filter: filter
         });
@@ -148,7 +145,7 @@ var MyListings = React.createClass({
         var listings = this.state.listings || [];
         var filterProps = {
             value: {
-                approvalStatus: filter
+                approval_status: filter
             },
             listings: listings,
             onFilterChanged: this.onFilterChanged
