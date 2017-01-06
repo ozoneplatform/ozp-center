@@ -1,3 +1,6 @@
+## Interested in becoming a contributor? 
+Fork the code for this repository. Make your changes and submit a pull request. The Ozone team will review your pull request and evaluate if it should be part of the project. For more information on the patch process please review the Patch Process at https://ozone.nextcentury.com/patch_process.
+
 # Center UI [![Build Status][travis-image]][travis-url]
 
 Center UI built on [React](http://facebook.github.io/react/), [Gulp](http://gulpjs.com/) and [Webpack](http://webpack.github.io/).
