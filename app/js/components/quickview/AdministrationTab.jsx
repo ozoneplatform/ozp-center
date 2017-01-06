@@ -159,6 +159,24 @@ var AdministrationTab = React.createClass({
 
                 }
                 break;
+            case 'Pending Deletion':
+                if (isStewardOfOrg) {
+                    controls = this.renderReviewSection();
+                    statusClass = 'label-needs-action';
+                    iconClass= 'icon-exclamation-14';
+
+                } else if (isAdmin) {
+                    controls = this.renderReviewSection();
+                    statusClass = 'label-pending';
+                    iconClass= 'icon-loader-14';
+
+                } else {
+                    controls = this.renderReviewSection();
+                    statusClass = 'label-pending';
+                    iconClass= 'icon-loader-14';
+
+                }
+                break;
             case 'Pending, Center':
                 if (isAdmin) {
                     controls = this.renderReviewSection();
@@ -212,8 +230,10 @@ var AdministrationTab = React.createClass({
 
         var isAdmin = UserRole[this.props.currentUser.highestRole] >= UserRole.APPS_MALL_STEWARD,
             isStewardOfOrg = _.contains(this.props.currentUser.stewardedOrganizations, this.props.listing.agencyShort),
-            pendingOrg = (listingStatus[this.props.listing.approvalStatus] === 'Pending, Organization') ? true : false,
-            pendingAdmin = (listingStatus[this.props.listing.approvalStatus] === 'Pending, Center') ? true : false;
+            pendingOrg = (listingStatus[this.props.listing.approvalStatus] === 'Pending, Organization')  ? true : false,
+            pendingAdmin = (listingStatus[this.props.listing.approvalStatus] === 'Pending, Center') ? true : false,
+            pendingDelete = (listingStatus[this.props.listing.approvalStatus] === 'Pending Deletion')  ? true : false;
+
 
         if (editing) {
             return (
@@ -228,6 +248,15 @@ var AdministrationTab = React.createClass({
                 </section>
             );
         } else {
+            if (pendingDelete){
+              return (
+                  <section className="review-listing">
+                      <h5>{"Listing Pending Deletion"}</h5>
+                      <button type="button" className="btn btn-default" onClick={ this.approveDelete }>{"Approve deletion"}</button>
+                      <button type="button" className="btn btn-default" onClick={ this.editRejection }>{"Reject deletion"}</button>
+                  </section>
+              );
+            }
             if(pendingOrg) {
                 if(isAdmin && !isStewardOfOrg) {
                    var org = this.props.listing.agencyShort;
@@ -289,6 +318,21 @@ var AdministrationTab = React.createClass({
         } else {
             approveListing(this.props.listing);
         }
+    },
+
+    approveDelete: function (event) {
+        //event.preventDefault();
+      ListingActions.deleteListing(this.props.listing);
+      sweetAlert({
+          title: "Deletion complete",
+          text: "The listing has been deleted.",
+          type: "info",
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "ok",
+          closeOnConfirm: true,
+          html: false
+      });
+      $(".quickview").modal("hide");
     }
 
 });

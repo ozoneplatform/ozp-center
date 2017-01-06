@@ -34,7 +34,8 @@ var ListingActions = createActions({
     approveByOrg: null,
     setFeatured: null,
     deleteListing: null,
-    pendingDelete: null
+    pendingDelete: null,
+    approveDelete: null
 });
 
 ListingActions.listingChangeCompleted = Reflux.createAction();

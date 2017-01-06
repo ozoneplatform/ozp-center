@@ -6,6 +6,7 @@ var { Link, Navigation } = require('react-router');
 var ActiveState = require('../../mixins/ActiveStateMixin');
 var { UserRole } = require('ozp-react-commons/constants');
 var deleted = './images/deleted_360.png';
+var SelfStore = require('ozp-react-commons/stores/SelfStore');
 
 var ActionMenu = React.createClass({
 
@@ -13,6 +14,11 @@ var ActionMenu = React.createClass({
 
     render: function () {
         //TODO fill in hrefs
+        var currentUser = SelfStore.getDefaultData().currentUser;
+        var owners = this.props.listing.owners;
+        console.log(currentUser)
+        console.log(owners)
+
         var listing = this.props.listing,
             activeRoutePath = this.getActiveRoutePath(),
             overviewHref = this.makeHref(activeRoutePath, this.getParams(), {
@@ -24,6 +30,10 @@ var ActionMenu = React.createClass({
                 listing: listing.id,
                 action: 'delete'
             }),
+            pendDeleteHref = this.makeHref(activeRoutePath, this.getParams(), {
+                listing: listing.id,
+                action: 'pending_deletion'
+            }),
             feedbackHref = this.makeHref(activeRoutePath, this.getParams(), {
                 listing: listing.id,
                 action: 'feedback'
@@ -34,23 +44,27 @@ var ActionMenu = React.createClass({
             del = <li key="del"><a href={deleteHref}>Delete</a></li>,
             view = <li key="view"><a href={overviewHref}>View</a></li>,
             feedback = <li key="feedback"><a href={feedbackHref}>Read Feedback</a></li>,
+            pendingDelete = <li key="penddelete"><a href={pendDeleteHref}>Pend for Deletion</a></li>,
             links,
             approvalStatus = listing.approvalStatus;
 
         switch (approvalStatus) {
             case 'APPROVED':
-                links = [edit, view, del];
+                links = [edit, view, pendingDelete];
                 break;
             case 'APPROVED_ORG':
-                links = [edit, preview, del];
+                links = [edit, preview, pendingDelete];
                 break;
             case 'PENDING':
-                links = [edit, preview, del];
+                links = [edit, preview, pendingDelete];
                 break;
             case 'REJECTED':
-                links = [edit, feedback, preview, del];
+                links = [edit, feedback, preview, pendingDelete];
                 break;
             case 'DELETED':
+                links = [];
+                break;
+            case 'PENDING_DELETION':
                 links = [view];
                 break;
             case 'DRAFT':

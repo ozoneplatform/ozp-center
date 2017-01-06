@@ -526,9 +526,23 @@ var CreateEditPage = React.createClass({
         };
     },
 
+    undelete: function(event){
+      //event.preventDefault();
+      ListingActions.approveByOrg(this.state.listing);
+      //CreateEditActions.submit();
+    },
     pendDelete: function(event){
       //event.preventDefault();
       ListingActions.pendingDelete(this.state.listing);
+      sweetAlert({
+        title: "Pended for Deletion",
+        text: "Your listing has been pended for deletion and is awaiting review from a content steward.",
+        type: "info",
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Ok",
+        closeOnConfirm: true,
+      });
+
     },
 
     onSave: function () {
@@ -740,8 +754,9 @@ var CreateEditPage = React.createClass({
         };
 
         var status = approvalStatus[listing.approvalStatus];
-        var { IN_PROGRESS, REJECTED } = approvalStatus;
+        var { IN_PROGRESS, REJECTED,PENDING_DELETION, DRAFT} = approvalStatus;
         var showSubmit = [IN_PROGRESS, REJECTED].some(s => s === status);
+        var showUndelete = [PENDING_DELETION].some(s => s === status);
         var showPreview = !!listing.id;
         var showDelete = !!listing.id;
         var titleText = (this.getParams().listingId ? 'Edit ' : 'Create New ') + 'Listing';
@@ -795,7 +810,7 @@ var CreateEditPage = React.createClass({
                             </a>
                         }
                         {
-                            showDelete && (_.contains(owners, currentUser.username)) && !currentUser.isAdmin() &&
+                            showDelete && (_.contains(owners, currentUser.username)) && !currentUser.isAdmin() && !showUndelete && approvalStatus !== "DRAFT" &&
                             <button className="btn btn-default tool"
                                     onClick={ this.pendDelete }>
                                 <span className="create-edit-button">Delete</span>
@@ -805,6 +820,14 @@ var CreateEditPage = React.createClass({
                                 <span className="create-edit-button">Delete</span>
                                 <i className="icon-trash-grayDark"></i>
                             </a>*/
+                        }
+                        {
+                          showUndelete &&
+                          <button className="btn btn-default tool"
+                                  onClick={ this.undelete }>
+                              <span className="create-edit-button">Undelete</span>
+                              <i className="icon-trash-grayDark"> </i>
+                          </button>
                         }
                         {
                             showSubmit &&
