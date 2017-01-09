@@ -20,6 +20,7 @@ var ActiveNotificationStore = Reflux.createStore({
     },
 
     fetchActiveCompleted(notifications) {
+        this.init();
         _notifications.receivePage(notifications);
         this.trigger();
     },
