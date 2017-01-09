@@ -63,7 +63,7 @@ var ActionMenu = React.createClass({
                 links = [];
                 break;
             case 'PENDING_DELETION':
-                links = [view];
+                links = [edit,view];
                 break;
             case 'DRAFT':
                 /* falls through */
