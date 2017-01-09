@@ -96,7 +96,7 @@ var ResourcesTab = React.createClass({
                 );
             });
             sortedContacts.push(
-                <div key={`${baseKey}.contactGroups.finalPush`} style={{'margin-top': '2em'}}>
+                <div key={`${baseKey}.contactGroups.finalPush`} style={{'marginTop': '2em'}}>
                     <p><strong>{contactType}</strong></p>
                     {contactBlocks}
                 </div>
