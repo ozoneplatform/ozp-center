@@ -392,3 +392,11 @@ div.col-md-4 > .form-group >span.image-container.image-present {
    background-color: #FFFF00 ;
    color: #000;
 }
+
+@-moz-document url-prefix(){
+  input[id$="inputElement.smallIcon"], input[id$="inputElement.largeIcon"],
+  input[id$="inputElement.bannerIcon"], input[id$="inputElement.featuredBannerIcon"]{
+    padding-top: 2px !important;
+    padding-bottom: 35px !important;
+  }
+}
