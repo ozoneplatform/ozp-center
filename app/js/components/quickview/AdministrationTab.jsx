@@ -163,17 +163,17 @@ var AdministrationTab = React.createClass({
                 if (isStewardOfOrg) {
                     controls = this.renderReviewSection();
                     statusClass = 'label-needs-action';
-                    iconClass= 'icon-exclamation-14';
+                    iconClass= 'icon-delete-14-redOrangeDark';
 
                 } else if (isAdmin) {
                     controls = this.renderReviewSection();
                     statusClass = 'label-pending';
-                    iconClass= 'icon-loader-14';
+                    iconClass= 'icon-delete-14-redOrangeDark';
 
                 } else {
                     controls = this.renderReviewSection();
                     statusClass = 'label-pending';
-                    iconClass= 'icon-loader-14';
+                    iconClass= 'icon-delete-14-redOrangeDark';
 
                 }
                 break;

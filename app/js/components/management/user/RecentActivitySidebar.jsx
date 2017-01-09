@@ -38,7 +38,7 @@ var MyListingsSidebarFilter = React.createClass({
                 <Link id="recent-activity-pending-deletion" to="my-listings" query={{approval_status: "PENDING_DELETION"}}>
                     <label htmlFor="my-listings-filter-pending-delete" className="label-pending-delete">
                         <i className="icon-caret-right"></i>
-                        <i className="icon-trash-blue"></i>
+                        <i className="icon-delete-redOrangeDark"></i>
                         Pending Deletion
                     </label>
                 </Link>
@@ -88,7 +88,7 @@ var AllListingsSidebarFilter = React.createClass({
                 <Link id="recent-activity-pending-deletion" to="all-listings" query={{approval_status: "PENDING_DELETION"}}>
                     <label htmlFor="recent-activity-pending-deletion" className="label-pending-deletion">
                         <i className="icon-caret-right"></i>
-                        <i className="icon-trash-blue"></i>
+                        <i className="icon-delete-redOrangeDark"></i>
                         Pending Deletion
                     </label>
                 </Link>
@@ -156,7 +156,7 @@ var OrgListingsSidebarFilter = React.createClass({
                     <label htmlFor="recent-activity-org-pending-deletion" className="label-pending-deletion">
                         <i className="icon-caret-right"></i>
                         Pending Deletion
-                        <i className="icon-trash-blue"></i>
+                        <i className="icon-delete-redOrangeDark"></i>
                     </label>
                 </Link>
             </RadioGroup>

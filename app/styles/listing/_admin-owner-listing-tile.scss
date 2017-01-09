@@ -163,3 +163,7 @@
     @extend .icon-trash-12-blueDarker;
     color: $gray-dark;
 }
+.AdminOwnerListingTile.pending-delete .approvalStatus {
+    @extend .icon-delete-14-redOrangeDark;
+    color: $gray-dark;
+}

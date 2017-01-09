@@ -88,7 +88,7 @@ var MyListingsStatusFilter = React.createClass({
                         <div className="clear"></div>
                         <input id="my-listings-filter-pending-delete" type="radio" value="PENDING_DELETION"/>
                         <label htmlFor="my-listings-filter-pending-delete" className="label-pending-delete">
-                            <i className="icon-exclamation-12-redOrangeDark" />
+                            <i className="icon-delete-12-redOrangeDark" />
                             Pending Deletion
                             <strong className="badge">{counts.PENDING_DELETION || 0}</strong>
                         </label>

@@ -16,8 +16,6 @@ var ActionMenu = React.createClass({
         //TODO fill in hrefs
         var currentUser = SelfStore.getDefaultData().currentUser;
         var owners = this.props.listing.owners;
-        console.log(currentUser)
-        console.log(owners)
 
         var listing = this.props.listing,
             activeRoutePath = this.getActiveRoutePath(),
