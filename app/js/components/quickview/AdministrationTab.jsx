@@ -252,8 +252,8 @@ var AdministrationTab = React.createClass({
               return (
                   <section className="review-listing">
                       <h5>{"Listing Pending Deletion"}</h5>
-                      <button type="button" className="btn btn-default" onClick={ this.approveDelete }>{"Approve deletion"}</button>
-                      <button type="button" className="btn btn-default" onClick={ this.editRejection }>{"Reject deletion"}</button>
+                      <button type="button" className="btn btn-success" onClick={ this.approveDelete }>{"Approve deletion"}</button>
+                      <button type="button" className="btn btn-warning" onClick={ this.editRejection }>{"Reject deletion"}</button>
                   </section>
               );
             }
@@ -263,8 +263,8 @@ var AdministrationTab = React.createClass({
                     return (
                         <section className="review-listing">
                             <h5>{"Review Listing for " + org}</h5>
-                            <button type="button" className="btn btn-default" onClick={ this.approve }>{"Approve for " + org}</button>
-                            <button type="button" className="btn btn-default" onClick={ this.editRejection }>{"Reject for " + org}</button>
+                            <button type="button" className="btn btn-success" onClick={ this.approve }>{"Approve for " + org}</button>
+                            <button type="button" className="btn btn-warning" onClick={ this.editRejection }>{"Reject for " + org}</button>
                         </section>
                     );
                 } else if(isStewardOfOrg) {
