@@ -223,9 +223,11 @@ var TableView = React.createClass({
 
                         actions = '<label class="AdminOwnerListingTable__actionMenu">';
 
+                    if(status === 'DELETED'){
+                      return null;
+                    }
                     actions += '<a key="link" href="'+editHref+'" title="Edit"><i class="icon-pencil-12-blueDark"/></a>';
-                    if(status !== 'DELETED'){
-                    if (status === 'APPROVED') {
+                    if (status === 'APPROVED' || status === 'PENDING_DELETION') {
                         actions += '<a key="view" href="'+overviewHref+'" title="View"><i class="icon-eye-12-blueDark"/></a>';
                     } else {
                         actions += '<a key="prev" href="'+overviewHref+'" title="Preview"><i class="icon-eye-12-blueDark"/></a>';
@@ -234,15 +236,12 @@ var TableView = React.createClass({
                     if (status === 'REJECTED') {
                         actions += '<a key="feedback" href="'+feedbackHref+'" title="Feedback"><i class="icon-feedback-12-blueDark"/></a>';
                     }
-
-                    actions += '<a key="del" href="'+deleteHref+'" title="Delete"><i class="icon-trash-12-blueDark"/></a>';
+                    if (status !== 'PENDING_DELETION'){
+                        actions += '<a key="del" href="'+deleteHref+'" title="Delete"><i class="icon-trash-12-blueDark"/></a>';
+                    }
                     actions += '</label>';
                     return actions;
-                    }
-                    else{
-                      return null;
-                    }
-                }
+                  }
             }
         );
         return columns;
@@ -262,6 +261,8 @@ var TableView = React.createClass({
             displayStatus = "Returned";
         }else if (status === "DELETED") {
             displayStatus = "Deleted";
+        }else if (status === "PENDING_DELETION") {
+            displayStatus = "Pending Deletion";
         }
         return displayStatus;
     },

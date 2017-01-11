@@ -71,7 +71,8 @@ var ApprovalStatusFilter = React.createClass({
         components.push(
             filterOption(value, 'Returned', 'REJECTED', counts.REJECTED, 'all-listings-filter-rejected', 'label-rejected', 'icon-reload-12-blueDark'),
             filterOption(value, 'Draft', 'IN_PROGRESS', counts.IN_PROGRESS, 'all-listings-filter-draft', 'label-draft', 'icon-paper-12-grayDark'),
-            filterOption(value, 'Deleted', 'DELETED', counts.DELETED, 'all-listings-filter-deleted', 'label-deleted', 'icon-trash-12-blueDarker')
+            filterOption(value, 'Deleted', 'DELETED', counts.DELETED, 'all-listings-filter-deleted', 'label-deleted', 'icon-trash-12-blueDarker'),
+            filterOption(value, 'Pending Deletion', 'PENDING_DELETION', counts.PENDING_DELETION, 'all-listings-filter-pending-deletion', 'label-pending-deletion', 'icon-delete-12-redOrangeDark')
         );
         return components;
     },

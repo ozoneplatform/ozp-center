@@ -228,7 +228,7 @@ button.btn.image-remove {
 =   Approval Status Indicators =
 ==============================*/
 
-.label-draft, .label-pending, .label-needs-action, .label-published, .label-rejected {
+.label-draft, .label-pending, .label-needs-action, .label-published, .label-rejected, .label-pending-delete {
     @extend .icons;
     font-family: 'Ubuntu';
     font-weight: 400;
@@ -397,7 +397,9 @@ body > div.classBanner {
 .icon-reload-14 {
     @extend .icon-reload-14-blueDark;
 }
-
+.icon-delete-14 {
+    @extend .icon-delete-14-redOrangeDark;
+}
 .icon-exclamation-12 {
     @extend .icon-exclamation-12-redOrangeDark;
 }
@@ -411,6 +413,9 @@ body > div.classBanner {
 }
 .icon-reload-12 {
     @extend .icon-reload-12-blueDark;
+}
+.icon-delete-12 {
+    @extend .icon-delete-12-redOrangeDark;
 }
 
 

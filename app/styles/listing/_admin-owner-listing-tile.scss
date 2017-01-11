@@ -14,6 +14,7 @@
 .MyListings__listings.IN_PROGRESS .AdminOwnerListingTile.draft,
 .MyListings__listings.REJECTED .AdminOwnerListingTile.needs-action,
 .MyListings__listings.PENDING .AdminOwnerListingTile.pending,
+.MyListings__listings.PENDING_DELETION .AdminOwnerListingTile.pending-delete,
 .MyListings__listings.APPROVED .AdminOwnerListingTile.published {
     display: inline-block;
 }
@@ -160,5 +161,9 @@
 }
 .AdminOwnerListingTile.deleted .approvalStatus {
     @extend .icon-trash-12-blueDarker;
+    color: $gray-dark;
+}
+.AdminOwnerListingTile.pending-delete .approvalStatus {
+    @extend .icon-delete-14-redOrangeDark;
     color: $gray-dark;
 }

@@ -6,6 +6,7 @@ var { Link, Navigation } = require('react-router');
 var ActiveState = require('../../mixins/ActiveStateMixin');
 var { UserRole } = require('ozp-react-commons/constants');
 var deleted = './images/deleted_360.png';
+var SelfStore = require('ozp-react-commons/stores/SelfStore');
 
 var ActionMenu = React.createClass({
 
@@ -13,6 +14,9 @@ var ActionMenu = React.createClass({
 
     render: function () {
         //TODO fill in hrefs
+        var currentUser = SelfStore.getDefaultData().currentUser;
+        var owners = this.props.listing.owners;
+
         var listing = this.props.listing,
             activeRoutePath = this.getActiveRoutePath(),
             overviewHref = this.makeHref(activeRoutePath, this.getParams(), {
@@ -24,6 +28,10 @@ var ActionMenu = React.createClass({
                 listing: listing.id,
                 action: 'delete'
             }),
+            pendDeleteHref = this.makeHref(activeRoutePath, this.getParams(), {
+                listing: listing.id,
+                action: 'pending_deletion'
+            }),
             feedbackHref = this.makeHref(activeRoutePath, this.getParams(), {
                 listing: listing.id,
                 action: 'feedback'
@@ -34,24 +42,53 @@ var ActionMenu = React.createClass({
             del = <li key="del"><a href={deleteHref}>Delete</a></li>,
             view = <li key="view"><a href={overviewHref}>View</a></li>,
             feedback = <li key="feedback"><a href={feedbackHref}>Read Feedback</a></li>,
+            pendingDelete = <li key="penddelete"><a href={pendDeleteHref}>Pend for Deletion</a></li>,
             links,
             approvalStatus = listing.approvalStatus;
 
         switch (approvalStatus) {
             case 'APPROVED':
-                links = [edit, view, del];
+                if(currentUser.isAdmin()){
+                  links = [edit, view, del];
+                }
+                else{
+                  links = [edit, view, pendingDelete];
+                }
                 break;
             case 'APPROVED_ORG':
-                links = [edit, preview, del];
+                if(currentUser.isAdmin()){
+                  links = [edit, view, del];
+                }
+                else{
+                  links = [edit, view, pendingDelete];
+                }
                 break;
             case 'PENDING':
-                links = [edit, preview, del];
+                if(currentUser.isAdmin()){
+                  links = [edit, view, del];
+                }
+                else{
+                  links = [edit, view, pendingDelete];
+                }
                 break;
             case 'REJECTED':
-                links = [edit, feedback, preview, del];
+                if(currentUser.isAdmin()){
+                  links = [edit, view, del];
+                }
+                else{
+                  links = [edit, view, pendingDelete];
+                }
                 break;
             case 'DELETED':
-                links = [view];
+                links = [];
+                break;
+            case 'PENDING_DELETION':
+                if(currentUser.isAdmin()){
+                  links = [edit, view, del];
+                }
+                else{
+                  links = [view, edit];
+                }
                 break;
             case 'DRAFT':
                 /* falls through */
@@ -153,6 +190,7 @@ var AdminOwnerListingTile = React.createClass({
                 'published': approvalStatus === 'APPROVED',
                 'rejected': approvalStatus === 'REJECTED',
                 'deleted': approvalStatus === 'DELETED',
+                'pending-delete': approvalStatus === 'PENDING_DELETION',
                 'AdminOwnerListingTile': true
             };
         }
@@ -164,6 +202,7 @@ var AdminOwnerListingTile = React.createClass({
                 'published': approvalStatus === 'APPROVED',
                 'rejected': approvalStatus === 'REJECTED',
                 'deleted': approvalStatus === 'DELETED',
+                'pending-delete': approvalStatus === 'PENDING_DELETION',
                 'AdminOwnerListingTile': true
             };
         }
@@ -174,6 +213,7 @@ var AdminOwnerListingTile = React.createClass({
                 'needs-action': approvalStatus === 'REJECTED',
                 'published': approvalStatus === 'APPROVED',
                 'deleted': approvalStatus === 'DELETED',
+                'pending-delete': approvalStatus === 'PENDING_DELETION',
                 'AdminOwnerListingTile': true
             };
         }

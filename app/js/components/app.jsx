@@ -12,6 +12,7 @@ var CenterProfileWindow = require('./profile/CenterProfileWindow.jsx');
 var CenterContactsWindow = require('./contacts/CenterContactsWindow.jsx');
 var FeedbackModal = require('./management/user/FeedbackModal.jsx');
 var { ListingDeleteConfirmation } = require('./shared/DeleteConfirmation.jsx');
+var { ListingPendingDeleteConfirmation } = require('./shared/PendingDeleteConfirmation.jsx');
 
 var App = React.createClass({
 
@@ -38,6 +39,9 @@ var App = React.createClass({
             }
             else if (action === 'delete') {
                 return <ListingDeleteConfirmation listing={listing} />;
+            }
+            else if (action === 'pending_deletion') {
+                return <ListingPendingDeleteConfirmation listing={listing} />;
             }
         }
         else if (profile) {

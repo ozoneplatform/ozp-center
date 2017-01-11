@@ -539,6 +539,25 @@ var CreateEditPage = React.createClass({
         };
     },
 
+    undelete: function(event){
+      //event.preventDefault();
+      ListingActions.undelete(this.state.listing);
+      //CreateEditActions.submit();
+    },
+    pendDelete: function(event){
+      //event.preventDefault();
+      ListingActions.pendingDelete(this.state.listing);
+      sweetAlert({
+        title: "Pended for Deletion",
+        text: "Your listing has been pended for deletion and is awaiting review from a content steward.",
+        type: "info",
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "Ok",
+        closeOnConfirm: true,
+      });
+
+    },
+
     onSave: function () {
         var scrollToError = false;
 
@@ -748,14 +767,18 @@ var CreateEditPage = React.createClass({
         };
 
         var status = approvalStatus[listing.approvalStatus];
-        var { IN_PROGRESS, REJECTED } = approvalStatus;
+        var { IN_PROGRESS, REJECTED,PENDING_DELETION, DRAFT} = approvalStatus;
         var showSubmit = [IN_PROGRESS, REJECTED].some(s => s === status);
+        var showUndelete = [PENDING_DELETION].some(s => s === status);
+        var inProgress = [IN_PROGRESS].some(s => s === status);
         var showPreview = !!listing.id;
         var showDelete = !!listing.id;
         var titleText = (this.getParams().listingId ? 'Edit ' : 'Create New ') + 'Listing';
         var saveText = showSave ? 'icon-save-white' : 'icon-check-white';
         var savingText = savingMessages[this.state.saveStatus];
         var idString = listing ? listing.id ? listing.id.toString() : '' : '';
+        var currentUser = this.props.currentUser
+        var owners = listing.owners.map(function (owner) {return owner.username;});
 
         var formProps = assign({},
             pick(this.state, ['errors', 'warnings', 'messages', 'firstError']),
@@ -768,6 +791,8 @@ var CreateEditPage = React.createClass({
                 imageErrors: this.state.imageErrors
             }
         );
+
+
 
         var deleteHref = this.makeHref(this.getActiveRoutePath(), this.getParams(), {
             listing: listing.id,
@@ -792,11 +817,31 @@ var CreateEditPage = React.createClass({
                             </button>
                         }
                         {
-                            showDelete &&
+                            showDelete && (currentUser.isAdmin() || inProgress) &&
                             <a href={deleteHref} className="btn btn-default tool delete-button">
                                 <span className="create-edit-button">Delete</span>
                                 <i className="icon-trash-grayDark"></i>
                             </a>
+                        }
+                        {
+                            showDelete && (_.contains(owners, currentUser.username)) && !currentUser.isAdmin() && !showUndelete && !inProgress &&
+                            <button className="btn btn-default tool"
+                                    onClick={ this.pendDelete }>
+                                <span className="create-edit-button">Delete</span>
+                                <i className="icon-trash-grayDark"> </i>
+                            </button>
+                            /*<a href={pendingDelete} className="btn btn-default tool delete-button">
+                                <span className="create-edit-button">Delete</span>
+                                <i className="icon-trash-grayDark"></i>
+                            </a>*/
+                        }
+                        {
+                          showUndelete &&
+                          <button className="btn btn-default tool"
+                                  onClick={ this.undelete }>
+                              <span className="create-edit-button">Undelete</span>
+                              <i className="icon-trash-grayDark"> </i>
+                          </button>
                         }
                         {
                             showSubmit &&

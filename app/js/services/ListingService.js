@@ -214,6 +214,14 @@ ListingActions.disable.listen(setEnabled.bind(null, false));
 ListingActions.enableBookmarked.listen(setEnabledBookmarked.bind(null, true));
 ListingActions.disableBookmarked.listen(setEnabledBookmarked.bind(null, false));
 
+ListingActions.pendingDelete.listen(function (listing) {
+    //OzpAnalytics.trackListingApproval(listing.title, listing.agencyShort);
+    var data = _.cloneDeep(listing);
+    data.approvalStatus = "PENDING_DELETION";
+    data.isEnabled=false;
+    ListingActions.save(data);
+});
+
 ListingActions.approve.listen(function (listing) {
     OzpAnalytics.trackListingApproval(listing.title, listing.agencyShort);
     updateListingProperty('approvalStatus', 'APPROVED', listing);
@@ -222,6 +230,11 @@ ListingActions.approve.listen(function (listing) {
 ListingActions.approveByOrg.listen(function (listing) {
     OzpAnalytics.trackListingOrgApproval(listing.title, listing.agencyShort);
     updateListingProperty('approvalStatus', 'APPROVED_ORG', listing);
+});
+
+ListingActions.undelete.listen(function (listing) {
+    //OzpAnalytics.trackListingApproval(listing.title, listing.agencyShort);
+    updateListingProperty('approvalStatus', 'PENDING', listing);
 });
 
 ListingActions.deleteListing.listen(function (listing) {
