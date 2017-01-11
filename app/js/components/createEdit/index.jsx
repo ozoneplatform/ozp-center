@@ -804,7 +804,7 @@ var CreateEditPage = React.createClass({
                             </button>
                         }
                         {
-                            showDelete && currentUser.isAdmin() || inProgress &&
+                            showDelete && (currentUser.isAdmin() || inProgress) &&
                             <a href={deleteHref} className="btn btn-default tool delete-button">
                                 <span className="create-edit-button">Delete</span>
                                 <i className="icon-trash-grayDark"></i>
