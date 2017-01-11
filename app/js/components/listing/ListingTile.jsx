@@ -45,7 +45,7 @@ var ActionMenu = React.createClass({
             pendingDelete = <li key="penddelete"><a href={pendDeleteHref}>Pend for Deletion</a></li>,
             links,
             approvalStatus = listing.approvalStatus;
-            console.log(currentUser.isAdmin())
+
         switch (approvalStatus) {
             case 'APPROVED':
                 if(currentUser.isAdmin()){
