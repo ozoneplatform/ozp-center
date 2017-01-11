@@ -45,25 +45,50 @@ var ActionMenu = React.createClass({
             pendingDelete = <li key="penddelete"><a href={pendDeleteHref}>Pend for Deletion</a></li>,
             links,
             approvalStatus = listing.approvalStatus;
-
+            console.log(currentUser.isAdmin())
         switch (approvalStatus) {
             case 'APPROVED':
-                links = [edit, view, pendingDelete];
+                if(currentUser.isAdmin()){
+                  links = [edit, view, del];
+                }
+                else{
+                  links = [edit, view, pendingDelete];
+                }
                 break;
             case 'APPROVED_ORG':
-                links = [edit, preview, pendingDelete];
+                if(currentUser.isAdmin()){
+                  links = [edit, view, del];
+                }
+                else{
+                  links = [edit, view, pendingDelete];
+                }
                 break;
             case 'PENDING':
-                links = [edit, preview, pendingDelete];
+                if(currentUser.isAdmin()){
+                  links = [edit, view, del];
+                }
+                else{
+                  links = [edit, view, pendingDelete];
+                }
                 break;
             case 'REJECTED':
-                links = [edit, feedback, preview, pendingDelete];
+                if(currentUser.isAdmin()){
+                  links = [edit, view, del];
+                }
+                else{
+                  links = [edit, view, pendingDelete];
+                }
                 break;
             case 'DELETED':
                 links = [];
                 break;
             case 'PENDING_DELETION':
-                links = [view,edit];
+                if(currentUser.isAdmin()){
+                  links = [edit, view, del];
+                }
+                else{
+                  links = [view, edit];
+                }
                 break;
             case 'DRAFT':
                 /* falls through */
