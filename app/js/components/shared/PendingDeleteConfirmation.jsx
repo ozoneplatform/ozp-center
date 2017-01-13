@@ -88,6 +88,14 @@ var ListingPendingDeleteConfirmation = React.createClass({
     },
 
     onPendingDeleteComplete: function () {
+        sweetAlert({
+          title: "Pended for Deletion",
+          text: "Your listing has been pended for deletion and is awaiting review from a content steward.",
+          type: "info",
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "Ok",
+          closeOnConfirm: true,
+        });
         this.close();
     },
 

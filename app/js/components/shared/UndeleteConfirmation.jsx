@@ -88,6 +88,15 @@ var ListingUndeleteConfirmation = React.createClass({
     },
 
     onUndeleteComplete: function () {
+      sweetAlert({
+          title: "Undelete complete",
+          text: "The listing has been returned to the Agencies content steward for approval.",
+          type: "info",
+          confirmButtonColor: "#DD6B55",
+          confirmButtonText: "ok",
+          closeOnConfirm: true,
+          html: false
+      });
         this.close();
     },
 

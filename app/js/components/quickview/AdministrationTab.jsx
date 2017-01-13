@@ -232,8 +232,7 @@ var AdministrationTab = React.createClass({
             isStewardOfOrg = _.contains(this.props.currentUser.stewardedOrganizations, this.props.listing.agencyShort),
             pendingOrg = (listingStatus[this.props.listing.approvalStatus] === 'Pending, Organization')  ? true : false,
             pendingAdmin = (listingStatus[this.props.listing.approvalStatus] === 'Pending, Center') ? true : false,
-            pendingDelete = (listingStatus[this.props.listing.approvalStatus] === 'Pending Deletion')  ? true : false,
-            org = this.props.listing.agencyShort;
+            pendingDelete = (listingStatus[this.props.listing.approvalStatus] === 'Pending Deletion')  ? true : false;
 
 
         if (editing) {
@@ -334,16 +333,7 @@ var AdministrationTab = React.createClass({
     approveDelete: function (event) {
         //event.preventDefault();
       ListingActions.deleteListing(this.props.listing);
-      sweetAlert({
-          title: "Deletion complete",
-          text: "The listing has been deleted.",
-          type: "info",
-          confirmButtonColor: "#DD6B55",
-          confirmButtonText: "ok",
-          closeOnConfirm: true,
-          html: false
-      });
-      $(".quickview").modal("hide");
+
     }
 
 });

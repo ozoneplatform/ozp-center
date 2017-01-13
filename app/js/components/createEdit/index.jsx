@@ -539,26 +539,6 @@ var CreateEditPage = React.createClass({
         };
     },
 
-    undelete: function(event){
-      //event.preventDefault();
-      ListingActions.undelete(this.state.listing);
-      //CreateEditActions.submit();
-    },
-    pendDelete: function(event){
-      //event.preventDefault();
-      ListingActions.pendingDelete(this.state.listing);
-      ListingActions.
-      sweetAlert({
-        title: "Pended for Deletion",
-        text: "Your listing has been pended for deletion and is awaiting review from a content steward.",
-        type: "info",
-        confirmButtonColor: "#DD6B55",
-        confirmButtonText: "Ok",
-        closeOnConfirm: true,
-      });
-
-    },
-
     onSave: function () {
         var scrollToError = false;
 
@@ -826,7 +806,7 @@ var CreateEditPage = React.createClass({
                             </button>
                         }
                         {
-                            showDelete || inProgress &&
+                            (showDelete || inProgress) &&
                             <a href={deleteHref} className="btn btn-default tool delete-button">
                                 <span className="create-edit-button">Delete</span>
                                 <i className="icon-trash-grayDark"></i>
@@ -838,11 +818,6 @@ var CreateEditPage = React.createClass({
                                 <span className="create-edit-button">Pend for Delete</span>
                                 <i className="icon-trash-grayDark"></i>
                             </a>
-                            /*<button className="btn btn-default tool"
-                                    onClick={ this.pendDelete }>
-                                <span className="create-edit-button">Delete</span>
-                                <i className="icon-trash-grayDark"> </i>
-                            </button>*/
                         }
                         {
                           showUndelete && (_.contains(owners, currentUser.username) || currentUser.isAdmin()) &&
@@ -850,12 +825,6 @@ var CreateEditPage = React.createClass({
                               <span className="create-edit-button">Undelete</span>
                               <i className="icon-trash-grayDark"></i>
                           </a>
-                          /*
-                          <button className="btn btn-default tool"
-                                  onClick={ this.undelete }>
-                              <span className="create-edit-button">Undelete</span>
-                              <i className="icon-trash-grayDark"> </i>
-                          </button>*/
                         }
                         {
                             showSubmit &&
