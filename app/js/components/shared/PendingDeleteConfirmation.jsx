@@ -74,6 +74,7 @@ var ListingPendingDeleteConfirmation = React.createClass({
 
     componentDidMount: function() {
         this.listenTo(GlobalListingStore, this.onStoreChange);
+        this.listenTo(ListingActions.pendingDeleteCompleted, this.onPendingDeleteComplete)
     },
 
     getState: function () {
@@ -124,7 +125,7 @@ var ListingPendingDeleteConfirmation = React.createClass({
         var listing = this.getListing();
 
         ListingActions.pendingDelete(listing);
-        this.close()
+        //this.close()
     }
 });
 

@@ -103,7 +103,8 @@ var MyListings = React.createClass({
     mixins: [
         Router.State,
         Reflux.listenTo(ListingActions.fetchOwnedListingsCompleted, 'onStoreChanged'),
-        Reflux.listenTo(ListingActions.deleteListingCompleted, 'onStoreChanged')
+        Reflux.listenTo(ListingActions.deleteListingCompleted, 'onStoreChanged'),
+        Reflux.listenTo(ListingActions.pendingDeleteCompleted, 'onStoreChanged')
     ],
 
     getListings: function () {
@@ -124,6 +125,7 @@ var MyListings = React.createClass({
         this.setState({
             listings: this.getListings()
         });
+        ListingActions.fetchOwnedListings();
     },
 
     onFilterChanged: function (key, filter) {

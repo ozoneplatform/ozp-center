@@ -75,6 +75,17 @@ var GlobalListingStore = Reflux.createStore({
             ListingActions.fetchChangeLogs(listing.id);
             this.trigger();
         });
+        this.listenTo(ListingActions.pendingDeleteCompleted, function (data) {
+          var listing = _listingsCache[data.id];
+
+          listing.owners.forEach(function (owner) {
+              var ownedListings = _listingsByOwnerCache.filter(function (item) {
+                  return item.id !== listing.id;
+              });
+              _listingsByOwnerCache = ownedListings;
+          });
+          this.trigger();
+        });
         this.listenTo(ListingActions.fetchByIdCompleted, function (data) {
             updateCache([data]);
             this.trigger();
