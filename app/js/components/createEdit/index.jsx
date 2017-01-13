@@ -806,7 +806,7 @@ var CreateEditPage = React.createClass({
                             </button>
                         }
                         {
-                            (showDelete || inProgress) &&
+                            (showDelete && inProgress) &&
                             <a href={deleteHref} className="btn btn-default tool delete-button">
                                 <span className="create-edit-button">Delete</span>
                                 <i className="icon-trash-grayDark"></i>
@@ -814,14 +814,14 @@ var CreateEditPage = React.createClass({
                         }
                         {
                             showDelete && (_.contains(owners, currentUser.username) || currentUser.isAdmin()) && !showUndelete && !inProgress &&
-                            <a href={pendDeleteHref} className="btn btn-default tool delete-button">
+                            <a href={pendDeleteHref} className="btn btn-default tool pendDelete-button">
                                 <span className="create-edit-button">Pend for Delete</span>
                                 <i className="icon-trash-grayDark"></i>
                             </a>
                         }
                         {
                           showUndelete && (_.contains(owners, currentUser.username) || currentUser.isAdmin()) &&
-                          <a href={undeleteHref} className="btn btn-default tool delete-button">
+                          <a href={undeleteHref} className="btn btn-default tool undelete-button">
                               <span className="create-edit-button">Undelete</span>
                               <i className="icon-trash-grayDark"></i>
                           </a>

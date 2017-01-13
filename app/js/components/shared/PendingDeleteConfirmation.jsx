@@ -47,7 +47,7 @@ var PendingDeleteConfirmation = React.createClass({
                     Are you sure that you would like to pend the {kind} &quot;{title}&quot; for deletion ?
                 </strong>
                 <button className="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button className="btn btn-danger" onClick={onDelete}>Delete</button>
+                <button className="btn btn-danger" onClick={onDelete}>Pend for deletion</button>
             </Modal>
         );
     },

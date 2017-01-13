@@ -47,7 +47,7 @@ var UndeleteConfirmation = React.createClass({
                     Are you sure that you would like to return the {kind} &quot;{title}&quot; to the center listing store?
                 </strong>
                 <button className="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button className="btn btn-danger" onClick={onDelete}>Delete</button>
+                <button className="btn btn-danger" onClick={onDelete}>Undelete</button>
             </Modal>
         );
     },
