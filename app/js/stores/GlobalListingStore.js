@@ -77,7 +77,6 @@ var GlobalListingStore = Reflux.createStore({
         });
         this.listenTo(ListingActions.pendingDeleteCompleted, function (data) {
           var listing = _listingsCache[data.id];
-
           listing.owners.forEach(function (owner) {
               var ownedListings = _listingsByOwnerCache.filter(function (item) {
                   return item.id !== listing.id;

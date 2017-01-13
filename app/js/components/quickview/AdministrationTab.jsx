@@ -232,7 +232,8 @@ var AdministrationTab = React.createClass({
             isStewardOfOrg = _.contains(this.props.currentUser.stewardedOrganizations, this.props.listing.agencyShort),
             pendingOrg = (listingStatus[this.props.listing.approvalStatus] === 'Pending, Organization')  ? true : false,
             pendingAdmin = (listingStatus[this.props.listing.approvalStatus] === 'Pending, Center') ? true : false,
-            pendingDelete = (listingStatus[this.props.listing.approvalStatus] === 'Pending Deletion')  ? true : false;
+            pendingDelete = (listingStatus[this.props.listing.approvalStatus] === 'Pending Deletion')  ? true : false,
+            org = this.props.listing.agencyShort;
 
 
         if (editing) {
@@ -242,20 +243,30 @@ var AdministrationTab = React.createClass({
                     <p>Please provide feedback for the listing owner about what they should do to make this listing ready for publication</p>
                     <form>
                         <Justification ref="justification" />
-                        <button type="button" className="btn btn-default" onClick={ this.cancelRejection }>Cancel</button>
-                        <button type="button" className="btn btn-warning" onClick={ this.returnToOwner }>Return to Owner</button>
+                        <button type="button" className="btn btn-default" onClick={ this.cancelRejection }>"Cancel"</button>
+                        <button type="button" className="btn btn-warning" onClick={ this.returnToOwner }>"Return to Owner"</button>
                     </form>
                 </section>
             );
         } else {
             if (pendingDelete){
-              return (
-                  <section className="review-listing">
-                      <h5>{"Listing Pending Deletion"}</h5>
-                      <button type="button" className="btn btn-success" onClick={ this.approveDelete }>{"Approve deletion"}</button>
-                      <button type="button" className="btn btn-warning" onClick={ this.editRejection }>{"Reject deletion"}</button>
-                  </section>
-              );
+              if(isAdmin && !isStewardOfOrg) {
+                return (
+                    <section className="review-listing">
+                        <h5>{"Listing Pending Deletion"}</h5>
+                        <button type="button" className="btn btn-success" onClick={ this.approveDelete }>{"Approve deletion for " + org}</button>
+                        <button type="button" className="btn btn-warning" onClick={ this.editRejection }>{"Reject deletion for " + org}</button>
+                    </section>
+                );
+              } else if(isStewardOfOrg) {
+                  return (
+                      <section className="review-listing">
+                         <h5>Review Listing</h5>
+                          <button type="button" className="btn btn-success" onClick={ this.approve }>"Approve deletion"</button>
+                          <button type="button" className="btn btn-warning" onClick={ this.editRejection }>"Return to Owner"</button>
+                       </section>
+                  );
+              }
             }
             if(pendingOrg) {
                 if(isAdmin && !isStewardOfOrg) {
@@ -271,8 +282,8 @@ var AdministrationTab = React.createClass({
                     return (
                         <section className="review-listing">
                            <h5>Review Listing</h5>
-                            <button type="button" className="btn btn-success" onClick={ this.approve }>Approve</button>
-                            <button type="button" className="btn btn-warning" onClick={ this.editRejection }>Return to Owner</button>
+                            <button type="button" className="btn btn-success" onClick={ this.approve }>"Approve"</button>
+                            <button type="button" className="btn btn-warning" onClick={ this.editRejection }>"Return to Owner"</button>
                          </section>
                     );
                 }
@@ -283,8 +294,8 @@ var AdministrationTab = React.createClass({
                     return (
                         <section className="review-listing">
                            <h5>Review Listing</h5>
-                            <button type="button" className="btn btn-success" onClick={ this.approve }>Approve</button>
-                            <button type="button" className="btn btn-warning" onClick={ this.editRejection }>Return to Owner</button>
+                            <button type="button" className="btn btn-success" onClick={ this.approve }>"Approve"</button>
+                            <button type="button" className="btn btn-warning" onClick={ this.editRejection }>"Return to Owner"</button>
                          </section>
                     );
                 }
