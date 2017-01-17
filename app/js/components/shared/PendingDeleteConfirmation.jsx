@@ -7,8 +7,9 @@ var Router = require('react-router');
 var Navigation = Router.Navigation;
 var AjaxMixin = require('../../mixins/AjaxMixin');
 var ActiveStateMixin = require('../../mixins/ActiveStateMixin');
-
+var CurrentListingStore = require('../../stores/CurrentListingStore');
 var GlobalListingStore = require('../../stores/GlobalListingStore');
+var SystemStore = require('../../stores/SystemStore');
 var ListingActions = require('../../actions/ListingActions');
 
 var _ = require('../../utils/_');
@@ -126,7 +127,21 @@ var ListingPendingDeleteConfirmation = React.createClass({
     },
 
     onHidden: function () {
-        this.transitionTo(this.getActiveRoutePath(), {listingId: this.state.listing.id});
+        if(this.getActiveRoute().name ==='org-listings'){
+          var currentUser= CurrentListingStore.currentUser;
+          var system= SystemStore.getSystem();
+          var userAgency = currentUser.stewardedOrganizations
+          _.forEach(userAgency, function(orgName) {
+              var org = _.find(system.organizations, function(orgObj) {
+                  return orgObj.shortName === orgName;
+              });
+            userAgency = org
+          });
+          this.transitionTo(this.getActiveRoutePath(), {org: userAgency.title});
+        }
+        else{
+          this.transitionTo(this.getActiveRoutePath(), {listingId: this.state.listing.id});
+        }
     },
 
     onDelete: function () {
