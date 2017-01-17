@@ -140,7 +140,7 @@ var ListingPendingDeleteConfirmation = React.createClass({
           this.transitionTo(this.getActiveRoutePath(), {org: userAgency.title});
         }
         else{
-          this.transitionTo(this.getActiveRoutePath(), {listingId: this.state.listing.id});
+          this.transitionTo('my-listings');
         }
     },
 
