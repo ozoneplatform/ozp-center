@@ -128,20 +128,19 @@ var ListingPendingDeleteConfirmation = React.createClass({
 
     onHidden: function () {
         if(this.getActiveRoute().name ==='org-listings'){
-          var currentUser= CurrentListingStore.currentUser;
-          var system= SystemStore.getSystem();
-          var userAgency = currentUser.stewardedOrganizations
-          _.forEach(userAgency, function(orgName) {
-              var org = _.find(system.organizations, function(orgObj) {
-                  return orgObj.shortName === orgName;
-              });
-            userAgency = org
-          });
-          this.transitionTo(this.getActiveRoutePath(), {org: userAgency.title});
+          var url = document.URL
+          var urlSplit = url.split("?");
+          location.replace(urlSplit[0])
+        }
+        else if (this.getActiveRoute().name === 'edit'){
+          var url = document.URL
+          var urlSplit = url.split("&");
+          location.replace(urlSplit[0])
         }
         else{
           this.transitionTo('my-listings');
         }
+
     },
 
     onDelete: function () {
