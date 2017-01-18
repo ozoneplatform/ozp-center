@@ -41,8 +41,9 @@ var AllListings = React.createClass({
             filter: this.state.filter
         });
         if(this.state.tableView){
+            this.state.filter.offset = 0;
+            w2ui.grid.offset = 0;
             UnpaginatedListingsStore.filterChange(this.state.filter);
-            w2ui.grid.searchReset();
         } else {
             PaginatedListingsStore.filterChange(this.state.filter);
         }

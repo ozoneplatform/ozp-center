@@ -30,9 +30,9 @@ var TableView = React.createClass({
     },
 
     render: function () {
-        return this.transferPropsTo(
-            <div ref="grid"></div>
-        );
+         var props = this.props;
+         return (<div ref="grid" {...props} ></div>);
+        
     },
 
     componentWillUnmount: function () {
@@ -40,6 +40,8 @@ var TableView = React.createClass({
     },
 
     componentDidMount: function () {
+        this.props.filter.limit = 24;
+        this.props.filter.offset = 0;
         var thisTable = this;
         this.grid = $(this.refs.grid.getDOMNode()).w2grid({
             name: 'grid',
@@ -53,19 +55,63 @@ var TableView = React.createClass({
                 toolbarSearch: true,
                 toolbarReload: false,
                 toolbarColumns: true,
-                toolbarSave: true
+                toolbarSave: false
             },
+          
             buttons: {
                 save : {
                     caption: w2utils.lang('Export to csv'),
                     icon: 'icon-save-grayDark'
                 }
             },
+            limit:this.props.filter.limit,
+            url:'placeholder',
+            onRequest: function(event){
+                var more = $('#grid_'+ this.name +'_rec_more');
+                if (this.autoLoad === true) {
+                    more.show().find('td').html('<div><div style="width: 20px; height: 20px;" class="w2ui-spinner"></div></div>');
+                } else {
+                    more.find('td').html('<div>'+ 'Load ' + this.limit + ' More...</div>');
+                }
+                event.preventDefault();
+                if(event.postData.cmd === 'get-records' && 
+                    (this.total === 0 || thisTable.props.filter.offset + thisTable.props.filter.limit < this.total)){
+                    thisTable.props.filter.offset += thisTable.props.filter.limit;
+                    UnpaginatedListingsStore.filterChange(thisTable.props.filter);
+                }
+                return;
+            }, 
+            onSort: function(event){
+                
+                thisTable.props.filter.offset = 0;
+                this.offset = 0;
+                var sortData = this.sortData[0];
+                var ascending = true;
+                    
+                if(sortData){
+                    ascending = sortData.direction === 'asc' ? false:true;
+                }
+                thisTable.props.filter.ordering = thisTable.convertToServerPropName(event.field, ascending);
+                UnpaginatedListingsStore.filterChange(thisTable.props.filter);
+            },
+            onSearch: function (event){
+                
+                thisTable.props.filter.offset = 0;
+                thisTable.props.filter.search = event.searchValue;
+                if(!event.searchValue)
+                    delete thisTable.props.filter.search;
+                UnpaginatedListingsStore.filterChange(thisTable.props.filter);
+            },
+            onLoad: function(event){   
+                this.url = 'placeholder'  
+                event.preventDefault();
+            },
             columns: this.getColumns(),
             records: [],
 
             /* eslint-disable no-unused-vars */
             onSubmit: function (event) {
+                event.preventDefault();
             /* eslint-enable no-unused-vars */
                 var records = this.records.map( function (record) {
                     var owners = '';
@@ -109,12 +155,16 @@ var TableView = React.createClass({
                 }
             }
         });
-        this.fetchAllListingsIfEmpty();
+
+        if(this.grid && !this.grid.records.length){
+            this.props.filter.offset = 0;
+            this.grid.offset = 0
+            UnpaginatedListingsStore.filterChange(this.props.filter);
+        }
     },
 
     getColumns: function () {
         var thisTable = this;
-
         var columns = [];
 
         columns.push(
@@ -141,13 +191,8 @@ var TableView = React.createClass({
             },
             { field: 'owners', caption: 'Owners', sortable: true, size: '10%',
                 render: function (record) {
-                    var owners = '';
-                    record.owners.forEach ( function (owner, index) {
-                        if (index) {
-                            owners += '; ';
-                        }
-                        owners += owner.displayName;
-                    });
+                    var ownerArray = _.pluck(record.owners,'displayName').sort();
+                    var owners = ownerArray.join('; ');
                     return owners;
                 }
             });
@@ -157,7 +202,7 @@ var TableView = React.createClass({
         }
 
         columns.push(
-            { field: 'private', caption: 'Private', size: '10%',
+            { field: 'private', caption: 'Private', sortable: true, size: '10%',
               render: function (record) {
                   if (record.private) {
                       return '<i class="icon-lock-blue"></i> Private';
@@ -178,7 +223,7 @@ var TableView = React.createClass({
                 }
             },
             { field: 'enabled', caption: 'Enabled', sortable: true, size: '5%'},
-            { field: 'featured', caption: 'Featured', sortable: true, size: '5%',
+            { field: 'featured', caption: 'Featured', sortable: false, size: '5%',
                 render: function (record) {
                     if (thisTable.props.isAdmin===true) {
                       if(record.featured !== null){
@@ -268,20 +313,12 @@ var TableView = React.createClass({
     },
 
     getUnpaginatedList: function () {
-        return UnpaginatedListingsStore.getListingsByFilter(this.props.filter);
-    },
-
-    fetchAllListingsIfEmpty: function () {
-        var listings = this.getUnpaginatedList();
-        if (!listings || listings==='undefined') {
-            ListingActions.fetchAllListingsAtOnce(this.props.filter);
-        }
-        this.onStoreChanged();
+        var results = UnpaginatedListingsStore.getListingsByFilter(this.props.filter);
+        return results;
     },
 
     onStoreChanged: function () {
         var unpaginatedList = this.getUnpaginatedList();
-
         if (!unpaginatedList) {
             return;
         }
@@ -289,8 +326,7 @@ var TableView = React.createClass({
         var {data, counts } = unpaginatedList;
 
         var records = data.map( function (listing) {
-            if(listing.approvalStatus !== 'DELETED'){
-              return {
+            var result = {
                   recid: listing.id,
                   title: listing.title,
                   owners: listing.owners,
@@ -304,28 +340,20 @@ var TableView = React.createClass({
                   private: listing.isPrivate,
                   securityMarking: listing.securityMarking
               };
+            if(listing.approvalStatus === 'DELETED'){
+              result.enabled = null;
+              result.featured = null;
             }
-            else{
-              return {
-                  recid: listing.id,
-                  title: listing.title,
-                  owners: listing.owners,
-                  organization: listing.agency ? listing.agency : '',
-                  comments: listing.whatIsNew ? listing.whatIsNew : '',
-                  status: listing.approvalStatus,
-                  updated: listing.editedDate,
-                  enabled: null,
-                  featured: null,
-                  actions: null,
-                  private: listing.isPrivate,
-                  securityMarking: listing.securityMarking
-              };
-            }
+            
+            return result;
+            
         });
-
         if (this.grid) {
-            this.grid.clear();
+            this.grid.requestComplete('success','get-records', function(){});
             this.grid.records = records;
+            if(counts.total !== this.grid.total)
+              this.grid.total = counts.total;
+            
             this.grid.refresh();
         }else{
             "warn";
@@ -335,7 +363,7 @@ var TableView = React.createClass({
     },
 
     onListingChangeCompleted: function () {
-        ListingActions.fetchAllListingsAtOnce(this.props.filter);
+       this.onStoreChanged();
     },
 
     JSONToCSVConvertor: function (JSONData, ReportTitle, ShowLabel) {
@@ -381,6 +409,24 @@ var TableView = React.createClass({
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+    },
+    convertToServerPropName: function(prop, ascending){
+        var prefix = '';
+        if(!ascending){
+            prefix = '-';
+        }
+        switch (prop){
+            case 'recid': return prefix + 'id';
+            case 'organization': return prefix + 'agency__title'
+            case 'status': return prefix + 'approval_status';
+            case 'enabled': return prefix + 'is_enabled';
+            //case 'featured': return prefix + 'is_featured';
+            case 'private': return prefix + 'is_private';
+            case 'owners': return prefix + 'owners__display_name';
+            case 'securityMarking': return prefix + 'security_marking';
+            case 'updated': return prefix + 'edited_date';
+            default: return prefix + prop;
+        }
     }
 });
 

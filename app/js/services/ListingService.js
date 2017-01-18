@@ -64,8 +64,8 @@ ListingActions.fetchAllListingsAtOnce.listen(function (filter) {
         });
 
         _.assign(opts, {
-            offset: 0,
-            limit: 999
+            offset: filter.offset || 0,
+            limit: filter.limit || 999
         });
     }
 
@@ -198,7 +198,7 @@ ListingActions.save.listen(function (data) {
     ListingApi
         .save(data)
         .then(ListingActions.saveCompleted.bind(null, isNew))
-        .then(ListingActions.listingChangeCompleted)
+        .then(ListingActions.listingChangeCompleted(data))
         .fail(ListingActions.saveFailed);
 });
 
@@ -241,9 +241,12 @@ ListingActions.undelete.listen(function (listing) {
 });
 
 ListingActions.deleteListing.listen(function (listing) {
+    listing.isEnabled = false;
+    listing.status = 'DELETED';
+    listing.approvalStatus = 'DELETED';
     ListingApi.del(listing.id)
         .then(ListingActions.deleteListingCompleted.bind(null, listing))
-        .then(ListingActions.listingChangeCompleted)
+        .then(ListingActions.listingChangeCompleted(listing))
         .fail(ListingActions.deleteListingFailed);
 });
 

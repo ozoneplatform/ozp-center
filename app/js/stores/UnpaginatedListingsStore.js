@@ -6,7 +6,20 @@ var ListingActions = require('../actions/ListingActions');
 
 var _unpaginatedListByFilter = {};
 var filterKey = function (filter) {
-    return JSON.stringify(filter);
+    //sort filter keys for accurate comparison
+    var props = [];
+    var result = {};
+    for(var propName in filter){
+        if (filter.hasOwnProperty(propName)){
+            props.push(propName);
+        }
+    }
+    props.sort();
+    for (var index in props){
+        var key = props[index];
+        result[key] = filter[key];
+    }
+    return JSON.stringify(result);
 };
 
 var UnpaginatedListingsStore = Reflux.createStore({
@@ -21,17 +34,29 @@ var UnpaginatedListingsStore = Reflux.createStore({
 
     onFetchAllListingsAtOnceCompleted: function (filter, response) {
         var key = filterKey(filter);
-        _unpaginatedListByFilter[key] = new PaginatedList(response);
+        var page = new PaginatedList (response);
+     
+        _unpaginatedListByFilter[key] = page;
         this.trigger();
     },
 
-    onListingChangeCompleted: function () {
-        // clear cache when any listing is updated
-        _unpaginatedListByFilter = {};
+    onListingChangeCompleted: function (data) {
+        for (var key in _unpaginatedListByFilter){
+            var list = _unpaginatedListByFilter[key].data;
+            for (var listing in list){
+                var entry = list[listing];
+                if (entry.id == data.id){
+                    list[listing] = data;
+                    this.trigger();
+                    return;
+                }
+            }
+        }
     },
 
     filterChange: function (filter) {
-        if ( _unpaginatedListByFilter[ filterKey ( filter ) ]) {
+        var listings = this.getListingsByFilter(filter)
+        if ( listings){
             this.trigger();
         } else {
             ListingActions.fetchAllListingsAtOnce(filter);
@@ -39,7 +64,32 @@ var UnpaginatedListingsStore = Reflux.createStore({
     },
 
     getListingsByFilter: function (filter) {
-        return _unpaginatedListByFilter[filterKey(filter)];
+        //consolidate paged results into one big list!
+        var shouldContinue = true;
+        var clonedFilter = JSON.parse(JSON.stringify(filter));
+        var offset = 0;
+        var data = [];
+        var currentPage = _unpaginatedListByFilter[filterKey(filter)];
+        while (shouldContinue && offset <= filter.offset){
+            clonedFilter.offset = offset;
+            offset += filter.limit;
+            var key = filterKey(clonedFilter);
+            var results = _unpaginatedListByFilter[key]
+            if(results){
+                data = data.concat(results.data);
+            }
+            else{
+                shouldContinue = false;
+            }
+        }
+        var clonedResult;
+        if(currentPage)
+            clonedResult = JSON.parse(JSON.stringify(currentPage));
+
+        if(clonedResult && data.length){
+            clonedResult.data = data;
+        }
+        return clonedResult;
     }
 });
 
