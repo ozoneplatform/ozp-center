@@ -133,8 +133,8 @@ var ListingPendingDeleteConfirmation = React.createClass({
           location.replace(urlSplit[0])
         }
         else if (this.getActiveRoute().name === 'edit'){
-          var url = document.URL
-          var urlSplit = url.split("&");
+          url = document.URL
+          urlSplit = url.split("&");
           location.replace(urlSplit[0])
         }
         else{
