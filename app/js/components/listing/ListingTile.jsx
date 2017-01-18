@@ -36,6 +36,10 @@ var ActionMenu = React.createClass({
                 listing: listing.id,
                 action: 'feedback'
             }),
+            undeleteHref = this.makeHref(activeRoutePath, this.getParams(), {
+                listing: listing.id,
+                action: 'undelete'
+            }),
             linkParams = {listingId: listing.id},
             edit = <li key="edit"><Link to="edit" params={linkParams}>Edit</Link></li>,
             preview = <li key="preview"><a href={overviewHref}>Preview</a></li>,
@@ -43,6 +47,7 @@ var ActionMenu = React.createClass({
             view = <li key="view"><a href={overviewHref}>View</a></li>,
             feedback = <li key="feedback"><a href={feedbackHref}>Read Feedback</a></li>,
             pendingDelete = <li key="penddelete"><a href={pendDeleteHref}>Pend for Deletion</a></li>,
+            undelete  = <li key="undelete"><a href={undeleteHref}>Undelete</a></li>,
             links,
             approvalStatus = listing.approvalStatus;
 
@@ -87,7 +92,7 @@ var ActionMenu = React.createClass({
                   links = [edit, view, del];
                 }
                 else{
-                  links = [view, edit];
+                  links = [view, edit,undelete];
                 }
                 break;
             case 'DRAFT':

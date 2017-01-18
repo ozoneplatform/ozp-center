@@ -7,14 +7,13 @@ var Router = require('react-router');
 var Navigation = Router.Navigation;
 var AjaxMixin = require('../../mixins/AjaxMixin');
 var ActiveStateMixin = require('../../mixins/ActiveStateMixin');
-var CurrentListingStore = require('../../stores/CurrentListingStore');
+
 var GlobalListingStore = require('../../stores/GlobalListingStore');
-var SystemStore = require('../../stores/SystemStore');
 var ListingActions = require('../../actions/ListingActions');
 
 var _ = require('../../utils/_');
 
-var PendingDeleteConfirmation = React.createClass({
+var UndeleteConfirmation = React.createClass({
 
     propTypes: {
         errorMessage: React.PropTypes.string,
@@ -45,10 +44,10 @@ var PendingDeleteConfirmation = React.createClass({
                     errorMessage && <div className="alert alert-danger">{errorMessage}</div>
                 }
                 <strong>
-                    Are you sure that you would like to pend the {kind} &quot;{title}&quot; for deletion ?
+                    Are you sure that you would like to return the {kind} &quot;{title}&quot; to the center listing store?
                 </strong>
                 <button className="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button className="btn btn-danger" onClick={onDelete}>Pend for deletion</button>
+                <button className="btn btn-danger" onClick={onDelete}>Undelete</button>
             </Modal>
         );
     },
@@ -58,7 +57,7 @@ var PendingDeleteConfirmation = React.createClass({
     }
 });
 
-var ListingPendingDeleteConfirmation = React.createClass({
+var ListingUndeleteConfirmation = React.createClass({
 
     propTypes: {
         /**
@@ -75,7 +74,7 @@ var ListingPendingDeleteConfirmation = React.createClass({
 
     componentDidMount: function() {
         this.listenTo(GlobalListingStore, this.onStoreChange);
-        this.listenTo(ListingActions.pendingDeleteCompleted, this.onPendingDeleteComplete)
+        this.listenTo(ListingActions.saveCompleted, this.onUndeleteComplete)
     },
 
     getState: function () {
@@ -88,15 +87,16 @@ var ListingPendingDeleteConfirmation = React.createClass({
         this.setState(this.getState());
     },
 
-    onPendingDeleteComplete: function () {
-        sweetAlert({
-          title: "Pended for Deletion",
-          text: "Your listing has been pended for deletion and is awaiting review from a content steward.",
+    onUndeleteComplete: function () {
+      sweetAlert({
+          title: "Undelete complete",
+          text: "The listing has been returned to the Agency's content steward for approval.",
           type: "info",
           confirmButtonColor: "#DD6B55",
-          confirmButtonText: "Ok",
+          confirmButtonText: "ok",
           closeOnConfirm: true,
-        });
+          html: false
+      });
         this.close();
     },
 
@@ -108,9 +108,9 @@ var ListingPendingDeleteConfirmation = React.createClass({
         var title = listing.title;
 
         return (
-            <PendingDeleteConfirmation ref="modal" kind="listing" title={title}
+            <UndeleteConfirmation ref="modal" kind="listing" title={title}
                 errorMessage={this.state.errorMessage}
-                onHidden={this.onHidden} onDelete={this.onDelete}/>
+                onHidden={this.onHidden} onDelete={this.onUndelete}/>
         );
     },
 
@@ -127,31 +127,29 @@ var ListingPendingDeleteConfirmation = React.createClass({
     },
 
     onHidden: function () {
-        if(this.getActiveRoute().name ==='org-listings'){
-          var url = document.URL
-          var urlSplit = url.split("?");
-          location.replace(urlSplit[0])
-        }
-        else if (this.getActiveRoute().name === 'edit'){
-          url = document.URL
-          urlSplit = url.split("?");
-          location.replace(urlSplit[0])
-        }
-        else{
-          this.transitionTo('my-listings');
-        }
-
+      if(this.getActiveRoute().name ==='org-listings'){
+        var url = document.URL
+        var urlSplit = url.split("?");
+        location.replace(urlSplit[0])
+      }
+      else if (this.getActiveRoute().name === 'edit'){
+        url = document.URL
+        urlSplit = url.split("?");
+        location.replace(urlSplit[0])
+      }
+      else{
+        this.transitionTo('my-listings');
+      }
     },
 
-    onDelete: function () {
+    onUndelete: function () {
         var listing = this.getListing();
-
-        ListingActions.pendingDelete(listing);
+        ListingActions.undelete(listing);
         //this.close()
     }
 });
 
 module.exports = {
-    PendingDeleteConfirmation: PendingDeleteConfirmation,
-    ListingPendingDeleteConfirmation: ListingPendingDeleteConfirmation
+    UndeleteConfirmation: UndeleteConfirmation,
+    ListingUndeleteConfirmation: ListingUndeleteConfirmation
 };

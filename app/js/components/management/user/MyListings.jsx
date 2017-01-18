@@ -103,11 +103,17 @@ var MyListings = React.createClass({
     mixins: [
         Router.State,
         Reflux.listenTo(ListingActions.fetchOwnedListingsCompleted, 'onStoreChanged'),
-        Reflux.listenTo(ListingActions.deleteListingCompleted, 'onStoreChanged')
+        Reflux.listenTo(ListingActions.deleteListingCompleted, 'listingRefresh' ),
+        Reflux.listenTo(ListingActions.pendingDeleteCompleted,'listingRefresh' ),
+        Reflux.listenTo(ListingActions.saveCompleted,'listingRefresh' )
     ],
+    listingRefresh: function(){
+      ListingActions.fetchOwnedListings()
+    },
 
     getListings: function () {
         var profile = SelfStore.getDefaultData().currentUser;
+        GlobalListingStore.getByOwner(profile)
         return GlobalListingStore.getByOwner(profile);
     },
 

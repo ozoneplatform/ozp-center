@@ -219,7 +219,10 @@ ListingActions.pendingDelete.listen(function (listing) {
     var data = _.cloneDeep(listing);
     data.approvalStatus = "PENDING_DELETION";
     data.isEnabled=false;
-    ListingActions.save(data);
+    ListingApi.save(data)
+    .then(ListingActions.pendingDeleteCompleted.bind(null, data))
+    .then(ListingActions.listingChangeCompleted)
+    .fail(ListingActions.pendingDeleteFailed)
 });
 
 ListingActions.approve.listen(function (listing) {

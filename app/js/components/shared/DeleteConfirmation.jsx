@@ -89,6 +89,15 @@ var ListingDeleteConfirmation = React.createClass({
     },
 
     onDeleteComplete: function () {
+        sweetAlert({
+            title: "Deletion complete",
+            text: "The listing has been deleted.",
+            type: "info",
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "ok",
+            closeOnConfirm: true,
+            html: false
+        });
         this.close();
     },
 

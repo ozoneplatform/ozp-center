@@ -232,8 +232,8 @@ var AdministrationTab = React.createClass({
             isStewardOfOrg = _.contains(this.props.currentUser.stewardedOrganizations, this.props.listing.agencyShort),
             pendingOrg = (listingStatus[this.props.listing.approvalStatus] === 'Pending, Organization')  ? true : false,
             pendingAdmin = (listingStatus[this.props.listing.approvalStatus] === 'Pending, Center') ? true : false,
-            pendingDelete = (listingStatus[this.props.listing.approvalStatus] === 'Pending Deletion')  ? true : false;
-
+            pendingDelete = (listingStatus[this.props.listing.approvalStatus] === 'Pending Deletion')  ? true : false,
+            agency = this.props.listing.agencyShort;
 
         if (editing) {
             return (
@@ -249,13 +249,23 @@ var AdministrationTab = React.createClass({
             );
         } else {
             if (pendingDelete){
-              return (
-                  <section className="review-listing">
-                      <h5>{"Listing Pending Deletion"}</h5>
-                      <button type="button" className="btn btn-success" onClick={ this.approveDelete }>{"Approve deletion"}</button>
-                      <button type="button" className="btn btn-warning" onClick={ this.editRejection }>{"Reject deletion"}</button>
-                  </section>
-              );
+              if(isAdmin && !isStewardOfOrg) {
+                return (
+                    <section className="review-listing">
+                        <h5>{"Listing Pending Deletion"}</h5>
+                        <button type="button" className="btn btn-success" onClick={ this.approveDelete }>{"Approve deletion for " + agency}</button>
+                        <button type="button" className="btn btn-warning" onClick={ this.editRejection }>{"Reject deletion for " + agency}</button>
+                    </section>
+                );
+              } else if(isStewardOfOrg) {
+                  return (
+                      <section className="review-listing">
+                         <h5>Review Listing</h5>
+                          <button type="button" className="btn btn-success" onClick={ this.approve }>Approve deletion</button>
+                          <button type="button" className="btn btn-warning" onClick={ this.editRejection }>Return to Owner</button>
+                       </section>
+                  );
+              }
             }
             if(pendingOrg) {
                 if(isAdmin && !isStewardOfOrg) {
@@ -263,8 +273,8 @@ var AdministrationTab = React.createClass({
                     return (
                         <section className="review-listing">
                             <h5>{"Review Listing for " + org}</h5>
-                            <button type="button" className="btn btn-success" onClick={ this.approve }>{"Approve for " + org}</button>
-                            <button type="button" className="btn btn-warning" onClick={ this.editRejection }>{"Reject for " + org}</button>
+                            <button type="button" className="btn btn-success" onClick={ this.approve }>{"Approve for " + agency}</button>
+                            <button type="button" className="btn btn-warning" onClick={ this.editRejection }>{"Reject for " + agency}</button>
                         </section>
                     );
                 } else if(isStewardOfOrg) {
@@ -323,16 +333,7 @@ var AdministrationTab = React.createClass({
     approveDelete: function (event) {
         //event.preventDefault();
       ListingActions.deleteListing(this.props.listing);
-      sweetAlert({
-          title: "Deletion complete",
-          text: "The listing has been deleted.",
-          type: "info",
-          confirmButtonColor: "#DD6B55",
-          confirmButtonText: "ok",
-          closeOnConfirm: true,
-          html: false
-      });
-      $(".quickview").modal("hide");
+
     }
 
 });
