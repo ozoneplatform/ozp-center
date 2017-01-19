@@ -1,3 +1,11 @@
+### 1.1.56 (2017-01-19)
+
+
+#### Bug Fixes
+
+* **all listings grid view:** Applications are not loaded all at once #135 (#755) ([b63a67d8](https://github.com/ozone-development/ozp-center.git/commit/b63a67d87e0462d2741b516e6f5a63fb317f44ca))
+
+
 ### 1.1.55 (2017-01-11)
 
 
