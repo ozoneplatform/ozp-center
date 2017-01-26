@@ -32,7 +32,7 @@ var TableView = React.createClass({
     render: function () {
          var props = this.props;
          return (<div ref="grid" {...props} ></div>);
-        
+
     },
 
     componentWillUnmount: function () {
@@ -57,7 +57,7 @@ var TableView = React.createClass({
                 toolbarColumns: true,
                 toolbarSave: false
             },
-          
+
             buttons: {
                 save : {
                     caption: w2utils.lang('Export to csv'),
@@ -74,20 +74,20 @@ var TableView = React.createClass({
                     more.find('td').html('<div>'+ 'Load ' + this.limit + ' More...</div>');
                 }
                 event.preventDefault();
-                if(event.postData.cmd === 'get-records' && 
+                if(event.postData.cmd === 'get-records' &&
                     (this.total === 0 || thisTable.props.filter.offset + thisTable.props.filter.limit < this.total)){
                     thisTable.props.filter.offset += thisTable.props.filter.limit;
                     UnpaginatedListingsStore.filterChange(thisTable.props.filter);
                 }
                 return;
-            }, 
+            },
             onSort: function(event){
-                
+
                 thisTable.props.filter.offset = 0;
                 this.offset = 0;
                 var sortData = this.sortData[0];
                 var ascending = true;
-                    
+
                 if(sortData){
                     ascending = sortData.direction === 'asc' ? false:true;
                 }
@@ -95,15 +95,18 @@ var TableView = React.createClass({
                 UnpaginatedListingsStore.filterChange(thisTable.props.filter);
             },
             onSearch: function (event){
-                
+
                 thisTable.props.filter.offset = 0;
                 thisTable.props.filter.search = event.searchValue;
+                if(event.searchData)
+                  if(event.searchData[0].value === '')
+                    delete thisTable.props.filter.search;
                 if(!event.searchValue)
                     delete thisTable.props.filter.search;
                 UnpaginatedListingsStore.filterChange(thisTable.props.filter);
             },
-            onLoad: function(event){   
-                this.url = 'placeholder'  
+            onLoad: function(event){
+                this.url = 'placeholder'
                 event.preventDefault();
             },
             columns: this.getColumns(),
@@ -344,16 +347,16 @@ var TableView = React.createClass({
               result.enabled = null;
               result.featured = null;
             }
-            
+
             return result;
-            
+
         });
         if (this.grid) {
             this.grid.requestComplete('success','get-records', function(){});
             this.grid.records = records;
             if(counts.total !== this.grid.total)
               this.grid.total = counts.total;
-            
+
             this.grid.refresh();
         }else{
             "warn";
