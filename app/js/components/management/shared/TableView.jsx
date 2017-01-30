@@ -67,18 +67,17 @@ var TableView = React.createClass({
             limit:this.props.filter.limit,
             url:'placeholder',
             onRequest: function(event){
-                var more = $('#grid_'+ this.name +'_rec_more');
-                if (this.autoLoad === true) {
-                    more.show().find('td').html('<div><div style="width: 20px; height: 20px;" class="w2ui-spinner"></div></div>');
-                } else {
-                    more.find('td').html('<div>'+ 'Load ' + this.limit + ' More...</div>');
-                }
                 event.preventDefault();
-                if(event.postData.cmd === 'get-records' &&
-                    (this.total === 0 || thisTable.props.filter.offset + thisTable.props.filter.limit < this.total)){
-                    thisTable.props.filter.offset += thisTable.props.filter.limit;
+                if(event.postData.cmd === 'get-records'){
+                    if (thisTable.props.filter.limit + thisTable.props.filter.offset < this.total){
+                        thisTable.props.filter.offset += thisTable.props.filter.limit;                                        
+                    } else if (this.total > 0)
+                        return;
+                    //show spinner while loading
+                    var more = $('#grid_'+ this.name +'_rec_more');
+                    more.show().find('td').html('<div><div style="width: 20px; height: 20px;" class="w2ui-spinner"></div></div>');
                     UnpaginatedListingsStore.filterChange(thisTable.props.filter);
-                }
+                } 
                 return;
             },
             onSort: function(event){
@@ -95,11 +94,9 @@ var TableView = React.createClass({
                 UnpaginatedListingsStore.filterChange(thisTable.props.filter);
             },
             onSearch: function (event){
-
                 thisTable.props.filter.offset = 0;
                 thisTable.props.filter.search = event.searchValue;
-                if(!event.searchValue || (event.searchData && event.searchData.length > 0 &&( event.searchData[0].value.replace(/\s/g, '').length === 0
-                  || event.searchData[0].value === '' )))
+                if(!event.searchData.length || !event.searchData[0].value.replace(/\s/g,''))
                     delete thisTable.props.filter.search;
                 UnpaginatedListingsStore.filterChange(thisTable.props.filter);
             },
@@ -160,7 +157,6 @@ var TableView = React.createClass({
         if(this.grid && !this.grid.records.length){
             this.props.filter.offset = 0;
             this.grid.offset = 0
-            UnpaginatedListingsStore.filterChange(this.props.filter);
         }
     },
 
@@ -350,12 +346,11 @@ var TableView = React.createClass({
 
         });
         if (this.grid) {
-            this.grid.requestComplete('success','get-records', function(){});
+            this.grid.total = counts.total;
             this.grid.records = records;
-            if(counts.total !== this.grid.total)
-              this.grid.total = counts.total;
-
             this.grid.refresh();
+            this.grid.requestComplete('success','get-records', function(){});
+            
         }else{
             "warn";
         }
