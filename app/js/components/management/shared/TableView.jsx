@@ -98,10 +98,7 @@ var TableView = React.createClass({
 
                 thisTable.props.filter.offset = 0;
                 thisTable.props.filter.search = event.searchValue;
-                if(event.searchData)
-                  if(event.searchData[0].value === '')
-                    delete thisTable.props.filter.search;
-                if(!event.searchValue)
+                if(!event.searchValue || !event.searchData[0])
                     delete thisTable.props.filter.search;
                 UnpaginatedListingsStore.filterChange(thisTable.props.filter);
             },
