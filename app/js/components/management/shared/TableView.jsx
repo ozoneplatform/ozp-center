@@ -96,9 +96,16 @@ var TableView = React.createClass({
             onSearch: function (event){
                 thisTable.props.filter.offset = 0;
                 thisTable.props.filter.search = event.searchValue;
-                if(!event.searchData.length || !event.searchData[0].value.replace(/\s/g,''))
+                this.searchData = event.searchData;
+                if(!event.searchData.length || !event.searchData[0].value.replace(/\s/g,'')){
+                    event.searchValue = '';
                     delete thisTable.props.filter.search;
+                }
+                this.last.search = event.searchValue
                 UnpaginatedListingsStore.filterChange(thisTable.props.filter);
+                event.preventDefault();
+                var str = [event.searchValue];
+                $(this.box).find('.w2ui-grid-data > div').w2marker(str);
             },
             onLoad: function(event){
                 this.url = 'placeholder'
