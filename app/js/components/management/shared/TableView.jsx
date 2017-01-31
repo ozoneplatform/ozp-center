@@ -100,9 +100,13 @@ var TableView = React.createClass({
                 if(!event.searchData.length || !event.searchData[0].value.replace(/\s/g,'')){
                     event.searchValue = '';
                     delete thisTable.props.filter.search;
+                    //these twho are needed to prevent the search clear icon from showing
+                    this.last.multi = false;
+                    this.searchData = [];
                 }
                 this.last.search = event.searchValue
                 UnpaginatedListingsStore.filterChange(thisTable.props.filter);
+                
                 event.preventDefault();
                 var str = [event.searchValue];
                 $(this.box).find('.w2ui-grid-data > div').w2marker(str);
