@@ -3,7 +3,6 @@
 var React = require('react');
 var Reflux = require('reflux');
 var CurrentListingStore = require('../../stores/CurrentListingStore');
-var GlobalListingStore = require('../../stores/GlobalListingStore');
 var ChangeLog = require('../shared/ChangeLog.jsx');
 
 var ChangeLogs = React.createClass({
