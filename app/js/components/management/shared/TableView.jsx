@@ -168,7 +168,6 @@ var TableView = React.createClass({
         if(this.grid && !this.grid.records.length){
             this.props.filter.offset = 0;
             this.grid.offset = 0;
-            console.log('get listings again')
             thisTable.onStoreChanged();
         }
     },
