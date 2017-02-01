@@ -76,13 +76,14 @@ var GlobalListingStore = Reflux.createStore({
             this.trigger();
         });
         this.listenTo(ListingActions.pendingDeleteCompleted, function (data) {
-          var listing = _listingsCache[data.id];
+          var listing = data;
           listing.owners.forEach(function (owner) {
               var ownedListings = _listingsByOwnerCache.filter(function (item) {
                   return item.id !== listing.id;
               });
               _listingsByOwnerCache = ownedListings;
           });
+          ListingActions.fetchChangeLogs(listing.id);
           this.trigger();
         });
         this.listenTo(ListingActions.fetchByIdCompleted, function (data) {
@@ -90,7 +91,7 @@ var GlobalListingStore = Reflux.createStore({
             this.trigger();
         });
         this.listenTo(ListingActions.deleteListingCompleted, function (data) {
-            var listing = _listingsCache[data.id];
+            var listing = data;
 
             listing.owners.forEach(function (owner) {
                 var ownedListings = _listingsByOwnerCache.filter(function (item) {
@@ -98,6 +99,7 @@ var GlobalListingStore = Reflux.createStore({
                 });
                 _listingsByOwnerCache = ownedListings;
             });
+            ListingActions.fetchChangeLogs(listing.id);
             this.trigger();
         });
 

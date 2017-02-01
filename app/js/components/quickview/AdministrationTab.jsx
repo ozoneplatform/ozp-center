@@ -91,8 +91,6 @@ var AdministrationTab = React.createClass({
         listing: React.PropTypes.object.isRequired
     },
 
-    mixins: [ Reflux.ListenerMixin ],
-
     getInitialState: function () {
         return { editingRejection: false };
     },
@@ -107,13 +105,6 @@ var AdministrationTab = React.createClass({
         if (this.props.listing.id) {
             fetchChangeLogs(this.props.listing.id);
         }
-        this.listenTo(ListingActions.deleteListingCompleted, this.getChangeLogs)
-    },
-
-    getChangeLogs: function(){
-      if (this.props.listing.id) {
-          fetchChangeLogs(this.props.listing.id);
-      }
     },
 
     render: function () {
