@@ -32,7 +32,7 @@ var TableView = React.createClass({
     render: function () {
          var props = this.props;
          return (<div ref="grid" {...props} ></div>);
-        
+
     },
 
     componentWillUnmount: function () {
@@ -57,7 +57,7 @@ var TableView = React.createClass({
                 toolbarColumns: true,
                 toolbarSave: false
             },
-          
+
             buttons: {
                 save : {
                     caption: w2utils.lang('Export to csv'),
@@ -67,27 +67,26 @@ var TableView = React.createClass({
             limit:this.props.filter.limit,
             url:'placeholder',
             onRequest: function(event){
-                var more = $('#grid_'+ this.name +'_rec_more');
-                if (this.autoLoad === true) {
-                    more.show().find('td').html('<div><div style="width: 20px; height: 20px;" class="w2ui-spinner"></div></div>');
-                } else {
-                    more.find('td').html('<div>'+ 'Load ' + this.limit + ' More...</div>');
-                }
                 event.preventDefault();
-                if(event.postData.cmd === 'get-records' && 
-                    (this.total === 0 || thisTable.props.filter.offset + thisTable.props.filter.limit < this.total)){
-                    thisTable.props.filter.offset += thisTable.props.filter.limit;
+                if(event.postData.cmd === 'get-records'){
+                    if (thisTable.props.filter.limit + thisTable.props.filter.offset < this.total){
+                        thisTable.props.filter.offset += thisTable.props.filter.limit;                                        
+                    } else if (this.total > 0)
+                        return;
+                    //show spinner while loading
+                    var more = $('#grid_'+ this.name +'_rec_more');
+                    more.show().find('td').html('<div><div style="width: 20px; height: 20px;" class="w2ui-spinner"></div></div>');
                     UnpaginatedListingsStore.filterChange(thisTable.props.filter);
-                }
+                } 
                 return;
-            }, 
+            },
             onSort: function(event){
-                
+
                 thisTable.props.filter.offset = 0;
                 this.offset = 0;
                 var sortData = this.sortData[0];
                 var ascending = true;
-                    
+
                 if(sortData){
                     ascending = sortData.direction === 'asc' ? false:true;
                 }
@@ -95,15 +94,25 @@ var TableView = React.createClass({
                 UnpaginatedListingsStore.filterChange(thisTable.props.filter);
             },
             onSearch: function (event){
-                
                 thisTable.props.filter.offset = 0;
                 thisTable.props.filter.search = event.searchValue;
-                if(!event.searchValue)
+                this.searchData = event.searchData;
+                if(!event.searchData.length || !event.searchData[0].value.replace(/\s/g,'')){
+                    event.searchValue = '';
                     delete thisTable.props.filter.search;
+                    //these twho are needed to prevent the search clear icon from showing
+                    this.last.multi = false;
+                    this.searchData = [];
+                }
+                this.last.search = event.searchValue
                 UnpaginatedListingsStore.filterChange(thisTable.props.filter);
+                
+                event.preventDefault();
+                var str = [event.searchValue];
+                $(this.box).find('.w2ui-grid-data > div').w2marker(str);
             },
-            onLoad: function(event){   
-                this.url = 'placeholder'  
+            onLoad: function(event){
+                this.url = 'placeholder'
                 event.preventDefault();
             },
             columns: this.getColumns(),
@@ -158,8 +167,8 @@ var TableView = React.createClass({
 
         if(this.grid && !this.grid.records.length){
             this.props.filter.offset = 0;
-            this.grid.offset = 0
-            UnpaginatedListingsStore.filterChange(this.props.filter);
+            this.grid.offset = 0;
+            thisTable.onStoreChanged();
         }
     },
 
@@ -344,17 +353,16 @@ var TableView = React.createClass({
               result.enabled = null;
               result.featured = null;
             }
-            
+
             return result;
-            
+
         });
         if (this.grid) {
-            this.grid.requestComplete('success','get-records', function(){});
+            this.grid.total = counts.total;
             this.grid.records = records;
-            if(counts.total !== this.grid.total)
-              this.grid.total = counts.total;
-            
             this.grid.refresh();
+            this.grid.requestComplete('success','get-records', function(){});
+            
         }else{
             "warn";
         }
