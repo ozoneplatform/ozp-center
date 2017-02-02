@@ -74,7 +74,7 @@ var ListingUndeleteConfirmation = React.createClass({
 
     componentDidMount: function() {
         this.listenTo(GlobalListingStore, this.onStoreChange);
-        this.listenTo(ListingActions.undeleteCompleted, this.onUndeleteComplete)
+        this.listenTo(ListingActions.saveCompleted, this.onUndeleteComplete)
     },
 
     getState: function () {
