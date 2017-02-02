@@ -1,5 +1,6 @@
 'use strict';
 
+var Reflux = require('reflux');
 var React = require('react');
 var _ = require('../../utils/_');
 var ChangeLogs = require('./ChangeLogs.jsx');
@@ -261,7 +262,7 @@ var AdministrationTab = React.createClass({
                   return (
                       <section className="review-listing">
                          <h5>Review Listing</h5>
-                          <button type="button" className="btn btn-success" onClick={ this.approve }>Approve deletion</button>
+                          <button type="button" className="btn btn-success" onClick={ this.approveDelete }>Approve deletion</button>
                           <button type="button" className="btn btn-warning" onClick={ this.editRejection }>Return to Owner</button>
                        </section>
                   );
@@ -333,7 +334,6 @@ var AdministrationTab = React.createClass({
     approveDelete: function (event) {
         //event.preventDefault();
       ListingActions.deleteListing(this.props.listing);
-
     }
 
 });

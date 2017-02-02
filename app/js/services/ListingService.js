@@ -255,6 +255,7 @@ ListingActions.deleteListing.listen(function (listing) {
         .then(ListingActions.deleteListingCompleted.bind(null, listing))
         .then(ListingActions.listingChangeCompleted(listing))
         .fail(ListingActions.deleteListingFailed);
+
 });
 
 ListingActions.setFeatured.listen(updateListingProperty.bind(null, 'isFeatured'));
