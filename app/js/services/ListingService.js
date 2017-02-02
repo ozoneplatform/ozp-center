@@ -237,7 +237,14 @@ ListingActions.approveByOrg.listen(function (listing) {
 
 ListingActions.undelete.listen(function (listing) {
     //OzpAnalytics.trackListingApproval(listing.title, listing.agencyShort);
-    updateListingProperty('approvalStatus', 'PENDING', listing);
+    //updateListingProperty('approvalStatus', 'PENDING', listing);
+    var data = _.cloneDeep(listing);
+    data.approvalStatus = "PENDING";
+    data.isEnabled=true;
+    ListingApi.save(data)
+    .then(ListingActions.undeleteCompleted.bind(null, data))
+    .then(ListingActions.listingChangeCompleted)
+    .fail(ListingActions.pendingDeleteFailed)
 });
 
 ListingActions.deleteListing.listen(function (listing) {
