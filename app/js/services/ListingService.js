@@ -221,7 +221,7 @@ ListingActions.pendingDelete.listen(function (listing) {
     data.isEnabled=false;
     ListingApi.save(data)
     .then(ListingActions.pendingDeleteCompleted.bind(null, data))
-    .then(ListingActions.listingChangeCompleted)
+    .then(ListingActions.listingChangeCompleted(data))
     .fail(ListingActions.pendingDeleteFailed)
 });
 
@@ -243,7 +243,7 @@ ListingActions.undelete.listen(function (listing) {
     data.isEnabled=true;
     ListingApi.save(data)
     .then(ListingActions.undeleteCompleted.bind(null, data))
-    .then(ListingActions.listingChangeCompleted)
+    .then(ListingActions.listingChangeCompleted(data))
     .fail(ListingActions.pendingDeleteFailed)
 });
 
