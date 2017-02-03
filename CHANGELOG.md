@@ -1,3 +1,13 @@
+### 1.1.57 (2017-02-02)
+
+
+#### Bug Fixes
+
+* undelete listner was changed to undelete instead of save listing ([791c3fe5](https://github.com/ozone-development/ozp-center.git/commit/791c3fe536f579ae976e96e9a2e7cbeb5056842f))
+* undelete listner was changed to undelete instead of save listing ([a4a38449](https://github.com/ozone-development/ozp-center.git/commit/a4a38449d591793637d35b385eeacf763b898698))
+* globallistingstore was not needed in changelogs ([5c9a04bf](https://github.com/ozone-development/ozp-center.git/commit/5c9a04bf019b22dd0958e7d69b44a2107e37bdc0))
+
+
 ### 1.1.56 (2017-01-19)
 
 
