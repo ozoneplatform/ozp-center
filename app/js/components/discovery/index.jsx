@@ -32,7 +32,7 @@ var GlobalListingStore = require('../../stores/GlobalListingStore');
 var timeout;
 
 
-var FILTERS = ['categories', 'type', 'agency'];
+var FILTERS = ['categories', 'type', 'agency', 'tags'];
 
 var areFiltersApplied = (state) => {
     return _.reduce(FILTERS, function (memo, filter) {
@@ -45,6 +45,7 @@ var Discovery = React.createClass({
     mixins: [ Reflux.ListenerMixin, ActiveStateMixin, Navigation],
 
     getInitialState() {
+        console.log(this)
         return {
             initCategories: [],
             featured: DiscoveryPageStore.getFeatured(),
@@ -55,6 +56,7 @@ var Discovery = React.createClass({
             initialMostPopularTiles: 12,
             queryString: this.state ? this.state.queryString : '',
             categories: this.state ? this.state.categories : [],
+            tags: this.state ? this.state.tags : [],
             type: this.state ? this.state.type : [],
             agency: this.state ? this.state.agency : [],
             nextOffset: DiscoveryPageStore.getNextOffset(),
@@ -84,6 +86,11 @@ var Discovery = React.createClass({
     onCategoryChange(categories) {
         this._searching = true;
         this.setState({ categories, currentOffset: 0 });
+    },
+
+    onTagsChange(tags) {
+        this._searching = true;
+        this.setState({ tags, currentOffset: 0 });
     },
 
     onTypeChange(type) {
@@ -183,7 +190,7 @@ var Discovery = React.createClass({
     },
 
     componentDidMount(){
-      
+
           $(this.refs.search.getDOMNode()).typeahead({
             hint: true,
             highlight: true,
@@ -207,7 +214,7 @@ var Discovery = React.createClass({
                 tab: 'overview'
             });
           });
-      
+
 
 
         $(window).scroll(() => {
@@ -243,6 +250,9 @@ var Discovery = React.createClass({
 
         if(this.context.getCurrentParams().org){
           this.onOrganizationChange(decodeURIComponent(this.context.getCurrentParams().org).split('+'));
+        }
+        if(this.context.getCurrentParams().tags){
+          this.onTagsChange(decodeURIComponent(this.context.getCurrentParams().tags).split('+'));
         }
     },
 
@@ -316,6 +326,7 @@ var Discovery = React.createClass({
             { search: this.state.queryString,
               offset: this.state.currentOffset,
               category: this.state.categories,
+              tag: this.state.tags,
               limit: this.state.limit
             },
             { type, agency });
@@ -437,7 +448,7 @@ var Discovery = React.createClass({
                 <h3 className="col-xs-12">No results found.</h3>;
         }
 
-        var searchLink = `${CENTER_URL}/#/home/${encodeURIComponent(this.state.queryString)}/${(this.state.categories.length) ? encodeURIComponent(this.state.categories.toString()).replace(/%2C/g,'+') : ''}/${(this.state.type.length) ? encodeURIComponent(this.state.type.toString()).replace(/%2C/g,'+') : ''}/${(this.state.agency.length) ? encodeURIComponent(this.state.agency.toString()).replace(/%2C/g,'+') : ''}`;
+        var searchLink = `${CENTER_URL}/#/home/${encodeURIComponent(this.state.queryString)}/${(this.state.categories.length) ? encodeURIComponent(this.state.categories.toString()).replace(/%2C/g,'+') : ''}/${(this.state.type.length) ? encodeURIComponent(this.state.type.toString()).replace(/%2C/g,'+') : ''}/${(this.state.agency.length) ? encodeURIComponent(this.state.agency.toString()).replace(/%2C/g,'+') : ''}/${(this.state.tags.length) ? encodeURIComponent(this.state.tags.toString()).replace(/%2C/g,'+') : ''}`;
         return (
             <section className="Discovery__SearchResults">
                 <h4 ref="searchResults">Search Results &nbsp;

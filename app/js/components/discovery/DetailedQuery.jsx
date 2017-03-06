@@ -96,8 +96,56 @@ var DetailedQuery = React.createClass({
       }
     },
 
+    getTags: function(){
+      console.log('getTags ' + this)
+      if(this.props.data.tags.length){
+        var prettyTags;
+        if(this.props.data.tags.length > 1){
+          prettyTags = this.props.data.tags.map((tag, i)=>{
+            /*
+            <i className="icon-cross-14-white" onClick={()=>{
+              var cats = this.props.data.categories;
+              cats.splice(cats.indexOf(cat), 1);
+
+              this.props.onTagChange(tags);
+            }}></i>*/
+            return (
+              <span key={`getTags.${i}`}>
+                <span  className="label label-default">
+                  {tag}
+                </span>
+                {(i !== this.props.data.tags.length -1) &&
+                  <span>&#32;or&#32;</span>
+                }
+              </span>
+            );
+          });
+        }else{
+          prettyTags = this.props.data.tags.map((tag)=>{
+            /*
+            <i className="icon-cross-14-white" onClick={()=>{
+              var cats = this.props.data.categories;
+              cats.splice(cats.indexOf(cat), 1);
+              this.props.onTagChange(tags);
+            }}></i>*/
+            return (
+              <span key="getTags" className="label label-default">
+                {tag}
+              </span>
+            );
+          });
+        }
+        return (
+          <span>
+            &nbsp;with the {(this.props.data.categories.length > 1) ? 'tags' : 'tag'} {prettyTags}
+          </span>
+        );
+      }else{
+        return false;
+      }
+    },
+
     getCategories: function(){
-      console.log(this)
       if(this.props.data.categories.length){
         var prettyCats;
         if(this.props.data.categories.length > 1){
@@ -153,6 +201,7 @@ var DetailedQuery = React.createClass({
             {this.getTypes()}
             {this.getOrgs()}
             {this.getCategories()}
+            {this.getTags()}
           </div>
         );
     }

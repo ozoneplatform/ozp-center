@@ -261,17 +261,6 @@ var ListingApi = {
             }));
     },
 
-    filterBy:function(options) {
-      console.log(options)
-      var params = $.param(options, true);
-      return $.getJSON(API_URL + '/api/listings/essearch/?tags' + params).then(
-          (response) => {response.results = _.map(response.results, this.newListing);
-          response.results = _.map(response.results, this.newListing);
-          return new PaginatedResponse(response, results);
-          })
-          .then(parseListToPaginatedResponse);
-    },
-
     search: function (options) {
         var params = $.param(options, true);
         console.log('params '+ params)
