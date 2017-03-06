@@ -257,7 +257,8 @@ var ListingApi = {
             resp => ({
                 featured: _.map(resp.featured, this.newListing),
                 newArrivals: _.map(resp.recent, this.newListing),
-                mostPopular: _.map(resp.most_popular, this.newListing)
+                mostPopular: _.map(resp.most_popular, this.newListing),
+                recommended: _.map(resp.recommended, this.newListing)
             }));
     },
 
