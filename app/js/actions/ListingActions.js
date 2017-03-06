@@ -14,6 +14,7 @@ var ListingActions = createActions({
     fetchById: null,
 
     search: null,
+    filterBy: null,
 
     fetchChangeLogs: null,
 

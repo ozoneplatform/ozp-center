@@ -54,7 +54,7 @@ function Listing (json) {
     });
 
     function viewingExistingListing(json) {
-        // This data comes from the API/listing endpoint      
+        // This data comes from the API/listing endpoint
         return json && json.id;
     }
 
@@ -261,8 +261,21 @@ var ListingApi = {
             }));
     },
 
+    filterBy:function(options) {
+      console.log(options)
+      var params = $.param(options, true);
+      return $.getJSON(API_URL + '/api/listings/essearch/?tags' + params).then(
+          (response) => {response.results = _.map(response.results, this.newListing);
+          response.results = _.map(response.results, this.newListing);
+          return new PaginatedResponse(response, results);
+          })
+          .then(parseListToPaginatedResponse);
+    },
+
     search: function (options) {
         var params = $.param(options, true);
+        console.log('params '+ params)
+        console.log('options '+ options)
         return $.getJSON(API_URL + '/api/listings/essearch/?' + params).then(
             (response) => {
                 if (options.category && options.category.length > 0) {

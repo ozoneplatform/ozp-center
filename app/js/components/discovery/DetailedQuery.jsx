@@ -6,7 +6,8 @@ var DetailedQuery = React.createClass({
 
     getInitialState: function(){
       return {
-        categories: []
+        categories: [],
+        tags: []
       };
     },
 
@@ -96,6 +97,7 @@ var DetailedQuery = React.createClass({
     },
 
     getCategories: function(){
+      console.log(this)
       if(this.props.data.categories.length){
         var prettyCats;
         if(this.props.data.categories.length > 1){
