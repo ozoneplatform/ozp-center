@@ -263,8 +263,6 @@ var ListingApi = {
 
     search: function (options) {
         var params = $.param(options, true);
-        console.log('params '+ params)
-        console.log('options '+ options)
         return $.getJSON(API_URL + '/api/listings/essearch/?' + params).then(
             (response) => {
                 if (options.category && options.category.length > 0) {

@@ -45,7 +45,6 @@ var Discovery = React.createClass({
     mixins: [ Reflux.ListenerMixin, ActiveStateMixin, Navigation],
 
     getInitialState() {
-        console.log(this)
         return {
             initCategories: [],
             featured: DiscoveryPageStore.getFeatured(),
@@ -108,6 +107,7 @@ var Discovery = React.createClass({
             this.debounceSearch();
         }
         else if(!_.isEqual(this.state.categories, prevState.categories) ||
+            !_.isEqual(this.state.tags, prevState.tags)||
             !_.isEqual(this.state.type, prevState.type) ||
             !_.isEqual(this.state.agency, prevState.agency) ||
             !_.isEqual(this.state.currentOffset, prevState.currentOffset)) {

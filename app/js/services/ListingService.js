@@ -132,7 +132,7 @@ ListingActions.fetchById.listen(function (id) {
 
     ListingActions.search.listen(function (options) {
         var apiOptions = Object.assign({}, options);
-        console.log(apiOptions)
+
         mostRecentSearch = apiOptions;
 
         ListingApi.search(apiOptions)
@@ -144,20 +144,6 @@ ListingActions.fetchById.listen(function (id) {
         });
     });
 })();
-
-ListingActions.filterBy.listen(function (options) {
-    var apiOptions = Object.assign({}, options);
-    console.log(apiOptions)
-    mostRecentSearch = apiOptions;
-
-    ListingApi.filter(apiOptions)
-        .then(function(searchResults) {
-            //drop out-of-order results
-            if (_.isEqual(mostRecentSearch, apiOptions)) {
-                ListingActions.searchCompleted(searchResults);
-            }
-    });
-});
 
 ListingActions.fetchChangeLogs.listen(function (listingId) {
     ListingApi.getChangeLogs(listingId)

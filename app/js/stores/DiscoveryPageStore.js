@@ -10,7 +10,6 @@ var _searchResults = [];
 var _nextOffset = 0;
 
 function getParameterByName(url, name) {
-    console.log(url)
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
     var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
         results = regex.exec(url);
