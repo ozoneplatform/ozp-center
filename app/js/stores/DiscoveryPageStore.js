@@ -26,7 +26,7 @@ var DiscoveryPageStore = Reflux.createStore({
                 this.onStorefrontListingsFetched);
 
         this.listenTo(ListingActions.searchCompleted, this.onSearchCompleted);
-        
+
         this.listenTo(ListingActions.deleteListingCompleted, this.removeListing)
     },
 

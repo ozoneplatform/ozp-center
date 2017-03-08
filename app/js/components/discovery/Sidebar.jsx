@@ -14,7 +14,8 @@ var Sidebar = React.createClass({
 
     getInitialState() {
         return {
-            categories: []
+            categories: [],
+            tags: []
         };
     },
 
@@ -22,10 +23,14 @@ var Sidebar = React.createClass({
       if(this.props.initCategories){
         this.setState({categories: this.props.initCategories});
       }
+      if(this.props.initTags){
+        this.setState({tags: this.props.initTags});
+      }
     },
 
     onHomeClick() {
         this.state.categories.length = 0;
+        this.state.tags.length = 0;
         this.forceUpdate();
 
         this.props.onGoHome();
@@ -69,7 +74,7 @@ var Sidebar = React.createClass({
     },
 
     render() {
-        var isBrowsing = this.props.isSearching || this.state.categories.length;
+        var isBrowsing = this.props.isSearching || this.state.categories.length || this.state.tags.length;
 
         var homeLinkClasses = React.addons.classSet({
             'active': !isBrowsing,

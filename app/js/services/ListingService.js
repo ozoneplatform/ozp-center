@@ -145,7 +145,6 @@ ListingActions.fetchById.listen(function (id) {
     });
 })();
 
-
 ListingActions.fetchChangeLogs.listen(function (listingId) {
     ListingApi.getChangeLogs(listingId)
         .then(ListingActions.fetchChangeLogsCompleted.bind(null, listingId));

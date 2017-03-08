@@ -97,7 +97,7 @@ var DetailsTab = React.createClass({
     renderTags:function(that){
         var tags= that.props.listing.tags;
         return tags.map(function (tags, i) {
-          var URL= CENTER_URL + '#/home/' + tags;
+          var URL= CENTER_URL + '#/home/////' + tags;
           return(
             <a href={URL} key={`renderTags.${i}`} onClick={function(){window.location.href=URL; window.location.reload();}}>{tags} </a>
           );

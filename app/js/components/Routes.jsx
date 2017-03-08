@@ -12,7 +12,7 @@ var OrgListings = require('./management/OrgListings/index.jsx');
 module.exports = function (childRoutes) {
 
     var routes = [
-        <Route path="home/?:searchString?/?:categories?/?:type?/?:org?" name="home" key="home" handler={ DiscoveryPage }/>,
+        <Route path="home/?:searchString?/?:categories?/?:type?/?:org?/?:tags?" name="home" key="home" handler={ DiscoveryPage }/>,
         <Route path="user-management" name="user-management" key="user-management" handler={ UserManagement }>
             <Route path="my-listings" name="my-listings" key="my-listings" handler={ UserManagement.MyListings } />
             <Route path="recent-activity" name="recent-activity" key="recent-activity" handler={ UserManagement.RecentActivity } />

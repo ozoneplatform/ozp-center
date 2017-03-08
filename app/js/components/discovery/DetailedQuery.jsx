@@ -6,7 +6,8 @@ var DetailedQuery = React.createClass({
 
     getInitialState: function(){
       return {
-        categories: []
+        categories: [],
+        tags: []
       };
     },
 
@@ -95,18 +96,46 @@ var DetailedQuery = React.createClass({
       }
     },
 
+    getTags: function(){
+      if(this.props.data.tags.length){
+        var prettyTags;
+        if(this.props.data.tags.length > 1){
+          prettyTags = this.props.data.tags.map((tag, i)=>{
+            return (
+              <span key={`getTags.${i}`}>
+                <span  className="label label-default">
+                  {tag}
+                </span>
+                {(i !== this.props.data.tags.length -1) &&
+                  <span>&#32;or&#32;</span>
+                }
+              </span>
+            );
+          });
+        }else{
+          prettyTags = this.props.data.tags.map((tag)=>{
+            return (
+              <span key="getTags" className="label label-default">
+                {tag}
+              </span>
+            );
+          });
+        }
+        return (
+          <span>
+            &nbsp;with the {(this.props.data.tags.length > 1) ? 'tags' : 'tag'} {prettyTags}
+          </span>
+        );
+      }else{
+        return false;
+      }
+    },
+
     getCategories: function(){
       if(this.props.data.categories.length){
         var prettyCats;
         if(this.props.data.categories.length > 1){
           prettyCats = this.props.data.categories.map((cat, i)=>{
-            /*
-            <i className="icon-cross-14-white" onClick={()=>{
-              var cats = this.props.data.categories;
-              cats.splice(cats.indexOf(cat), 1);
-
-              this.props.onCategoryChange(cats);
-            }}></i>*/
             return (
               <span key={`getCategories.${i}`}>
                 <span  className="label label-default">
@@ -120,12 +149,6 @@ var DetailedQuery = React.createClass({
           });
         }else{
           prettyCats = this.props.data.categories.map((cat)=>{
-            /*
-            <i className="icon-cross-14-white" onClick={()=>{
-              var cats = this.props.data.categories;
-              cats.splice(cats.indexOf(cat), 1);
-              this.props.onCategoryChange(cats);
-            }}></i>*/
             return (
               <span key="getCategories" className="label label-default">
                 {cat}
@@ -151,6 +174,7 @@ var DetailedQuery = React.createClass({
             {this.getTypes()}
             {this.getOrgs()}
             {this.getCategories()}
+            {this.getTags()}
           </div>
         );
     }

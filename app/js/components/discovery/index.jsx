@@ -32,7 +32,7 @@ var GlobalListingStore = require('../../stores/GlobalListingStore');
 var timeout;
 
 
-var FILTERS = ['categories', 'type', 'agency'];
+var FILTERS = ['categories', 'type', 'agency', 'tags'];
 
 var areFiltersApplied = (state) => {
     return _.reduce(FILTERS, function (memo, filter) {
@@ -47,6 +47,7 @@ var Discovery = React.createClass({
     getInitialState() {
         return {
             initCategories: [],
+            initTags: [],
             featured: DiscoveryPageStore.getFeatured(),
             newArrivals: DiscoveryPageStore.getNewArrivals(),
             mostPopular: DiscoveryPageStore.getMostPopular(),
@@ -55,6 +56,7 @@ var Discovery = React.createClass({
             initialMostPopularTiles: 12,
             queryString: this.state ? this.state.queryString : '',
             categories: this.state ? this.state.categories : [],
+            tags: this.state ? this.state.tags : [],
             type: this.state ? this.state.type : [],
             agency: this.state ? this.state.agency : [],
             nextOffset: DiscoveryPageStore.getNextOffset(),
@@ -86,6 +88,11 @@ var Discovery = React.createClass({
         this.setState({ categories, currentOffset: 0 });
     },
 
+    onTagsChange(tags) {
+        this._searching = true;
+        this.setState({ tags, currentOffset: 0 });
+    },
+
     onTypeChange(type) {
         this._searching = true;
         this.setState({ type, currentOffset: 0 });
@@ -101,6 +108,7 @@ var Discovery = React.createClass({
             this.debounceSearch();
         }
         else if(!_.isEqual(this.state.categories, prevState.categories) ||
+            !_.isEqual(this.state.tags, prevState.tags)||
             !_.isEqual(this.state.type, prevState.type) ||
             !_.isEqual(this.state.agency, prevState.agency) ||
             !_.isEqual(this.state.currentOffset, prevState.currentOffset)) {
@@ -123,6 +131,9 @@ var Discovery = React.createClass({
 
         if(this.context.getCurrentParams().categories){
           this.setState({initCategories: decodeURIComponent(this.context.getCurrentParams().categories).split('+')});
+        }
+        if(this.context.getCurrentParams().tags){
+          this.setState({initTags: decodeURIComponent(this.context.getCurrentParams().tags).split('+')});
         }
 
     },
@@ -183,7 +194,7 @@ var Discovery = React.createClass({
     },
 
     componentDidMount(){
-      
+
           $(this.refs.search.getDOMNode()).typeahead({
             hint: true,
             highlight: true,
@@ -207,7 +218,7 @@ var Discovery = React.createClass({
                 tab: 'overview'
             });
           });
-      
+
 
 
         $(window).scroll(() => {
@@ -244,6 +255,9 @@ var Discovery = React.createClass({
         if(this.context.getCurrentParams().org){
           this.onOrganizationChange(decodeURIComponent(this.context.getCurrentParams().org).split('+'));
         }
+        if(this.context.getCurrentParams().tags){
+          this.onTagsChange(this.state.initTags);
+        }
     },
 
 
@@ -265,7 +279,8 @@ var Discovery = React.createClass({
             queryString: '',
             currentOffset: 0,
             type: [],
-            agency: []
+            agency: [],
+            tags: []
         });
     },
 
@@ -316,6 +331,7 @@ var Discovery = React.createClass({
             { search: this.state.queryString,
               offset: this.state.currentOffset,
               category: this.state.categories,
+              tag: this.state.tags,
               limit: this.state.limit
             },
             { type, agency });
@@ -437,7 +453,7 @@ var Discovery = React.createClass({
                 <h3 className="col-xs-12">No results found.</h3>;
         }
 
-        var searchLink = `${CENTER_URL}/#/home/${encodeURIComponent(this.state.queryString)}/${(this.state.categories.length) ? encodeURIComponent(this.state.categories.toString()).replace(/%2C/g,'+') : ''}/${(this.state.type.length) ? encodeURIComponent(this.state.type.toString()).replace(/%2C/g,'+') : ''}/${(this.state.agency.length) ? encodeURIComponent(this.state.agency.toString()).replace(/%2C/g,'+') : ''}`;
+        var searchLink = `${CENTER_URL}/#/home/${encodeURIComponent(this.state.queryString)}/${(this.state.categories.length) ? encodeURIComponent(this.state.categories.toString()).replace(/%2C/g,'+') : ''}/${(this.state.type.length) ? encodeURIComponent(this.state.type.toString()).replace(/%2C/g,'+') : ''}/${(this.state.agency.length) ? encodeURIComponent(this.state.agency.toString()).replace(/%2C/g,'+') : ''}/${(this.state.tags.length) ? encodeURIComponent(this.state.tags.toString()).replace(/%2C/g,'+') : ''}`;
         return (
             <section className="Discovery__SearchResults">
                 <h4 ref="searchResults">Search Results &nbsp;

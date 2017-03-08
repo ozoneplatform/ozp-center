@@ -54,7 +54,7 @@ function Listing (json) {
     });
 
     function viewingExistingListing(json) {
-        // This data comes from the API/listing endpoint      
+        // This data comes from the API/listing endpoint
         return json && json.id;
     }
 
@@ -270,12 +270,18 @@ var ListingApi = {
                         OzpAnalytics.trackCategorization('Categorization', options.category[index], response.count);
                     }
                 }
+                if (options.tag && options.tag.length > 0) {
+                    for(var tagIndex = 0; tagIndex < options.tag.length; tagIndex++) {
+                        OzpAnalytics.trackCategorization('Tags', options.tag[tagIndex], response.count);
+                    }
+                }
 
                 delaySearch(function(){
                     if (options.search) {
                         var queryStringNoStar = options.search.replace(/[*]$/,"");
                         if ((options.type && options.type.length > 0) ||
                             (options.category && options.category.length > 0) ||
+                            (options.tag && options.tag.length > 0) ||
                             (options.agency && options.agency.length > 0)) {
                             queryStringNoStar = queryStringNoStar + ' (+)';
                         }
