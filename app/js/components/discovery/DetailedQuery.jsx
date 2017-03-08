@@ -97,18 +97,10 @@ var DetailedQuery = React.createClass({
     },
 
     getTags: function(){
-      console.log('getTags ' + this)
       if(this.props.data.tags.length){
         var prettyTags;
         if(this.props.data.tags.length > 1){
           prettyTags = this.props.data.tags.map((tag, i)=>{
-            /*
-            <i className="icon-cross-14-white" onClick={()=>{
-              var cats = this.props.data.categories;
-              cats.splice(cats.indexOf(cat), 1);
-
-              this.props.onTagChange(tags);
-            }}></i>*/
             return (
               <span key={`getTags.${i}`}>
                 <span  className="label label-default">
@@ -122,12 +114,6 @@ var DetailedQuery = React.createClass({
           });
         }else{
           prettyTags = this.props.data.tags.map((tag)=>{
-            /*
-            <i className="icon-cross-14-white" onClick={()=>{
-              var cats = this.props.data.categories;
-              cats.splice(cats.indexOf(cat), 1);
-              this.props.onTagChange(tags);
-            }}></i>*/
             return (
               <span key="getTags" className="label label-default">
                 {tag}
@@ -150,13 +136,6 @@ var DetailedQuery = React.createClass({
         var prettyCats;
         if(this.props.data.categories.length > 1){
           prettyCats = this.props.data.categories.map((cat, i)=>{
-            /*
-            <i className="icon-cross-14-white" onClick={()=>{
-              var cats = this.props.data.categories;
-              cats.splice(cats.indexOf(cat), 1);
-
-              this.props.onCategoryChange(cats);
-            }}></i>*/
             return (
               <span key={`getCategories.${i}`}>
                 <span  className="label label-default">
@@ -170,12 +149,6 @@ var DetailedQuery = React.createClass({
           });
         }else{
           prettyCats = this.props.data.categories.map((cat)=>{
-            /*
-            <i className="icon-cross-14-white" onClick={()=>{
-              var cats = this.props.data.categories;
-              cats.splice(cats.indexOf(cat), 1);
-              this.props.onCategoryChange(cats);
-            }}></i>*/
             return (
               <span key="getCategories" className="label label-default">
                 {cat}
