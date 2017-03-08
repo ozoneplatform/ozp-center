@@ -47,6 +47,7 @@ var Discovery = React.createClass({
     getInitialState() {
         return {
             initCategories: [],
+            initTags: [],
             featured: DiscoveryPageStore.getFeatured(),
             newArrivals: DiscoveryPageStore.getNewArrivals(),
             mostPopular: DiscoveryPageStore.getMostPopular(),
@@ -130,6 +131,9 @@ var Discovery = React.createClass({
 
         if(this.context.getCurrentParams().categories){
           this.setState({initCategories: decodeURIComponent(this.context.getCurrentParams().categories).split('+')});
+        }
+        if(this.context.getCurrentParams().tags){
+          this.setState({initTags: decodeURIComponent(this.context.getCurrentParams().tags).split('+')});
         }
 
     },
@@ -252,7 +256,7 @@ var Discovery = React.createClass({
           this.onOrganizationChange(decodeURIComponent(this.context.getCurrentParams().org).split('+'));
         }
         if(this.context.getCurrentParams().tags){
-          this.onTagsChange(decodeURIComponent(this.context.getCurrentParams().tags).split('+'));
+          this.onTagsChange(this.state.initTags);
         }
     },
 
@@ -275,7 +279,8 @@ var Discovery = React.createClass({
             queryString: '',
             currentOffset: 0,
             type: [],
-            agency: []
+            agency: [],
+            tags: []
         });
     },
 

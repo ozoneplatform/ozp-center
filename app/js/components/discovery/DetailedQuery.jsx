@@ -123,7 +123,7 @@ var DetailedQuery = React.createClass({
         }
         return (
           <span>
-            &nbsp;with the {(this.props.data.categories.length > 1) ? 'tags' : 'tag'} {prettyTags}
+            &nbsp;with the {(this.props.data.tags.length > 1) ? 'tags' : 'tag'} {prettyTags}
           </span>
         );
       }else{
