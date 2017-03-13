@@ -20,6 +20,7 @@ var DetailsTab = require('./DetailsTab.jsx');
 var ResourcesTab = require('./ResourcesTab.jsx');
 var AdministrationTab = require('./AdministrationTab.jsx');
 var NotificationsTab = require('./NotificationsTab.jsx');
+var Recommendations = require('./Recommendations.jsx');
 
 var tabs = {
     'overview': OverviewTab,
@@ -129,7 +130,8 @@ var Quickview = React.createClass({
                                 <div className="tab-content" >
                                     <ActiveRouteHandler currentUser={currentUser} listing={listing} shown ={shown} />
                                 </div>
-                            </div>
+                            </div>,
+                            <Recommendations { ...headerProps } key="recommendations"></Recommendations>
                         ]
                 }
             </Modal>
