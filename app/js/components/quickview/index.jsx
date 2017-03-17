@@ -118,6 +118,13 @@ var Quickview = React.createClass({
             allowEdit: CurrentListingStore.currentUserCanEdit()
           };
 
+          var recommendationProps = {
+              listing: listing,
+              recommendations: listing ? listing.similar:[],
+              preview: this.props.preview,
+              currentUser: currentUser
+          }
+
         return (
             <Modal ref="modal" className="quickview" onShown={this.onShown} onHidden={this.onHidden} tabIndex="0">
                 {
@@ -131,7 +138,7 @@ var Quickview = React.createClass({
                                     <ActiveRouteHandler currentUser={currentUser} listing={listing} shown ={shown} />
                                 </div>
                             </div>,
-                            <Recommendations { ...headerProps } key="recommendations"></Recommendations>
+                            <Recommendations { ...recommendationProps } key="recommendations"></Recommendations>
                         ]
                 }
             </Modal>

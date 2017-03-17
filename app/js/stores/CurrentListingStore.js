@@ -305,14 +305,14 @@ var CurrentListingStore = createStore({
     },
 
     loadListing: function (id) {
-        var deferred = $.Deferred(),
-            promise = deferred.promise(),
-            intId = parseInt(id, 10);
+    //    var deferred = $.Deferred(),
+       //     promise = deferred.promise(),
+         var   intId = parseInt(id, 10);
 
         if (id) {
             if (_listing && _listing.id === intId) {
                 this.trigger({listing: _listing});
-                return deferred.resolve(_listing);
+       //         return deferred.resolve(_listing);
             }
 
             var listing = GlobalListingStore.getCache()[id];
@@ -322,16 +322,21 @@ var CurrentListingStore = createStore({
       //          deferred.resolve(_listing);
         //    } else {
                 ListingApi.getById(id).then(l => {
+                    ListingApi.getSimilarListings(id).then(listings => {
+             l.similar = listings;
                     this.refreshListing(cloneDeep(l));
-                    deferred.resolve(_listing);
+                  //  deferred.resolve(_listing);
                 });
          //   }
+         
+     //        deferred.resolve(_listing);
+         });
         } else {
             this.refreshListing(new Listing({ owners: [this.currentUser] }));
-            deferred.resolve(_listing);
+        //    deferred.resolve(_listing);
         }
 
-        return promise;
+     //   return promise;
     },
 
     /**

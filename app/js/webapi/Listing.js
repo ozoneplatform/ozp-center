@@ -425,6 +425,13 @@ var ListingApi = {
         }
         return $.getJSON(url).then(
             (response) => new PaginatedResponse(humps.camelizeKeys(response)));
+    },
+
+    getSimilarListings: function(listingId) {
+        var url =`${API_URL}/api/listing/${listingId}/similar/`;
+
+        return $.getJSON(url).then(
+            (resp) => parseList(_.map(resp, this.newListing)));
     }
 };
 

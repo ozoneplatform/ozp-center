@@ -2,10 +2,10 @@
 
 var React = require('react');
 var IconRating = require('../shared/IconRating.jsx');
-
+var RecommendedListingTile = require('../discovery/RecommendedListingTile.jsx');
 var BookmarkButton = require('../BookmarkButton.jsx');
 var CenterLaunchLink = require('../CenterLaunchLink.jsx');
-
+var Carousel = require('../carousel/index.jsx');
 var QuickViewRecommendations = React.createClass({
 
     propTypes: {
@@ -14,35 +14,55 @@ var QuickViewRecommendations = React.createClass({
     },
 
     componentDidMount: function(){
-      if (!this.props.preview) {
-        $(this.refs.hastooltips.getDOMNode()).find('.tooltiped').each(function(){
-          $(this).tooltip({
-            delay: 400
-          });
-        });
-      }
     },
 
     render: function () {
-        var listing = this.props.listing;
-        var title = listing.title;
-        var avgRate = listing.avgRate;
-        var image = listing.imageMediumUrl;
-        var agencyShort = listing.agencyShort;
+
+        var recommendations = this.props.recommendations;
+        var children = recommendations?recommendations.map(function (listing) {
+            return <RecommendedListingTile
+                        key = { listing.id }
+                        listing={ listing }
+                    />;
+        }):[];
+
         var lockStyle = {
             position: 'absolute',
             left: '4px',
             top: '4px'
         };
-        var labelStyle = {
-            paddingLeft: '10px'
+        var divStyle = {
+            display: 'inline-block',
+            width:'100%'
         };
 
+        var carouselOptions = {
+                auto: false,
+                scroll: {
+                    easing: 'quadratic',
+                    items: 1,
+                    duration: 500
+                },
+                width: '100%',
+                items: {
+                    visible: 3,
+                    start: -1
+                },
+            };
+
+            
+
+       console.log(recommendations)
+
         return (
-            <div className="quickview-recommendations">
+            <div className="quickview-recommendations" style={divStyle}>
                 <div className="quickview-recommendations-info">
                     <h3 className="recommendations-title" tabIndex="0" title="Similar Listings">Similar Listings
                     </h3>
+                    
+                   <div><Carousel options={carouselOptions} >
+                        {children}
+                   </Carousel></div>
                 </div>
                
             </div>
