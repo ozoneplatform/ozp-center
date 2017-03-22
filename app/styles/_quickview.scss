@@ -125,6 +125,14 @@ ul.list-unstyled.RecentActivity
         display: inline-block;
         width-max:50px;
     }
+
+    .quickview-header{
+            @extend .quickview-header;
+            display: inline-block; 
+            width: 250px; 
+            border-right: 1px solid rgb(238, 238, 239); 
+            margin-right: 0px;
+        }
 }
 
 .quickview-header {
