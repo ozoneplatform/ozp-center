@@ -138,7 +138,7 @@ var Quickview = React.createClass({
                                     <ActiveRouteHandler currentUser={currentUser} listing={listing} shown ={shown} />
                                 </div>
                             </div>,
-                            <Recommendations { ...recommendationProps } key="recommendations"></Recommendations>
+                           // <Recommendations { ...recommendationProps } key="recommendations"></Recommendations>
                         ]
                 }
             </Modal>
