@@ -40,6 +40,7 @@ var GlobalListingStore = Reflux.createStore({
             updateCache(storefront.featured);
             updateCache(storefront.newArrivals);
             updateCache(storefront.mostPopular);
+            updateCache(storefront.recommended);
         });
         this.listenTo(ListingActions.searchCompleted, updateCacheFromPaginatedResponse);
         this.listenTo(ListingActions.fetchAllListingsCompleted, function (filter, response) {

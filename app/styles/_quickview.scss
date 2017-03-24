@@ -111,7 +111,29 @@ ul.list-unstyled.RecentActivity
         }
     }
 
+.quickview-recommendations {
+    position: relative;
+    padding: 25px;
+    border-top: 4px solid #eeeeef;
 
+    .recommendations-title {
+        
+        font-size: 18px;
+        line-height: 18px;
+        font-weight: normal;
+        margin: 0;
+        display: inline-block;
+        width-max:50px;
+    }
+
+    .quickview-header{
+            @extend .quickview-header;
+            display: inline-block; 
+            width: 250px; 
+            border-right: 1px solid rgb(238, 238, 239); 
+            margin-right: 0px;
+        }
+}
 
 .quickview-header {
     position: relative;

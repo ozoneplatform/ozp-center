@@ -52,6 +52,7 @@ var Discovery = React.createClass({
             newArrivals: DiscoveryPageStore.getNewArrivals(),
             mostPopular: DiscoveryPageStore.getMostPopular(),
             searchResults: DiscoveryPageStore.getSearchResults(),
+            recommended: DiscoveryPageStore.getRecommended(),
             mostPopularTiles: 12,
             initialMostPopularTiles: 12,
             queryString: this.state ? this.state.queryString : '',
@@ -183,6 +184,7 @@ var Discovery = React.createClass({
                                 this.renderSearchResults() :
                                 [
                                     this.renderFeaturedListings(),
+                                    this.renderRecommended(),
                                     this.renderNewArrivals(),
                                     this.renderMostPopular()
                                 ]
@@ -374,6 +376,20 @@ var Discovery = React.createClass({
             <FeaturedListings key="FeaturedListings"
                 listings={ this.state.featured } />
         );
+    },
+
+    renderRecommended(){
+        if(this.state.recommended.length){
+            return (
+                <section className="Discovery__Recommended" key="Discovery__Recommended">
+                <h4>Recommended Listings</h4>
+                <Carousel className="new-arrival-listings" aria-label="Recommended Apps Carousel">
+                    { ListingTile.fromArray(this.state.recommended) }
+                </Carousel>
+            </section>
+            );
+        }
+
     },
 
     renderNewArrivals() {

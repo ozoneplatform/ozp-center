@@ -257,7 +257,8 @@ var ListingApi = {
             resp => ({
                 featured: _.map(resp.featured, this.newListing),
                 newArrivals: _.map(resp.recent, this.newListing),
-                mostPopular: _.map(resp.most_popular, this.newListing)
+                mostPopular: _.map(resp.most_popular, this.newListing),
+                recommended: _.map(resp.recommended, this.newListing)
             }));
     },
 
@@ -430,6 +431,13 @@ var ListingApi = {
         }
         return $.getJSON(url).then(
             (response) => new PaginatedResponse(humps.camelizeKeys(response)));
+    },
+
+    getSimilarListings: function(listingId) {
+        var url =`${API_URL}/api/listing/${listingId}/similar/`;
+
+        return $.getJSON(url).then(
+            (resp) => parseList(_.map(resp, this.newListing)));
     }
 };
 
