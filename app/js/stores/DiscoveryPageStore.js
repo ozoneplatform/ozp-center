@@ -8,6 +8,7 @@ var _mostPopular = [];
 var _featured = [];
 var _searchResults = [];
 var _nextOffset = 0;
+var _totalSearchResults = 0;
 
 function getParameterByName(url, name) {
     name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -56,6 +57,7 @@ var DiscoveryPageStore = Reflux.createStore({
 
     onSearchCompleted: function (searchResults) {
         var items = searchResults.getItemAsList();
+        _totalSearchResults = searchResults.total();
 
         // FIXME:  Makes the ugly, but currently accurate, assumption
         // that if a previous link exists then these new results should
@@ -73,6 +75,10 @@ var DiscoveryPageStore = Reflux.createStore({
 
     getSearchResults: function () {
         return _searchResults;
+    },
+
+    getTotalSearchResults: function () {
+        return _totalSearchResults;
     },
 
     removeListing: function(listing) {

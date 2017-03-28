@@ -466,6 +466,9 @@ var Discovery = React.createClass({
                     &nbsp;<span className="icon-share-10-blueDark"></span>
                   </span>
                 </h4>
+                <div>
+                    Showing {this.state.searchResults.length} out of {DiscoveryPageStore.getTotalSearchResults()} listings.
+                </div>
                 <p><DetailedQuery
                   onCategoryChange={this.onCategoryChange}
                   onTypeChange={this.onTypeChange}
