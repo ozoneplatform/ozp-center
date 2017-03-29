@@ -446,11 +446,20 @@ var Discovery = React.createClass({
 
     renderSearchResults() {
         var results = '';
+        let listingResults;
 
         if (!this._searching) {
             results = this.state.searchResults.length > 0 ?
                 ListingTile.fromArray(this.state.searchResults) :
                 <h3 className="col-xs-12">No results found.</h3>;
+        }
+
+        if (this.state.searchResults.length != 0) {
+            listingResults = <div aira-label={'Showing (this.state.searchResults.length) out of (DiscoveryPageStore.getTotalSearchResults()) listings'}>
+                Showing {this.state.searchResults.length} out of {DiscoveryPageStore.getTotalSearchResults()} listings.
+            </div>
+        } else {
+            listingResults = null;
         }
 
         var searchLink = `${CENTER_URL}/#/home/${encodeURIComponent(this.state.queryString)}/${(this.state.categories.length) ? encodeURIComponent(this.state.categories.toString()).replace(/%2C/g,'+') : ''}/${(this.state.type.length) ? encodeURIComponent(this.state.type.toString()).replace(/%2C/g,'+') : ''}/${(this.state.agency.length) ? encodeURIComponent(this.state.agency.toString()).replace(/%2C/g,'+') : ''}/${(this.state.tags.length) ? encodeURIComponent(this.state.tags.toString()).replace(/%2C/g,'+') : ''}`;
@@ -466,9 +475,7 @@ var Discovery = React.createClass({
                     &nbsp;<span className="icon-share-10-blueDark"></span>
                   </span>
                 </h4>
-                <div>
-                    Showing {this.state.searchResults.length} out of {DiscoveryPageStore.getTotalSearchResults()} listings.
-                </div>
+                {listingResults}
                 <p><DetailedQuery
                   onCategoryChange={this.onCategoryChange}
                   onTypeChange={this.onTypeChange}
