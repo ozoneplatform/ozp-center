@@ -1,10 +1,18 @@
 'use strict';
 
 var React = require('react');
+var Reflux = require('reflux');
+
+var ErrorActions = require('ozp-react-commons/actions/ErrorActions');
+var ErrorStore = require('ozp-react-commons/stores/ErrorStore');
+var ErrorWindow = require('ozp-react-commons/components/error/ErrorWindow.jsx');
 
 var DetailedQuery = React.createClass({
+    mixins: [Reflux.connect(ErrorStore, "errorStoreData")],
 
     getInitialState: function(){
+        ErrorActions.fetchEsStatus();
+
       return {
         categories: [],
         tags: []
@@ -167,16 +175,24 @@ var DetailedQuery = React.createClass({
     },
 
     render() {
+        if (this.state.errorStoreData) {
+            return (
+              <div>
+                <ErrorWindow errorMessage={this.state.errorStoreData.errorMessage}/>
+              </div>
+          );
+        } else {
+            return (
+              <div>
+                {this.getQueryString()}
+                {this.getTypes()}
+                {this.getOrgs()}
+                {this.getCategories()}
+                {this.getTags()}
+              </div>
+          );
+        }
 
-        return (
-          <div>
-            {this.getQueryString()}
-            {this.getTypes()}
-            {this.getOrgs()}
-            {this.getCategories()}
-            {this.getTags()}
-          </div>
-        );
     }
 
 });
