@@ -455,11 +455,9 @@ var Discovery = React.createClass({
         }
 
         if (this.state.searchResults.length != 0) {
-            listingResults = <div aira-label={'Showing (this.state.searchResults.length) out of (DiscoveryPageStore.getTotalSearchResults()) listings'}>
+            listingResults = <div aria-label={'Showing (this.state.searchResults.length) out of (DiscoveryPageStore.getTotalSearchResults()) listings'}>
                 Showing {this.state.searchResults.length} out of {DiscoveryPageStore.getTotalSearchResults()} listings.
             </div>
-        } else {
-            listingResults = null;
         }
 
         var searchLink = `${CENTER_URL}/#/home/${encodeURIComponent(this.state.queryString)}/${(this.state.categories.length) ? encodeURIComponent(this.state.categories.toString()).replace(/%2C/g,'+') : ''}/${(this.state.type.length) ? encodeURIComponent(this.state.type.toString()).replace(/%2C/g,'+') : ''}/${(this.state.agency.length) ? encodeURIComponent(this.state.agency.toString()).replace(/%2C/g,'+') : ''}/${(this.state.tags.length) ? encodeURIComponent(this.state.tags.toString()).replace(/%2C/g,'+') : ''}`;
