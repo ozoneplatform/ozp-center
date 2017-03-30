@@ -455,7 +455,7 @@ var Discovery = React.createClass({
         }
 
         if (this.state.searchResults.length != 0) {
-            listingResults = <div aria-label={'Showing (this.state.searchResults.length) out of (DiscoveryPageStore.getTotalSearchResults()) listings'}>
+            listingResults = <div aria-label={'Showing ' + this.state.searchResults.length + ' out of ' + DiscoveryPageStore.getTotalSearchResults() + ' listings'}>
                 Showing {this.state.searchResults.length} out of {DiscoveryPageStore.getTotalSearchResults()} listings.
             </div>
         }
