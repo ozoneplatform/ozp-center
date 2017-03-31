@@ -366,7 +366,7 @@ var Discovery = React.createClass({
         if(this.state.recommended.length){
             return (
                 <section className="Discovery__Recommended" key="Discovery__Recommended">
-                <h4>Recommended Listings</h4>
+                <h4>Recommended For You</h4>
                 <Carousel className="new-arrival-listings" aria-label="Recommended Apps Carousel">
                     { ListingTile.fromArray(this.state.recommended) }
                 </Carousel>
