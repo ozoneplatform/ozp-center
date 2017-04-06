@@ -23,6 +23,8 @@ var ListingActions = createActions({
     saveReview: null,
     deleteReview: null,
 
+    fetchSimilar: null,
+
     launch: null,
     save: null,
     reject: null,

@@ -50,7 +50,7 @@ var lockStyle = {
         };
         var divStyle={display:'inline-block',
     width: '250px',
-'border-right':'1px'};
+'borderRight':'1px'};
         imageLargeUrl = listing.imageLargeUrl;
 
         return (

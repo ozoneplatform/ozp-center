@@ -19,6 +19,7 @@ var { ImageApi } = require('../webapi/Image');
 var { API_URL } = require('ozp-react-commons/OzoneConfig');
 
 var _listing = null;
+var _listingId = null;
 var _submitting = false;
 
 var imageErrors = {screenshots: []};
@@ -132,6 +133,7 @@ var CurrentListingStore = createStore({
         revokeAllObjectURLs();
         _listing = listing;
         _submitting = false;
+        console.log(listing)
         var validation = this.doValidation();
         this.trigger({
             listing: _listing,
@@ -149,12 +151,14 @@ var CurrentListingStore = createStore({
     },
 
     onCacheUpdated: function () {
+        console.log('cache updated')
         
-        if (_listing && _listing.id) {
-             ListingApi.getById(_listing.id).then(l => {
-                    this.refreshListing(cloneDeep(l));
-                
-                });
+        if (_listingId) {
+            var newListing = GlobalListingStore.getById(_listingId);
+            if(newListing){
+                newListing.similar = GlobalListingStore.getSimilarForListing(_listingId);
+                this.refreshListing(newListing);
+            }
         }
     },
 
@@ -305,38 +309,24 @@ var CurrentListingStore = createStore({
     },
 
     loadListing: function (id) {
-    //    var deferred = $.Deferred(),
-       //     promise = deferred.promise(),
-         var   intId = parseInt(id, 10);
+        var deferred = $.Deferred();
+        var promise = deferred.promise();
+        var   intId = parseInt(id, 10);
+        _listingId = id;
+        console.log('loadListing')
 
         if (id) {
-            if (_listing && _listing.id === intId) {
-                this.trigger({listing: _listing});
-       //         return deferred.resolve(_listing);
+            _listingId = id;
+            if (!_listing){
+                var newListing = GlobalListingStore.getById(id) || new Listing({ owners: [this.currentUser] });
+                newListing.similar = GlobalListingStore.getSimilarForListing(_listingId);
+                this.refreshListing(newListing );
             }
-
-            var listing = GlobalListingStore.getCache()[id];
-            _listing = listing;
-      ///      if (listing) {
-        ///        this.refreshListing(cloneDeep(listing));
-      //          deferred.resolve(_listing);
-        //    } else {
-                ListingApi.getById(id).then(l => {
-                    ListingApi.getSimilarListings(id).then(listings => {
-             l.similar = listings;
-                    this.refreshListing(cloneDeep(l));
-                  //  deferred.resolve(_listing);
-                });
-         //   }
-         
-     //        deferred.resolve(_listing);
-         });
-        } else {
-            this.refreshListing(new Listing({ owners: [this.currentUser] }));
-        //    deferred.resolve(_listing);
+            else {
+                this.onCacheUpdated(); 
+            }
         }
-
-     //   return promise;
+        return promise;
     },
 
     /**
