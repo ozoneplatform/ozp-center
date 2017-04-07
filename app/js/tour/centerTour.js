@@ -47,8 +47,24 @@ const meTour = new Tour({
       orphan: true,
       onShown: function(){
         $('#step-0').focus();
+
+        $('#end-tour-btn').keypress(function(e) {
+            // Enter key is pressed
+            if (e.keyCode == 13) {
+                console.log("hey");
+                document.getElementById('start-tour-btn').setAttribute("hidden", "true");
+            }
+        })
+
+        $('#start-tour-btn').keydown(function(e) {
+            // Tab key is pressed
+            if (e.keyCode == 9) {
+                e.preventDefault();
+                document.getElementById('end-tour-btn').focus();
+            }
+        })
       },
-      template: '<div id="welcome" class="popover" role="tooltip" tabIndex="0" aria-labelledby="tourTitle" aria-describedby="tourContent"> <h1 class="popover-header">Welcome to <img src="./images/marketplace-logo.png" alt="AppsMall Marketplace"></h1><h3 id="tourTitle" class="popover-title popover-subtitle"></h3> <div id="tourContent" class="popover-content"></div> <div class="popover-navigation"> <button class="btn btn-sm" id="end-tour-btn" data-role="end" tabIndex="0">No thanks</button> <div class="btn-group"> <button class="btn btn-sm btn-default" data-role="next" tabIndex="0">' + contentLocalStart + ' &raquo;</button></div> </div> </div>'
+      template: '<div id="welcome" class="popover" role="tooltip" tabIndex="0" aria-labelledby="tourTitle" aria-describedby="tourContent"> <h1 class="popover-header">Welcome to <img src="./images/marketplace-logo.png" alt="AppsMall Marketplace"></h1><h3 id="tourTitle" class="popover-title popover-subtitle"></h3> <div id="tourContent" class="popover-content"></div> <div class="popover-navigation"> <button class="btn btn-sm" id="end-tour-btn" data-role="end" tabIndex="0">No thanks</button> <div class="btn-group"> <button class="btn btn-sm btn-default" id="start-tour-btn" data-role="next" tabIndex="0">' + contentLocalStart + '</button></div> </div> </div>'
     },
     //1
     {
