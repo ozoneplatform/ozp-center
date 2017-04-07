@@ -6,6 +6,7 @@ var ActiveState = require('../../mixins/ActiveStateMixin');
 var IconRating = require('../shared/IconRating.jsx');
 var CenterLaunchLink = require('../CenterLaunchLink.jsx');
 var BookmarkButton = require('../BookmarkButton.jsx');
+var CurrentListingStore = require('../../stores/CurrentListingStore.js');
 
 var RecommendedListingTile = React.createClass({
 
@@ -25,6 +26,11 @@ var RecommendedListingTile = React.createClass({
                 }).map((tile, i) => <RecommendedListingTile listing={tile} key={`${tile.id}.${i}`}/>)
             );
         }
+    },
+
+    loadRecommendation: function (recommendationId) {
+        console.log('loadingrecommendation')
+        CurrentListingStore.loadListing(recommendationId);
     },
 
     render: function () {
@@ -54,7 +60,7 @@ var lockStyle = {
         imageLargeUrl = listing.imageLargeUrl;
 
         return (
-            <div className="quickview-header" style={divStyle}>
+            <div className="quickview-header" style={divStyle} onClick ={this.loadRecommendation.bind(this,listing.id)} >
                 <div className="quickview-header-info">
                     <img className="listing-icon" alt={`${listing.title} header information`} src={ image } data-fallback="/store/images/types/3" />
                     <h3 className="listing-title" tabIndex="0" title={ title }>{ title }
@@ -77,6 +83,7 @@ var lockStyle = {
                         halfClassName="icon-star-half-filled-yellow" />
                 </div>
                 </div>
+                
         );
     }
 });
