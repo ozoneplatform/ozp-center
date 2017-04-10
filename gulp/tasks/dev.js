@@ -29,6 +29,6 @@ gulp.task('dev', ['sass', 'copy', 'config', 'fonts', 'images', 'svg', 'jqueryUnd
 
     // refersh app manually
     function reloadApp () {
-        server.io.sockets.emit('ok');
+       // server.io.sockets.emit('ok');
     }
 });
