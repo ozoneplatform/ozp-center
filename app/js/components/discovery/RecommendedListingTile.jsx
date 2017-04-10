@@ -36,8 +36,6 @@ var RecommendedListingTile = React.createClass({
     render: function () {
         var listing = this.props.listing;
         var title = listing.title;
-        var description = listing.descriptionShort && listing.descriptionShort.substr(0, 140);
-        var imageLargeUrl;
         var image = listing.imageMediumUrl;
         var avgRate = listing.avgRate;
         var agencyShort = listing.agencyShort;
@@ -57,7 +55,6 @@ var lockStyle = {
         var divStyle={display:'inline-block',
     width: '250px',
 'borderRight':'1px'};
-        imageLargeUrl = listing.imageLargeUrl;
 
         return (
             <div className="quickview-header" style={divStyle} onClick ={this.loadRecommendation.bind(this,listing.id)} >
