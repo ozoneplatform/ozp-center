@@ -59,10 +59,11 @@ var OverviewTab = React.createClass({
         }
 
         var smallImageUrls = screenshots.map(function (screenshot, i) {
-            return <img alt="show large screenshot once click"
-                        src={screenshot.smallImageUrl}
-                        key={i}
-                        onClick={ me.showLargeScreenshots.bind(me, i) }/>;
+            return (<div>
+                        <img alt="show large screenshot once click" src={screenshot.smallImageUrl} key={i} onClick={ me.showLargeScreenshots.bind(me, i) }/>
+                        <h5>Screenshot Description:</h5>
+                        <p>{screenshot.description}</p>
+                    </div>);
         });
 
         return (
@@ -70,19 +71,26 @@ var OverviewTab = React.createClass({
                 <Carousel autoInit={ shown }>
                     { smallImageUrls }
                 </Carousel>
+
             </div>
         );
     },
 
     showLargeScreenshots: function (index) {
         var largeScreenshots = this.props.listing.screenshots.map(function (screenshot) {
-            return { src: screenshot.largeImageUrl || screenshot.smallImageUrl };
+            return { src: screenshot.largeImageUrl || screenshot.smallImageUrl ,
+                description: screenshot.description };
         });
 
         $.magnificPopup.open({
             type: 'image',
             gallery: {
                 enabled: true
+            },
+            image: {
+                titleSrc: function(screenshot) {
+                    return screenshot.data.description;
+                }
             },
             items: largeScreenshots
         }, index);

@@ -278,11 +278,22 @@ var ScreenshotForm = React.createClass({
                 </div>
 
                 <div className="col-md-2">
-                <button type="button" className="close" onClick={this.props.removeHandler}>
-                    <span aria-hidden="true"><i className="icon-cross-16"></i></span><span className="sr-only">Remove</span>
-                </button>
+                    <button type="button" className="close" onClick={this.props.removeHandler}>
+                        <span aria-hidden="true"><i className="icon-cross-16"></i></span><span className="sr-only">Remove</span>
+                    </button>
                 </div>
+
                 <div className="clear"></div>
+                <div className="col-md-2">
+                    <div><br/></div>
+                </div>
+
+                <div className="col-md-8">
+                    <TextAreaInput { ...this.getFormComponentProps('description') } id="description" label="Description:" charLimit="160" optional/>
+                </div>
+
+                <div className="clear"></div>
+
             </div>
         );
     }
@@ -353,7 +364,7 @@ var ListingForm = React.createClass({
         */
         return (
             <form ref="form" className="CreateEdit__form col-xs-9 col-lg-10">
-                <h2 id={f.basicInformation.id}>Basic Information</h2>
+                <h2 id={f.basicInformation.id}>BasiTextAreaInputc Information</h2>
 
                 <MarkingInput id={f.securityMarking.id} { ...p('securityMarking') } aria-label={p('securityMarking').description}/>
 
