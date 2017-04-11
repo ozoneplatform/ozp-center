@@ -133,7 +133,6 @@ var CurrentListingStore = createStore({
         revokeAllObjectURLs();
         _listing = listing;
         _submitting = false;
-        console.log(listing)
         var validation = this.doValidation();
         this.trigger({
             listing: _listing,
@@ -151,7 +150,6 @@ var CurrentListingStore = createStore({
     },
 
     onCacheUpdated: function () {
-        console.log('cache updated')
         
         if (_listingId) {
             var newListing = GlobalListingStore.getById(_listingId);
@@ -313,7 +311,6 @@ var CurrentListingStore = createStore({
         var promise = deferred.promise();
         var   intId = parseInt(id, 10);
         _listingId = id;
-        console.log('loadListing')
 
         if (id) {
             _listingId = id;

@@ -29,7 +29,6 @@ var RecommendedListingTile = React.createClass({
     },
 
     loadRecommendation: function (recommendationId) {
-        console.log('loadingrecommendation')
         CurrentListingStore.loadListing(recommendationId);
     },
 
@@ -52,9 +51,7 @@ var lockStyle = {
             left: '4px',
             top: '4px'
         };
-        var divStyle={display:'inline-block',
-    width: '250px',
-'borderRight':'1px'};
+       
 
         return (
             <div className="recommendations-tile" onClick ={this.loadRecommendation.bind(this,listing.id)} >

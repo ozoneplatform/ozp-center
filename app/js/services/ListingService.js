@@ -157,7 +157,6 @@ ListingActions.fetchOwnedListings.listen(function (profile) {
 });
 
 ListingActions.fetchSimilar.listen(function (listingId) {
-    console.log('ListingActions.fetchSimilar.listen')
     ListingApi.getSimilarListings(listingId)
         .then(ListingActions.fetchSimilarCompleted.bind(null, listingId));
 })

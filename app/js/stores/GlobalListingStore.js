@@ -59,7 +59,6 @@ var GlobalListingStore = Reflux.createStore({
             this.trigger();
         });
         this.listenTo(ListingActions.fetchSimilarCompleted, function (id, similar){
-            console.log('fetchSimilarCompleted')
             _similarCache[id] = similar;
             this.trigger();
         });
@@ -150,7 +149,6 @@ var GlobalListingStore = Reflux.createStore({
     },
 
     getSimilarForListing: function (id) {
-        console.log('getSimilarForListing')
         if(!_similarCache[id]) {
             ListingActions.fetchSimilar(id);
             return [];
