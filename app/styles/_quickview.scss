@@ -115,7 +115,11 @@ ul.list-unstyled.RecentActivity
     position: relative;
     padding: 25px;
     border-top: 4px solid #eeeeef;
-
+    height: 156px;
+    .carousel, .carousel-wrapper {
+        max-height: 89px;
+    }
+    
     .recommendations-title {
         
         font-size: 18px;
@@ -125,13 +129,15 @@ ul.list-unstyled.RecentActivity
         display: inline-block;
     }
 
-    .quickview-header{
-            @extend .quickview-header;
-            display: inline-block; 
-            width: 250px; 
-            border-right: 1px solid rgb(238, 238, 239); 
-            margin-right: 0px;
-        }
+    .recommendations-tile{
+        @extend .quickview-header;
+        cursor: pointer;
+        border-right: 1px solid #eeeeef !important;
+        width: 255px;
+        display: inline-block;
+
+    }
+
 }
 
 .quickview-header {
@@ -369,3 +375,6 @@ ul.list-unstyled.RecentActivity
         color: $link-color;
     }
 }
+
+
+

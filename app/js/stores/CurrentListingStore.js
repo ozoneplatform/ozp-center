@@ -321,10 +321,16 @@ var CurrentListingStore = createStore({
                 var newListing = GlobalListingStore.getById(id) || new Listing({ owners: [this.currentUser] });
                 newListing.similar = GlobalListingStore.getSimilarForListing(_listingId);
                 this.refreshListing(newListing );
+                deferred.resolve(newListing);
             }
             else {
                 this.onCacheUpdated(); 
+                deferred.resolve(_listing);
             }
+        } else {
+            var newListing = new Listing({ owners: [this.currentUser] });
+            this.refreshListing(newListing);
+            deferred.resolve(newListing)
         }
         return promise;
     },
@@ -381,7 +387,7 @@ var CurrentListingStore = createStore({
                 featuredBannerIconPromise
             ].concat(screenshotPromises);
 
-        return $.when(...promises).then(me.handleImageSaveResponses.bind(me));
+        return $.when(...s).then(me.handleImageSaveResponses.bind(me));
     },
 
     /**

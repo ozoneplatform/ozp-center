@@ -57,7 +57,7 @@ var lockStyle = {
 'borderRight':'1px'};
 
         return (
-            <div className="quickview-header" style={divStyle} onClick ={this.loadRecommendation.bind(this,listing.id)} >
+            <div className="recommendations-tile" onClick ={this.loadRecommendation.bind(this,listing.id)} >
                 <div className="quickview-header-info">
                     <img className="listing-icon" alt={`${listing.title} header information`} src={ image } data-fallback="/store/images/types/3" />
                     <h3 className="listing-title" tabIndex="0" title={ title }>{ title }
