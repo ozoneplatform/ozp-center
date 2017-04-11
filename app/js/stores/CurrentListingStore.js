@@ -150,7 +150,7 @@ var CurrentListingStore = createStore({
     },
 
     onCacheUpdated: function () {
-        
+
         if (_listingId) {
             var newListing = GlobalListingStore.getById(_listingId);
             if(newListing){
@@ -312,20 +312,21 @@ var CurrentListingStore = createStore({
         var   intId = parseInt(id, 10);
         _listingId = id;
 
+        var newListing;
         if (id) {
             _listingId = id;
             if (!_listing){
-                var newListing = GlobalListingStore.getById(id) || new Listing({ owners: [this.currentUser] });
+                newListing = GlobalListingStore.getById(id) || new Listing({ owners: [this.currentUser] });
                 newListing.similar = GlobalListingStore.getSimilarForListing(_listingId);
                 this.refreshListing(newListing );
                 deferred.resolve(newListing);
             }
             else {
-                this.onCacheUpdated(); 
+                this.onCacheUpdated();
                 deferred.resolve(_listing);
             }
         } else {
-            var newListing = new Listing({ owners: [this.currentUser] });
+            newListing = new Listing({ owners: [this.currentUser] });
             this.refreshListing(newListing);
             deferred.resolve(newListing)
         }
