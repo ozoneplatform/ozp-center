@@ -56,13 +56,8 @@ var QuickViewRecommendations = React.createClass({
 
     render: function () {
 
-        var divStyle = {
-            display: 'inline-block',
-            width:'100%'
-        };
-
         return (
-            <div className="quickview-recommendations" style={divStyle}>
+            <div className="quickview-recommendations" >
                 <div className="quickview-recommendations-info">
                     <h3 className="recommendations-title" tabIndex="0" title="Similar Listings">Similar Listings
                     </h3>
