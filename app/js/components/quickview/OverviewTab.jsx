@@ -59,10 +59,22 @@ var OverviewTab = React.createClass({
         }
 
         var smallImageUrls = screenshots.map(function (screenshot, i) {
-            return (<div>
-                        <img alt="show large screenshot once click" src={screenshot.smallImageUrl} key={i} onClick={ me.showLargeScreenshots.bind(me, i) }/>
+            function ScreenshotDescription() {
+                if (!screenshot.description) {
+                    return null;
+                }
+
+                return (
+                    <div>
                         <h5>Screenshot Description:</h5>
                         <p>{screenshot.description}</p>
+                    </div>
+                );
+            }
+
+            return (<div>
+                        <img alt="show large screenshot once click" src={screenshot.smallImageUrl} key={i} onClick={ me.showLargeScreenshots.bind(me, i) }/>
+                            <ScreenshotDescription/>
                     </div>);
         });
 
