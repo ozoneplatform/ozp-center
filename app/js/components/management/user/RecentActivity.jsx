@@ -134,7 +134,6 @@ var RecentActivity = React.createClass({
     render: function () {
         var hasMore = this.state.hasMore || false;
         var logs = this.renderChangeLogs();
-        //console.log(logs);
 
         return (
             <div className="RecentActivity row">

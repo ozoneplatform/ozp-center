@@ -155,6 +155,11 @@ ListingActions.fetchOwnedListings.listen(function (profile) {
     ListingApi.getOwnedListings(profile).then(ListingActions.fetchOwnedListingsCompleted);
 });
 
+ListingActions.fetchSimilar.listen(function (listingId) {
+    ListingApi.getSimilarListings(listingId)
+        .then(ListingActions.fetchSimilarCompleted.bind(null, listingId));
+})
+
 
 ListingActions.fetchReviews.listen(function (listing) {
     ListingApi.fetchReviews(listing.id)

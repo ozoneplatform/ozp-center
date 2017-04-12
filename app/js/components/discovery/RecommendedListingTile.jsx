@@ -6,6 +6,7 @@ var ActiveState = require('../../mixins/ActiveStateMixin');
 var IconRating = require('../shared/IconRating.jsx');
 var CenterLaunchLink = require('../CenterLaunchLink.jsx');
 var BookmarkButton = require('../BookmarkButton.jsx');
+var CurrentListingStore = require('../../stores/CurrentListingStore.js');
 
 var RecommendedListingTile = React.createClass({
 
@@ -27,11 +28,13 @@ var RecommendedListingTile = React.createClass({
         }
     },
 
+    loadRecommendation: function (recommendationId) {
+        CurrentListingStore.loadListing(recommendationId);
+    },
+
     render: function () {
         var listing = this.props.listing;
         var title = listing.title;
-        var description = listing.descriptionShort && listing.descriptionShort.substr(0, 140);
-        var imageLargeUrl;
         var image = listing.imageMediumUrl;
         var avgRate = listing.avgRate;
         var agencyShort = listing.agencyShort;
@@ -48,13 +51,10 @@ var lockStyle = {
             left: '4px',
             top: '4px'
         };
-        var divStyle={display:'inline-block',
-    width: '250px',
-'border-right':'1px'};
-        imageLargeUrl = listing.imageLargeUrl;
+       
 
         return (
-            <div className="quickview-header" style={divStyle}>
+            <div className="recommendations-tile" onClick ={this.loadRecommendation.bind(this,listing.id)} >
                 <div className="quickview-header-info">
                     <img className="listing-icon" alt={`${listing.title} header information`} src={ image } data-fallback="/store/images/types/3" />
                     <h3 className="listing-title" tabIndex="0" title={ title }>{ title }
@@ -77,6 +77,7 @@ var lockStyle = {
                         halfClassName="icon-star-half-filled-yellow" />
                 </div>
                 </div>
+                
         );
     }
 });
