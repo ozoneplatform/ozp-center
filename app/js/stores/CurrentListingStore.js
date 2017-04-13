@@ -385,7 +385,7 @@ var CurrentListingStore = createStore({
                 featuredBannerIconPromise
             ].concat(screenshotPromises);
 
-        return $.when(...s).then(me.handleImageSaveResponses.bind(me));
+        return $.when(...promises).then(me.handleImageSaveResponses.bind(me));
     },
 
     /**
