@@ -19,6 +19,7 @@ var { ImageApi } = require('../webapi/Image');
 var { API_URL } = require('ozp-react-commons/OzoneConfig');
 
 var _listing = null;
+var _listingId = null;
 var _submitting = false;
 
 var imageErrors = {screenshots: []};
@@ -149,12 +150,13 @@ var CurrentListingStore = createStore({
     },
 
     onCacheUpdated: function () {
-        
-        if (_listing && _listing.id) {
-             ListingApi.getById(_listing.id).then(l => {
-                    this.refreshListing(cloneDeep(l));
-                
-                });
+
+        if (_listingId) {
+            var newListing = GlobalListingStore.getById(_listingId);
+            if(newListing){
+                newListing.similar = GlobalListingStore.getSimilarForListing(_listingId);
+                this.refreshListing(newListing);
+            }
         }
     },
 
@@ -305,38 +307,30 @@ var CurrentListingStore = createStore({
     },
 
     loadListing: function (id) {
-    //    var deferred = $.Deferred(),
-       //     promise = deferred.promise(),
-         var   intId = parseInt(id, 10);
+        var deferred = $.Deferred();
+        var promise = deferred.promise();
+        var   intId = parseInt(id, 10);
+        _listingId = id;
 
+        var newListing;
         if (id) {
-            if (_listing && _listing.id === intId) {
-                this.trigger({listing: _listing});
-       //         return deferred.resolve(_listing);
+            _listingId = id;
+            if (!_listing){
+                newListing = GlobalListingStore.getById(id) || new Listing({ owners: [this.currentUser] });
+                newListing.similar = GlobalListingStore.getSimilarForListing(_listingId);
+                this.refreshListing(newListing );
+                deferred.resolve(newListing);
             }
-
-            var listing = GlobalListingStore.getCache()[id];
-            _listing = listing;
-      ///      if (listing) {
-        ///        this.refreshListing(cloneDeep(listing));
-      //          deferred.resolve(_listing);
-        //    } else {
-                ListingApi.getById(id).then(l => {
-                    ListingApi.getSimilarListings(id).then(listings => {
-             l.similar = listings;
-                    this.refreshListing(cloneDeep(l));
-                  //  deferred.resolve(_listing);
-                });
-         //   }
-         
-     //        deferred.resolve(_listing);
-         });
+            else {
+                this.onCacheUpdated();
+                deferred.resolve(_listing);
+            }
         } else {
-            this.refreshListing(new Listing({ owners: [this.currentUser] }));
-        //    deferred.resolve(_listing);
+            newListing = new Listing({ owners: [this.currentUser] });
+            this.refreshListing(newListing);
+            deferred.resolve(newListing)
         }
-
-     //   return promise;
+        return promise;
     },
 
     /**
@@ -391,7 +385,7 @@ var CurrentListingStore = createStore({
                 featuredBannerIconPromise
             ].concat(screenshotPromises);
 
-        return $.when(...promises).then(me.handleImageSaveResponses.bind(me));
+        return $.when(...s).then(me.handleImageSaveResponses.bind(me));
     },
 
     /**

@@ -123,6 +123,7 @@ function Listing (json) {
     this.screenshots = this.screenshots || [];
     this.docUrls = this.docUrls || [];
     this.changeLogs = [];
+    this.similar = [];
     return this;
 }
 
@@ -437,7 +438,7 @@ var ListingApi = {
         var url =`${API_URL}/api/listing/${listingId}/similar/`;
 
         return $.getJSON(url).then(
-            (resp) => parseList(_.map(resp, this.newListing)));
+            (resp) => _.map(resp, this.newListing));
     }
 };
 
