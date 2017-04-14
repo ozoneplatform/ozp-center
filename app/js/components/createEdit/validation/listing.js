@@ -20,7 +20,8 @@ var Screenshot = struct({
     smallImageId: Num,
     smallImageMarking: NonBlankString(200),
     largeImageId: Num,
-    largeImageMarking: NonBlankString(200)
+    largeImageMarking: NonBlankString(200),
+    description: maybe(StringMax(160))
 });
 
 var Resource = struct({
