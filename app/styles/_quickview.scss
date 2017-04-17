@@ -116,6 +116,8 @@ ul.list-unstyled.RecentActivity
     padding: 25px;
     border-top: 4px solid #eeeeef;
     height: 156px;
+    overflow: hidden;
+    
     .carousel, .carousel-wrapper {
         max-height: 89px;
     }
