@@ -373,7 +373,7 @@ var ListingForm = React.createClass({
                     options={ getOptionsForSystemObject(system.types) }/>
                 <Select2Input id={f.categories.id} { ...p('categories') } multiple
                     options={ getOptionsForSystemObject(system.categories) }/>
-                <Select2TagInput id={f.tags.id} { ...p('tags') } multiple/>
+                <Select2TagInput id={f.tags.id} showFOUOwarning="true" { ...p('tags') } multiple/>
                 <TextAreaInput id={f.description.id} { ...p('description') } rows="6"/>
                 <TextAreaInput id={f.descriptionShort.id} { ...p('descriptionShort') } charLimit="100" rows="3"/>
 
