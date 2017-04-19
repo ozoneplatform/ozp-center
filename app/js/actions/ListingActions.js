@@ -9,6 +9,7 @@ var ListingActions = createActions({
     fetchAllListingsAtOnce: null,
     fetchCounts: null,
     fetchAllChangeLogs: null,
+    fetchAllChangeLogsByID: null,
     fetchStorefrontListings: null,
 
     fetchById: null,

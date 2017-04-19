@@ -338,9 +338,13 @@ var ListingApi = {
         });
     },
 
-    getChangeLogs: function (id) {
-        return $.getJSON(API_URL + '/api/listing/' + id + '/activity/?offset=0&limit=' + PAGINATION_MAX).then(
-            (response) => new PaginatedResponse(humps.camelizeKeys(response)).getItemAsList());
+    getChangeLogs: function (id, url, options) {
+        if(!_.isString(url)) {
+                url = API_URL + '/api/listing/' + id + '/activity/?' + $.param(options);
+        }
+
+        return $.getJSON(url).then(
+            (response) => new PaginatedResponse(humps.camelizeKeys(response)));
     },
 
     fetchReviews: function (id) {

@@ -145,9 +145,29 @@ ListingActions.fetchById.listen(function (id) {
     });
 })();
 
-ListingActions.fetchChangeLogs.listen(function (listingId) {
-    ListingApi.getChangeLogs(listingId)
-        .then(ListingActions.fetchChangeLogsCompleted.bind(null, listingId));
+ListingActions.fetchChangeLogs.listen(function (listingId, filter) {
+  var PaginatedChangeLogByIDStore = require('../stores/PaginatedChangeLogByIDStore');
+
+  var paginatedList = PaginatedChangeLogByIDStore.getChangeLogsByID(),
+      opts = {},
+      nextLink;
+
+  if (paginatedList) {
+      paginatedList.expectPage();
+      nextLink = paginatedList.nextLink;
+  }
+  else {
+      _.assign(opts, {
+          offset: 0,
+          limit: PAGINATION_MAX
+      });
+  }
+
+  ListingApi
+      .getChangeLogs(listingId, nextLink, opts)
+      .then(function (response) {
+          ListingActions.fetchAllChangeLogsByIDCompleted(filter, response);
+      });
 });
 
 
