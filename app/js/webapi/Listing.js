@@ -343,11 +343,6 @@ var ListingApi = {
                 url = API_URL + '/api/listing/' + id + '/activity/?' + $.param(options);
         }
 
-        if(!options) options = {};
-        _.assign(options, {
-            offset: 0,
-            limit: PAGINATION_MAX
-        });
         return $.getJSON(url).then(
             (response) => new PaginatedResponse(humps.camelizeKeys(response)));
     },

@@ -105,11 +105,15 @@ var AdministrationTab = React.createClass({
     },
 
     getInitialState: function () {
-        return { editingRejection: false, hasMore: true, changeLogs: [] };
+        PaginatedChangeLogByIDStore.resetChangeLogByIDStore();
+        return { prevId: this.props.listing.id, editingRejection: false, hasMore: true, changeLogs: [] };
     },
 
     componentWillReceiveProps: function (newProps) {
-        if (this.props.listing.id !== newProps.listing.id) {
+        if (this.state.prevId !== newProps.listing.id) {
+            this.state.prevId = newProps.listing.id;
+            this.state.changeLogs = [];
+            PaginatedChangeLogByIDStore.resetChangeLogByIDStore();
             fetchChangeLogs(newProps.listing.id);
         }
     },
