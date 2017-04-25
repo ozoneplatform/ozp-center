@@ -102,6 +102,26 @@
             font-size: 2em;
         }
     }
+
+    button.up-arrow {
+        padding: 0;
+        cursor: pointer;
+        background: transparent;
+        border: 0;
+        position: absolute;
+        top: 7px;
+        font-size: 2em;
+    }
+    button.down-arrow {
+        padding: 0;
+        cursor: pointer;
+        background: transparent;
+        border: 0;
+        position: absolute;
+        top: 9px;
+        left: 72px;
+        font-size: 2em;
+    }
 }
 
 .CreateEdit__titlebar {

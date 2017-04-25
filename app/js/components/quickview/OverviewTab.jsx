@@ -54,11 +54,17 @@ var OverviewTab = React.createClass({
         var shown = this.props.shown;
         var screenshots = this.props.listing.screenshots;
 
+        // Sort the screenshots
+        screenshots.sort(function(a, b){
+            return a.order - b.order;
+        })
+
         if (!screenshots.length) {
             return (<p className="text-muted col-xs-12 col-md-9">No screenshots provided!</p>);
         }
 
         var smallImageUrls = screenshots.map(function (screenshot, i) {
+
             function ScreenshotDescription() {
                 if (!screenshot.description) {
                     return null;

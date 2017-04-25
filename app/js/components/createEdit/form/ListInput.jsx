@@ -24,7 +24,10 @@ var ListInput = React.createClass({
                     key: `${index}.${this.context.lastUpdate}`,
                     path: this.props.path.concat(index),
                     count: index,
-                    baseKey: `${index}`
+                    total: items.length,
+                    baseKey: `${index}`,
+                    reorderDownHandler: this.onReorderDown.bind(null, index),
+                    reorderUpHandler: this.onReorderUp.bind(null, index)
                 });
 
             return <this.props.itemForm {...props} />;
@@ -53,7 +56,32 @@ var ListInput = React.createClass({
         event.preventDefault();
         var items = this.props.value;
         items.splice(key, 1);
+        this.props.setter(null);
         this.props.setter(items);
+    },
+
+    onReorderUp: function (key, direction) {
+        var items = this.props.value;
+
+        if (key-1 >= 0) {
+            this.props.setter(null);
+            var temp = items[key-1];
+            items[key-1] = items[key];
+            items[key] = temp;
+            this.props.setter(items);
+        }
+    },
+
+    onReorderDown: function (key, direction) {
+        var items = this.props.value;
+
+        if (key+1 < items.length ) {
+            this.props.setter(null);
+            var temp = items[key+1];
+            items[key+1] = items[key];
+            items[key] = temp;
+            this.props.setter(items);
+        }
     },
 
     getClasses: function () {
