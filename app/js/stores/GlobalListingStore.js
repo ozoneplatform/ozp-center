@@ -114,7 +114,6 @@ var GlobalListingStore = Reflux.createStore({
     getById: function (id) {
         if (!_listingsCache[id]) {
             ListingActions.fetchById(id);
-            ListingActions.fetchSimilar(id);
             return null;
         }
         return _listingsCache[id];
@@ -151,7 +150,7 @@ var GlobalListingStore = Reflux.createStore({
     getSimilarForListing: function (id) {
         if(!_similarCache[id]) {
             ListingActions.fetchSimilar(id);
-            return [];
+            return null;
         }
         return _similarCache[id];
     }

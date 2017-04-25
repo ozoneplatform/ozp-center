@@ -3,14 +3,27 @@
 require('jquery');
 
 var React = require('react');
+var Reflux = require('reflux');
 var IconRating = require('../shared/IconRating.jsx');
 var RecommendedListingTile = require('../discovery/RecommendedListingTile.jsx');
 var BookmarkButton = require('../BookmarkButton.jsx');
 var CenterLaunchLink = require('../CenterLaunchLink.jsx');
 var Carousel = require('../carousel/index.jsx');
-var CurrentListingStore = require('../../stores/CurrentListingStore.js');
+var CurrentListingStore = require('../../stores/CurrentListingStore');
+var ListingActions = require('../../actions/ListingActions.js');
 var QuickViewRecommendations = React.createClass({
-
+    mixins: [
+        Reflux.listenTo(CurrentListingStore, 'onFetchSimilarCompleted'),
+    ],
+    getInitialState: function() {
+        return this.getState();
+    },
+    getState: function() {
+        return {similar: CurrentListingStore.getSimilar()};
+    },
+    onFetchSimilarCompleted: function(){
+        this.setState(this.getState());
+    },
     propTypes: {
         listing: React.PropTypes.object,
         shown: React.PropTypes.bool,
@@ -22,10 +35,9 @@ var QuickViewRecommendations = React.createClass({
         };
     },
 
-    
-
     renderSimilar: function () {
-        var component = this;
+
+         var listing = this.props.listing;
         var carouselOptions = {
                 auto: false,
                 scroll: {
@@ -39,10 +51,10 @@ var QuickViewRecommendations = React.createClass({
                     start: -1
                 },
             };
-        var recommendations = this.props.listing.similar;
-        if(!recommendations.length){
+        var recommendations = this.state.similar;
+        if(!recommendations){
             return <div>Loading...</div>;
-        }
+        } else {
         var children = recommendations.map(function (listing) {
             return <RecommendedListingTile
                         key = { listing.id }
@@ -52,6 +64,7 @@ var QuickViewRecommendations = React.createClass({
         return <Carousel options = {carouselOptions} autoInit = {this.props.shown} >
                 {children}
                </Carousel>
+        }
     },
 
     render: function () {

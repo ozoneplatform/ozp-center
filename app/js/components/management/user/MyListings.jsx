@@ -113,8 +113,8 @@ var MyListings = React.createClass({
 
     getListings: function () {
         var profile = SelfStore.getDefaultData().currentUser;
-        GlobalListingStore.getByOwner(profile)
-        return GlobalListingStore.getByOwner(profile);
+        var listings = GlobalListingStore.getByOwner(profile)
+        return listings;
     },
 
     getInitialState: function () {

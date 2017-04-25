@@ -31,7 +31,7 @@ var OverviewTab = React.createClass({
         var description = 'No description provided!';
         if(this.props.listing.description){
           description = this.props.listing.description.split(/\n/g).map((p, i)=>{
-            return(<span key={i}>{p}<br/></span>);
+            return(<span key={`listingDescription.${i}`}>{p}<br/></span>);
           });
         }
         var descriptionClasses = React.addons.classSet({
@@ -40,7 +40,7 @@ var OverviewTab = React.createClass({
 
         return (
             <div className="tab-pane active row quickview-overview" tabIndex="0">
-                { this.renderScreenshots() }
+                 { this.renderScreenshots() }
                 <div className="col-xs-12 col-md-3 pull-right">
                     <h3 className="offscreen"> Description of app in Overview section of model </h3>
                     <p className= { descriptionClasses }>{ description }</p>
@@ -65,15 +65,15 @@ var OverviewTab = React.createClass({
                 }
 
                 return (
-                    <div>
+                    <div key={`screenshotDescription.${i}`}>
                         <h5>Screenshot Description:</h5>
                         <p>{screenshot.description}</p>
                     </div>
                 );
             }
 
-            return (<div>
-                        <img alt="show large screenshot once click" src={screenshot.smallImageUrl} key={i} onClick={ me.showLargeScreenshots.bind(me, i) }/>
+            return (<div key={`screenshot.${i}`}>
+                        <img alt="show large screenshot once click" src={screenshot.smallImageUrl} onClick={ me.showLargeScreenshots.bind(me, i) }/>
                             <ScreenshotDescription/>
                     </div>);
         });

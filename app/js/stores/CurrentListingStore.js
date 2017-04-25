@@ -122,7 +122,8 @@ var CurrentListingStore = createStore({
     listenables: [
         Object.assign({}, CreateEditActions, {
             systemUpdated: SystemStore,
-            cacheUpdated: GlobalListingStore
+            cacheUpdated: GlobalListingStore,
+            similarUpdated: ListingActions.fetchSimilarCompleted
         }),
         { profileUpdate: SelfStore }
     ],
@@ -154,10 +155,13 @@ var CurrentListingStore = createStore({
         if (_listingId) {
             var newListing = GlobalListingStore.getById(_listingId);
             if(newListing){
-                newListing.similar = GlobalListingStore.getSimilarForListing(_listingId);
                 this.refreshListing(newListing);
             }
         }
+    },
+
+    onSimilarUpdated: function (){
+        this.trigger();//  this.onCacheUpdated();
     },
 
     onProfileUpdate: function(profileData) {
@@ -306,18 +310,20 @@ var CurrentListingStore = createStore({
         return reviews;
     },
 
+    getSimilar: function () {
+        var similar = GlobalListingStore.getSimilarForListing(_listing.id);
+        return similar;
+    },
+
     loadListing: function (id) {
         var deferred = $.Deferred();
         var promise = deferred.promise();
         var   intId = parseInt(id, 10);
         _listingId = id;
-
         var newListing;
         if (id) {
-            _listingId = id;
             if (!_listing){
                 newListing = GlobalListingStore.getById(id) || new Listing({ owners: [this.currentUser] });
-                newListing.similar = GlobalListingStore.getSimilarForListing(_listingId);
                 this.refreshListing(newListing );
                 deferred.resolve(newListing);
             }

@@ -124,7 +124,6 @@ var Quickview = React.createClass({
               preview: this.props.preview,
               currentUser: currentUser
           }
-
         return (
             <Modal ref="modal" className="quickview" onShown={this.onShown} onHidden={this.onHidden} tabIndex="0">
                 {
@@ -137,10 +136,11 @@ var Quickview = React.createClass({
                                 <div className="tab-content" >
                                     <ActiveRouteHandler currentUser={currentUser} listing={listing} shown ={shown} />
                                 </div>
-                            </div>,
-                            <Recommendations listing={listing} shown = {shown} key="recommendations"></Recommendations>
+                            </div>
                         ]
                 }
+                { listing && listing.id && this.props.currentUser.isBetaUser && <Recommendations listing={listing} shown = {shown} key="recommendations" />}
+
             </Modal>
         );
     },
