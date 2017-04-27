@@ -31,5 +31,9 @@ module.exports = {
 
     trackListingReviewView: function(listingName, agency){
         window._paq.push(['trackEvent', 'Listing Review View', listingName, agency]);
+    },
+
+    trackRecommender: function(type, application){
+        window._paq.push(['trackEvent', type, application]);
     }
 };

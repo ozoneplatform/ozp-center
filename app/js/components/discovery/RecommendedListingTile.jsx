@@ -7,6 +7,8 @@ var IconRating = require('../shared/IconRating.jsx');
 var CenterLaunchLink = require('../CenterLaunchLink.jsx');
 var BookmarkButton = require('../BookmarkButton.jsx');
 var CurrentListingStore = require('../../stores/CurrentListingStore.js');
+var OzpAnalytics = require('../../analytics/ozp-analytics');
+var { listingMessages } = require('ozp-react-commons/constants/messages');
 
 var RecommendedListingTile = React.createClass({
 
@@ -28,8 +30,9 @@ var RecommendedListingTile = React.createClass({
         }
     },
 
-    loadRecommendation: function (recommendationId) {
-        CurrentListingStore.loadListing(recommendationId);
+    loadRecommendation: function (recommendation) {
+        OzpAnalytics.trackRecommender(listingMessages['recommender.similar'], recommendation.title);
+        CurrentListingStore.loadListing(recommendation.id);
     },
 
     render: function () {
@@ -46,15 +49,15 @@ var RecommendedListingTile = React.createClass({
         var labelStyle = {
             paddingLeft: '10px'
         };
-var lockStyle = {
+        var lockStyle = {
             position: 'absolute',
             left: '4px',
             top: '4px'
         };
-       
+
 
         return (
-            <div className="recommendations-tile" onClick ={this.loadRecommendation.bind(this,listing.id)} >
+            <div className="recommendations-tile" onClick={this.loadRecommendation.bind(this,listing)} >
                 <div className="quickview-header-info">
                     <img className="listing-icon" alt={`${listing.title} header information`} src={ image } data-fallback="/store/images/types/3" />
                     <h3 className="listing-title" tabIndex="0" title={ title }>{ title }
@@ -77,7 +80,7 @@ var lockStyle = {
                         halfClassName="icon-star-half-filled-yellow" />
                 </div>
                 </div>
-                
+
         );
     }
 });
