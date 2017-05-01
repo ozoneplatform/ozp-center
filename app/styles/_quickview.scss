@@ -130,6 +130,13 @@ ul.list-unstyled.RecentActivity
         display: inline-block;
     }
 
+    .listing-title{
+        width: 147px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
     .recommendations-tile{
         @extend .quickview-header;
         cursor: pointer;
