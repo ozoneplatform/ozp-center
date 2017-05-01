@@ -159,7 +159,7 @@ var NotificationsModal = React.createClass({
                                 </ul>
                               </div>
                               <div className="col-xs-8">
-                                { this.state.notificationList.length &&
+                                { this.state.notificationList.length > 0 &&
                                   <div>
                                     {
                                       this.makeNotification(
