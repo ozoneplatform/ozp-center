@@ -6,15 +6,18 @@ var ActiveState = require('../../mixins/ActiveStateMixin');
 var IconRating = require('../shared/IconRating.jsx');
 var CenterLaunchLink = require('../CenterLaunchLink.jsx');
 var BookmarkButton = require('../BookmarkButton.jsx');
+var OzpAnalytics = require('../../analytics/ozp-analytics');
+var { listingMessages } = require('ozp-react-commons/constants/messages');
 
 var ListingTile = React.createClass({
 
     mixins: [Navigation, CurrentPath, ActiveState],
 
     statics: {
-        fromArray: function (array) {
+        fromArray: function (array, from) {
+            if(!from) from = '';
             return array.map(function(listing, i) {
-                return <ListingTile listing={listing} key={`${listing.id}.${i}`}/>;
+                return <ListingTile from={from} listing={listing} key={`${listing.id}.${i}`}/>;
             });
         },
         renderLimitedTiles: function(display, mostPopular) {
@@ -25,6 +28,13 @@ var ListingTile = React.createClass({
                 }).map((tile, i) => <ListingTile listing={tile} key={`${tile.id}.${i}`}/>)
             );
         }
+    },
+
+    handleClick: function(from, title) {
+      if(from){
+        if(from == listingMessages['recommender.recommended'])
+          OzpAnalytics.trackRecommender(listingMessages['recommender.recommended'], title);
+      }
     },
 
     render: function () {
@@ -43,7 +53,7 @@ var ListingTile = React.createClass({
         imageLargeUrl = listing.imageLargeUrl;
 
         return (
-            <li className="listing SearchListingTile">
+            <li onClick={this.handleClick.bind(this, this.props.from, listing.title)} className="listing SearchListingTile">
                 <a className="listing-link"  href={ href }>
                     {/* Empty link - css will make it cover entire <li>*/}
                     <span className="hidden-span">{listing.title}</span>

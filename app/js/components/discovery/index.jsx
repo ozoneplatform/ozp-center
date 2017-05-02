@@ -6,6 +6,7 @@ var { Navigation } = require('react-router');
 var _ = require('../../utils/_');
 var {CENTER_URL, API_URL} = require('ozp-react-commons/OzoneConfig');
 var { PAGINATION_MAX } = require('ozp-react-commons/constants');
+var { listingMessages } = require('ozp-react-commons/constants/messages');
 
 // actions
 var ListingActions = require('../../actions/ListingActions');
@@ -382,9 +383,9 @@ var Discovery = React.createClass({
         if(this.state.recommended.length){
             return (
                 <section className="Discovery__Recommended" key="Discovery__Recommended">
-                <h4>Recommended For You</h4>
+                <h4>{listingMessages['recommender.recommended']}</h4>
                 <Carousel className="new-arrival-listings" aria-label="Recommended Apps Carousel">
-                    { ListingTile.fromArray(this.state.recommended) }
+                    { ListingTile.fromArray(this.state.recommended, listingMessages['recommender.recommended']) }
                 </Carousel>
             </section>
             );
