@@ -1,3 +1,11 @@
+### 1.1.68 (2017-05-03)
+
+
+#### Bug Fixes
+
+* **notification:** notification modal no longer says "0No Notifications" (#795) ([ef1b0c82](https://github.com/ozone-development/ozp-center.git/commit/ef1b0c82dfe3b7679883aa763d1996ce89255e4a))
+
+
 ### 1.1.67 (2017-04-26)
 
 
