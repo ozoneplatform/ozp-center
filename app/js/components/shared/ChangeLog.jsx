@@ -45,7 +45,7 @@ var PendingDeletionChangeLog = React.createClass({
         return (
             <div>
                 <AuthorLink author={changeLog.author} />
-                <span> Submitted { this.props.listingName } for deletion</span>
+                <span> submitted { this.props.listingName } for deletion</span>
             </div>
         );
     }

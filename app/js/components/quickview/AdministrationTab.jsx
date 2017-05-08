@@ -3,17 +3,18 @@
 var Reflux = require('reflux');
 var React = require('react');
 var _ = require('../../utils/_');
-var ChangeLogs = require('./ChangeLogs.jsx');
+var ChangeLog = require('../shared/ChangeLog.jsx');
 var ListingActions = require('../../actions/ListingActions');
 var fetchChangeLogs = ListingActions.fetchChangeLogs;
 var rejectListing = ListingActions.reject;
-var enableListing = ListingActions.enable;
-var disableListing = ListingActions.disable;
 var approveListingByOrg = ListingActions.approveByOrg;
 var approveListing = ListingActions.approve;
 var listingStatus = require('ozp-react-commons/constants').approvalStatus;
 var { UserRole } = require('ozp-react-commons/constants');
 var { form, Str, subtype, struct } = require('tcomb-form');
+var LoadMore = require('../shared/LoadMore.jsx');
+var PaginatedChangeLogByIDStore = require('../../stores/PaginatedChangeLogByIDStore');
+var SystemStateMixin = require('../../mixins/SystemStateMixin');
 
 var Toggle = React.createClass({
     propTypes: {
@@ -39,6 +40,15 @@ var Toggle = React.createClass({
 });
 
 var EnabledControl = React.createClass({
+    onChange: function (evt, onChange) {
+        PaginatedChangeLogByIDStore.resetChangeLogByIDStore();
+
+        if(evt.target.checked)
+            ListingActions.enable(this.props.listing);
+        else
+            ListingActions.disable(this.props.listing);
+    },
+
     shouldComponentUpdate: function (newProps) {
         return newProps.listing.isEnabled !== this.props.isEnabled;
     },
@@ -47,21 +57,21 @@ var EnabledControl = React.createClass({
         var listing = this.props.listing,
             enabled = listing.isEnabled,
             title = enabled ? 'Enabled' : 'Disabled',
-            description = 'This listing is ' + (enabled ? '' : 'not') + ' visible to users',
-            onChange = enabled ? disableListing.bind(null, listing) :
-                enableListing.bind(null, listing);
+            description = 'This listing is ' + (enabled ? '' : 'not') + ' visible to users';
 
         return (
             <Toggle title={title} label="Enabled" className="enabled-toggle"
                 description={description}
                 checked={enabled}
-                onChange={onChange}/>
+                onChange={this.onChange}/>
         );
     }
 });
 
 var FeaturedControl = React.createClass({
     onChange: function (evt) {
+        PaginatedChangeLogByIDStore.resetChangeLogByIDStore();
+
         ListingActions.setFeatured(evt.target.checked, this.props.listing);
     },
 
@@ -86,35 +96,86 @@ var FeaturedControl = React.createClass({
 });
 
 var AdministrationTab = React.createClass({
+    mixins: [
+        SystemStateMixin
+    ],
 
     propTypes: {
         listing: React.PropTypes.object.isRequired
     },
 
     getInitialState: function () {
-        return { editingRejection: false };
+        PaginatedChangeLogByIDStore.resetChangeLogByIDStore();
+        return { prevId: this.props.listing.id, editingRejection: false, hasMore: true, changeLogs: [] };
     },
 
     componentWillReceiveProps: function (newProps) {
-        if (this.props.listing.id !== newProps.listing.id) {
+        if (this.state.prevId !== newProps.listing.id) {
+            this.state.prevId = newProps.listing.id;
+            this.state.changeLogs = [];
+            PaginatedChangeLogByIDStore.resetChangeLogByIDStore();
             fetchChangeLogs(newProps.listing.id);
         }
     },
 
-    componentWillMount: function () {
-        if (this.props.listing.id) {
-            fetchChangeLogs(this.props.listing.id);
+    componentDidMount: function () {
+        this.fetchAllChangeLogsIfEmpty();
+        this.listenTo(PaginatedChangeLogByIDStore, this.onChangeLogsReceived);
+    },
+
+    onChangeLogsReceived: function() {
+        var paginatedList = this.getPaginatedList();
+        if (!paginatedList) {
+            return;
         }
+        var { data, hasMore } = paginatedList;
+        this.setState({
+            changeLogs: data,
+            hasMore: hasMore
+        });
+    },
+
+    getPaginatedList: function () {
+        return PaginatedChangeLogByIDStore.getChangeLogsByID();
+    },
+
+    fetchAllChangeLogsIfEmpty: function () {
+        var changeLogs = this.getPaginatedList();
+        if (!changeLogs) {
+            if (this.props.listing.id) {
+                fetchChangeLogs(this.props.listing.id);
+            }
+        }
+        this.onChangeLogsReceived();
+    },
+
+    renderChangeLogs: function () {
+        return this.state.changeLogs.map(function (changeLog) {
+            return [
+                <ChangeLog changeLog={changeLog}></ChangeLog>,
+                <br/>
+            ];
+        })
+    },
+
+    onLoadMore: function() {
+        fetchChangeLogs(this.props.listing.id);
     },
 
     render: function () {
+        var hasMore = this.state.hasMore || false;
+        var logs = this.renderChangeLogs();
+
         return (
             <div className="tab-pane active Quickview__ChangeLog row">
                 { this.renderStatus() }
                 <div className="col-xs-8 col-right">
                     <section>
                         <h5>Listing Changes</h5>
-                        <ChangeLogs showListingName={ false } org={this.props.listing.agency}/>
+                        <LoadMore className="RecentActivity__activities all"
+                                  hasMore={hasMore} onLoadMore={this.onLoadMore}>
+                            { logs }
+                        </LoadMore>
                     </section>
                 </div>
             </div>

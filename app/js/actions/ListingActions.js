@@ -9,6 +9,7 @@ var ListingActions = createActions({
     fetchAllListingsAtOnce: null,
     fetchCounts: null,
     fetchAllChangeLogs: null,
+    fetchAllChangeLogsByID: null,
     fetchStorefrontListings: null,
 
     fetchById: null,
@@ -22,6 +23,8 @@ var ListingActions = createActions({
     fetchReviews: null,
     saveReview: null,
     deleteReview: null,
+
+    fetchSimilar: null,
 
     launch: null,
     save: null,

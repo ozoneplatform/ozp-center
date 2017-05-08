@@ -145,15 +145,40 @@ ListingActions.fetchById.listen(function (id) {
     });
 })();
 
-ListingActions.fetchChangeLogs.listen(function (listingId) {
-    ListingApi.getChangeLogs(listingId)
-        .then(ListingActions.fetchChangeLogsCompleted.bind(null, listingId));
+ListingActions.fetchChangeLogs.listen(function (listingId, filter) {
+  var PaginatedChangeLogByIDStore = require('../stores/PaginatedChangeLogByIDStore');
+
+  var paginatedList = PaginatedChangeLogByIDStore.getChangeLogsByID(),
+      opts = {},
+      nextLink;
+
+  if (paginatedList) {
+      paginatedList.expectPage();
+      nextLink = paginatedList.nextLink;
+  }
+  else {
+      _.assign(opts, {
+          offset: 0,
+          limit: PAGINATION_MAX
+      });
+  }
+
+  ListingApi
+      .getChangeLogs(listingId, nextLink, opts)
+      .then(function (response) {
+          ListingActions.fetchAllChangeLogsByIDCompleted(filter, response);
+      });
 });
 
 
 ListingActions.fetchOwnedListings.listen(function (profile) {
     ListingApi.getOwnedListings(profile).then(ListingActions.fetchOwnedListingsCompleted);
 });
+
+ListingActions.fetchSimilar.listen(function (listingId) {
+    ListingApi.getSimilarListings(listingId)
+        .then(ListingActions.fetchSimilarCompleted.bind(null, listingId));
+})
 
 
 ListingActions.fetchReviews.listen(function (listing) {

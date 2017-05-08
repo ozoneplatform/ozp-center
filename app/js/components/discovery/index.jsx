@@ -6,6 +6,7 @@ var { Navigation } = require('react-router');
 var _ = require('../../utils/_');
 var {CENTER_URL, API_URL} = require('ozp-react-commons/OzoneConfig');
 var { PAGINATION_MAX } = require('ozp-react-commons/constants');
+var { listingMessages } = require('ozp-react-commons/constants/messages');
 
 // actions
 var ListingActions = require('../../actions/ListingActions');
@@ -52,6 +53,7 @@ var Discovery = React.createClass({
             newArrivals: DiscoveryPageStore.getNewArrivals(),
             mostPopular: DiscoveryPageStore.getMostPopular(),
             searchResults: DiscoveryPageStore.getSearchResults(),
+            recommended: DiscoveryPageStore.getRecommended(),
             mostPopularTiles: 12,
             initialMostPopularTiles: 12,
             queryString: this.state ? this.state.queryString : '',
@@ -123,8 +125,8 @@ var Discovery = React.createClass({
         this.listenTo(ListingActions.searchCompleted, this.onSearchCompleted);
 
         // // Reload when a new review is added
-        // this.listenTo(ListingActions.saveReviewCompleted, ListingActions.fetchStorefrontListings);
-        this.listenTo(GlobalListingStore, ListingActions.fetchStorefrontListings);
+         this.listenTo(ListingActions.saveReviewCompleted, ListingActions.fetchStorefrontListings);
+        //this.listenTo(GlobalListingStore, ListingActions.fetchStorefrontListings);
 
         // fetch data when instantiated
         ListingActions.fetchStorefrontListings();
@@ -183,6 +185,7 @@ var Discovery = React.createClass({
                                 this.renderSearchResults() :
                                 [
                                     this.renderFeaturedListings(),
+                                    this.renderRecommended(),
                                     this.renderNewArrivals(),
                                     this.renderMostPopular()
                                 ]
@@ -374,6 +377,20 @@ var Discovery = React.createClass({
             <FeaturedListings key="FeaturedListings"
                 listings={ this.state.featured } />
         );
+    },
+
+    renderRecommended(){
+        if(this.state.recommended.length){
+            return (
+                <section className="Discovery__Recommended" key="Discovery__Recommended">
+                <h4>{listingMessages['recommender.recommended']}</h4>
+                <Carousel className="new-arrival-listings" aria-label="Recommended Apps Carousel">
+                    { ListingTile.fromArray(this.state.recommended, listingMessages['recommender.recommended']) }
+                </Carousel>
+            </section>
+            );
+        }
+
     },
 
     renderNewArrivals() {

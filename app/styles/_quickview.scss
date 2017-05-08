@@ -19,7 +19,7 @@ $quickview-nav-tabs-height: 42px;
     }
     .tab-content {
         overflow: auto;
-        height: 425px;
+        height: 455px;
         padding: 25px;
         color: $gray-dark;
     }
@@ -111,7 +111,42 @@ ul.list-unstyled.RecentActivity
         }
     }
 
+.quickview-recommendations {
+    position: relative;
+    padding: 25px;
+    border-top: 4px solid #eeeeef;
+    height: 156px;
+    overflow: hidden;
+    
+    .carousel, .carousel-wrapper {
+        max-height: 89px;
+    }
+    
+    .recommendations-title {
+        font-size: 18px;
+        line-height: 18px;
+        font-weight: normal;
+        margin: 0;
+        display: inline-block;
+    }
 
+    .listing-title{
+        width: 147px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    
+    .recommendations-tile{
+        @extend .quickview-header;
+        cursor: pointer;
+        border-right: 1px solid #eeeeef !important;
+        width: 255px;
+        display: inline-block;
+
+    }
+
+}
 
 .quickview-header {
     position: relative;
@@ -180,7 +215,6 @@ ul.list-unstyled.RecentActivity
         padding: 0 0 0 20px;
         margin: 0;
         display: inline-block;
-        width-max:50px;
     }
 }
 
@@ -349,3 +383,6 @@ ul.list-unstyled.RecentActivity
         color: $link-color;
     }
 }
+
+
+

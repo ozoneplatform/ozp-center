@@ -278,11 +278,22 @@ var ScreenshotForm = React.createClass({
                 </div>
 
                 <div className="col-md-2">
-                <button type="button" className="close" onClick={this.props.removeHandler}>
-                    <span aria-hidden="true"><i className="icon-cross-16"></i></span><span className="sr-only">Remove</span>
-                </button>
+                    <button type="button" className="close" onClick={this.props.removeHandler}>
+                        <span aria-hidden="true"><i className="icon-cross-16"></i></span><span className="sr-only">Remove</span>
+                    </button>
                 </div>
+
                 <div className="clear"></div>
+                <div className="col-md-2">
+                    <div><br/></div>
+                </div>
+
+                <div className="col-md-8">
+                    <TextAreaInput { ...this.getFormComponentProps('description') } id="description" label="Description:" charLimit="160" optional/>
+                </div>
+
+                <div className="clear"></div>
+
             </div>
         );
     }
@@ -362,7 +373,7 @@ var ListingForm = React.createClass({
                     options={ getOptionsForSystemObject(system.types) }/>
                 <Select2Input id={f.categories.id} { ...p('categories') } multiple
                     options={ getOptionsForSystemObject(system.categories) }/>
-                <Select2TagInput id={f.tags.id} { ...p('tags') } multiple/>
+                <Select2TagInput id={f.tags.id} showFOUOwarning="true" { ...p('tags') } multiple/>
                 <TextAreaInput id={f.description.id} { ...p('description') } rows="6"/>
                 <TextAreaInput id={f.descriptionShort.id} { ...p('descriptionShort') } charLimit="100" rows="3"/>
 

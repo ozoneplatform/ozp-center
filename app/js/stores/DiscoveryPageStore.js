@@ -7,6 +7,7 @@ var _newArrivals = [];
 var _mostPopular = [];
 var _featured = [];
 var _searchResults = [];
+var _recommended = [];
 var _nextOffset = 0;
 var _totalSearchResults = 0;
 
@@ -35,8 +36,13 @@ var DiscoveryPageStore = Reflux.createStore({
         _newArrivals = storefrontListings.newArrivals;
         _mostPopular = storefrontListings.mostPopular;
         _featured = storefrontListings.featured;
+        _recommended = storefrontListings.recommended;
 
         this.trigger();
+    },
+
+    getRecommended: function () {
+        return _recommended;
     },
 
     getNewArrivals: function () {
@@ -91,6 +97,9 @@ var DiscoveryPageStore = Reflux.createStore({
         _featured = _featured.filter(function (item) {
                     return item.id !== listing.id;
                 });
+        _recommended = _recommended.filter(function (item) {
+                    return item.id !== listing.id;
+        })
     }
 
 });

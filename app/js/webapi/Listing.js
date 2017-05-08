@@ -123,6 +123,7 @@ function Listing (json) {
     this.screenshots = this.screenshots || [];
     this.docUrls = this.docUrls || [];
     this.changeLogs = [];
+    this.similar = [];
     return this;
 }
 
@@ -257,7 +258,8 @@ var ListingApi = {
             resp => ({
                 featured: _.map(resp.featured, this.newListing),
                 newArrivals: _.map(resp.recent, this.newListing),
-                mostPopular: _.map(resp.most_popular, this.newListing)
+                mostPopular: _.map(resp.most_popular, this.newListing),
+                recommended: _.map(resp.recommended, this.newListing)
             }));
     },
 
@@ -336,9 +338,13 @@ var ListingApi = {
         });
     },
 
-    getChangeLogs: function (id) {
-        return $.getJSON(API_URL + '/api/listing/' + id + '/activity/?offset=0&limit=' + PAGINATION_MAX).then(
-            (response) => new PaginatedResponse(humps.camelizeKeys(response)).getItemAsList());
+    getChangeLogs: function (id, url, options) {
+        if(!_.isString(url)) {
+                url = API_URL + '/api/listing/' + id + '/activity/?' + $.param(options);
+        }
+
+        return $.getJSON(url).then(
+            (response) => new PaginatedResponse(humps.camelizeKeys(response)));
     },
 
     fetchReviews: function (id) {
@@ -430,6 +436,13 @@ var ListingApi = {
         }
         return $.getJSON(url).then(
             (response) => new PaginatedResponse(humps.camelizeKeys(response)));
+    },
+
+    getSimilarListings: function(listingId) {
+        var url =`${API_URL}/api/listing/${listingId}/similar/`;
+
+        return $.getJSON(url).then(
+            (resp) => _.map(resp, this.newListing));
     }
 };
 

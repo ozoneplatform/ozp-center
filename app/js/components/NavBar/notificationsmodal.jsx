@@ -95,10 +95,10 @@ var NotificationsModal = React.createClass({
             <h4>{(n.listing) ? n.listing.title : 'AppsMall'} <small>{formattedDate}</small></h4>
             <div>
 
-              { !(n.notificationType === "PEER.BOOKMARK") &&
+              { !(n.notificationType === "peer_bookmark") &&
                 <span className="message small" dangerouslySetInnerHTML={createNotificationText()}></span>
               }
-              { n.notificationType === "PEER.BOOKMARK" &&
+              { n.notificationType === "peer_bookmark" &&
                 <div>
                   <p className="message small">{n.author.user.username} has shared a the folder <b>{n.peer.folderName}</b> with you.</p>
                   <p className="message small">{n.message}</p>
@@ -159,7 +159,7 @@ var NotificationsModal = React.createClass({
                                 </ul>
                               </div>
                               <div className="col-xs-8">
-                                { this.state.notificationList.length &&
+                                { this.state.notificationList.length > 0 &&
                                   <div>
                                     {
                                       this.makeNotification(
