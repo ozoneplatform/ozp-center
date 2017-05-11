@@ -51,7 +51,6 @@ const meTour = new Tour({
         $('#end-tour-btn').keypress(function(e) {
             // Enter key is pressed
             if (e.keyCode == 13) {
-                console.log("hey");
                 document.getElementById('start-tour-btn').setAttribute("hidden", "true");
             }
         })
