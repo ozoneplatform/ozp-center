@@ -26,6 +26,49 @@ var ListingManagement = React.createClass({
                 to: 'my-listings',
                 name: 'My Listings'
             }]
+
+            /*
+            tabs: [{
+                to: 'recent-activity',
+                name: 'Recent Activity'
+            }, {
+                to: 'all-listings',
+                name: 'All Center Listings'
+            }, {
+                to: 'my-listings',
+                name: 'My Listings'
+            }, {
+                to: 'my-listings',
+                name: 'My Listings 1'
+            }, {
+                to: 'my-listings',
+                name: 'My Listings 2'
+            }, {
+                to: 'my-listings',
+                name: 'My Listings 3'
+            }, {
+                to: 'my-listings',
+                name: 'My Listings 4'
+            }, {
+                to: 'my-listings',
+                name: 'My Listings 5'
+            }, {
+                to: 'my-listings',
+                name: 'My Listings 6'
+            }, {
+                to: 'my-listings',
+                name: 'My Listings 7'
+            }, {
+                to: 'my-listings',
+                name: 'My Listings 8'
+            }, {
+                to: 'my-listings',
+                name: 'My Listings 9'
+            }, {
+                to: 'my-listings',
+                name: 'My Listings 10'
+            }]
+            */
         };
     },
 
