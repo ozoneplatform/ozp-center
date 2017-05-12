@@ -21,6 +21,33 @@
 
 
     .nav-tabs {
-        padding-left: 50%;
+        padding-left: 34%;
+        min-width: 1325px;
+    }
+
+    .nav-tabs li {
+        width: 140px;
+    }
+
+    .nav-tabs li a {
+        text-align: center;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        width: 140px;
+    }
+
+    .nav-tabs li.arrow, .nav-tabs li.arrow a,
+    .nav-tabs li.arrowDisabled, .nav-tabs li.arrowDisabled a {
+        width: 28px !important;
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+    }
+
+    .nav-tabs li.arrowDisabled, .nav-tabs li.arrowDisabled a {
+        pointer-events: none;
+        color: lightgray;
     }
 }
