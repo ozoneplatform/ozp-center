@@ -66,6 +66,14 @@
                 > i.icon-shopping {
                     @extend .icon-shopping-blueDark;
                 }
+
+                > .subscribe {
+                    visibility: visible;
+                    float: right;
+                    color: gray;
+                    font-size: 75%;
+                    padding-right: 10px;
+                }
             }
 
             &.active {
@@ -82,6 +90,10 @@
                 > i.icon-shopping {
                     @extend .icon-shopping-blueDark;
                 }
+            }
+
+            > .subscribe {
+                visibility: hidden;
             }
         }
     }
