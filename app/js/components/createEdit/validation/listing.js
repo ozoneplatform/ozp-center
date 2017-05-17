@@ -58,6 +58,8 @@ function getRequiredContactTypes (contactTypes) {
 }
 
 function hasRequiredContactTypes (requiredContactTypes, contacts) {
+    if(!contacts)
+        return false;
     return requiredContactTypes.every(type => contacts.some(contact => contact.type === type));
 }
 
@@ -144,6 +146,10 @@ function copyImageValidations(validation) {
 //the following is not neccesarry to correctly validate the listing,
 //but for ensuring certain errors are reflected at the correct path
 function validateContacts(validation, instance) {
+    if(!instance.contacts){
+        validation.errors['contacts'] = true;
+        return;
+    }
     instance.contacts.forEach(function (contact, index) {
         ['secure', 'unsecure'].forEach(function(suffix) {
             var path = `contacts.${index}.${suffix}Phone`;

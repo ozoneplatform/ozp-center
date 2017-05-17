@@ -28,6 +28,9 @@ function updateOwnerCache (listings) {
 
 function updateCacheFromPaginatedResponse (listingsAsPaginatedResponse) {
     var listings = listingsAsPaginatedResponse.getItemAsList();
+    _.forEach(listings, function(value, key){
+        listings[key].isPartialListing = true;
+    })
     updateCache(listings);
 }
 
@@ -112,7 +115,7 @@ var GlobalListingStore = Reflux.createStore({
     },
 
     getById: function (id) {
-        if (!_listingsCache[id]) {
+        if (!_listingsCache[id] || _listingsCache[id].isPartialListing === true){
             ListingActions.fetchById(id);
             return null;
         }
