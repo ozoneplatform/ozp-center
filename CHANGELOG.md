@@ -1,3 +1,11 @@
+### 1.1.70 (2017-05-17)
+
+
+#### Bug Fixes
+
+* **search:** fixed critical defect where apps were not opening after search (JIRA 482 & 450) ([bd24c716](https://github.com/ozone-development/ozp-center.git/commit/bd24c7168dcabb98e217c9339aa1cd295ee168e5))
+
+
 ### 1.1.69 (2017-05-10)
 
 
