@@ -46,9 +46,24 @@ const meTour = new Tour({
       content: "This simple tour guides you through the toolbar items and introduces you to the primary components of the system: The HUD, Center and Webtop. These three components enable you to discover, bookmark, rate, review, organize and launch mission and business applications from across the enterprise.",
       orphan: true,
       onShown: function(){
-        $('#welcome').focus();
+        $('#content').focus();
+
+        $('#end-tour-btn').keypress(function(e) {
+            // Enter key is pressed
+            if (e.keyCode == 13) {
+                document.getElementById('start-tour-btn').setAttribute("hidden", "true");
+            }
+        })
+
+        $('#start-tour-btn').keydown(function(e) {
+            // Tab key is pressed
+            if (e.keyCode == 9) {
+                e.preventDefault();
+                document.getElementById('end-tour-btn').focus();
+            }
+        })
       },
-      template: '<div id="welcome" class="popover" role="tooltip" tabIndex="0" aria-labelledby="tourTitle" aria-describedby="tourContent"> <h1 class="popover-header">Welcome to <img src="./images/marketplace-logo.png" alt="AppsMall Marketplace"></h1><h3 id="tourTitle" class="popover-title popover-subtitle"></h3> <div id="tourContent" class="popover-content"></div> <div class="popover-navigation"> <button class="btn btn-sm" id="end-tour-btn" data-role="end" tabIndex="0">No thanks</button> <div class="btn-group"> <button class="btn btn-sm btn-default" data-role="next" tabIndex="0">' + contentLocalStart + ' &raquo;</button></div> </div> </div>'
+      template: '<div id="welcome" class="popover" role="tooltip" aria-labelledby="tourTitle" aria-describedby="tourContent"> <h1 class="popover-header">Welcome to <img src="./images/marketplace-logo.png" alt="AppsMall Marketplace"></h1> <div id="content" aria-labelledby="tourTitle tourContent" role="tooltip" tabIndex="0"> <h3 id="tourTitle" class="popover-title popover-subtitle"></h3> <div id="tourContent" class="popover-content"></div> <div class="popover-navigation"> <button class="btn btn-sm" id="end-tour-btn" data-role="end" tabIndex="0">No thanks</button>  <button class="btn btn-sm btn-default" id="start-tour-btn" data-role="next" tabIndex="0">' + contentLocalStart + '</button></div> </div> </div> </div>'
     },
     //1
     {

@@ -165,8 +165,8 @@ var Quickview = React.createClass({
             });
 
             return (
-                <li className={className} key={link.to}>
-                    <a href={href}>{link.name}</a>
+                <li className={className} key={link.to} role={link.name}>
+                    <a id={link.name} href={href}>{link.name}</a>
                 </li>
             );
         });
