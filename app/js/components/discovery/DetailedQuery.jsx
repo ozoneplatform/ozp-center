@@ -178,7 +178,7 @@ var DetailedQuery = React.createClass({
         if (this.state.errorStoreData) {
             return (
               <div>
-                <ErrorWindow errorMessage={this.state.errorStoreData.errorMessage}/>
+                <ErrorWindow errorMessage="Search is currently unavailable. Please try again in a few minutes."/>
               </div>
           );
         } else {
