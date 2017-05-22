@@ -133,6 +133,7 @@ var CurrentListingStore = createStore({
     refreshListing: function (listing) {
         revokeAllObjectURLs();
         _listing = listing;
+        _listingId = listing.id;
         _submitting = false;
         var validation = this.doValidation();
         this.trigger({
