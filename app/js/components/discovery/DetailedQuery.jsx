@@ -7,15 +7,17 @@ var ErrorActions = require('ozp-react-commons/actions/ErrorActions');
 var ErrorStore = require('ozp-react-commons/stores/ErrorStore');
 var ErrorWindow = require('ozp-react-commons/components/error/ErrorWindow.jsx');
 
+var SubscriptionActions = require('../../actions/SubscriptionActions');
+var SubscriptionStore = require('../../stores/SubscriptionStore');
+
 var DetailedQuery = React.createClass({
-    mixins: [Reflux.connect(ErrorStore, "errorStoreData")],
+    mixins: [Reflux.connect(ErrorStore, "errorStoreData"), Reflux.connect(SubscriptionStore, "subscriptionStore"), Reflux.listenerMixin],
 
     getInitialState: function(){
         ErrorActions.fetchEsStatus();
+        SubscriptionActions.fetchSubscriptions();
 
       return {
-        categories: [],
-        tags: []
       };
     },
 
@@ -105,6 +107,7 @@ var DetailedQuery = React.createClass({
     },
 
     getTags: function(){
+
       if(this.props.data.tags.length){
         var prettyTags;
         if(this.props.data.tags.length > 1){
@@ -174,7 +177,30 @@ var DetailedQuery = React.createClass({
       }
     },
 
+    subscribeToTag: function(event) {
+        SubscriptionActions.subscribeToTag(this.props.data.tagId[0]);
+        event.stopPropagation();
+    },
+
+    unsubscribeToTag: function(event, tag) {
+        for (var element of this.state.subscriptionStore) {
+            if (element.entity_id == this.props.data.tagId && element.entity_type === "tag") {
+                SubscriptionActions.unsubscribeToTag(element);
+            }
+        }
+        event.stopPropagation();
+    },
+
     render() {
+        var subscribeLink = <a className="subscribe" onClick={(e) => {this.subscribeToTag(e)}} >Subscribe</a>;
+        if (this.state.subscriptionStore && this.state.subscriptionStore.length > 0) {
+            for (var element of this.state.subscriptionStore) {
+                if (element.entity_id == this.props.data.tagId && element.entity_type === "tag") {
+                    subscribeLink = <a className="subscribe" onClick={(e) => {this.unsubscribeToTag(e, element)}} >Unsubscribe</a>;
+                }
+            }
+        }
+
         if (this.state.errorStoreData) {
             return (
               <div>
@@ -189,6 +215,7 @@ var DetailedQuery = React.createClass({
                 {this.getOrgs()}
                 {this.getCategories()}
                 {this.getTags()}
+                {subscribeLink}
               </div>
           );
         }

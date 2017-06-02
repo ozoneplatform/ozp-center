@@ -62,7 +62,7 @@ function Listing (json) {
         this.isExistingListing = true;
         this.type = json.listingType ? json.listingType.title : "";
         this.categories = _.map(json.categories, 'title') || [];
-        this.tags = _.map(json.tags, 'name') || [];
+        this.tags = _.map(json.tags) || [];
         this.agency = json.agency ? json.agency.title : json.agencyTitle || "";
         this.agencyShort = json.agency ? json.agency.shortName : json.agencyShortName || "";
         this.owners = _.map(json.owners, function (o) {

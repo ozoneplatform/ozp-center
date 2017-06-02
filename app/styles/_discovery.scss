@@ -49,6 +49,14 @@
         }
     }
 
+    .subscribe {
+        visibility: visible;
+        cursor: pointer;
+        color: gray;
+        font-size: 75%;
+        padding-left: 5px;
+    }
+
     .sidebar {
 
         li {
