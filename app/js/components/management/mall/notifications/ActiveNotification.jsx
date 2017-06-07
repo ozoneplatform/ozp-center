@@ -28,6 +28,8 @@ var ActiveNotification = React.createClass({
 
     render() {
         var { listing, expiresDate, message  } = this.props.notification;
+        var e = document.createElement('div');
+        e.innerHTML = message;
 
         return (
             <div className="PastNotification">
@@ -35,7 +37,7 @@ var ActiveNotification = React.createClass({
                     <h5 style={{margin: 0, fontWeight: 400}}>{(listing) ? listing.title : 'AppsMall'}</h5>
                     <em>Expires: <_Date date={expiresDate} /> at <Time date={expiresDate} /></em>
                 </div>
-                <p>{ message }</p>
+                <p dangerouslySetInnerHTML={{ __html: message}} />
             </div>
         );
     }
