@@ -1,3 +1,11 @@
+### 1.1.73 (2017-06-07)
+
+
+#### Bug Fixes
+
+* Selecting the center icon now takes the user to the Center Homepage. ([3ef6f4b3](https://github.com/ozone-development/ozp-center.git/commit/3ef6f4b322684c4de7517f58216c817457b50e73))
+
+
 ### 1.1.72 (2017-05-31)
 
 
