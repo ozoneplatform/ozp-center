@@ -192,7 +192,12 @@ var DetailedQuery = React.createClass({
     },
 
     render() {
-        var subscribeLink = <a className="subscribe" onClick={(e) => {this.subscribeToTag(e)}} >Subscribe</a>;
+        if (this.props.data.tagId.length > 0) {
+            var subscribeLink = <a className="subscribe" onClick={(e) => {this.subscribeToTag(e)}} >Subscribe</a>;
+        } else {
+            subscribeLink = null;
+        }
+
         if (this.state.subscriptionStore && this.state.subscriptionStore.length > 0) {
             for (var element of this.state.subscriptionStore) {
                 if (element.entity_id == this.props.data.tagId && element.entity_type === "tag") {
