@@ -13,7 +13,7 @@ var Stewards = React.createClass({
 
     getDefaultProps: function () {
 
-        var props = {
+        return {
             title: 'Steward',
             url: API_URL + '/api/profile/?role=ORG_STEWARD',
             getDisplayName: function (selectedRecord) {
@@ -99,7 +99,6 @@ var Stewards = React.createClass({
                 }
             }
         };
-        return props;
     },
 
     getSchema: function () {
