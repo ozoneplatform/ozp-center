@@ -12,7 +12,7 @@ require('sweetalert');
 var FIELDS = [
     'approvedDate', 'id', 'title', 'description', 'descriptionShort', 'screenshots', 'contacts',
     'totalComments', 'avgRate', 'totalRate1', 'totalRate2', 'totalRate3','totalRate4', 'height',
-    'width', 'totalRate5','totalVotes', 'state', 'tags', 'type','uuid', 'requirements', 'singleton',
+    'width', 'totalRate5','totalVotes', 'state', 'tags', 'tagsObject', 'type','uuid', 'requirements', 'singleton',
     'versionName', 'imageLargeUrl', 'imageSmallUrl', 'imageMediumUrl', 'imageXlargeUrl',
     'launchUrl', 'company', 'whatIsNew', 'owners', 'agency', 'agencyShort', 'rejection',
     'isEnabled', 'categories', 'releaseDate', 'editedDate', 'intents', 'docUrls', 'approvalStatus',
@@ -62,7 +62,8 @@ function Listing (json) {
         this.isExistingListing = true;
         this.type = json.listingType ? json.listingType.title : "";
         this.categories = _.map(json.categories, 'title') || [];
-        this.tags = _.map(json.tags) || [];
+        this.tags = _.map(json.tags, 'name') || [];
+        this.tagsObject = _.map(json.tags) || [];
         this.agency = json.agency ? json.agency.title : json.agencyTitle || "";
         this.agencyShort = json.agency ? json.agency.shortName : json.agencyShortName || "";
         this.owners = _.map(json.owners, function (o) {
@@ -110,6 +111,7 @@ function Listing (json) {
         }) || [];
         this.categories = json.categories || [];
         this.tags = json.tags || [];
+        this.tagsObject = json.tags || [];
         this.agency = json.agency || "";
         this.agencyShort = json.agencyShort || "";
         this.intents = json.intents || [];
