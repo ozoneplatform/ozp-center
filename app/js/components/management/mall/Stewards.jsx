@@ -59,6 +59,15 @@ var Stewards = React.createClass({
                 }
             },
             grid: {
+                toolbar: {
+                    items: [
+                        { type: 'button', id: 'demoteButton', caption: 'Demote', title: 'Demote a Steward', img: 'icon-trash-grayDark' }
+                    ],
+                    onClick: function (target, data) {
+                        console.log(target);
+                        //w2alert('Are you sure you want to remove USER from Stewards?')
+                    }
+                },
                 columns: [
                     { field: 'displayName', caption: 'Display Name', size: '34%' },
                     { field: 'username', caption: 'Username', size: '33%' },
