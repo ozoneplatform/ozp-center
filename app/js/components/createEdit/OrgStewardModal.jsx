@@ -34,6 +34,7 @@ module.exports = React.createClass({
         this.state.system.organizations.map(function(org){
 
             var stewardsForOrg = _.map(me.state.stewards, function(s){
+                console.log('FOUND!');
                 return _.map(s.stewarded_organizations, function (stew_org) {
                     if (_.contains(stew_org, org.title)){
                         return (<li>{s.display_name} | <a href={"mailto:" + s.user.email}>{s.user.email}</a></li>);

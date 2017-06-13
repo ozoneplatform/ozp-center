@@ -12,7 +12,8 @@ var Stewards = React.createClass({
     mixins: [ require('../../../mixins/SystemStateMixin') ],
 
     getDefaultProps: function () {
-        return {
+
+        var props = {
             title: 'Steward',
             url: API_URL + '/api/profile/?role=ORG_STEWARD',
             getDisplayName: function (selectedRecord) {
@@ -61,11 +62,25 @@ var Stewards = React.createClass({
             grid: {
                 toolbar: {
                     items: [
-                        { type: 'button', id: 'demoteButton', caption: 'Demote', title: 'Demote a Steward', img: 'icon-trash-grayDark' }
+                        { type: 'button', id: 'demoteButton', caption: 'Demote', title: 'Demote a Steward', img: 'icon-delete' }
                     ],
                     onClick: function (target, data) {
-                        console.log(target);
-                        //w2alert('Are you sure you want to remove USER from Stewards?')
+                        data.onComplete = function(){
+                            var user = this.owner.getSelection();
+                            var username = this.owner.get(user).displayName;
+                            console.log(username);
+
+                            if (data.target === 'demoteButton') {
+                                w2confirm('Are you sure you want to remove ' + username + ' from Stewards?')
+                                    //console.log(answer);
+                                    .yes(function () {
+                                        console.log('clicked YES');
+
+                                        //TODO: Replace steward to USER; Remove all orgs from list
+
+                                    });
+                            }
+                        }
                     }
                 },
                 columns: [
@@ -84,6 +99,7 @@ var Stewards = React.createClass({
                 }
             }
         };
+        return props;
     },
 
     getSchema: function () {
