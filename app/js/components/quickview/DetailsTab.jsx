@@ -39,6 +39,7 @@ var DetailsTab = React.createClass({
         var versionNumber = this.props.listing.versionName;
         var categories = this.props.listing.categories.join(', ');
         var tags = this.props.listing.tags;
+        var tagsObject = this.props.listing.tagsObject;
         var requirements = this.props.listing.requirements;
 
         return (
@@ -95,11 +96,11 @@ var DetailsTab = React.createClass({
     },
 
     renderTags:function(that){
-        var tags= that.props.listing.tags;
+        var tags = that.props.listing.tagsObject;
         return tags.map(function (tags, i) {
-          var URL= CENTER_URL + '#/home/////' + tags;
+          var URL= CENTER_URL + '#/home/////' + tags.name + '/' + tags.id;
           return(
-            <a href={URL} key={`renderTags.${i}`} onClick={function(){window.location.href=URL; window.location.reload();}}>{tags} </a>
+            <a href={URL} key={`renderTags.${i}`} onClick={function(){window.location.href=URL; window.location.reload();}}>{tags.name} </a>
           );
         });
     },

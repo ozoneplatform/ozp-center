@@ -51,7 +51,7 @@ var Sidebar = React.createClass({
 
     onUnsubscribeClick(event, category) {
         for (var element of this.state.subscriptionStore) {
-            if (element.entity_id == category.id) {
+            if (element.entity_id == category.id && element.entity_type == "category") {
                 SubscriptionActions.unsubscribeToCategory(element);
             }
         }

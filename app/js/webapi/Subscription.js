@@ -12,19 +12,19 @@ var SubscriptionApi = {
         });
     },
 
-    subscribeToCategory: function(categoryId) {
+    subscribeToEntity: function(type, entity_id) {
         return $.ajax({
             type: 'POST',
             url: API_URL + '/api/self/subscription/',
-            data: JSON.stringify({entity_type: "category", entity_id: categoryId}),
+            data: JSON.stringify({entity_type: type, entity_id: entity_id}),
             contentType: 'application/json'
         });
     },
 
-    unsubscribeToCategory: function(categoryId) {
+    unsubscribeToEntity: function(entity_id) {
         return $.ajax({
             type: 'DELETE',
-            url: API_URL + '/api/subscription/' + categoryId + '/'
+            url: API_URL + '/api/subscription/' + entity_id + '/'
         });
     }
 };
