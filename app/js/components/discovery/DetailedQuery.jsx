@@ -183,32 +183,35 @@ var DetailedQuery = React.createClass({
     },
 
     unsubscribeToTag: function(event, tag) {
-        for (var element of this.state.subscriptionStore) {
-            if (element.entity_id == this.props.data.tagId && element.entity_type === "tag") {
+        var me = this;
+
+        this.state.subscriptionStore.forEach(function(element) {
+            if (element.entity_id == me.props.data.tagId && element.entity_type === "tag") {
                 SubscriptionActions.unsubscribeToTag(element);
             }
-        }
+        });
         event.stopPropagation();
     },
 
     render() {
         var subscribeLink = null;
-      
+        var me = this;
+
         if (this.state.subscriptionStore)  {
             let foundSubscription = false;
-            for (var element of this.state.subscriptionStore) {
-                if (element.entity_id == this.props.data.tagId && element.entity_type === "tag") {
+            this.state.subscriptionStore.forEach(function(element) {
+                if (element.entity_id == me.props.data.tagId && element.entity_type === "tag") {
                     foundSubscription = true;
-                    subscribeLink = <a className="tag_subscribe" onClick={(e) => {this.unsubscribeToTag(e, element)}} >Unsubscribe</a>;
+                    subscribeLink = <a className="tag_subscribe" onClick={(e) => {me.unsubscribeToTag(e, element)}} >Unsubscribe</a>;
                 }
-            }
+            });
             //last conditional is a fix for subscription store not being null even if it hasn't loaded yet
             if(this.state.subscriptionStore.length === 0 || (!foundSubscription && this.state.subscriptionStore[0].entity_id)){
                 subscribeLink = <a className="tag_subscribe" onClick={(e) => {this.subscribeToTag(e)}} >Subscribe</a>;
-            }  
+            }
         }
-                
-        
+
+
 
         if (this.state.errorStoreData) {
             return (
