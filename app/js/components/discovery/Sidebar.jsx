@@ -50,13 +50,13 @@ var Sidebar = React.createClass({
     },
 
     onUnsubscribeClick(event, category) {
-        for (var element of this.state.subscriptionStore) {
-            if (element.entity_id == category.id) {
+        this.state.subscriptionStore.forEach(function(element) {
+            if (element.entity_id == category.id && element.entity_type == "category") {
                 SubscriptionActions.unsubscribeToCategory(element);
             }
-        }
+        });
         event.stopPropagation();
-    },
+    }, 
 
     onSelect(category) {
         var { categories } = this.state;
@@ -89,12 +89,11 @@ var Sidebar = React.createClass({
 
             var categoryLink = <a className="subscribe" onClick={ (e) => {me.onSubscribeClick(e, category)} } >Subscribe</a>;
             if (me.state.subscriptionStore && me.state.subscriptionStore.length > 0) {
-                for (var element of me.state.subscriptionStore) {
+                me.state.subscriptionStore.forEach(function(element) {
                     if (element.entity_description == category.title) {
                         categoryLink = <a className="subscribe" onClick={ (e) => {me.onUnsubscribeClick(e, category)} }>Unsubscribe</a>;
-                        break;
                     }
-                }
+                });
             }
 
             return (
