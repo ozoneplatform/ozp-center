@@ -56,7 +56,7 @@ var Sidebar = React.createClass({
             }
         });
         event.stopPropagation();
-    }, 
+    },
 
     onSelect(category) {
         var { categories } = this.state;

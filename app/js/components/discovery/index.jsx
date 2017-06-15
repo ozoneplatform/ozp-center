@@ -59,6 +59,7 @@ var Discovery = React.createClass({
             queryString: this.state ? this.state.queryString : '',
             categories: this.state ? this.state.categories : [],
             tags: this.state ? this.state.tags : [],
+            tagId: this.state ? this.state.tagId : [],
             type: this.state ? this.state.type : [],
             agency: this.state ? this.state.agency : [],
             nextOffset: DiscoveryPageStore.getNextOffset(),
@@ -137,6 +138,10 @@ var Discovery = React.createClass({
         if(this.context.getCurrentParams().tags){
           this.setState({initTags: decodeURIComponent(this.context.getCurrentParams().tags).split('+')});
         }
+        if(this.context.getCurrentParams().tagId){
+            this.setState({tagId: decodeURIComponent(this.context.getCurrentParams().tagId).split('+')});
+        }
+
 
     },
 
@@ -283,7 +288,8 @@ var Discovery = React.createClass({
             currentOffset: 0,
             type: [],
             agency: [],
-            tags: []
+            tags: [],
+            tagId: []
         });
     },
 
@@ -335,6 +341,7 @@ var Discovery = React.createClass({
               offset: this.state.currentOffset,
               category: this.state.categories,
               tag: this.state.tags,
+              tagId: this.state.tagId,
               limit: this.state.limit
             },
             { type, agency });
@@ -477,7 +484,7 @@ var Discovery = React.createClass({
             </div>
         }
 
-        var searchLink = `${CENTER_URL}/#/home/${encodeURIComponent(this.state.queryString)}/${(this.state.categories.length) ? encodeURIComponent(this.state.categories.toString()).replace(/%2C/g,'+') : ''}/${(this.state.type.length) ? encodeURIComponent(this.state.type.toString()).replace(/%2C/g,'+') : ''}/${(this.state.agency.length) ? encodeURIComponent(this.state.agency.toString()).replace(/%2C/g,'+') : ''}/${(this.state.tags.length) ? encodeURIComponent(this.state.tags.toString()).replace(/%2C/g,'+') : ''}`;
+        var searchLink = `${CENTER_URL}/#/home/${encodeURIComponent(this.state.queryString)}/${(this.state.categories.length) ? encodeURIComponent(this.state.categories.toString()).replace(/%2C/g,'+') : ''}/${(this.state.type.length) ? encodeURIComponent(this.state.type.toString()).replace(/%2C/g,'+') : ''}/${(this.state.agency.length) ? encodeURIComponent(this.state.agency.toString()).replace(/%2C/g,'+') : ''}/${(this.state.tags.length) ? encodeURIComponent(this.state.tags.toString()).replace(/%2C/g,'+') : ''}/${(this.state.tagId.length) ? encodeURIComponent(this.state.tagId.toString()).replace(/%2C/g,'+') : ''}`;
         return (
             <section className="Discovery__SearchResults">
                 <h4 ref="searchResults">Search Results &nbsp;

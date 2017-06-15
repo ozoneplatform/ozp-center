@@ -7,7 +7,9 @@ var SubscriptionApi = require('../webapi/Subscription');
 var SubscriptionActions = Reflux.createActions([
     'fetchSubscriptions',
     'subscribeToCategory',
-    'unsubscribeToCategory'
+    'unsubscribeToCategory',
+    'subscribeToTag',
+    'unsubscribeToTag'
 ]);
 
 module.exports = SubscriptionActions;

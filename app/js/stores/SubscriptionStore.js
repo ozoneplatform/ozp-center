@@ -10,14 +10,14 @@ var _ = require('../utils/_');
 
 var SubscriptionStore = Reflux.createStore({
     listenables: SubscriptionActions,
-    categories: [],
+    subscriptions: [],
 
     onFetchSubscriptions: function() {
         var me = this;
 
         SubscriptionApi.getSubscriptions().then(function(response) {
-            me.categories = response;
-            me.trigger(me.categories);
+            me.subscriptions = response;
+            me.trigger(me.subscriptions);
             me.doTrigger();
         });
     },
@@ -25,19 +25,19 @@ var SubscriptionStore = Reflux.createStore({
     onSubscribeToCategory: function(category) {
         var me = this;
 
-        SubscriptionApi.subscribeToCategory(category).then(function(categoryEntry) {
-            me.categories = me.categories.concat(categoryEntry);
+        SubscriptionApi.subscribeToEntity("category", category).then(function(categoryEntry) {
+            me.subscriptions = me.subscriptions.concat(categoryEntry);
             me.doTrigger();
         });
     },
 
-    unsubscribeToCategory: function(category) {
+    onUnsubscribeToCategory: function(category) {
         var me = this;
 
-        SubscriptionApi.unsubscribeToCategory(category.id).then(function() {
-            for (var i = 0; i < me.categories.length; i++) {
-                if (me.categories[i].entity_id == category.entity_id) {
-                    me.categories.splice(i, 1);
+        SubscriptionApi.unsubscribeToEntity(category.id).then(function() {
+            for (var i = 0; i < me.subscriptions.length; i++) {
+                if (me.subscriptions[i].entity_id == category.entity_id && me.subscriptions[i].entity_type == 'category') {
+                    me.subscriptions.splice(i, 1);
                 }
             }
             me.doTrigger();
@@ -45,12 +45,34 @@ var SubscriptionStore = Reflux.createStore({
 
     },
 
+    onSubscribeToTag: function(tag) {
+        var me = this;
+
+        SubscriptionApi.subscribeToEntity("tag", tag).then(function(tagEntry) {
+            me.subscriptions = me.subscriptions.concat(tagEntry);
+            me.doTrigger();
+        });
+    },
+
+    onUnsubscribeToTag: function(tag) {
+        var me = this;
+
+        SubscriptionApi.unsubscribeToEntity(tag.id).then(function() {
+            for (var i = 0; i < me.subscriptions.length; i++) {
+                if (me.subscriptions[i].entity_id == tag.entity_id && me.subscriptions[i].entity_type == 'tag') {
+                    me.subscriptions.splice(i, 1);
+                }
+            }
+            me.doTrigger();
+        });
+    },
+
     doTrigger: function() {
         this.trigger(this.getDefaultData());
     },
 
     getDefaultData: function() {
-        return this.categories;
+        return this.subscriptions;
     }
 });
 
