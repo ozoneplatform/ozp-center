@@ -17,11 +17,13 @@ var PastNotification = React.createClass({
         }
     },
     render() {
-        var { expiresDate, message, listing } = this.props.notification;
+        var { expiresDate, message, listing, createdDate } = this.props.notification;
+        var created = new Date(createdDate);
         return (
             <div className="PastNotification">
                 <div className="PastNotification__Header">
                     <h5 style={{margin: 0, fontWeight: 400}}>{(listing) ? listing.title : 'AppsMall'}</h5>
+                    <em>Created: <_Date date={created} /> at <Time date={created} /><br/></em>
                     <em>Expired: <_Date date={expiresDate} /> at <Time date={expiresDate} /></em>
                 </div>
                 <p>{ message }</p>
