@@ -63,7 +63,9 @@ var Stewards = React.createClass({
                 }
             },
             grid: {
+                name: 'grid',
                 toolbar: {
+                    name: 'stewards',
                     items: [
                         { type: 'button', id: 'demoteButton', caption: 'Demote', title: 'Demote a Steward', img: 'icon-delete' }
                     ],
@@ -80,25 +82,24 @@ var Stewards = React.createClass({
                                 w2alert('Please select a Steward.');
                             }
 
-                            //console.log(userInfo);
-
                             if (data.target === 'demoteButton') {
                                 w2confirm('Are you sure you want to remove ' + username + ' from Stewards?')
                                     .yes(function () {
-                                        //console.log('clicked YES');
-                                        var newUserInfo = userInfo;
-                                        newUserInfo.stewardedOrganizations = [];
-                                        newUserInfo.user.groups[0] = {name: "USER"};
-
-                                        //console.log(newUserInfo);
-                                        //console.log(JSON.stringify(humps.decamelizeKeys(newUserInfo)));
+                                        console.log('clicked YES');
+                                        var newUserInfo = {"stewardedOrganizations": [],
+                                        "user":{"groups":[{"name":"USER"}]}
+                                        };
 
                                         $.ajax({
                                             type: 'PUT',
                                             url: API_URL + `/api/profile/${userID}/`,
-                                            data: JSON.stringify(humps.decamelizeKeys(newUserInfo))
+                                            data: JSON.stringify(humps.decamelizeKeys(newUserInfo)),
+                                            contentType: 'application/json'
                                         })
-                                        //.done(newGrid.reload)
+                                        setTimeout(function(){
+                                            w2ui['grid'].reload();
+                                        }, 100);
+                                        //done(w2ui['grid'].reload())
                                         //.fail(newGrid.handleError);
                                     });
                             }
