@@ -7,15 +7,15 @@ var ErrorActions = require('ozp-react-commons/actions/ErrorActions');
 var ErrorStore = require('ozp-react-commons/stores/ErrorStore');
 var ErrorWindow = require('ozp-react-commons/components/error/ErrorWindow.jsx');
 
-var SubscriptionActions = require('../../actions/SubscriptionActions');
-var SubscriptionStore = require('../../stores/SubscriptionStore');
+var TagSubscriptionActions = require('../../actions/TagSubscriptionActions');
+var TagSubscriptionStore = require('../../stores/TagSubscriptionStore');
 
 var DetailedQuery = React.createClass({
-    mixins: [Reflux.connect(ErrorStore, "errorStoreData"), Reflux.connect(SubscriptionStore, "subscriptionStore"), Reflux.listenerMixin],
+    mixins: [Reflux.connect(ErrorStore, "errorStoreData"), Reflux.connect(TagSubscriptionStore, "tagSubscriptionStore"), Reflux.listenerMixin],
 
     getInitialState: function(){
         ErrorActions.fetchEsStatus();
-        SubscriptionActions.fetchSubscriptions();
+        TagSubscriptionActions.fetchSubscriptions();
 
       return {
       };
@@ -178,16 +178,16 @@ var DetailedQuery = React.createClass({
     },
 
     subscribeToTag: function(event) {
-        SubscriptionActions.subscribeToTag(this.props.data.tagId[0]);
+        TagSubscriptionActions.subscribeToTag(this.props.data.tagId[0]);
         event.stopPropagation();
     },
 
     unsubscribeToTag: function(event, tag) {
         var me = this;
 
-        this.state.subscriptionStore.forEach(function(element) {
+        this.state.tagSubscriptionStore.forEach(function(element) {
             if (element.entity_id == me.props.data.tagId && element.entity_type === "tag") {
-                SubscriptionActions.unsubscribeToTag(element);
+                TagSubscriptionActions.unsubscribeToTag(element);
             }
         });
         event.stopPropagation();
@@ -197,20 +197,19 @@ var DetailedQuery = React.createClass({
         var subscribeLink = null;
         var me = this;
 
-        if (this.state.subscriptionStore)  {
+        if (this.state.tagSubscriptionStore)  {
             let foundSubscription = false;
-            this.state.subscriptionStore.forEach(function(element) {
-                if (element.entity_id == me.props.data.tagId && element.entity_type === "tag" && this.props.data.tagId.length > 0) {
+            this.state.tagSubscriptionStore.forEach(function(element) {
+                if (element.entity_id == me.props.data.tagId && me.props.data.tagId.length > 0) {
                     foundSubscription = true;
                     subscribeLink = <a className="tag_subscribe" onClick={(e) => {me.unsubscribeToTag(e, element)}} >Unsubscribe</a>;
                 }
             });
             //last conditional is a fix for subscription store not being null even if it hasn't loaded yet
-            if(this.props.data.tagId.length > 0 && (this.state.subscriptionStore.length === 0 || (!foundSubscription && this.state.subscriptionStore[0].entity_id))){
+            if(this.props.data.tagId.length > 0 && (this.state.tagSubscriptionStore.length === 0 || (!foundSubscription && this.state.tagSubscriptionStore[0].entity_id))){
                 subscribeLink = <a className="tag_subscribe" onClick={(e) => {this.subscribeToTag(e)}} >Subscribe</a>;
             }
         }
-
 
 
         if (this.state.errorStoreData) {

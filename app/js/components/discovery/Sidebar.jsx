@@ -4,11 +4,11 @@ var React = require('react');
 var Reflux = require('reflux');
 var _ = require('../../utils/_');
 
-var SubscriptionActions = require('../../actions/SubscriptionActions');
-var SubscriptionStore = require('../../stores/SubscriptionStore');
+var CategorySubscriptionActions = require('../../actions/CategorySubscriptionActions');
+var CategorySubscriptionStore = require('../../stores/CategorySubscriptionStore');
 
 var Sidebar = React.createClass({
-    mixins: [Reflux.connect(SubscriptionStore, "subscriptionStore"), Reflux.listenerMixin],
+    mixins: [Reflux.connect(CategorySubscriptionStore, "categorySubscriptionStore"), Reflux.listenerMixin],
 
     propTypes: {
         isSearching: React.PropTypes.bool.isRequired,
@@ -18,7 +18,7 @@ var Sidebar = React.createClass({
     },
 
     getInitialState() {
-        SubscriptionActions.fetchSubscriptions();
+        CategorySubscriptionActions.fetchSubscriptions();
 
         return {
             categories: [],
@@ -45,14 +45,14 @@ var Sidebar = React.createClass({
     },
 
     onSubscribeClick(event, category) {
-        SubscriptionActions.subscribeToCategory(category.id);
+        CategorySubscriptionActions.subscribeToCategory(category.id);
         event.stopPropagation();
     },
 
     onUnsubscribeClick(event, category) {
-        this.state.subscriptionStore.forEach(function(element) {
+        this.state.categorySubscriptionStore.forEach(function(element) {
             if (element.entity_id == category.id && element.entity_type == "category") {
-                SubscriptionActions.unsubscribeToCategory(element);
+                CategorySubscriptionActions.unsubscribeToCategory(element);
             }
         });
         event.stopPropagation();
@@ -88,8 +88,8 @@ var Sidebar = React.createClass({
             });
 
             var categoryLink = <a className="subscribe" onClick={ (e) => {me.onSubscribeClick(e, category)} } >Subscribe</a>;
-            if (me.state.subscriptionStore && me.state.subscriptionStore.length > 0) {
-                me.state.subscriptionStore.forEach(function(element) {
+            if (me.state.categorySubscriptionStore && me.state.categorySubscriptionStore.length > 0) {
+                me.state.categorySubscriptionStore.forEach(function(element) {
                     if (element.entity_description == category.title) {
                         categoryLink = <a className="subscribe" onClick={ (e) => {me.onUnsubscribeClick(e, category)} }>Unsubscribe</a>;
                     }
