@@ -1,12 +1,15 @@
 'use strict';
 
+require('script!w2ui');
+w2utils.settings.dataType = 'RESTFULL';
+
 var React = require('react');
+var $ = require('jquery');
 var t = require('tcomb-form');
 var { Str, struct, subtype, enums, list } = t;
 var Crud = require('../../shared/Crud.jsx');
-
 var { API_URL } = require('ozp-react-commons/OzoneConfig');
-
+var humps = require('humps');
 var Stewards = React.createClass({
 
     mixins: [ require('../../../mixins/SystemStateMixin') ],
@@ -66,18 +69,37 @@ var Stewards = React.createClass({
                     ],
                     onClick: function (target, data) {
                         data.onComplete = function(){
-                            var user = this.owner.getSelection();
-                            var username = this.owner.get(user).displayName;
-                            console.log(username);
+                            var newGrid = this.owner;
+                            var userID = newGrid.getSelection()[0];
+                            var userInfo = newGrid.get(userID)
+
+                            try {
+                                var username = userInfo.displayName;
+                            }
+                            catch (err) {
+                                w2alert('Please select a Steward.');
+                            }
+
+                            //console.log(userInfo);
 
                             if (data.target === 'demoteButton') {
                                 w2confirm('Are you sure you want to remove ' + username + ' from Stewards?')
-                                    //console.log(answer);
                                     .yes(function () {
-                                        console.log('clicked YES');
+                                        //console.log('clicked YES');
+                                        var newUserInfo = userInfo;
+                                        newUserInfo.stewardedOrganizations = [];
+                                        newUserInfo.user.groups[0] = {name: "USER"};
 
-                                        //TODO: Replace steward to USER; Remove all orgs from list
+                                        //console.log(newUserInfo);
+                                        //console.log(JSON.stringify(humps.decamelizeKeys(newUserInfo)));
 
+                                        $.ajax({
+                                            type: 'PUT',
+                                            url: API_URL + `/api/profile/${userID}/`,
+                                            data: JSON.stringify(humps.decamelizeKeys(newUserInfo))
+                                        })
+                                        //.done(newGrid.reload)
+                                        //.fail(newGrid.handleError);
                                     });
                             }
                         }
