@@ -85,22 +85,26 @@ var Stewards = React.createClass({
                             if (data.target === 'demoteButton') {
                                 w2confirm('Are you sure you want to remove ' + username + ' from Stewards?')
                                     .yes(function () {
-                                        console.log('clicked YES');
-                                        var newUserInfo = {"stewardedOrganizations": [],
-                                        "user":{"groups":[{"name":"USER"}]}
-                                        };
+                                        if (newGrid.records.length <= 1){
+                                            w2alert('There must be at least one Steward.');
+                                        }
+                                        else{
+                                            var newUserInfo = {"stewardedOrganizations": [],
+                                            "user":{"groups":[{"name":"USER"}]}
+                                            };
 
-                                        $.ajax({
-                                            type: 'PUT',
-                                            url: API_URL + `/api/profile/${userID}/`,
-                                            data: JSON.stringify(humps.decamelizeKeys(newUserInfo)),
-                                            contentType: 'application/json'
-                                        })
-                                        setTimeout(function(){
-                                            w2ui['grid'].reload();
-                                        }, 100);
-                                        //done(w2ui['grid'].reload())
-                                        //.fail(newGrid.handleError);
+                                            $.ajax({
+                                                type: 'PUT',
+                                                url: API_URL + `/api/profile/${userID}/`,
+                                                data: JSON.stringify(humps.decamelizeKeys(newUserInfo)),
+                                                contentType: 'application/json'
+                                            })
+                                            
+                                            //To ensure changes are finished before updating the grid
+                                            setTimeout(function(){
+                                                w2ui['grid'].reload();
+                                            }, 100);
+                                        }
                                     });
                             }
                         }
