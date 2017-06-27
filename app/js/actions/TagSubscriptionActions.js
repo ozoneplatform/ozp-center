@@ -4,12 +4,10 @@ var Reflux = require('reflux');
 var createActions = require('../utils/createActions');
 var SubscriptionApi = require('../webapi/Subscription');
 
-var SubscriptionActions = Reflux.createActions([
+var TagSubscriptionActions = Reflux.createActions([
     'fetchSubscriptions',
-    'subscribeToCategory',
-    'unsubscribeToCategory',
     'subscribeToTag',
     'unsubscribeToTag'
 ]);
 
-module.exports = SubscriptionActions;
+module.exports = TagSubscriptionActions;
