@@ -117,11 +117,11 @@ ul.list-unstyled.RecentActivity
     border-top: 4px solid #eeeeef;
     height: 156px;
     overflow: hidden;
-    
+
     .carousel, .carousel-wrapper {
         max-height: 89px;
     }
-    
+
     .recommendations-title {
         font-size: 18px;
         line-height: 18px;
@@ -136,7 +136,7 @@ ul.list-unstyled.RecentActivity
         overflow: hidden;
         text-overflow: ellipsis;
     }
-    
+
     .recommendations-tile{
         @extend .quickview-header;
         cursor: pointer;
@@ -161,6 +161,8 @@ ul.list-unstyled.RecentActivity
         left: 100px;
         bottom: -30px;
         white-space: nowrap;
+        margin-left: 23px;
+        padding-left: 0px;
     }
 
     .quickview-header-info {
@@ -383,6 +385,3 @@ ul.list-unstyled.RecentActivity
         color: $link-color;
     }
 }
-
-
-

@@ -48,15 +48,21 @@ var IconRating = React.createClass({
     },
 
     render: function () {
+        var votes = (this.props.totalVotes != null && this.props.totalVotes > 0) ? '(' + this.props.totalVotes + ')' : null;
         // key is explicitly used here to destroy IconRating component for Reset
         return (
+            <div>
             <_IconRating {...this.props}
                 key={ this.props.currentRating }
                 currentRating={ this.state.rating }
                 className={ this.props.className }
                 toggledClassName={ this.props.toggledClassName }
                 untoggledClassName={ this.props.untoggledClassName }
-                halfClassName={ this.props.halfClassName } />
+                halfClassName={ this.props.halfClassName }/>
+            <span className="rating-text">
+                {votes}
+            </span>
+            </div>
         );
     }
 

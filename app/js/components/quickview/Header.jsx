@@ -29,6 +29,7 @@ var QuickviewHeader = React.createClass({
         var avgRate = listing.avgRate;
         var image = listing.imageMediumUrl;
         var agencyShort = listing.agencyShort;
+        var totalVotes = listing.totalVotes;
         var lockStyle = {
             position: 'absolute',
             left: '4px',
@@ -60,7 +61,8 @@ var QuickviewHeader = React.createClass({
                         currentRating= { avgRate }
                         toggledClassName="icon-star-filled-yellow"
                         untoggledClassName="icon-star-filled-grayLighter"
-                        halfClassName="icon-star-half-filled-yellow" />
+                        halfClassName="icon-star-half-filled-yellow"
+                        totalVotes={totalVotes} />
                 </div>
                 { !this.props.preview && this.renderActions() }
             </div>
