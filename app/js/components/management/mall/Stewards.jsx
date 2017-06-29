@@ -9,7 +9,6 @@ var $ = require('jquery');
 var t = require('tcomb-form');
 var { Str, struct, subtype, enums, list } = t;
 var Crud = require('../../shared/Crud.jsx');
-var DemoteConfirmation = require('../../shared/DemoteConfirmation.jsx');
 var { API_URL } = require('ozp-react-commons/OzoneConfig');
 var humps = require('humps');
 var Stewards = React.createClass({
