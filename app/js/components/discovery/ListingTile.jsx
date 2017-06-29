@@ -44,6 +44,7 @@ var ListingTile = React.createClass({
         var imageLargeUrl;
         var avgRate = listing.avgRate;
         var agencyShort = listing.agencyShort;
+        var totalVotes = listing.totalVotes;
         var href = this.makeHref(this.getActiveRoutePath(), null, {
             listing: listing.id,
             action: 'view',
@@ -68,7 +69,8 @@ var ListingTile = React.createClass({
                         currentRating = { avgRate }
                         toggledClassName="icon-star-filled-yellow"
                         untoggledClassName="icon-star-filled-grayLighter"
-                        halfClassName="icon-star-half-filled-yellow" />
+                        halfClassName="icon-star-half-filled-yellow"
+                        totalVotes={totalVotes} />
                     {
                         agencyShort &&
                         <span className="company">

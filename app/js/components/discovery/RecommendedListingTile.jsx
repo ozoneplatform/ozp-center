@@ -41,6 +41,7 @@ var RecommendedListingTile = React.createClass({
         var image = listing.imageMediumUrl;
         var avgRate = listing.avgRate;
         var agencyShort = listing.agencyShort;
+        var totalVotes = listing.totalVotes;
         var href = this.makeHref(this.getActiveRoutePath(), null, {
             listing: listing.id,
             action: 'view',
@@ -77,9 +78,10 @@ var RecommendedListingTile = React.createClass({
                         currentRating= { avgRate }
                         toggledClassName="icon-star-filled-yellow"
                         untoggledClassName="icon-star-filled-grayLighter"
-                        halfClassName="icon-star-half-filled-yellow" />
+                        halfClassName="icon-star-half-filled-yellow"
+                        totalVotes= {totalVotes} />
                 </div>
-                </div>
+            </div>
 
         );
     }
