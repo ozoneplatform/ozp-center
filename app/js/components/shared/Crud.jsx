@@ -210,7 +210,9 @@ var Crud = React.createClass({
     },
 
     getUrlWithoutParams: function () {
-        return this.props.url.replace(/\?.*/, '');
+        var url = this.props.url.replace(/\?.*/, '');
+        url = url.replace(/\/$/, '');
+        return url;
     },
 
     //Retrieve form data process a create, using a potentially custom function
