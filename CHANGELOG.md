@@ -1,3 +1,11 @@
+### 1.1.78 (2017-07-03)
+
+
+#### Bug Fixes
+
+* Selecting the save button in Center Settings now properly saves information. ([99c64014](https://github.com/ozone-development/ozp-center.git/commit/99c64014b6019d578d0cf335c5b0f61ecdf47e5e))
+
+
 ### 1.1.77 (2017-06-28)
 
 
