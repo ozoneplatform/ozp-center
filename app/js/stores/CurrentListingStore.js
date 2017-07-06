@@ -133,7 +133,8 @@ var CurrentListingStore = createStore({
     refreshListing: function (listing) {
         revokeAllObjectURLs();
         _listing = listing;
-        _listingId = listing.id;
+        if(listing.id)
+            _listingId = listing.id;
         _submitting = false;
         var validation = this.doValidation();
         this.trigger({
@@ -325,7 +326,8 @@ var CurrentListingStore = createStore({
         if (id) {
             if (!_listing){
                 newListing = GlobalListingStore.getById(id) || new Listing({ owners: [this.currentUser] });
-                this.onCacheUpdated();
+                //this.onCacheUpdated();
+                this.refreshListing(newListing);
                 deferred.resolve(newListing);
             }
             else {
