@@ -324,7 +324,7 @@ var CurrentListingStore = createStore({
         _listingId = id;
         var newListing;
         if (id) {
-            if (!_listing){
+            if (!_listing || !_listing.id != _listingId){
                 newListing = GlobalListingStore.getById(id) || new Listing({ owners: [this.currentUser] });
                 //this.onCacheUpdated();
                 this.refreshListing(newListing);
