@@ -68,7 +68,7 @@ var Stewards = React.createClass({
                 toolbar: {
                     name: 'toolbar',
                     items: [
-                        { type: 'button', id: 'demoteButton', caption: 'Demote', hint: 'Demote a Steward', img: 'icon-delete', disabled: true }
+                        { type: 'button', id: 'demoteButton', caption: 'Remove', hint: 'Remove a user from list of stewards', img: 'icon-delete', disabled: true }
                     ],
                     onClick: function (target, data) {
                         data.onComplete = function(){
