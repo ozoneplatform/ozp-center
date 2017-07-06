@@ -163,7 +163,7 @@ var CurrentListingStore = createStore({
     },
 
     onSimilarUpdated: function (){
-        this.trigger();//  this.onCacheUpdated();
+        this.trigger();
     },
 
     onProfileUpdate: function(profileData) {
@@ -326,7 +326,6 @@ var CurrentListingStore = createStore({
         if (id) {
             if (!_listing || !_listing.id != _listingId){
                 newListing = GlobalListingStore.getById(id) || new Listing({ owners: [this.currentUser] });
-                //this.onCacheUpdated();
                 this.refreshListing(newListing);
                 deferred.resolve(newListing);
             }
