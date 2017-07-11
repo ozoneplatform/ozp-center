@@ -24,7 +24,7 @@ var SubscriptionApi = {
     unsubscribeToEntity: function(entity_id) {
         return $.ajax({
             type: 'DELETE',
-            url: API_URL + '/api/subscription/' + entity_id + '/'
+            url: API_URL + '/api/self/subscription/' + entity_id + '/'
         });
     }
 };
