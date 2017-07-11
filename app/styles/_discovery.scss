@@ -52,7 +52,12 @@
     .tag_subscribe {
         visibility: visible;
         cursor: pointer;
-        color: #D3D3D3;
+        color: orange;
+        padding-left: 8px;
+    }
+
+    .divider {
+        padding-left: 8px;
     }
 
     .sidebar {

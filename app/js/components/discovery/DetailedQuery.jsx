@@ -133,13 +133,13 @@ var DetailedQuery = React.createClass({
                   this.state.tagSubscriptionStore.forEach(function(element) {
                       if (element.entity_id == me.props.data.tagId && me.props.data.tagId.length > 0) {
                           foundSubscription = true;
-                          divider = <span> | </span>;
+                          divider = <span className="divider"> | </span>;
                           subscribeLink = <a className="tag_subscribe" onClick={(e) => {me.unsubscribeToTag(e, element)}} >Unsubscribe</a>;
                       }
                   });
                   //last conditional is a fix for subscription store not being null even if it hasn't loaded yet
                   if(this.props.data.tagId.length > 0 && (this.state.tagSubscriptionStore.length === 0 || (!foundSubscription && this.state.tagSubscriptionStore[0].entity_id))){
-                      divider = <span> | </span>;
+                      divider = <span className="divider"> | </span>;
                       subscribeLink = <a className="tag_subscribe" onClick={(e) => {this.subscribeToTag(e)}} >Subscribe</a>;
                   }
               }
