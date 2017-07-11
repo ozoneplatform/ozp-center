@@ -10,6 +10,7 @@ var ErrorWindow = require('ozp-react-commons/components/error/ErrorWindow.jsx');
 var TagSubscriptionActions = require('../../actions/TagSubscriptionActions');
 var TagSubscriptionStore = require('../../stores/TagSubscriptionStore');
 
+
 var DetailedQuery = React.createClass({
     mixins: [Reflux.connect(ErrorStore, "errorStoreData"), Reflux.connect(TagSubscriptionStore, "tagSubscriptionStore"), Reflux.listenerMixin],
 
@@ -169,7 +170,8 @@ var DetailedQuery = React.createClass({
         }
         return (
           <span>
-            &nbsp;with the {(this.props.data.categories.length > 1) ? 'categories' : 'category'} {prettyCats}
+            &nbsp;with the {(this.props.data.categories.length > 1) ? 'categories' : 'category'}
+             {prettyCats}
           </span>
         );
       }else{

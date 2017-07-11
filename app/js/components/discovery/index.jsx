@@ -22,6 +22,7 @@ var Types = require('./Types.jsx');
 var Organizations = require('./Organizations.jsx');
 var DetailedQuery = require('./DetailedQuery.jsx');
 var ActiveStateMixin = require('../../mixins/ActiveStateMixin');
+var ReactSelectBox = require('react-select-box');
 
 
 var $ = require('jquery');
@@ -449,7 +450,9 @@ var Discovery = React.createClass({
 
         return (
             <section className="Discovery__MostPopular" key="Discovery__MostPopular">
-                <h4>Most Popular</h4>
+                <h4>Most Popular
+                </h4>
+
                 <ul className="infiniteScroll row clearfix">
                     { InfiniTiles }
                 </ul>
