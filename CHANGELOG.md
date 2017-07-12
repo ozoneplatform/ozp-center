@@ -1,3 +1,11 @@
+### 1.1.79 (2017-07-12)
+
+
+#### Bug Fixes
+
+* Changed caption and hint fields from 'demote' to 'remove.' ([db8fbf6e](https://github.com/ozone-development/ozp-center.git/commit/db8fbf6e5e3ea7bfa4a6c22bd677129e0eab1a42))
+
+
 ### 1.1.78 (2017-07-03)
 
 
