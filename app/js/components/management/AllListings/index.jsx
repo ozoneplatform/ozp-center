@@ -114,11 +114,6 @@ var AllListings = React.createClass({
                         <EnabledFilter { ...sidebarFilterOptions } />
                     </Sidebar>
                 </div>
-                <SelectBox className="SelectBox sortBy" label="Sort By">
-                   <option className="sortBy" value="name">Name</option>
-                   <option className="sortBy" value="latest">Latest</option>
-                   <option className="sortBy" value="rating">Rating</option>
-               </SelectBox>
                 { this.renderListings() }
             </div>
         );

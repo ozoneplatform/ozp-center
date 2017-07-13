@@ -10,6 +10,7 @@ var ErrorWindow = require('ozp-react-commons/components/error/ErrorWindow.jsx');
 var TagSubscriptionActions = require('../../actions/TagSubscriptionActions');
 var TagSubscriptionStore = require('../../stores/TagSubscriptionStore');
 
+var SelectBox = require('../shared/SelectBox.jsx');
 
 var DetailedQuery = React.createClass({
     mixins: [Reflux.connect(ErrorStore, "errorStoreData"), Reflux.connect(TagSubscriptionStore, "tagSubscriptionStore"), Reflux.listenerMixin],
@@ -129,6 +130,11 @@ var DetailedQuery = React.createClass({
             return (
               <span key="getTags" className="label label-default">
                 {tag}
+                <SelectBox className="SelectBox sortBy" label="Sort By">
+                   <option className="sortBy" value="name">Name</option>
+                   <option className="sortBy" value="latest">Latest</option>
+                   <option className="sortBy" value="rating">Rating</option>
+               </SelectBox>
               </span>
             );
           });
@@ -170,8 +176,7 @@ var DetailedQuery = React.createClass({
         }
         return (
           <span>
-            &nbsp;with the {(this.props.data.categories.length > 1) ? 'categories' : 'category'}
-             {prettyCats}
+            &nbsp;with the {(this.props.data.categories.length > 1) ? 'categories' : 'category'} {prettyCats}
           </span>
         );
       }else{

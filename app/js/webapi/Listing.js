@@ -265,12 +265,19 @@ var ListingApi = {
             }));
     },
 
+    getMostPopular: function(options) {
+        var params = $.param(options, true);
+        return $.getJSON(API_URL + '/api/storefront/most_popular?' + params).then(
+            resp => ({
+                mostPopular: _.map(resp.most_popular, this.newListing)
+            })
+        );
+    },
+
     search: function (options) {
-        console.log(options);
         var params = $.param(options, true);
         return $.getJSON(API_URL + '/api/listings/essearch/?' + params).then(
             (response) => {
-                console.log(response);
                 if (options.category && options.category.length > 0) {
                     for(var index = 0; index < options.category.length; index++) {
                         OzpAnalytics.trackCategorization('Categorization', options.category[index], response.count);
@@ -295,7 +302,6 @@ var ListingApi = {
                     }
                 }, 800);
                 response.results = _.map(response.results, this.newListing);
-                console.log(response);
                 return response;
 
             })

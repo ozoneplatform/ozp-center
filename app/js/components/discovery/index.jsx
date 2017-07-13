@@ -24,6 +24,7 @@ var DetailedQuery = require('./DetailedQuery.jsx');
 var ActiveStateMixin = require('../../mixins/ActiveStateMixin');
 var ReactSelectBox = require('react-select-box');
 
+var SelectBox = require('../shared/SelectBox.jsx');
 
 var $ = require('jquery');
 require('../../utils/typeahead.js');
@@ -66,6 +67,7 @@ var Discovery = React.createClass({
             nextOffset: DiscoveryPageStore.getNextOffset(),
             currentOffset: this.state ? this.state.currentOffset : 0,
             limit: this.state ? this.state.limit : PAGINATION_MAX,
+            ordering: this.state ? this.state.ordering : ['title'],
             loadingMore: false,
             searching: false
         };
@@ -107,6 +109,13 @@ var Discovery = React.createClass({
         this.setState({ agency, currentOffset: 0 });
     },
 
+    onSortChange(order) {
+        if (order != this.state.ordering) {
+            this._searching = true;
+            this.setState({ ordering: order});
+        }
+    },
+
     componentDidUpdate(prevProps, prevState) {
         if (this.state.queryString !== prevState.queryString) {
             this.debounceSearch();
@@ -115,7 +124,8 @@ var Discovery = React.createClass({
             !_.isEqual(this.state.tags, prevState.tags)||
             !_.isEqual(this.state.type, prevState.type) ||
             !_.isEqual(this.state.agency, prevState.agency) ||
-            !_.isEqual(this.state.currentOffset, prevState.currentOffset)) {
+            !_.isEqual(this.state.currentOffset, prevState.currentOffset) ||
+            !_.isEqual(this.state.ordering, prevState.ordering)) {
             this.search();
         }
     },
@@ -343,7 +353,8 @@ var Discovery = React.createClass({
               category: this.state.categories,
               tag: this.state.tags,
               tagId: this.state.tagId,
-              limit: this.state.limit
+              limit: this.state.limit,
+              ordering: this.state.ordering
             },
             { type, agency });
 
@@ -450,9 +461,7 @@ var Discovery = React.createClass({
 
         return (
             <section className="Discovery__MostPopular" key="Discovery__MostPopular">
-                <h4>Most Popular
-                </h4>
-
+                <h4>Most Popular</h4>
                 <ul className="infiniteScroll row clearfix">
                     { InfiniTiles }
                 </ul>
@@ -488,6 +497,9 @@ var Discovery = React.createClass({
         }
 
         var searchLink = `${CENTER_URL}/#/home/${encodeURIComponent(this.state.queryString)}/${(this.state.categories.length) ? encodeURIComponent(this.state.categories.toString()).replace(/%2C/g,'+') : ''}/${(this.state.type.length) ? encodeURIComponent(this.state.type.toString()).replace(/%2C/g,'+') : ''}/${(this.state.agency.length) ? encodeURIComponent(this.state.agency.toString()).replace(/%2C/g,'+') : ''}/${(this.state.tags.length) ? encodeURIComponent(this.state.tags.toString()).replace(/%2C/g,'+') : ''}/${(this.state.tagId.length) ? encodeURIComponent(this.state.tagId.toString()).replace(/%2C/g,'+') : ''}`;
+        let ratingLoHi = ['avg_rate', 'total_votes'];
+        let ratingHiLo = ['-avg_rate', 'total_votes'];
+
         return (
             <section className="Discovery__SearchResults">
                 <h4 ref="searchResults">Search Results &nbsp;
@@ -501,13 +513,22 @@ var Discovery = React.createClass({
                   </span>
                 </h4>
                 {listingResults}
-                <p><DetailedQuery
-                  onCategoryChange={this.onCategoryChange}
-                  onTypeChange={this.onTypeChange}
-                  onOrganizationChange={this.onOrganizationChange}
-                  reset={this.reset}
-                  data={this.state}
-                  /></p>
+                <div>
+                    <p><DetailedQuery
+                      onCategoryChange={this.onCategoryChange}
+                      onTypeChange={this.onTypeChange}
+                      onOrganizationChange={this.onOrganizationChange}
+                      reset={this.reset}
+                      data={this.state}
+                      /></p>
+                    <SelectBox className="SelectBox sortBy" label="Sort By" onChange={this.onSortChange}>
+                        <option className="sortBy" value="title">Title: A to Z</option>
+                        <option className="sortBy" value="-title">Title: Z to A</option>
+                        <option className="sortBy" value={ratingLoHi}>Rating: Low to High</option>
+                        <option className="sortBy" value={ratingHiLo}>Rating: High to Low</option>
+                        <option className="sortBy" value="-approved_date">Newest</option>
+                    </SelectBox>
+                </div>
                 <ul className="list-unstyled listings-search-results row clearfix">
                     { results }
                 </ul>
