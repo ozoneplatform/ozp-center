@@ -118,8 +118,8 @@
         border-radius: 0;
         box-shadow: none;
         height:45px;
-    	float: right;
         right: 48px;
+        display: inline-block;
 
         > .react-select-box {
 
@@ -160,6 +160,10 @@
 
         }
 
+    }
+
+    .resultsDiv {
+        display: inline-block;
     }
 }
 

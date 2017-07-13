@@ -227,7 +227,7 @@ var DetailedQuery = React.createClass({
           );
         } else {
             return (
-              <div>
+              <div className="resultsDiv">
                 {this.getQueryString()}
                 {this.getTypes()}
                 {this.getOrgs()}

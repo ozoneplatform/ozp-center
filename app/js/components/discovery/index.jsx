@@ -452,6 +452,11 @@ var Discovery = React.createClass({
           }, 500);
         }
     },
+
+    sortMostPopular(order) {
+        DiscoveryPageStore.sortMostPopular(order);
+    },
+
     renderMostPopular() {
         if(!this.state.mostPopular.length) {
             return;
@@ -462,6 +467,13 @@ var Discovery = React.createClass({
         return (
             <section className="Discovery__MostPopular" key="Discovery__MostPopular">
                 <h4>Most Popular</h4>
+                    <SelectBox className="SelectBox sortBy" label="Sort By" onChange={this.sortMostPopular}>
+                        <option className="sortBy" value="newest">Newest</option>
+                        <option className="sortBy" value="titleAZ">Title: A to Z</option>
+                        <option className="sortBy" value="titleZA">Title: Z to A</option>
+                        <option className="sortBy" value="ratingLoHi">Rating: Low to High</option>
+                        <option className="sortBy" value="ratingHiLo">Rating: High to Low</option>
+                    </SelectBox>
                 <ul className="infiniteScroll row clearfix">
                     { InfiniTiles }
                 </ul>
@@ -497,8 +509,8 @@ var Discovery = React.createClass({
         }
 
         var searchLink = `${CENTER_URL}/#/home/${encodeURIComponent(this.state.queryString)}/${(this.state.categories.length) ? encodeURIComponent(this.state.categories.toString()).replace(/%2C/g,'+') : ''}/${(this.state.type.length) ? encodeURIComponent(this.state.type.toString()).replace(/%2C/g,'+') : ''}/${(this.state.agency.length) ? encodeURIComponent(this.state.agency.toString()).replace(/%2C/g,'+') : ''}/${(this.state.tags.length) ? encodeURIComponent(this.state.tags.toString()).replace(/%2C/g,'+') : ''}/${(this.state.tagId.length) ? encodeURIComponent(this.state.tagId.toString()).replace(/%2C/g,'+') : ''}`;
-        let ratingLoHi = ['avg_rate', 'total_votes'];
-        let ratingHiLo = ['-avg_rate', 'total_votes'];
+        let ratingLoHi = ['avg_rate', '-total_votes'];
+        let ratingHiLo = ['-avg_rate', '-total_votes'];
 
         return (
             <section className="Discovery__SearchResults">
@@ -513,21 +525,23 @@ var Discovery = React.createClass({
                   </span>
                 </h4>
                 {listingResults}
-                <div>
-                    <p><DetailedQuery
-                      onCategoryChange={this.onCategoryChange}
-                      onTypeChange={this.onTypeChange}
-                      onOrganizationChange={this.onOrganizationChange}
-                      reset={this.reset}
-                      data={this.state}
-                      /></p>
-                    <SelectBox className="SelectBox sortBy" label="Sort By" onChange={this.onSortChange}>
-                        <option className="sortBy" value="title">Title: A to Z</option>
-                        <option className="sortBy" value="-title">Title: Z to A</option>
-                        <option className="sortBy" value={ratingLoHi}>Rating: Low to High</option>
-                        <option className="sortBy" value={ratingHiLo}>Rating: High to Low</option>
-                        <option className="sortBy" value="-approved_date">Newest</option>
-                    </SelectBox>
+                <div className="resultsDiv">
+                    <p>
+                        <DetailedQuery
+                          onCategoryChange={this.onCategoryChange}
+                          onTypeChange={this.onTypeChange}
+                          onOrganizationChange={this.onOrganizationChange}
+                          reset={this.reset}
+                          data={this.state}
+                          />
+                          <SelectBox className="SelectBox sortBy" label="Sort By" onChange={this.onSortChange}>
+                              <option className="sortBy" value="-approved_date">Newest</option>
+                              <option className="sortBy" value="title">Title: A to Z</option>
+                              <option className="sortBy" value="-title">Title: Z to A</option>
+                              <option className="sortBy" value={ratingLoHi}>Rating: Low to High</option>
+                              <option className="sortBy" value={ratingHiLo}>Rating: High to Low</option>
+                          </SelectBox>
+                    </p>
                 </div>
                 <ul className="list-unstyled listings-search-results row clearfix">
                     { results }
