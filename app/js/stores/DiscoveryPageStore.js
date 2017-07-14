@@ -63,7 +63,7 @@ var DiscoveryPageStore = Reflux.createStore({
 
     sortAlphabetically(arr, order) {
         arr.sort(function (a, b) {
-            return (a.title < b.title) ? -1 : 1;
+            return (a.title.toUpperCase() < b.title.toUpperCase()) ? -1 : 1;
         });
 
         if (order == "desc") {
@@ -115,7 +115,7 @@ var DiscoveryPageStore = Reflux.createStore({
                 break;
             default:
         }
-        
+
         this.trigger();
     },
 
