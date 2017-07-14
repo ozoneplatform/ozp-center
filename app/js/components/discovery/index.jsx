@@ -35,6 +35,8 @@ var timeout;
 
 
 var FILTERS = ['categories', 'type', 'agency', 'tags'];
+var sortOptions = ['Newest', 'Title: A to Z', 'Title: Z to A', 'Rating: Low to High', 'Rating: High to Low'];
+var searchSortOptions = ['-approved_date', 'title', '-title', ['avg_rate', '-total_votes'], ['-avg_rate', '-total_votes']];
 
 var areFiltersApplied = (state) => {
     return _.reduce(FILTERS, function (memo, filter) {
@@ -67,6 +69,7 @@ var Discovery = React.createClass({
             currentOffset: this.state ? this.state.currentOffset : 0,
             limit: this.state ? this.state.limit : PAGINATION_MAX,
             ordering: this.state ? this.state.ordering : [],
+            orderingText: this.state ? this.state.orderingText : 'Sort By',
             loadingMore: false,
             searching: false
         };
@@ -110,7 +113,25 @@ var Discovery = React.createClass({
 
     onSortChange(order) {
         if (order != this.state.ordering) {
-            this._searching = false;
+            switch (order) {
+                case searchSortOptions[0]:
+                    this.setState({orderingText: sortOptions[0]});
+                    break;
+                case searchSortOptions[1]:
+                    this.setState({orderingText: sortOptions[1]});
+                    break;
+                case searchSortOptions[2]:
+                    this.setState({orderingText: sortOptions[2]});
+                    break;
+                case searchSortOptions[3]:
+                    this.setState({orderingText: sortOptions[3]});
+                    break;
+                case searchSortOptions[4]:
+                    this.setState({orderingText: sortOptions[4]});
+                    break;
+                default:
+            }
+
             this.setState({ordering: order, currentOffset: 0});
         }
     },
@@ -459,6 +480,25 @@ var Discovery = React.createClass({
 
     sortMostPopular(order) {
         DiscoveryPageStore.sortMostPopular(order);
+
+        switch (order) {
+            case "newest":
+                this.setState({orderingText: sortOptions[0]});
+                break;
+            case "titleAZ":
+                this.setState({orderingText: sortOptions[1]});
+                break;
+            case "titleZA":
+                this.setState({orderingText: sortOptions[2]});
+                break;
+            case "ratingLoHi":
+                this.setState({orderingText: sortOptions[3]});
+                break;
+            case "ratingHiLo":
+                this.setState({orderingText: sortOptions[4]});
+                break;
+            default:
+        }
     },
 
     renderMostPopular() {
@@ -471,12 +511,12 @@ var Discovery = React.createClass({
         return (
             <section className="Discovery__MostPopular" key="Discovery__MostPopular">
                 <h4>Most Popular</h4>
-                    <SelectBox className="SelectBox sortBy" label="Sort By" onChange={this.sortMostPopular}>
-                        <option className="sortBy" value="newest">Newest</option>
-                        <option className="sortBy" value="titleAZ">Title: A to Z</option>
-                        <option className="sortBy" value="titleZA">Title: Z to A</option>
-                        <option className="sortBy" value="ratingLoHi">Rating: Low to High</option>
-                        <option className="sortBy" value="ratingHiLo">Rating: High to Low</option>
+                    <SelectBox className="SelectBox sortBy" label={this.state.orderingText} onChange={this.sortMostPopular}>
+                        <option className="sortBy" value="newest">{sortOptions[0]}</option>
+                        <option className="sortBy" value="titleAZ">{sortOptions[1]}</option>
+                        <option className="sortBy" value="titleZA">{sortOptions[2]}</option>
+                        <option className="sortBy" value="ratingLoHi">{sortOptions[3]}</option>
+                        <option className="sortBy" value="ratingHiLo">{sortOptions[4]}</option>
                     </SelectBox>
                 <ul className="infiniteScroll row clearfix">
                     { InfiniTiles }
@@ -513,17 +553,15 @@ var Discovery = React.createClass({
         }
 
         var searchLink = `${CENTER_URL}/#/home/${encodeURIComponent(this.state.queryString)}/${(this.state.categories.length) ? encodeURIComponent(this.state.categories.toString()).replace(/%2C/g,'+') : ''}/${(this.state.type.length) ? encodeURIComponent(this.state.type.toString()).replace(/%2C/g,'+') : ''}/${(this.state.agency.length) ? encodeURIComponent(this.state.agency.toString()).replace(/%2C/g,'+') : ''}/${(this.state.tags.length) ? encodeURIComponent(this.state.tags.toString()).replace(/%2C/g,'+') : ''}/${(this.state.tagId.length) ? encodeURIComponent(this.state.tagId.toString()).replace(/%2C/g,'+') : ''}`;
-        let ratingLoHi = ['avg_rate', '-total_votes'];
-        let ratingHiLo = ['-avg_rate', '-total_votes'];
 
         return (
             <section className="Discovery__SearchResults">
-                <SelectBox className="SelectBox sortBy" label="Sort By" onChange={this.onSortChange}>
-                    <option className="sortBy" value="-approved_date">Newest</option>
-                    <option className="sortBy" value="title">Title: A to Z</option>
-                    <option className="sortBy" value="-title">Title: Z to A</option>
-                    <option className="sortBy" value={ratingLoHi}>Rating: Low to High</option>
-                    <option className="sortBy" value={ratingHiLo}>Rating: High to Low</option>
+                <SelectBox className="SelectBox sortBy" label={this.state.orderingText} onChange={this.onSortChange}>
+                    <option className="sortBy" value={searchSortOptions[0]}>{sortOptions[0]}</option>
+                    <option className="sortBy" value={searchSortOptions[1]}>{sortOptions[1]}</option>
+                    <option className="sortBy" value={searchSortOptions[2]}>{sortOptions[2]}</option>
+                    <option className="sortBy" value={searchSortOptions[3]}>{sortOptions[3]}</option>
+                    <option className="sortBy" value={searchSortOptions[4]}>{sortOptions[4]}</option>
                 </SelectBox>
                 <h4 ref="searchResults">Search Results &nbsp;
                   <span tabIndex="0"
