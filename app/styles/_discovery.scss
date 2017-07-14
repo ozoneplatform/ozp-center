@@ -117,9 +117,15 @@
         width: 140px;
         border-radius: 0;
         box-shadow: none;
-        height:45px;
-        right: 48px;
+        height:27px;
+        float: right;
         display: inline-block;
+        top: 5px;
+
+        > button {
+            padding-top: 4px;
+            height: 27px;
+        }
 
         > .react-select-box {
 
@@ -133,6 +139,10 @@
                     color: $gray-dark;
                 }
             }
+        }
+
+        > .react-select-box::after {
+            top: 8px;
         }
 
         > .react-select-box-options {
