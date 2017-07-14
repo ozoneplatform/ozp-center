@@ -514,6 +514,13 @@ var Discovery = React.createClass({
 
         return (
             <section className="Discovery__SearchResults">
+                <SelectBox className="SelectBox sortBy" label="Sort By" onChange={this.onSortChange}>
+                    <option className="sortBy" value="-approved_date">Newest</option>
+                    <option className="sortBy" value="title">Title: A to Z</option>
+                    <option className="sortBy" value="-title">Title: Z to A</option>
+                    <option className="sortBy" value={ratingLoHi}>Rating: Low to High</option>
+                    <option className="sortBy" value={ratingHiLo}>Rating: High to Low</option>
+                </SelectBox>
                 <h4 ref="searchResults">Search Results &nbsp;
                   <span tabIndex="0"
                     className="shareLink"
@@ -534,13 +541,6 @@ var Discovery = React.createClass({
                           reset={this.reset}
                           data={this.state}
                           />
-                          <SelectBox className="SelectBox sortBy" label="Sort By" onChange={this.onSortChange}>
-                              <option className="sortBy" value="-approved_date">Newest</option>
-                              <option className="sortBy" value="title">Title: A to Z</option>
-                              <option className="sortBy" value="-title">Title: Z to A</option>
-                              <option className="sortBy" value={ratingLoHi}>Rating: Low to High</option>
-                              <option className="sortBy" value={ratingHiLo}>Rating: High to Low</option>
-                          </SelectBox>
                     </p>
                 </div>
                 <ul className="list-unstyled listings-search-results row clearfix">
