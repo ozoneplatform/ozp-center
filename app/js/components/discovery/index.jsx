@@ -22,7 +22,6 @@ var Types = require('./Types.jsx');
 var Organizations = require('./Organizations.jsx');
 var DetailedQuery = require('./DetailedQuery.jsx');
 var ActiveStateMixin = require('../../mixins/ActiveStateMixin');
-var ReactSelectBox = require('react-select-box');
 
 var SelectBox = require('../shared/SelectBox.jsx');
 
@@ -67,7 +66,7 @@ var Discovery = React.createClass({
             nextOffset: DiscoveryPageStore.getNextOffset(),
             currentOffset: this.state ? this.state.currentOffset : 0,
             limit: this.state ? this.state.limit : PAGINATION_MAX,
-            ordering: this.state ? this.state.ordering : ['title'],
+            ordering: this.state ? this.state.ordering : [],
             loadingMore: false,
             searching: false
         };
@@ -111,8 +110,8 @@ var Discovery = React.createClass({
 
     onSortChange(order) {
         if (order != this.state.ordering) {
-            this._searching = true;
-            this.setState({ ordering: order});
+            this._searching = false;
+            this.setState({ordering: order, currentOffset: 0});
         }
     },
 
@@ -353,10 +352,15 @@ var Discovery = React.createClass({
               category: this.state.categories,
               tag: this.state.tags,
               tagId: this.state.tagId,
-              limit: this.state.limit,
-              ordering: this.state.ordering
+              limit: this.state.limit
             },
             { type, agency });
+
+        if (this.state.ordering) {
+            combinedObj = _.assign(combinedObj, {
+                ordering: this.state.ordering
+            },{ type, agency });
+        }
 
         ListingActions.search(_.assign(combinedObj));
 

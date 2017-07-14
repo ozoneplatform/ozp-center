@@ -18,8 +18,6 @@ var TableView = require('../shared/TableView.jsx');
 
 var { UserRole } = require('ozp-react-commons/constants');
 
-var SelectBox = require('../../shared/SelectBox.jsx');
-
 var AllListings = React.createClass({
 
     mixins: [

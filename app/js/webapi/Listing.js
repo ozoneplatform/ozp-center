@@ -265,15 +265,6 @@ var ListingApi = {
             }));
     },
 
-    getMostPopular: function(options) {
-        var params = $.param(options, true);
-        return $.getJSON(API_URL + '/api/storefront/most_popular?' + params).then(
-            resp => ({
-                mostPopular: _.map(resp.most_popular, this.newListing)
-            })
-        );
-    },
-
     search: function (options) {
         var params = $.param(options, true);
         return $.getJSON(API_URL + '/api/listings/essearch/?' + params).then(
