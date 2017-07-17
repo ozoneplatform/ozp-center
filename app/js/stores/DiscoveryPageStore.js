@@ -97,24 +97,20 @@ var DiscoveryPageStore = Reflux.createStore({
     },
 
     sortMostPopular(order) {
-        switch (order) {
-            case "titleAZ":
-                _mostPopular = this.sortAlphabetically(_mostPopular, "asc");
-                break;
-            case "titleZA":
-                _mostPopular = this.sortAlphabetically(_mostPopular, "desc");
-                break;
-            case "newest":
-                _mostPopular = this.sortNewest(_mostPopular);
-                break;
-            case "ratingLoHi":
-                _mostPopular = this.sortRating(_mostPopular, "asc");
-                break;
-            case "ratingHiLo":
-                _mostPopular = this.sortRating(_mostPopular, "desc");
-                break;
-            default:
-        }
+        var me = this;
+        var sortOptions = [
+            {option: 'Newest', searchParam: '-approved_date', sortMethod: function(){me.sortNewest(_mostPopular)}},
+            {option: 'Title: A to Z', searchParam: 'title', sortMethod: function(){me.sortAlphabetically(_mostPopular)}},
+            {option: 'Title: Z to A', searchParam: '-title', sortMethod: function(){me.sortAlphabetically(_mostPopular, "desc")}},
+            {option: 'Rating: Low to High', searchParam: ['avg_rate', '-total_votes'], sortMethod: function(){me.sortRating(_mostPopular)}},
+            {option: 'Rating: High to Low', searchParam: ['-avg_rate', '-total_votes'], sortMethod: function(){me.sortRating(_mostPopular, "desc")}}
+        ];
+
+        sortOptions.forEach(function(element) {
+            if (order == element.option) {
+                element.sortMethod();
+            }
+        });
 
         this.trigger();
     },
