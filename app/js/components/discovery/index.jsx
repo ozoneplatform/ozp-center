@@ -97,24 +97,29 @@ var Discovery = React.createClass({
         }
     },
 
-    onCategoryChange(categories) {
+    resetSearchState() {
         this._searching = true;
-        this.setState({ categories, currentOffset: 0 });
+        this.setState({currentOffset: 0, orderingText: 'Sort By', ordering: []});
+    },
+
+    onCategoryChange(categories) {
+        this.resetSearchState();
+        this.setState({ categories });
     },
 
     onTagsChange(tags) {
-        this._searching = true;
-        this.setState({ tags, currentOffset: 0 });
+        this.resetSearchState();
+        this.setState({ tags });
     },
 
     onTypeChange(type) {
-        this._searching = true;
-        this.setState({ type, currentOffset: 0 });
+        this.resetSearchState();
+        this.setState({ type });
     },
 
     onOrganizationChange(agency) {
-        this._searching = true;
-        this.setState({ agency, currentOffset: 0 });
+        this.resetSearchState();
+        this.setState({ agency });
     },
 
     onSortChange(order) {
