@@ -61,6 +61,60 @@ var DiscoveryPageStore = Reflux.createStore({
         return _nextOffset;
     },
 
+    sortAlphabetically(arr, order) {
+        arr.sort(function (a, b) {
+            return (a.title.toUpperCase() < b.title.toUpperCase()) ? -1 : 1;
+        });
+
+        if (order == "desc") {
+            arr.reverse();
+        }
+
+        return arr;
+    },
+
+    sortNewest(arr) {
+        arr.sort(function (a,b) {
+            return new Date(b.approvedDate) - new Date(a.approvedDate);
+        });
+        return arr;
+    },
+
+    sortRating(arr, order) {
+        arr.sort(function (a, b) {
+            if (a.avgRate == b.avgRate) {
+                return (a.totalVotes > b.totalVotes) ? -1 : 1;
+            } else {
+                if (order == "desc") {
+                    return (a.avgRate > b.avgRate) ? -1 : 1;
+                } else {
+                    return (a.avgRate < b.avgRate) ? -1 : 1;
+                }
+            }
+        });
+
+        return arr;
+    },
+
+    sortMostPopular(order) {
+        var me = this;
+        var sortOptions = [
+            {option: 'Newest', searchParam: '-approved_date', sortMethod: function(){me.sortNewest(_mostPopular)}},
+            {option: 'Title: A to Z', searchParam: 'title', sortMethod: function(){me.sortAlphabetically(_mostPopular)}},
+            {option: 'Title: Z to A', searchParam: '-title', sortMethod: function(){me.sortAlphabetically(_mostPopular, "desc")}},
+            {option: 'Rating: Low to High', searchParam: ['avg_rate', '-total_votes'], sortMethod: function(){me.sortRating(_mostPopular)}},
+            {option: 'Rating: High to Low', searchParam: ['-avg_rate', '-total_votes'], sortMethod: function(){me.sortRating(_mostPopular, "desc")}}
+        ];
+
+        sortOptions.forEach(function(element) {
+            if (order == element.option) {
+                element.sortMethod();
+            }
+        });
+
+        this.trigger();
+    },
+
     onSearchCompleted: function (searchResults) {
         var items = searchResults.getItemAsList();
         _totalSearchResults = searchResults.total();

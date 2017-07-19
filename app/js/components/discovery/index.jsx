@@ -23,6 +23,7 @@ var Organizations = require('./Organizations.jsx');
 var DetailedQuery = require('./DetailedQuery.jsx');
 var ActiveStateMixin = require('../../mixins/ActiveStateMixin');
 
+var SelectBox = require('../shared/SelectBox.jsx');
 
 var $ = require('jquery');
 require('../../utils/typeahead.js');
@@ -34,6 +35,13 @@ var timeout;
 
 
 var FILTERS = ['categories', 'type', 'agency', 'tags'];
+var sortOptions = [
+    {option: 'Newest', searchParam: '-approved_date'},
+    {option: 'Title: A to Z', searchParam: 'title'},
+    {option: 'Title: Z to A', searchParam: '-title'},
+    {option: 'Rating: Low to High', searchParam: ['avg_rate', '-total_votes']},
+    {option: 'Rating: High to Low', searchParam: ['-avg_rate', '-total_votes']}
+];
 
 var areFiltersApplied = (state) => {
     return _.reduce(FILTERS, function (memo, filter) {
@@ -65,6 +73,8 @@ var Discovery = React.createClass({
             nextOffset: DiscoveryPageStore.getNextOffset(),
             currentOffset: this.state ? this.state.currentOffset : 0,
             limit: this.state ? this.state.limit : PAGINATION_MAX,
+            ordering: this.state ? this.state.ordering : [],
+            orderingText: this.state ? this.state.orderingText : 'Sort By',
             loadingMore: false,
             searching: false
         };
@@ -74,6 +84,7 @@ var Discovery = React.createClass({
         this._searching = true;
         this.setState({
             queryString: evt.target.value,
+            orderingText: 'Sort By',
             currentOffset: 0
         });
     },
@@ -106,6 +117,17 @@ var Discovery = React.createClass({
         this.setState({ agency, currentOffset: 0 });
     },
 
+    onSortChange(order) {
+        var me = this;
+        if (order != this.state.ordering) {
+            sortOptions.forEach(function(element) {
+                if (order == element.option) {
+                    me.setState({orderingText: element.option, ordering: element.searchParam, currentOffset: 0});
+                }
+            });
+        }
+    },
+
     componentDidUpdate(prevProps, prevState) {
         if (this.state.queryString !== prevState.queryString) {
             this.debounceSearch();
@@ -114,7 +136,8 @@ var Discovery = React.createClass({
             !_.isEqual(this.state.tags, prevState.tags)||
             !_.isEqual(this.state.type, prevState.type) ||
             !_.isEqual(this.state.agency, prevState.agency) ||
-            !_.isEqual(this.state.currentOffset, prevState.currentOffset)) {
+            !_.isEqual(this.state.currentOffset, prevState.currentOffset) ||
+            !_.isEqual(this.state.ordering, prevState.ordering)) {
             this.search();
         }
     },
@@ -346,6 +369,12 @@ var Discovery = React.createClass({
             },
             { type, agency });
 
+        if (this.state.ordering) {
+            combinedObj = _.assign(combinedObj, {
+                ordering: this.state.ordering
+            },{ type, agency });
+        }
+
         ListingActions.search(_.assign(combinedObj));
 
         this.setState({
@@ -440,6 +469,30 @@ var Discovery = React.createClass({
           }, 500);
         }
     },
+
+    sortMostPopular(order) {
+        var me = this;
+        DiscoveryPageStore.sortMostPopular(order);
+
+        sortOptions.forEach(function(element) {
+            if (order == element.option) {
+                me.setState({orderingText: element.option});
+            }
+        });
+    },
+
+    renderSortOptions(sortMethod) {
+        return (
+            <SelectBox className="SelectBox sortBy" label={this.state.orderingText} onChange={sortMethod}>
+                <option className="sortBy" value={sortOptions[0].option}>{sortOptions[0].option}</option>
+                <option className="sortBy" value={sortOptions[1].option}>{sortOptions[1].option}</option>
+                <option className="sortBy" value={sortOptions[2].option}>{sortOptions[2].option}</option>
+                <option className="sortBy" value={sortOptions[3].option}>{sortOptions[3].option}</option>
+                <option className="sortBy" value={sortOptions[4].option}>{sortOptions[4].option}</option>
+            </SelectBox>
+        );
+    },
+
     renderMostPopular() {
         if(!this.state.mostPopular.length) {
             return;
@@ -450,6 +503,7 @@ var Discovery = React.createClass({
         return (
             <section className="Discovery__MostPopular" key="Discovery__MostPopular">
                 <h4>Most Popular</h4>
+                    {this.renderSortOptions(this.sortMostPopular)}
                 <ul className="infiniteScroll row clearfix">
                     { InfiniTiles }
                 </ul>
@@ -485,8 +539,10 @@ var Discovery = React.createClass({
         }
 
         var searchLink = `${CENTER_URL}/#/home/${encodeURIComponent(this.state.queryString)}/${(this.state.categories.length) ? encodeURIComponent(this.state.categories.toString()).replace(/%2C/g,'+') : ''}/${(this.state.type.length) ? encodeURIComponent(this.state.type.toString()).replace(/%2C/g,'+') : ''}/${(this.state.agency.length) ? encodeURIComponent(this.state.agency.toString()).replace(/%2C/g,'+') : ''}/${(this.state.tags.length) ? encodeURIComponent(this.state.tags.toString()).replace(/%2C/g,'+') : ''}/${(this.state.tagId.length) ? encodeURIComponent(this.state.tagId.toString()).replace(/%2C/g,'+') : ''}`;
+
         return (
             <section className="Discovery__SearchResults">
+                {this.renderSortOptions(this.onSortChange)}
                 <h4 ref="searchResults">Search Results &nbsp;
                   <span tabIndex="0"
                     className="shareLink"
@@ -498,13 +554,17 @@ var Discovery = React.createClass({
                   </span>
                 </h4>
                 {listingResults}
-                <p><DetailedQuery
-                  onCategoryChange={this.onCategoryChange}
-                  onTypeChange={this.onTypeChange}
-                  onOrganizationChange={this.onOrganizationChange}
-                  reset={this.reset}
-                  data={this.state}
-                  /></p>
+                <div className="resultsDiv">
+                    <p>
+                        <DetailedQuery
+                          onCategoryChange={this.onCategoryChange}
+                          onTypeChange={this.onTypeChange}
+                          onOrganizationChange={this.onOrganizationChange}
+                          reset={this.reset}
+                          data={this.state}
+                          />
+                    </p>
+                </div>
                 <ul className="list-unstyled listings-search-results row clearfix">
                     { results }
                 </ul>
