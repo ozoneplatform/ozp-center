@@ -18,7 +18,7 @@ var AjaxMixin = {
             errors: response ? response.errors : null,
             errorStatus: status,
             errorMessage: response ?
-                    (response.message || response.responseText) :
+                    (response.message || response.responseText || response.detail) :
                     response.responseText
         });
     }
