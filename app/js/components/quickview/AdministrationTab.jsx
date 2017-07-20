@@ -30,7 +30,7 @@ var Toggle = React.createClass({
                 <p>{this.props.description}</p>
 
                 <label className="switchLabel">{this.props.label || title}:</label>
-                <input type="checkbox" className="switch-checkbox" id={this.props.id} checked={this.props.checked} onChange={this.props.onChange}/>
+                <input type="checkbox" className="switch-checkbox" id={this.props.id} defaultChecked={this.props.checked} onChange={this.props.onChange}/>
                 <label className=" switch switch-label" htmlFor={this.props.id}>
                     <span className="switch-inner"></span>
                     <span className="switch-slider"></span>
