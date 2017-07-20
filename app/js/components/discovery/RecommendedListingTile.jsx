@@ -30,10 +30,9 @@ var RecommendedListingTile = React.createClass({
         }
     },
 
-    loadRecommendation: function (recommendation, href) {
+    loadRecommendation: function (recommendation) {
         OzpAnalytics.trackRecommender(listingMessages['recommender.similar'], recommendation.title);
         CurrentListingStore.loadListing(recommendation.id);
-        //window.history.pushState('','', href);
     },
 
     render: function () {
@@ -59,7 +58,7 @@ var RecommendedListingTile = React.createClass({
 
 
         return (
-            <div className="recommendations-tile" onClick={this.loadRecommendation.bind(this,listing, href)} >
+            <div className="recommendations-tile" onClick={this.loadRecommendation.bind(this,listing)} >
                 <a className="listing-link"  href={ href }>
                     {/* Empty link - css will make it cover entire <li>*/}
                     <span className="hidden-span">{listing.title}</span>
