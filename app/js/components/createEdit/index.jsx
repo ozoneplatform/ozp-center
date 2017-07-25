@@ -397,7 +397,7 @@ var ListingForm = React.createClass({
                 <TextInput id={f.launchUrl.id} { ...decodedUrl }/>
 
 
-                <Toggle
+                <Toggle toggleId="privateListing"
                     explanation={['This web application/widget is visible to all agencies in the community',
                                     'This web application/widget is only visible to your agency']}
                     id={f.isPrivate.id} { ...p('isPrivate') } />
@@ -410,7 +410,7 @@ var ListingForm = React.createClass({
                         return { id: intent.action, text: intent.action };
                     })
                 } optional />
-                <Toggle
+            <Toggle toggleId="singletonListing"
                   explanation={['Multiple instances of this web application/widget can be launched in webtop',
                     'Only one instance of this web application/widget can be launched in webtop']}
                   id={f.singleton.id} { ...p('singleton') } />

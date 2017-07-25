@@ -59,6 +59,10 @@ var RecommendedListingTile = React.createClass({
 
         return (
             <div className="recommendations-tile" onClick={this.loadRecommendation.bind(this,listing)} >
+                <a className="listing-link"  href={ href }>
+                    {/* Empty link - css will make it cover entire <li>*/}
+                    <span className="hidden-span">{listing.title}</span>
+                </a>
                 <div className="quickview-header-info">
                     <img className="listing-icon" alt={`${listing.title} header information`} src={ image } data-fallback="/store/images/types/3" />
                     <h3 className="listing-title" tabIndex="0" title={ title }>{ title }
