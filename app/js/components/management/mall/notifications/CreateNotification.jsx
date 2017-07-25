@@ -31,10 +31,14 @@ var CreateNotification = React.createClass({
         return {
             uuid: uuid(),
             date: null,
-            message: '',
+            message: this.props.message,
             hour: '00',
             minute: '00'
         };
+    },
+
+    componentWillReceiveProps(nextProps){
+        this.setState({message: nextProps.message});
     },
 
     onReset(event) {
@@ -71,6 +75,8 @@ var CreateNotification = React.createClass({
             expiresDate: expiresDate,
             message: message
         });
+
+        this.onReset();
     },
 
     /* eslint-disable no-unused-vars */

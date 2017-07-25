@@ -7,6 +7,11 @@ position: relative;
 .ActiveNotification, .PastNotification {
     word-wrap: break-word;
     margin-bottom: 20px;
+
+    .resend {
+        margin-left: 10px;
+        cursor: pointer;
+    }
 }
 
 .ActiveNotification__Header, .PastNotification__Header {
