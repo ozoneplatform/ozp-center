@@ -114,17 +114,17 @@ var Notifications = React.createClass({
 
     render() {
         var message = this.state.message;
-        var fn = this.updateMessage;
+        var updateMessage = this.updateMessage;
         return (
             <div className="row">
                 <div className="col-md-4 clearfix">
-                    <CreateNotification message={message}/>
+                    <CreateNotification fn={updateMessage} message={message}/>
                 </div>
                 <div className="col-md-4">
                     <ActiveNotifications />
                 </div>
                 <div className="col-md-4">
-                    <PastNotifications fn={fn}/>
+                    <PastNotifications fn={updateMessage}/>
                 </div>
             </div>
         );
