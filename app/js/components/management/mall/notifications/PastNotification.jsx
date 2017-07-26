@@ -6,13 +6,16 @@ var Time = require('ozp-react-commons/components/Time.jsx');
 
 var PastNotification = React.createClass({
     statics: {
-        fromArray: function (notifications) {
+        fromArray: function (notifications, id, centerSettings, fn) {
             if (notifications) {
                 return notifications.map(function (notification) {
-                    return <PastNotification key={notification.id} notification={notification}/>;
+                    return <PastNotification key={notification.id} notification={notification} centerSettings={centerSettings} fn={fn}/>;
                 });
             }
         }
+    },
+    resend: function(message){
+        this.props.fn(message);
     },
     render() {
         var { listing, expiresDate, message, createdDate } = this.props.notification;
@@ -20,12 +23,15 @@ var PastNotification = React.createClass({
         var e = document.createElement('div');
         e.innerHTML = message;
 
+        var resend = (this.props.centerSettings  ? <a onClick={() => this.resend(message)}><i className="icon-speech-bubble-grayDark activeIcon resend" title="Resend Notification"></i></a> : null)
+
         return (
             <div className="PastNotification">
                 <div className="PastNotification__Header">
                     <h5 style={{margin: 0, fontWeight: 400}}>{(listing) ? listing.title : 'AppsMall' }</h5>
                     <em>Created: <_Date date={created} /> at <Time date={created} /> / </em>
                     <em>Expired: <_Date date={expiresDate} /> at <Time date={expiresDate} /></em>
+                    {resend}
                 </div>
                 <p dangerouslySetInnerHTML={{ __html: message}} />
             </div>

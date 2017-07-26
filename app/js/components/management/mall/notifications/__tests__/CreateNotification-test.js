@@ -38,7 +38,7 @@ describe('CreateNotification', function () {
     });
 
     it('resets state when notification is created', () => {
-        var createNotification = TestUtils.renderIntoDocument(<CreateNotification />);
+        var createNotification = TestUtils.renderIntoDocument(<CreateNotification fn={() => function(){this.setState({message: message});}}/>);
         var resetSpy = sinon.spy(createNotification, 'onReset');
         var setStateSpy = sinon.spy(createNotification, 'setState');
         NotificationActions.createNotificationCompleted(createNotification.state.uuid, {
