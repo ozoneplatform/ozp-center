@@ -85,15 +85,15 @@ var DiscoveryPageStore = Reflux.createStore({
         arr = this.sortAlphabetically(arr);
         arr.sort(function (a, b) {
             if (a.avgRate == b.avgRate) {
-                return (a.totalVotes > b.totalVotes) ? -1 : 1;
+                return (a.totalVotes < b.totalVotes) ? -1 : 1;
             } else {
-                if (order == "desc") {
-                    return (a.avgRate > b.avgRate) ? -1 : 1;
-                } else {
-                    return (a.avgRate < b.avgRate) ? -1 : 1;
-                }
+                return (a.avgRate < b.avgRate) ? -1 : 1;
             }
         });
+
+        if (order == "desc") {
+            arr.reverse();
+        }
 
         return arr;
     },

@@ -39,7 +39,7 @@ var sortOptions = [
     {option: 'Newest', searchParam: '-approved_date'},
     {option: 'Title: A to Z', searchParam: 'title'},
     {option: 'Title: Z to A', searchParam: '-title'},
-    {option: 'Rating: Low to High', searchParam: ['avg_rate', '-total_votes']},
+    {option: 'Rating: Low to High', searchParam: ['avg_rate', 'total_votes']},
     {option: 'Rating: High to Low', searchParam: ['-avg_rate', '-total_votes']}
 ];
 
