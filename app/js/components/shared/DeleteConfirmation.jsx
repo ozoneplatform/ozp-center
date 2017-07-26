@@ -36,18 +36,24 @@ var DeleteConfirmation = React.createClass({
             title = this.props.title,
             onDelete = this.props.onDelete,
             errorMessage = this.props.errorMessage;
+        var content = <div>
+        <strong>
+            Are you sure that you would like to delete the {kind} &quot;{title}&quot;?
+        </strong>
+        <button className="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button className="btn btn-danger" onClick={onDelete}>Delete</button></div>;
+
+        if (errorMessage) {
+            content = <div>
+                <div className="alert alert-danger">{errorMessage}</div>
+                <button className="btn btn-default" data-dismiss="modal">OK</button>
+            </div>;
+        }
 
         return (
             <Modal ref="modal" className="DeleteConfirmation" size="small" onHidden={this.props.onHidden}>
                 <button className="close corner" data-dismiss="modal"><i className="icon-cross-16"></i></button>
-                {
-                    errorMessage && <div className="alert alert-danger">{errorMessage}</div>
-                }
-                <strong>
-                    Are you sure that you would like to delete the {kind} &quot;{title}&quot;?
-                </strong>
-                <button className="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button className="btn btn-danger" onClick={onDelete}>Delete</button>
+                {content}
             </Modal>
         );
     },
