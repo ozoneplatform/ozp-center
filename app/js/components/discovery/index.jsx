@@ -298,6 +298,9 @@ var Discovery = React.createClass({
 
 
     onStoreChange() {
+        if (!this.state.searching) {
+            this.setState({orderingText: 'Sort By'});
+        }
         this.setState(this.getInitialState());
     },
 
