@@ -30,9 +30,12 @@ var RecommendedListingTile = React.createClass({
         }
     },
 
-    loadRecommendation: function (recommendation) {
+    loadRecommendation: function (recommendation, href) {
         OzpAnalytics.trackRecommender(listingMessages['recommender.similar'], recommendation.title);
         CurrentListingStore.loadListing(recommendation.id);
+        setTimeout(function(){
+            window.location.href = href
+        }, 750);
     },
 
     render: function () {
@@ -42,7 +45,8 @@ var RecommendedListingTile = React.createClass({
         var avgRate = listing.avgRate;
         var agencyShort = listing.agencyShort;
         var totalVotes = listing.totalVotes;
-        var href = this.makeHref(this.getActiveRoutePath(), null, {
+        var close_href = this.makeHref(this.getActiveRoutePath(), null, {});
+        var open_href = this.makeHref(this.getActiveRoutePath(), null, {
             listing: listing.id,
             action: 'view',
             tab: 'overview'
@@ -58,8 +62,8 @@ var RecommendedListingTile = React.createClass({
 
 
         return (
-            <div className="recommendations-tile" onClick={this.loadRecommendation.bind(this,listing)} >
-                <a className="listing-link"  href={ href }>
+            <div className="recommendations-tile" onClick={this.loadRecommendation.bind(this,listing, open_href)} >
+                <a className="listing-link"  href={ close_href }>
                     {/* Empty link - css will make it cover entire <li>*/}
                     <span className="hidden-span">{listing.title}</span>
                 </a>
