@@ -63,19 +63,22 @@ var Organizations = React.createClass({
     render() {
         var orgCounts = this.state.counts;
         return (
-            <SelectBox className="SelectBox__Organizations col-sm-3 col-xs-4" tabIndex="0" label="Organizations" aria-haspopup="true" onChange={this.onChange} value={this.props.value} multiple>
-                {
-                    this.state.system.organizations.map(
-                        (x) => <option
-                        tabIndex={0}
-                        key={x.id}
-                        value={x.shortName}
-                        tag={JSON.stringify(orgCounts[x.id])}>
-                            {x.shortName}
-                        </option>
-                    )
-                }
-            </SelectBox>
+            <div>
+                <SelectBox className="SelectBox__Organizations col-sm-3 col-xs-4" tabIndex="0" label="Organizations" ariaDescribedBy="orgDescription" aria-haspopup="true" onChange={this.onChange} value={this.props.value} multiple>
+                    {
+                        this.state.system.organizations.map(
+                            (x) => <option
+                            tabIndex={0}
+                            key={x.id}
+                            value={x.shortName}
+                            tag={JSON.stringify(orgCounts[x.id])}>
+                                {x.shortName}
+                            </option>
+                        )
+                    }
+                </SelectBox>
+                <span id="orgDescription" className="ariaTip">Press tab once and use the arrow keys to filter through different organizations</span>
+            </div>
         );
     }
 });

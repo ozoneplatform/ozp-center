@@ -18,13 +18,16 @@ var Types = React.createClass({
 
     render() {
         return (
-            <SelectBox className="SelectBox__Types col-sm-3 col-xs-4" tabIndex="0" label="Listing Type" aria-haspopup="true" onChange={this.onChange} value={this.props.value} multiple>
-                {
-                    this.state.system.types.map((x, i) =>
-                        <option tabIndex={0} key={`${x.id}.${i}`} value={x.title}>{x.title}</option>
-                    )
-                }
-            </SelectBox>
+            <div>
+                <SelectBox className="SelectBox__Types col-sm-3 col-xs-4" tabIndex="0" label="Listing Type" ariaDescribedBy="typeDescription" aria-haspopup="true" onChange={this.onChange} value={this.props.value} multiple>
+                    {
+                        this.state.system.types.map((x, i) =>
+                            <option tabIndex={0} key={`${x.id}.${i}`} value={x.title}>{x.title}</option>
+                        )
+                    }
+                </SelectBox>
+                <span id="typeDescription" className="ariaTip">Press tab once and use the arrow keys to filter through different listing types</span>
+            </div>
         );
     }
 });
