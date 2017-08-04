@@ -24,8 +24,17 @@ var DiscoveryPageStore = Reflux.createStore({
     * Update local cache when new data is fetched
     **/
     init: function () {
+        //depricated
         this.listenTo(ListingActions.fetchStorefrontListingsCompleted,
                 this.onStorefrontListingsFetched);
+        this.listenTo(ListingActions.fetchFeaturedListingsCompleted,
+                (listings)=>{_featured = listings; this.trigger();});
+        this.listenTo(ListingActions.fetchMostPopularListingsCompleted,
+                (listings)=>{_mostPopular = this.sortRating(listings,"desc"); this.trigger();});
+        this.listenTo(ListingActions.fetchRecentListingsCompleted,
+                (listings)=>{_newArrivals = listings; this.trigger();});
+        this.listenTo(ListingActions.fetchRecommendedListingsCompleted,
+                (listings)=>{_recommended = listings; this.trigger()});
 
         this.listenTo(ListingActions.searchCompleted, this.onSearchCompleted);
 

@@ -255,7 +255,7 @@ var ListingApi = {
         return new Listing(listingData);
     },
 
-    getStorefrontListings: function() {
+    getStorefrontListings: function() { //depricated
         return $.getJSON(API_URL + '/api/storefront/').then(
             resp => ({
                 featured: _.map(resp.featured, this.newListing),
@@ -263,6 +263,34 @@ var ListingApi = {
                 mostPopular: _.map(resp.most_popular, this.newListing),
                 recommended: _.map(resp.recommended, this.newListing)
             }));
+    },
+
+    getFeaturedListings: function() {
+        return $.getJSON(API_URL + '/api/storefront/featured/').then(
+            resp => {
+                return _.map(resp.featured, this.newListing);
+            });
+    },
+
+    getRecentListings: function() {
+        return $.getJSON(API_URL + '/api/storefront/recent/').then(
+            resp => {
+                return _.map(resp.recent, this.newListing);
+            });
+    },
+
+    getMostPopularListings: function() {
+        return $.getJSON(API_URL + '/api/storefront/most_popular/').then(
+            resp => {
+                return _.map(resp.most_popular, this.newListing);
+            });
+    },
+
+    getRecommendedListings: function() {
+        return $.getJSON(API_URL + '/api/storefront/recommended/').then(
+            resp => {
+                return _.map(resp.recommended, this.newListing);
+            });
     },
 
     search: function (options) {

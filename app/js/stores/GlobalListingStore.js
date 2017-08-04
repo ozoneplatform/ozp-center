@@ -40,11 +40,24 @@ var GlobalListingStore = Reflux.createStore({
     * Update local listingsCache when new data is fetched
     **/
     init: function () {
+        //depricated
         this.listenTo(ListingActions.fetchStorefrontListingsCompleted, function(storefront) {
             updateCache(storefront.featured);
             updateCache(storefront.newArrivals);
             updateCache(storefront.mostPopular);
             updateCache(storefront.recommended);
+        });
+        this.listenTo(ListingActions.fetchFeaturedListingsCompleted, function(listings) {
+            updateCache(listings);
+        });
+        this.listenTo(ListingActions.fetchRecentListingsCompleted, function(listings) {
+            updateCache(listings);
+        });
+        this.listenTo(ListingActions.fetchMostPopularListingsCompleted, function(listings) {
+            updateCache(listings);
+        });
+        this.listenTo(ListingActions.fetchRecommendedListingsCompleted, function(listings) {
+            updateCache(listings);
         });
         this.listenTo(ListingActions.searchCompleted, updateCacheFromPaginatedResponse);
         this.listenTo(ListingActions.fetchAllListingsCompleted, function (filter, response) {

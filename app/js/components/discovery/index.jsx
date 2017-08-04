@@ -158,7 +158,10 @@ var Discovery = React.createClass({
         //this.listenTo(GlobalListingStore, ListingActions.fetchStorefrontListings);
 
         // fetch data when instantiated
-        ListingActions.fetchStorefrontListings();
+        ListingActions.fetchFeaturedListings();
+        ListingActions.fetchRecentListings();
+        ListingActions.fetchMostPopularListings();
+        ListingActions.fetchRecommendedListings();
 
         if(this.context.getCurrentParams().categories){
           this.setState({initCategories: decodeURIComponent(this.context.getCurrentParams().categories).split('+')});
