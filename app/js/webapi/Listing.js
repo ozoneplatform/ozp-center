@@ -126,6 +126,7 @@ function Listing (json) {
     this.docUrls = this.docUrls || [];
     this.changeLogs = [];
     this.similar = [];
+    this.isPartialListing = true;
     return this;
 }
 
