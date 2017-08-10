@@ -110,7 +110,7 @@ var DetailsTab = React.createClass({
             return owners.map(function (owner, i) {
               if(owner.displayName !== "Masked Display Name"){
                 return (
-                    <p className="listing-owner" key={`renderOwners.${i}`}>
+                    <p className="listing-owner col-xs-offset-1" key={`renderOwners.${i}`}>
                         <span> </span>
                         <ProfileLink profileId={owner.id}>
                             {owner.displayName}
