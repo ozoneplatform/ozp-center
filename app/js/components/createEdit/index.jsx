@@ -396,7 +396,6 @@ var ListingForm = React.createClass({
                 <TextInput id={f.versionNumber.id} { ...p('versionName') }/>
                 <TextInput id={f.launchUrl.id} { ...decodedUrl }/>
 
-
                 <Toggle toggleId="privateListing"
                     explanation={['This web application/widget is visible to all agencies in the community',
                                     'This web application/widget is only visible to your agency']}
