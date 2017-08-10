@@ -26,6 +26,10 @@ var ActiveNotification = React.createClass({
         NotificationActions.expireNotification(subset);
     },
 
+    deleteNotification(notificationId) {
+        NotificationActions.deleteNotification(notificationId);
+    },
+
     render() {
         var { listing, expiresDate, createdDate, message  } = this.props.notification;
         var created = new Date(createdDate);
@@ -38,6 +42,7 @@ var ActiveNotification = React.createClass({
                     <h5 style={{margin: 0, fontWeight: 400}}>{(listing) ? listing.title : 'AppsMall'}</h5>
                     <em>Created: <_Date date={created} /> at <Time date={created} /> / </em>
                     <em>Expires: <_Date date={expiresDate} /> at <Time date={expiresDate} /></em>
+                    <a onClick={() => this.deleteNotification(this.props.notification.id)}><i className="icon-trash-12-blueDarker activeIcon resend" title="Delete Notification"></i></a>
                 </div>
                 <p dangerouslySetInnerHTML={{ __html: message}} />
             </div>
