@@ -50,6 +50,10 @@ var DiscoveryPageStore = Reflux.createStore({
         this.trigger();
     },
 
+    resetMostPopular: function() {
+        _mostPopular = this.sortRating(_mostPopular,"desc");
+    },
+
     getRecommended: function () {
         return _recommended;
     },

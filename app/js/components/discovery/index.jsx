@@ -100,6 +100,9 @@ var Discovery = React.createClass({
     resetSearchState() {
         this._searching = true;
         this.setState({currentOffset: 0, orderingText: 'Sort By', ordering: []});
+
+        // Need to reset Most Popular in store after search
+        DiscoveryPageStore.resetMostPopular();
     },
 
     onCategoryChange(categories) {
