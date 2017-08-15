@@ -493,6 +493,15 @@ div.col-md-4 > .form-group >span.image-container.image-present {
    color: #000;
 }
 
+.FOUOwarning {
+    background-color: #ffa500;
+    color: #ffffff;
+    border-color: #b1264e;
+    border-radius: 4px;
+    padding: 5px;
+    font-weight: 300;
+}
+
 @-moz-document url-prefix(){
   input[id$="inputElement.smallIcon"], input[id$="inputElement.largeIcon"],
   input[id$="inputElement.bannerIcon"], input[id$="inputElement.featuredBannerIcon"]{
