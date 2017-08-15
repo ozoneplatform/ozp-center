@@ -38,7 +38,7 @@ var DeleteConfirmation = React.createClass({
             errorMessage = this.props.errorMessage;
         var content = <div>
         <strong>
-            Are you sure that you would like to delete the {kind} &quot;{title}&quot;?
+            Are you sure that you would like to delete the {kind}{title}?
         </strong>
         <button className="btn btn-default" data-dismiss="modal">Cancel</button>
         <button className="btn btn-danger" onClick={onDelete}>Delete</button></div>;
@@ -112,7 +112,7 @@ var ListingDeleteConfirmation = React.createClass({
         if (!listing) {
             return null;
         }
-        var title = listing.title;
+        var title = ' "' + listing.title + '"';
 
         return (
             <DeleteConfirmation ref="modal" kind="listing" title={title}
