@@ -38,22 +38,10 @@ var PastNotification = React.createClass({
         this.setState({ deleting: true });
     },
 
-    closeModal() {
-        sweetAlert({
-            title: "Deletion complete",
-            text: "The notification has been deleted.",
-            type: "info",
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "ok",
-            closeOnConfirm: true,
-            html: false
-        });
-    },
-
     renderDeleteConfirmation(notification) {
         return (
             <DeleteConfirmation ref="modal" kind="notification"
-                onHidden={this.closeModal} onDelete={() =>this.deleteNotification(notification.id)}/>
+                onDelete={() =>this.deleteNotification(notification.id)}/>
         );
     },
 
