@@ -18,6 +18,7 @@ var DeleteConfirmation = React.createClass({
     propTypes: {
         errorMessage: React.PropTypes.string,
         onHidden: React.PropTypes.func,
+        onCancel: React.PropTypes.func,
         onDelete: React.PropTypes.func.isRequired
     },
 
@@ -35,12 +36,13 @@ var DeleteConfirmation = React.createClass({
         var kind = this.props.kind,
             title = this.props.title,
             onDelete = this.props.onDelete,
+            onCancel = this.props.onCancel,
             errorMessage = this.props.errorMessage;
         var content = <div>
         <strong>
-            Are you sure that you would like to delete the {kind} &quot;{title}&quot;?
+            Are you sure that you would like to delete the {kind}{title}?
         </strong>
-        <button className="btn btn-default" data-dismiss="modal">Cancel</button>
+        <button className="btn btn-default" data-dismiss="modal" onClick={onCancel}>Cancel</button>
         <button className="btn btn-danger" onClick={onDelete}>Delete</button></div>;
 
         if (errorMessage) {
@@ -52,7 +54,6 @@ var DeleteConfirmation = React.createClass({
 
         return (
             <Modal ref="modal" className="DeleteConfirmation" size="small" onHidden={this.props.onHidden}>
-                <button className="close corner" data-dismiss="modal"><i className="icon-cross-16"></i></button>
                 {content}
             </Modal>
         );
@@ -112,7 +113,7 @@ var ListingDeleteConfirmation = React.createClass({
         if (!listing) {
             return null;
         }
-        var title = listing.title;
+        var title = ' "' + listing.title + '"';
 
         return (
             <DeleteConfirmation ref="modal" kind="listing" title={title}

@@ -64,6 +64,12 @@ var NotificationActions = createActions({
       NotificationApi.fetchPast(url, id)
           .then(NotificationActions.fetchPastCompleted)
           .fail(NotificationActions.fetchPastFailed);
+    },
+
+    deleteNotification(notificationId) {
+        NotificationApi.delete(notificationId)
+            .then(NotificationActions.deleteNotificationCompleted)
+            .fail(NotificationActions.deleteNotificationFailed);
     }
 
 });

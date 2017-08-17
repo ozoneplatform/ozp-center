@@ -13,6 +13,7 @@ var ActiveNotificationStore = Reflux.createStore({
         this.listenTo(NotificationActions.fetchActiveCompleted, this.fetchActiveCompleted);
         this.listenTo(NotificationActions.createNotificationCompleted, this.onCreateCompleted);
         this.listenTo(NotificationActions.expireNotificationCompleted, this.onExpireCompleted);
+        this.listenTo(NotificationActions.deleteNotificationCompleted, this.onDeleteCompleted);
     },
 
     getNotifications() {
@@ -32,6 +33,11 @@ var ActiveNotificationStore = Reflux.createStore({
 
     onExpireCompleted(notification) {
         _.remove(_notifications.data, { id: notification.id });
+        this.trigger();
+    },
+
+    onDeleteCompleted(id) {
+        _.remove(_notifications.data, { id: id });
         this.trigger();
     }
 
