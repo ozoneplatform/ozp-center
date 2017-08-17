@@ -45,7 +45,7 @@ var PastNotification = React.createClass({
     renderDeleteConfirmation(notification) {
         return (
             <DeleteConfirmation ref="modal" kind="notification"
-                onCancel={this.closeModal} onClose={this.closeModal} onDelete={() =>this.deleteNotification(notification.id)}/>
+                onCancel={this.closeModal} onDelete={() =>this.deleteNotification(notification.id)}/>
         );
     },
 

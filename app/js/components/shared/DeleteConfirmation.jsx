@@ -19,7 +19,6 @@ var DeleteConfirmation = React.createClass({
         errorMessage: React.PropTypes.string,
         onHidden: React.PropTypes.func,
         onCancel: React.PropTypes.func,
-        onClose: React.PropTypes.func,
         onDelete: React.PropTypes.func.isRequired
     },
 
@@ -38,7 +37,6 @@ var DeleteConfirmation = React.createClass({
             title = this.props.title,
             onDelete = this.props.onDelete,
             onCancel = this.props.onCancel,
-            onClose = this.props.onClose,
             errorMessage = this.props.errorMessage;
         var content = <div>
         <strong>
@@ -56,7 +54,6 @@ var DeleteConfirmation = React.createClass({
 
         return (
             <Modal ref="modal" className="DeleteConfirmation" size="small" onHidden={this.props.onHidden}>
-                <button className="close corner" data-dismiss="modal"><i className="icon-cross-16" onClick={onClose}></i></button>
                 {content}
             </Modal>
         );
