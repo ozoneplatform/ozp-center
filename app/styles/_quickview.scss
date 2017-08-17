@@ -49,7 +49,7 @@ $quickview-nav-tabs-height: 42px;
     p, section > p, section > span {
         @extend .textBase;
         margin-top: 3px;
-        margin-bottom: 3px;
+        margin-bottom: 5px;
     }
 
     .alert-warning {
@@ -59,6 +59,7 @@ $quickview-nav-tabs-height: 42px;
     label {
         font-weight: 400;
         margin-right: 5px;
+        margin-bottom: 0px;
     }
 
     .intentName {
