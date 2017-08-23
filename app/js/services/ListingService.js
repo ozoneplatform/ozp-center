@@ -225,7 +225,10 @@ ListingActions.deleteReview.listen(function (listing, review) {
 
 ListingActions.launch.listen(function (listing) {
     OzpAnalytics.trackEvent('Applications', listing.title, listing.agencyShort);
-    window.open(listing.launchUrl);
+    setTimeout(function() {
+        window.open(listing.launchUrl);
+    }, 3000);
+
 });
 
 ListingActions.save.listen(function (data) {

@@ -29,6 +29,7 @@ var OverviewTab = React.createClass({
 
     render: function () {
         var description = 'No description provided!';
+        var requirements = this.props.listing.requirements;
         if(this.props.listing.description){
           description = this.props.listing.description.split(/\n/g).map((p, i)=>{
             return(<span key={`listingDescription.${i}`}>{p}<br/></span>);
@@ -43,6 +44,10 @@ var OverviewTab = React.createClass({
                  { this.renderScreenshots() }
                 <div className="col-xs-12 col-md-3 pull-right">
                     <h3 className="offscreen"> Description of app in Overview section of model </h3>
+                        <section className="forceWrap usage">
+                            <h5>Usage Requirements</h5>
+                            <p className="forceWrap">{ requirements }</p>
+                        </section>
                     <p className= { descriptionClasses }>{ description }</p>
                 </div>
             </div>
