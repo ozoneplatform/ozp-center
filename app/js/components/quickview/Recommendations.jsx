@@ -30,6 +30,12 @@ var QuickViewRecommendations = React.createClass({
         shown: React.PropTypes.bool,
     },
 
+    componentDidUpdate: function(prevProps, prevState) {
+        if (prevProps.listing != this.props.listing) {
+            ListingActions.fetchSimilar(this.props.listing.id);
+        }
+    },
+
     getDefaultProps: function () {
         return {
             shown: false
@@ -38,7 +44,7 @@ var QuickViewRecommendations = React.createClass({
 
     renderSimilar: function () {
 
-         var listing = this.props.listing;
+        var listing = this.props.listing;
         var carouselOptions = {
                 auto: false,
                 scroll: {
