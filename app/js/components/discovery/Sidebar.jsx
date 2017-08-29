@@ -87,11 +87,11 @@ var Sidebar = React.createClass({
                 'facet-group-item': true
             });
 
-            var categoryLink = <a className="subscribe" onClick={ (e) => {me.onSubscribeClick(e, category)} } >Subscribe</a>;
+            var categoryLink = <span className="subscribe"> | <a onClick={ (e) => {me.onSubscribeClick(e, category)} } >Subscribe</a></span>;
             if (me.state.categorySubscriptionStore && me.state.categorySubscriptionStore.length > 0) {
                 me.state.categorySubscriptionStore.forEach(function(element) {
                     if (element.entity_description == category.title) {
-                        categoryLink = <a className="subscribe" onClick={ (e) => {me.onUnsubscribeClick(e, category)} }>Unsubscribe</a>;
+                        categoryLink = <span className="subscribe"> | <a onClick={ (e) => {me.onUnsubscribeClick(e, category)} }>Unsubscribe</a></span>;
                     }
                 });
             }

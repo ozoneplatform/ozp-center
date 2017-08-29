@@ -28,12 +28,13 @@ var Toggle = React.createClass({
             <section className={this.props.className}>
                 <h5>{title}</h5>
                 <p>{this.props.description}</p>
-                <label className="switchLabel">{this.props.label || title}:</label>
-                    <label className="switch"><input type="checkbox" ref="checkbox" className="ios brand-success"
-                        checked={this.props.checked} onChange={this.props.onChange} />
-                    <div className="track"><div className="knob"></div></div>
-                    </label>
 
+                <label className="switchLabel">{this.props.label || title}:</label>
+                <input type="checkbox" className="switch-checkbox" id={this.props.id} defaultChecked={this.props.checked} onChange={this.props.onChange}/>
+                <label className=" switch switch-label" htmlFor={this.props.id}>
+                    <span className="switch-inner"></span>
+                    <span className="switch-slider"></span>
+                </label>
             </section>
         );
     }
@@ -55,12 +56,13 @@ var EnabledControl = React.createClass({
 
     render: function () {
         var listing = this.props.listing,
+            id = 'enabledControl',
             enabled = listing.isEnabled,
             title = enabled ? 'Enabled' : 'Disabled',
             description = 'This listing is ' + (enabled ? '' : 'not') + ' visible to users';
 
         return (
-            <Toggle title={title} label="Enabled" className="enabled-toggle"
+            <Toggle title={title} label="Enabled" className="enabled-toggle" id={id}
                 description={description}
                 checked={enabled}
                 onChange={this.onChange}/>
@@ -69,7 +71,7 @@ var EnabledControl = React.createClass({
 });
 
 var FeaturedControl = React.createClass({
-    onChange: function (evt) {
+    onChange1: function (evt) {
         PaginatedChangeLogByIDStore.resetChangeLogByIDStore();
 
         ListingActions.setFeatured(evt.target.checked, this.props.listing);
@@ -81,16 +83,17 @@ var FeaturedControl = React.createClass({
 
     render: function () {
         var listing = this.props.listing,
+            id = 'featuredControl',
             featured = listing.isFeatured,
             title = 'Featured',
             description = 'This listing is ' + (featured ? '' : 'not') +
                 ' featured on the Discovery Page';
 
         return (
-            <Toggle title={title} label="Featured" className="featured-toggle"
+            <Toggle title={title} label="Featured" className="featured-toggle" id={id}
                 description={description}
                 checked={featured}
-                onChange={this.onChange}/>
+                onChange={this.onChange1}/>
         );
     }
 });

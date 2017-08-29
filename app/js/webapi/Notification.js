@@ -35,6 +35,17 @@ module.exports = {
         }).then((x) => this.parse(humps.camelizeKeys(x)));
     },
 
+    delete(id) {
+        return $.ajax({
+            url: `${API_URL}/api/notification/` + id + '/',
+            type: 'delete',
+            dataType: 'json',
+            contentType: 'application/json'
+        }).then((response) => {
+            return id;
+        });
+    },
+
     fetchActive() {
         return $.getJSON(`${API_URL}/api/notifications/pending/?offset=0&limit=${PAGINATION_MAX}`)
             .then((response) => {

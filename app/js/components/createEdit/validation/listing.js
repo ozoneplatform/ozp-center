@@ -51,7 +51,8 @@ var securityMarking = NonBlankString(200),
     contacts = list(Contact),
     docUrls = list(Resource),
     owners = list(User),
-    atLeastOne = l => l.length > 0;
+    atLeastOne = l => l.length > 0,
+    atLeastOneLessThree = l =>l.length > 0 && l.length <= 3;
 
 function getRequiredContactTypes (contactTypes) {
     return contactTypes.filter(t => t.required).map(t => t.name);
@@ -68,7 +69,7 @@ function ListingFull (requiredContactTypes) {
         securityMarking: securityMarking,
         title: title,
         type: type,
-        categories: subtype(categories, atLeastOne),
+        categories: subtype(categories, atLeastOneLessThree),
         tags: subtype(tags, atLeastOne),
         description: NonBlankString(4000),
         descriptionShort: NonBlankString(100),
@@ -99,7 +100,7 @@ var ListingDraft = struct({
     securityMarking: securityMarking,
     title: title,
     type: type,
-    categories: categories,
+    categories: subtype(categories, atLeastOneLessThree),
     tags: tags,
     description: maybe(StringMax(4000)),
     descriptionShort: maybe(StringMax(100)),

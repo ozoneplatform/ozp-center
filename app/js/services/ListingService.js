@@ -107,8 +107,24 @@ ListingActions.fetchAllChangeLogs.listen(function (profile, filter) {
         });
 });
 
-ListingActions.fetchStorefrontListings.listen(function() {
+ListingActions.fetchStorefrontListings.listen(function() { //depricated
     ListingApi.getStorefrontListings().then(ListingActions.fetchStorefrontListingsCompleted);
+});
+
+ListingActions.fetchFeaturedListings.listen(function() {
+    ListingApi.getFeaturedListings().then(ListingActions.fetchFeaturedListingsCompleted);
+});
+
+ListingActions.fetchRecentListings.listen(function() {
+    ListingApi.getRecentListings().then(ListingActions.fetchRecentListingsCompleted);
+});
+
+ListingActions.fetchMostPopularListings.listen(function() {
+    ListingApi.getMostPopularListings().then(ListingActions.fetchMostPopularListingsCompleted);
+});
+
+ListingActions.fetchRecommendedListings.listen(function() {
+    ListingApi.getRecommendedListings().then(ListingActions.fetchRecommendedListingsCompleted);
 });
 
 ListingActions.fetchById.listen(function (id) {

@@ -192,7 +192,7 @@ var Crud = React.createClass({
 
     renderDeleteConfirmation: function () {
         var kind = this.props.title.toLowerCase();
-        var title = this.props.getDisplayName(this.getSelectedRecord());
+        var title = ' "' + this.props.getDisplayName(this.getSelectedRecord()) + '"';
 
         return (
             <DeleteConfirmation ref="modal" kind={ kind } title={ title }

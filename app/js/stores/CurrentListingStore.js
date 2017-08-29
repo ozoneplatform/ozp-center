@@ -133,7 +133,8 @@ var CurrentListingStore = createStore({
     refreshListing: function (listing) {
         revokeAllObjectURLs();
         _listing = listing;
-        _listingId = listing.id;
+        if(listing.id)
+            _listingId = listing.id;
         _submitting = false;
         var validation = this.doValidation();
         this.trigger({
@@ -162,7 +163,7 @@ var CurrentListingStore = createStore({
     },
 
     onSimilarUpdated: function (){
-        this.trigger();//  this.onCacheUpdated();
+        this.trigger();
     },
 
     onProfileUpdate: function(profileData) {
@@ -323,9 +324,9 @@ var CurrentListingStore = createStore({
         _listingId = id;
         var newListing;
         if (id) {
-            if (!_listing){
+            if (!_listing || !_listing.id != _listingId){
                 newListing = GlobalListingStore.getById(id) || new Listing({ owners: [this.currentUser] });
-                this.onCacheUpdated();
+                this.refreshListing(newListing);
                 deferred.resolve(newListing);
             }
             else {

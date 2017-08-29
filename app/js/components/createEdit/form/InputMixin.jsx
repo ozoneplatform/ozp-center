@@ -18,7 +18,7 @@ var InputMixin = {
     render: function () {
         var labelClasses = classSet({ 'input-optional': this.props.optional });
         var CharLimit = (this.props.charLimit) ? `${this.props.charLimit}/${this.props.charLimit} characters remaining` : '';
-        var FOUOwarning = (this.props.showFOUOwarning) ? <div className="has-error"><p className="help-block small ">{reviewWarningMessage}</p></div> : '';
+        var FOUOwarning = (this.props.showFOUOwarning) ? <div className="has-error"><p className="FOUOwarning small ">{reviewWarningMessage}</p></div> : '';
 
         if(this.props.charLimit && this.state.value){
           if(this.props.charLimit - this.state.value.length < 0){

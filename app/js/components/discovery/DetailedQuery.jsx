@@ -125,9 +125,28 @@ var DetailedQuery = React.createClass({
           });
         }else{
           prettyTags = this.props.data.tags.map((tag)=>{
+              var me = this;
+              var subscribeLink = null;
+              var divider = null;
+              if (this.state.tagSubscriptionStore)  {
+                  let foundSubscription = false;
+                  this.state.tagSubscriptionStore.forEach(function(element) {
+                      if (element.entity_id == me.props.data.tagId && me.props.data.tagId.length > 0) {
+                          foundSubscription = true;
+                          divider = <span className="divider"> | </span>;
+                          subscribeLink = <a className="tag_subscribe" onClick={(e) => {me.unsubscribeToTag(e, element)}} >Unsubscribe</a>;
+                      }
+                  });
+                  //last conditional is a fix for subscription store not being null even if it hasn't loaded yet
+                  if(this.props.data.tagId.length > 0 && (this.state.tagSubscriptionStore.length === 0 || (!foundSubscription && this.state.tagSubscriptionStore[0].entity_id))){
+                      divider = <span className="divider"> | </span>;
+                      subscribeLink = <a className="tag_subscribe" onClick={(e) => {this.subscribeToTag(e)}} >Subscribe</a>;
+                  }
+              }
+
             return (
               <span key="getTags" className="label label-default">
-                {tag}
+                {tag} {divider} {subscribeLink}
               </span>
             );
           });
@@ -197,19 +216,6 @@ var DetailedQuery = React.createClass({
         var subscribeLink = null;
         var me = this;
 
-        if (this.state.tagSubscriptionStore)  {
-            let foundSubscription = false;
-            this.state.tagSubscriptionStore.forEach(function(element) {
-                if (element.entity_id == me.props.data.tagId && me.props.data.tagId.length > 0) {
-                    foundSubscription = true;
-                    subscribeLink = <a className="tag_subscribe" onClick={(e) => {me.unsubscribeToTag(e, element)}} >Unsubscribe</a>;
-                }
-            });
-            //last conditional is a fix for subscription store not being null even if it hasn't loaded yet
-            if(this.props.data.tagId.length > 0 && (this.state.tagSubscriptionStore.length === 0 || (!foundSubscription && this.state.tagSubscriptionStore[0].entity_id))){
-                subscribeLink = <a className="tag_subscribe" onClick={(e) => {this.subscribeToTag(e)}} >Subscribe</a>;
-            }
-        }
 
 
         if (this.state.errorStoreData) {
@@ -220,7 +226,7 @@ var DetailedQuery = React.createClass({
           );
         } else {
             return (
-              <div>
+              <div className="resultsDiv">
                 {this.getQueryString()}
                 {this.getTypes()}
                 {this.getOrgs()}

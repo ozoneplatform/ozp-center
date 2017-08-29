@@ -24,8 +24,17 @@ var DiscoveryPageStore = Reflux.createStore({
     * Update local cache when new data is fetched
     **/
     init: function () {
+        //depricated
         this.listenTo(ListingActions.fetchStorefrontListingsCompleted,
                 this.onStorefrontListingsFetched);
+        this.listenTo(ListingActions.fetchFeaturedListingsCompleted,
+                (listings)=>{_featured = listings; this.trigger();});
+        this.listenTo(ListingActions.fetchMostPopularListingsCompleted,
+                (listings)=>{_mostPopular = this.sortRating(listings,"desc"); this.trigger();});
+        this.listenTo(ListingActions.fetchRecentListingsCompleted,
+                (listings)=>{_newArrivals = listings; this.trigger();});
+        this.listenTo(ListingActions.fetchRecommendedListingsCompleted,
+                (listings)=>{_recommended = listings; this.trigger()});
 
         this.listenTo(ListingActions.searchCompleted, this.onSearchCompleted);
 
@@ -34,11 +43,15 @@ var DiscoveryPageStore = Reflux.createStore({
 
     onStorefrontListingsFetched: function (storefrontListings) {
         _newArrivals = storefrontListings.newArrivals;
-        _mostPopular = storefrontListings.mostPopular;
+        _mostPopular = this.sortRating(storefrontListings.mostPopular,"desc");
         _featured = storefrontListings.featured;
         _recommended = storefrontListings.recommended;
 
         this.trigger();
+    },
+
+    resetMostPopular: function() {
+        _mostPopular = this.sortRating(_mostPopular,"desc");
     },
 
     getRecommended: function () {
@@ -59,6 +72,62 @@ var DiscoveryPageStore = Reflux.createStore({
 
     getNextOffset: function () {
         return _nextOffset;
+    },
+
+    sortAlphabetically(arr, order) {
+        arr.sort(function (a, b) {
+            return (a.title.toUpperCase() < b.title.toUpperCase()) ? -1 : 1;
+        });
+
+        if (order == "desc") {
+            arr.reverse();
+        }
+
+        return arr;
+    },
+
+    sortNewest(arr) {
+        arr.sort(function (a,b) {
+            return new Date(b.approvedDate) - new Date(a.approvedDate);
+        });
+        return arr;
+    },
+
+    sortRating(arr, order) {
+        // Sort array alphabetically to keep dataset in the same order each time prior to ordering by ratings
+        arr = this.sortAlphabetically(arr);
+        arr.sort(function (a, b) {
+            if (a.avgRate == b.avgRate) {
+                return (a.totalVotes < b.totalVotes) ? -1 : 1;
+            } else {
+                return (a.avgRate < b.avgRate) ? -1 : 1;
+            }
+        });
+
+        if (order == "desc") {
+            arr.reverse();
+        }
+
+        return arr;
+    },
+
+    sortMostPopular(order) {
+        var me = this;
+        var sortOptions = [
+            {option: 'Newest', searchParam: '-approved_date', sortMethod: function(){me.sortNewest(_mostPopular)}},
+            {option: 'Title: A to Z', searchParam: 'title', sortMethod: function(){me.sortAlphabetically(_mostPopular)}},
+            {option: 'Title: Z to A', searchParam: '-title', sortMethod: function(){me.sortAlphabetically(_mostPopular, "desc")}},
+            {option: 'Rating: Low to High', searchParam: ['avg_rate', '-total_votes'], sortMethod: function(){me.sortRating(_mostPopular)}},
+            {option: 'Rating: High to Low', searchParam: ['-avg_rate', '-total_votes'], sortMethod: function(){me.sortRating(_mostPopular, "desc")}}
+        ];
+
+        sortOptions.forEach(function(element) {
+            if (order == element.option) {
+                element.sortMethod();
+            }
+        });
+
+        this.trigger();
     },
 
     onSearchCompleted: function (searchResults) {

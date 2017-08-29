@@ -10,7 +10,11 @@ var ListingActions = createActions({
     fetchCounts: null,
     fetchAllChangeLogs: null,
     fetchAllChangeLogsByID: null,
-    fetchStorefrontListings: null,
+    fetchStorefrontListings: null, //depricated
+    fetchFeaturedListings: null, 
+    fetchRecentListings: null,
+    fetchMostPopularListings: null,
+    fetchRecommendedListings: null,
 
     fetchById: null,
 

@@ -37,6 +37,10 @@ var CreateNotification = React.createClass({
         };
     },
 
+    componentWillReceiveProps(nextProps){
+        this.setState({message: nextProps.message});
+    },
+
     onReset(event) {
         if (event) {
             event.preventDefault();
@@ -49,6 +53,8 @@ var CreateNotification = React.createClass({
             hour: '00',
             minute: '00'
         });
+
+        this.props.fn('');
     },
 
     onExpiresDateChange(date) {
