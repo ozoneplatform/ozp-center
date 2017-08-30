@@ -223,6 +223,19 @@ ListingActions.deleteReview.listen(function (listing, review) {
         .fail(_.partial(ListingActions.deleteReviewFailed, listing, review));
 });
 
+ListingActions.saveReviewResponse.listen(function (listing, review) {
+    ListingApi.saveReviewResponse(listing.id, review)
+        .then(function (response) {
+            ListingActions.fetchById(listing.id);
+            ListingActions.fetchReviews(listing);
+            ListingActions.saveReviewResponseCompleted(listing, response);
+            OzpAnalytics.trackListingReview(listing.title, listing.agencyShort);
+        })
+        .fail(function(response) {
+            ListingActions.saveReviewResponseFailed(response);
+        });
+});
+
 ListingActions.launch.listen(function (listing) {
     OzpAnalytics.trackEvent('Applications', listing.title, listing.agencyShort);
     window.open(listing.launchUrl);
