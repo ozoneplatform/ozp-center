@@ -112,19 +112,27 @@ ListingActions.fetchStorefrontListings.listen(function() { //depricated
 });
 
 ListingActions.fetchFeaturedListings.listen(function() {
-    ListingApi.getFeaturedListings().then(ListingActions.fetchFeaturedListingsCompleted);
+    ListingApi.getFeaturedListings()
+        .then(ListingActions.fetchFeaturedListingsCompleted)
+        .fail(ListingActions.fetchFeaturedListingsFailed);
 });
 
 ListingActions.fetchRecentListings.listen(function() {
-    ListingApi.getRecentListings().then(ListingActions.fetchRecentListingsCompleted);
+    ListingApi.getRecentListings()
+        .then(ListingActions.fetchRecentListingsCompleted)
+        .fail(ListingActions.fetchRecentListingsFailed);
 });
 
 ListingActions.fetchMostPopularListings.listen(function() {
-    ListingApi.getMostPopularListings().then(ListingActions.fetchMostPopularListingsCompleted);
+    ListingApi.getMostPopularListings()
+        .then(ListingActions.fetchMostPopularListingsCompleted)
+        .fail(ListingActions.fetchMostPopularListingsFailed);
 });
 
 ListingActions.fetchRecommendedListings.listen(function() {
-    ListingApi.getRecommendedListings().then(ListingActions.fetchRecommendedListingsCompleted);
+    ListingApi.getRecommendedListings()
+    .then(ListingActions.fetchRecommendedListingsCompleted)
+    .fail(ListingActions.fetchRecommendedListingsFailed);
 });
 
 ListingActions.fetchById.listen(function (id) {

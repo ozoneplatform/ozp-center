@@ -220,6 +220,10 @@
     display: block;
 }
 
+.loader-message {
+    text-align: center;
+}
+
 .loader-animate {
     -animation: spin .9s infinite linear;
     -ms-animation: spin2 .9s infinite linear;
@@ -233,6 +237,11 @@
 }
 
 @keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
+}
+
+@keyframes spin2 {
     from { transform: scale(1) rotate(0deg);}
     to { transform: scale(1) rotate(360deg);}
 }
