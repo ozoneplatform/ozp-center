@@ -420,7 +420,12 @@ var Discovery = React.createClass({
 
     renderFeaturedListings() {
         if(!this.state.featured.length) {
-            return;
+            return (
+                <section>
+                    <h4>Featured</h4>
+                    <span className="icon-loader-36 loader loader-animate"></span>
+                </section>
+            );
         }
 
         return (
@@ -445,7 +450,12 @@ var Discovery = React.createClass({
 
     renderNewArrivals() {
         if(!this.state.newArrivals.length) {
-            return;
+            return (
+                <section>
+                    <h4>New Arrivals</h4>
+                    <span className="icon-loader-36 loader loader-animate"></span>
+                </section>
+            );
         }
 
         return (
@@ -509,7 +519,12 @@ var Discovery = React.createClass({
 
     renderMostPopular() {
         if(!this.state.mostPopular.length) {
-            return;
+            return (
+                <section>
+                    <h4>Most Popular</h4>
+                    <span className="icon-loader-36 loader loader-animate"></span>
+                </section>
+            );
         }
 
         var InfiniTiles = ListingTile.renderLimitedTiles(this.state.mostPopularTiles, this.state.mostPopular);
