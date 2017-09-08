@@ -4,6 +4,8 @@ var React = require('react');
 var Reflux = require('reflux');
 
 var SelfStore = require('ozp-react-commons/stores/SelfStore');
+var CurrentProfileStore = require('ozp-react-commons/stores/CurrentProfileStore');
+var ProfileActions = require('ozp-react-commons/actions/ProfileActions');
 
 var ListingActions = require('../actions/ListingActions');
 
@@ -13,7 +15,11 @@ function getState(profileData) {
     var profile = profileData.currentUser,
         launchInWebtop = profile ? profile.launchInWebtop : false;
 
-    return {launchInWebtop: launchInWebtop, launchModal: false, timeout: null};
+    return {launchInWebtop: launchInWebtop,
+            launchModal: false,
+            timeout: null,
+            leavingOzpWarningFlag: false
+        };
 }
 
 /**
@@ -21,7 +27,7 @@ function getState(profileData) {
  * this will either launch into webtop (in a new tab) or just in a new tab
  */
 var CenterLaunchLink = React.createClass({
-    mixins: [Reflux.listenTo(SelfStore, 'onStoreUpdate')],
+    mixins: [Reflux.listenTo(SelfStore, 'onStoreUpdate'), Reflux.connect(SelfStore)],
 
     propTypes: {
         listing: React.PropTypes.object.isRequired
@@ -52,18 +58,35 @@ var CenterLaunchLink = React.createClass({
     },
 
     modalConfirmation: function(){
+        var profile = this.state.currentUser;
+        profile.leavingOzpWarningFlag = this.state.leavingOzpWarningFlag;
+
+        ProfileActions.updateProfileFlags(profile);
+        ProfileActions.fetchProfile(profile.profileId);
+
         this.setState({'launchModal': false});
         clearTimeout(this.state.timeout);
+    },
+
+    optWarning: function(event) {
+        if (event.target.value == 'false' || !event.target.value) {
+            this.setState({
+                leavingOzpWarningFlag: true
+            });
+        } else {
+            this.setState({
+                leavingOzpWarningFlag: false
+            });
+        }
     },
 
     render: function() {
         var { className, ...otherProps } = this.props,
             linkClassName = className ? className + ' btn' : 'btn';
-
         var launchWarning = this.state.launchModal;
         var requirements = this.props.listing.requirements;
-        var launchModal = requirements && requirements.toLowerCase() != 'none'
-            ? (<Modal ref="modal" className="LaunchConfirmation" size="small" title="Launch Requirements Notice" onCancel={this.modalConfirmation}>
+
+        var launchModal = requirements && this.state.currentUser && !this.state.currentUser.leavingOzpWarningFlag ? (<Modal ref="modal" className="LaunchConfirmation" size="small" title="Launch Requirements Notice" onCancel={this.modalConfirmation}>
                   <strong>
                       <p>Please review the requirements below if you have problems launching <b>{this.props.listing.title}</b>:</p>
                       <br/>
@@ -71,6 +94,7 @@ var CenterLaunchLink = React.createClass({
                       <br/>
                   </strong>
                   <p>This dialog box will close automatically after 3 seconds.</p>
+                  <input type="checkbox" onChange={this.optWarning} value={this.state.leavingOzpWarningFlag}>Don't show this warning from now on</input><br/>
                   <button className="btn btn-danger" onClick={this.modalConfirmation}>OK</button>
               </Modal>)
           : null;
