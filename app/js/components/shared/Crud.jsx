@@ -197,7 +197,7 @@ var Crud = React.createClass({
         return (
             <DeleteConfirmation ref="modal" kind={ kind } title={ title }
                 errorMessage={this.state.errorMessage}
-                onHidden={this.resetState} onDelete={(this.props.demote ? this.onDemote : this.onDelete)} />
+                onHidden={this.resetState} onDelete={(this.props.removeUser ? this.onRemoveUser : this.onDelete)} />
         );
     },
 
@@ -276,7 +276,7 @@ var Crud = React.createClass({
         .fail(this.handleError);
     },
 
-    onDemote: function () {
+    onRemoveUser: function () {
         var id = this.getSelectedId();
 
         var newUserInfo = {
@@ -297,7 +297,6 @@ var Crud = React.createClass({
 
     onDelete: function () {
         var id = this.getSelectedId();
-
         $.ajax({
             url: `${this.getUrlWithoutParams()}/${id}/`,
             type: 'delete',

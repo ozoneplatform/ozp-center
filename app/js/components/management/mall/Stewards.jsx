@@ -93,7 +93,7 @@ var Stewards = React.createClass({
     },
 
     render: function () {
-        return <Crud {...this.props} demote={true} Schema={this.getSchema()} />;
+        return <Crud {...this.props} removeUser={true} Schema={this.getSchema()} />;
     }
 
 });
