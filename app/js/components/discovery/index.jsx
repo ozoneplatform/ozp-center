@@ -76,8 +76,36 @@ var Discovery = React.createClass({
             ordering: this.state ? this.state.ordering : [],
             orderingText: this.state ? this.state.orderingText : 'Sort By',
             loadingMore: false,
-            searching: false
+            searching: false,
+            featuredError: this.state ? this.state.featuredError : false,
+            newArrivalsError: this.state ? this.state.newArrivalsError : false,
+            mostPopularError: this.state ? this.state.mostPopularError : false,
+            recommendedError: this.state ? this.state.recommendedError : false
         };
+    },
+
+    onFetchFeaturedListingsFailed: function() {
+        this.setState({
+            featuredError: true
+        });
+    },
+
+    onFetchRecentListingsFailed: function() {
+        this.setState({
+            newArrivalsError: true
+        });
+    },
+
+    onFetchMostPopularListingsFailed: function() {
+        this.setState({
+            mostPopularError: true
+        });
+    },
+
+    onFetchRecommendedListingsFailed: function() {
+        this.setState({
+            recommendedError: true
+        });
     },
 
     onSearchInputChange(evt) {
@@ -165,6 +193,11 @@ var Discovery = React.createClass({
         ListingActions.fetchRecentListings();
         ListingActions.fetchMostPopularListings();
         ListingActions.fetchRecommendedListings();
+
+        this.listenTo(ListingActions.fetchFeaturedListingsFailed, this.onFetchFeaturedListingsFailed);
+        this.listenTo(ListingActions.fetchRecentListingsFailed, this.onFetchRecentListingsFailed);
+        this.listenTo(ListingActions.fetchMostPopularListingsFailed, this.onFetchMostPopularListingsFailed);
+        this.listenTo(ListingActions.fetchRecommendedListingsFailed, this.onFetchRecommendedListingsFailed);
 
         if(this.context.getCurrentParams().categories){
           this.setState({initCategories: decodeURIComponent(this.context.getCurrentParams().categories).split('+')});
@@ -420,7 +453,22 @@ var Discovery = React.createClass({
 
     renderFeaturedListings() {
         if(!this.state.featured.length) {
-            return;
+            if (this.state.featuredError) {
+                return(
+                    <section>
+                        <h4>Featured</h4>
+                        <span className="icon-exclamation-36 loader"></span>
+                        <h5 className="loader-message">Error loading Featured Listings</h5>
+                    </section>
+                )
+            }
+
+            return (
+                <section>
+                    <h4>Featured</h4>
+                    <span className="icon-loader-36 loader loader-animate"></span>
+                </section>
+            );
         }
 
         return (
@@ -431,6 +479,16 @@ var Discovery = React.createClass({
 
     renderRecommended(){
         if(this.state.recommended.length){
+            if (this.state.recommendedError) {
+                return(
+                    <section>
+                        <h4>{listingMessages['recommender.recommended']}</h4>
+                        <span className="icon-exclamation-36 loader"></span>
+                        <h5 className="loader-message">Error loading Recommended Listings</h5>
+                    </section>
+                )
+            }
+
             return (
                 <section className="Discovery__Recommended" key="Discovery__Recommended">
                 <h4>{listingMessages['recommender.recommended']}</h4>
@@ -445,7 +503,22 @@ var Discovery = React.createClass({
 
     renderNewArrivals() {
         if(!this.state.newArrivals.length) {
-            return;
+            if (this.state.featuredError) {
+                return(
+                    <section>
+                        <h4>New Arrivals</h4>
+                        <span className="icon-exclamation-36 loader"></span>
+                        <h5 className="loader-message">Error loading New Arrivals Listings</h5>
+                    </section>
+                )
+            }
+
+            return (
+                <section>
+                    <h4>New Arrivals</h4>
+                    <span className="icon-loader-36 loader loader-animate"></span>
+                </section>
+            );
         }
 
         return (
@@ -509,7 +582,22 @@ var Discovery = React.createClass({
 
     renderMostPopular() {
         if(!this.state.mostPopular.length) {
-            return;
+            if (this.state.featuredError) {
+                return(
+                    <section className="loader">
+                        <h4>Most Popular</h4>
+                        <span className="icon-exclamation-36 loader"></span>
+                        <h5 className="loader-message">Error loading Most Popular Listings</h5>
+                    </section>
+                )
+            }
+
+            return (
+                <section>
+                    <h4>Most Popular</h4>
+                    <span className="icon-loader-36 loader loader-animate"></span>
+                </section>
+            );
         }
 
         var InfiniTiles = ListingTile.renderLimitedTiles(this.state.mostPopularTiles, this.state.mostPopular);
