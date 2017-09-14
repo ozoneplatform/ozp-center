@@ -123,9 +123,9 @@ var CurrentListingStore = createStore({
         Object.assign({}, CreateEditActions, {
             systemUpdated: SystemStore,
             cacheUpdated: GlobalListingStore,
-            similarUpdated: ListingActions.fetchSimilarCompleted
+            similarUpdated: ListingActions.fetchSimilarCompleted,
         }),
-        { profileUpdate: SelfStore }
+        { profileUpdate: SelfStore, saveResponseFailed: ListingActions.saveReviewResponseFailed }
     ],
 
     currentUser: null,
@@ -153,7 +153,6 @@ var CurrentListingStore = createStore({
     },
 
     onCacheUpdated: function () {
-
         if (_listingId) {
             var newListing = GlobalListingStore.getById(_listingId);
             if(newListing){
@@ -164,6 +163,27 @@ var CurrentListingStore = createStore({
 
     onSimilarUpdated: function (){
         this.trigger();
+    },
+
+    onSaveResponseFailed: function(error) {
+        var errorMessage = "Try again later.";
+        
+        if (error.status == 400) {
+            errorMessage = "Cannot create duplicate review";
+        } else
+            if (error.status == 403) {
+                errorMessage = "Permission Denied";
+            }
+
+        sweetAlert({
+            title: "Error",
+            text: errorMessage,
+            type: "error",
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "ok",
+            closeOnConfirm: true,
+            html: false
+        });
     },
 
     onProfileUpdate: function(profileData) {

@@ -389,11 +389,13 @@ var ListingApi = {
         if (review.id) {
             method = 'PUT';
             url += `${review.id}/`;
+            review.author = undefined;
         }
         // default rate to 1 if not specified
         if (!review.rate) {
             review.rate = 1;
         }
+        review.listing= listingId;
 
         return $.ajax({
             type: method,
@@ -408,6 +410,33 @@ var ListingApi = {
         return $.ajax({
             type: 'DELETE',
             url: `${API_URL}/api/listing/${listingId}/review/${reviewId}/`,
+            dataType: 'json',
+            contentType: 'application/json'
+        });
+    },
+
+    saveReviewResponse: function (parentId, review) {
+        var url = `${API_URL}/api/listing/${review.listing.id}/review/`,
+            method = 'POST';
+
+        // default rate to 1 if not specified
+        if (!review.rate) {
+            review.rate = 1;
+        }
+
+        review.review_parent = review.review.id;
+        review.listing = review.listing.id;
+
+        if (review.parentReview) {
+            method = 'PUT';
+            url += `${review.reviewId}/`;
+            review.review_parent = review.parentReview.id;
+        }
+
+        return $.ajax({
+            type: method,
+            url: url,
+            data: JSON.stringify(review),
             dataType: 'json',
             contentType: 'application/json'
         });

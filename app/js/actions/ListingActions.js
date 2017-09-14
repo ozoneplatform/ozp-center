@@ -11,7 +11,7 @@ var ListingActions = createActions({
     fetchAllChangeLogs: null,
     fetchAllChangeLogsByID: null,
     fetchStorefrontListings: null, //depricated
-    fetchFeaturedListings: null, 
+    fetchFeaturedListings: null,
     fetchRecentListings: null,
     fetchMostPopularListings: null,
     fetchRecommendedListings: null,
@@ -27,6 +27,8 @@ var ListingActions = createActions({
     fetchReviews: null,
     saveReview: null,
     deleteReview: null,
+    saveReviewResponse: null,
+    deleteReviewResponse: null,
 
     fetchSimilar: null,
 
