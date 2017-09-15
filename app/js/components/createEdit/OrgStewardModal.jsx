@@ -62,7 +62,7 @@ module.exports = React.createClass({
 
     render() {
         return (
-            <Modal ref="modal" className="StewardsModal" size="small" title="Organization Stewards" onHidden={this.props.onHidden}>
+            <Modal ref="modal" className="StewardsModal" size="small" modaltitle="Organization Stewards" onHidden={this.props.onHidden}>
                 { this.renderStewards() }
             </Modal>
         );
