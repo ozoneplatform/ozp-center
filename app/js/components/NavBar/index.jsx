@@ -3,7 +3,7 @@
 var React = require('react');
 var UserNotificationDropdown = require('ozp-react-commons/components/notification/UserNotificationDropdown.jsx');
 var HelpModal = require('./helpmodal.jsx');
-var NotificationsModal = require('./notificationsmodal.jsx');
+var NotificationWindow = require('../notification/NotificationWindow.jsx');
 var ProfileLink = require('../profile/ProfileLink.jsx');
 var ModalLink = require('../ModalLink.jsx');
 var { HUD_URL, METRICS_URL, WEBTOP_URL, DEVELOPER_RESOURCES_URL} = require('ozp-react-commons/OzoneConfig');
@@ -110,7 +110,7 @@ var NavBar = React.createClass({
                     this.state.showHelp && <HelpModal onHidden={this.onModalHidden} />
                 }
                 {
-                    this.state.showNotifications && <NotificationsModal onHidden={this.onModalHidden} />
+                    this.state.showNotifications && <NotificationWindow onHidden={this.onModalHidden} />
                 }
             </nav>
         );
@@ -134,7 +134,8 @@ var NavBar = React.createClass({
 
     onModalHidden: function () {
         this.setState({ showHelp: false, showNotifications: false });
-    }
+    },
+  
 
 });
 

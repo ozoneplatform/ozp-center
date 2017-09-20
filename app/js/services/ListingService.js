@@ -112,19 +112,27 @@ ListingActions.fetchStorefrontListings.listen(function() { //depricated
 });
 
 ListingActions.fetchFeaturedListings.listen(function() {
-    ListingApi.getFeaturedListings().then(ListingActions.fetchFeaturedListingsCompleted);
+    ListingApi.getFeaturedListings()
+        .then(ListingActions.fetchFeaturedListingsCompleted)
+        .fail(ListingActions.fetchFeaturedListingsFailed);
 });
 
 ListingActions.fetchRecentListings.listen(function() {
-    ListingApi.getRecentListings().then(ListingActions.fetchRecentListingsCompleted);
+    ListingApi.getRecentListings()
+        .then(ListingActions.fetchRecentListingsCompleted)
+        .fail(ListingActions.fetchRecentListingsFailed);
 });
 
 ListingActions.fetchMostPopularListings.listen(function() {
-    ListingApi.getMostPopularListings().then(ListingActions.fetchMostPopularListingsCompleted);
+    ListingApi.getMostPopularListings()
+        .then(ListingActions.fetchMostPopularListingsCompleted)
+        .fail(ListingActions.fetchMostPopularListingsFailed);
 });
 
 ListingActions.fetchRecommendedListings.listen(function() {
-    ListingApi.getRecommendedListings().then(ListingActions.fetchRecommendedListingsCompleted);
+    ListingApi.getRecommendedListings()
+    .then(ListingActions.fetchRecommendedListingsCompleted)
+    .fail(ListingActions.fetchRecommendedListingsFailed);
 });
 
 ListingActions.fetchById.listen(function (id) {
@@ -221,6 +229,19 @@ ListingActions.deleteReview.listen(function (listing, review) {
             ListingActions.deleteReviewCompleted(listing, review);
         })
         .fail(_.partial(ListingActions.deleteReviewFailed, listing, review));
+});
+
+ListingActions.saveReviewResponse.listen(function (listing, review) {
+    ListingApi.saveReviewResponse(listing.id, review)
+        .then(function (response) {
+            ListingActions.fetchById(listing.id);
+            ListingActions.fetchReviews(listing);
+            ListingActions.saveReviewResponseCompleted(listing, response);
+            OzpAnalytics.trackListingReview(listing.title, listing.agencyShort);
+        })
+        .fail(function(response) {
+            ListingActions.saveReviewResponseFailed(response);
+        });
 });
 
 ListingActions.launch.listen(function (listing) {
