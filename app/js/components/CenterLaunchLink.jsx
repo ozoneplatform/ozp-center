@@ -54,7 +54,7 @@ var CenterLaunchLink = React.createClass({
         var me = this;
         me.setState({'launchModal': true});
 
-        me.setState({'timeout' : setTimeout(me.modalConfirmation, 10000)});
+        me.setState({'timeout' : setTimeout(me.modalConfirmation, 30000)});
     },
 
     modalConfirmation: function(){
@@ -96,7 +96,7 @@ var CenterLaunchLink = React.createClass({
                       <p>{this.props.listing.system_requirements}</p>
                       <br/>
                   </strong>
-                  <p>This dialog box will close automatically after 10 seconds.</p>
+                  <p>This dialog box will close automatically after 30 seconds.</p>
                   <section>
                       <input type="checkbox" className="checkbox" onChange={this.optWarning} value={this.state.leavingOzpWarningFlag}></input>
                       <p className="checkbox-text">Don't show this warning from now on</p>
