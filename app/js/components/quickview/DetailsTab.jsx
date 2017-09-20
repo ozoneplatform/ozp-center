@@ -40,7 +40,8 @@ var DetailsTab = React.createClass({
         var categories = this.props.listing.categories.join(', ');
         var tags = this.props.listing.tags;
         var tagsObject = this.props.listing.tagsObject;
-        var requirements = this.props.listing.requirements;
+        var usage_requirements = this.props.listing.usage_requirements;
+        var system_requirements = this.props.listing.system_requirements;
 
         return (
             <div className="tab-pane active quickview-details row" tabIndex="0">
@@ -60,7 +61,11 @@ var DetailsTab = React.createClass({
                     </section>
                     <section>
                         <h5>Usage Requirements</h5>
-                        <p className="forceWrap">{ requirements }</p>
+                        <p className="forceWrap">{ usage_requirements }</p>
+                    </section>
+                    <section>
+                        <h5>System Requirements</h5>
+                        <p className="forceWrap">{ system_requirements }</p>
                     </section>
                 </div>
                 <div className="col-xs-4">
