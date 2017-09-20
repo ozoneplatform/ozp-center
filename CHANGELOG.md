@@ -1,9 +1,18 @@
 
+### 1.1.90 (None)   
+
+#### Merge Pull Requests  
+* Merge pull request #859 from aml-development/org_steward_modal_title ([576bf125](https://github.com/aml-development/ozp-center/commit/576bf125fdc3a1f014542b5430ae3822eff88926))
+* Merge pull request #849 from aml-development/review_respond ([395a337e](https://github.com/aml-development/ozp-center/commit/395a337e2a772b761c04ca87ed4b04232b9a099e))           
+
 ### 1.1.89 (2017-09-13)           
 
 ### 1.1.88 (2017-09-13)           
 
-### 1.1.87 (2017-09-13)  
+### 1.1.87 (2017-09-13)
+
+#### Feature  
+* **review**:  Allow responding to reviews ([0130b062](https://github.com/aml-development/ozp-center/commit/0130b062f6925e0feda58cafa4a933f2a57efb40))     
 
 #### Refactor  
 * refactored code to improve readability ([6e5baa40](https://github.com/aml-development/ozp-center/commit/6e5baa406359a1164d42353236e2f6db5dd28cd7))    
@@ -63,6 +72,7 @@
 * Change disclaimer for Categories in Create Listings Page ([86ba117c](https://github.com/aml-development/ozp-center/commit/86ba117cda30016f0e92a87f887a7a6f97e01e2a))
 * updated stores to fetchById on every app open (#835) ([3c8c9a45](https://github.com/aml-development/ozp-center/commit/3c8c9a45b323a868b711ca532324a3a4066ccaa6))
 * Separating the frontend storefront calls to use the new endpoints (#834) ([f0923a51](https://github.com/aml-development/ozp-center/commit/f0923a51d5451f7205d24c5b140a8622b9b1b7ff))
+* Adding back the Org Steward modal title ([a9388487](https://github.com/aml-development/ozp-center/commit/a9388487c01f19497736e2320675272c125185b2))
 * Putting a URL load delay in place to try to fix the similar listing loading issue. ([e9283f83](https://github.com/aml-development/ozp-center/commit/e9283f833252e3a1a4902850b63d0703a3507ef5))     
 
 ### 1.1.82 (2017-07-26) 
