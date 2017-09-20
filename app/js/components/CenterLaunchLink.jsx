@@ -54,7 +54,7 @@ var CenterLaunchLink = React.createClass({
         var me = this;
         me.setState({'launchModal': true});
 
-        // me.setState({'timeout' : setTimeout(me.modalConfirmation, 10000)});
+        me.setState({'timeout' : setTimeout(me.modalConfirmation, 10000)});
     },
 
     modalConfirmation: function(){
@@ -69,9 +69,6 @@ var CenterLaunchLink = React.createClass({
     },
 
     optWarning: function(event) {
-        this.setState({
-            timeout: null
-        });
         if (event.target.value == 'false' || !event.target.value) {
             this.setState({
                 leavingOzpWarningFlag: true
