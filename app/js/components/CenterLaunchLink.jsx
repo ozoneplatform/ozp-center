@@ -54,7 +54,7 @@ var CenterLaunchLink = React.createClass({
         var me = this;
         me.setState({'launchModal': true});
 
-        me.setState({'timeout' : setTimeout(me.modalConfirmation, 3000)});
+        // me.setState({'timeout' : setTimeout(me.modalConfirmation, 10000)});
     },
 
     modalConfirmation: function(){
@@ -69,6 +69,9 @@ var CenterLaunchLink = React.createClass({
     },
 
     optWarning: function(event) {
+        this.setState({
+            timeout: null
+        });
         if (event.target.value == 'false' || !event.target.value) {
             this.setState({
                 leavingOzpWarningFlag: true
@@ -84,13 +87,16 @@ var CenterLaunchLink = React.createClass({
         var { className, ...otherProps } = this.props,
             linkClassName = className ? className + ' btn' : 'btn';
         var launchWarning = this.state.launchModal;
-        var requirements = this.props.listing.requirements;
 
-        var launchModal = requirements && this.state.currentUser && !this.state.currentUser.leavingOzpWarningFlag ? (<Modal ref="modal" className="LaunchConfirmation" size="small" title="Launch Requirements Notice" onCancel={this.modalConfirmation}>
+        var launchModal = this.state.currentUser && !this.state.currentUser.leavingOzpWarningFlag ? (<Modal ref="modal" className="LaunchConfirmation" size="small" title="Launch Requirements Notice" onCancel={this.modalConfirmation}>
                   <strong>
                       <p>Please review the requirements below if you have problems launching <b>{this.props.listing.title}</b>:</p>
                       <br/>
-                      <p>{this.props.listing.requirements}</p>
+                      <h5>Usage Requirements</h5>
+                      <p>{this.props.listing.usage_requirements}</p>
+                      <br/>
+                      <h5>System Requirements</h5>
+                      <p>{this.props.listing.system_requirements}</p>
                       <br/>
                   </strong>
                   <p>This dialog box will close automatically after 3 seconds.</p>
