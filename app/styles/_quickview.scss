@@ -532,3 +532,14 @@ ul.list-unstyled.RecentActivity
     display: block;
     font-size: 12px;
 }
+
+.checkbox {
+    display: inline-block;
+}
+
+.checkbox-text {
+    display: inline-block;
+    position: relative;
+    bottom: 2px;
+    padding-left: 5px;
+}

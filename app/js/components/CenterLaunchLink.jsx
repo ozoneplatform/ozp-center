@@ -99,8 +99,12 @@ var CenterLaunchLink = React.createClass({
                       <p>{this.props.listing.system_requirements}</p>
                       <br/>
                   </strong>
-                  <p>This dialog box will close automatically after 3 seconds.</p>
-                  <input type="checkbox" onChange={this.optWarning} value={this.state.leavingOzpWarningFlag}>Don't show this warning from now on</input><br/>
+                  <p>This dialog box will close automatically after 10 seconds.</p>
+                  <section>
+                      <input type="checkbox" className="checkbox" onChange={this.optWarning} value={this.state.leavingOzpWarningFlag}></input>
+                      <p className="checkbox-text">Don't show this warning from now on</p>
+                      <br/>
+                  </section>
                   <button className="btn btn-danger" onClick={this.modalConfirmation}>OK</button>
               </Modal>)
           : null;
