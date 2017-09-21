@@ -18,7 +18,7 @@ function getState(profileData) {
     return {launchInWebtop: launchInWebtop,
             launchModal: false,
             timeout: null,
-            leavingOzpWarningFlag: false
+            leavingOzpWarningFlag: true
         };
 }
 
@@ -69,13 +69,13 @@ var CenterLaunchLink = React.createClass({
     },
 
     optWarning: function(event) {
-        if (event.target.value == 'false' || !event.target.value) {
+        if (event.target.value == 'true' || event.target.value) {
             this.setState({
-                leavingOzpWarningFlag: true
+                leavingOzpWarningFlag: false
             });
         } else {
             this.setState({
-                leavingOzpWarningFlag: false
+                leavingOzpWarningFlag: true
             });
         }
     },
@@ -85,7 +85,7 @@ var CenterLaunchLink = React.createClass({
             linkClassName = className ? className + ' btn' : 'btn';
         var launchWarning = this.state.launchModal;
 
-        var launchModal = this.state.currentUser && !this.state.currentUser.leavingOzpWarningFlag ? (<Modal ref="modal" className="LaunchConfirmation" size="small" title="Launch Requirements Notice" onCancel={this.modalConfirmation}>
+        var launchModal = this.state.currentUser && this.state.currentUser.leavingOzpWarningFlag ? (<Modal ref="modal" className="LaunchConfirmation" size="small" title="Launch Requirements Notice" onCancel={this.modalConfirmation}>
                   <strong>
                       <p>Please review the requirements below if you have problems launching <b>{this.props.listing.title}</b>:</p>
                       <br/>
