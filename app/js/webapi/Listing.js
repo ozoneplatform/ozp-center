@@ -90,9 +90,6 @@ function Listing (json) {
         this.imageXlargeUrl = json.largeBannerIcon ? json.largeBannerIcon.url : "";
         this.featuredBannerIconMarking = json.largeBannerIcon ? json.largeBannerIcon.securityMarking :  "";
 
-        this.usage_requirements = json.usageRequirements;
-        this.system_requirements = json.systemRequirements;
-
         _.map(this.screenshots, x => {
             x.smallImageId = x.smallImage.id;
             x.smallImageUrl = x.smallImage.url;
@@ -130,6 +127,9 @@ function Listing (json) {
     this.changeLogs = [];
     this.similar = [];
     this.isPartialListing = true;
+    this.usage_requirements = json.usageRequirements;
+    this.system_requirements = json.systemRequirements;
+
     return this;
 }
 
