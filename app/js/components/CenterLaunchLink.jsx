@@ -62,7 +62,7 @@ var CenterLaunchLink = React.createClass({
                 me.setState({
                     'launchWarning': false
                 });
-            }, 5000);
+            }, 30000);
         }
     },
 
