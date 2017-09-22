@@ -93,7 +93,7 @@ var CenterLaunchLink = React.createClass({
             linkClassName = className ? className + ' btn' : 'btn';
         var launchWarning = this.state.launchWarning;
 
-        var launchModal = this.state.currentUser && this.state.currentUser.leavingOzpWarningFlag ? (<Modal ref="modal" className="LaunchConfirmation" size="small" title="Launch Requirements Notice" onCancel={this.modalConfirmation}>
+        var launchModal = this.state.currentUser && this.state.currentUser.leavingOzpWarningFlag ? (<Modal ref="modal" className="LaunchConfirmation" size="small" modaltitle="Launch Requirements Notice" onCancel={this.modalConfirmation}>
                   <strong>
                       <p>Please review the requirements below if you have problems launching <b>{this.props.listing.title}</b>:</p>
                       <br/>

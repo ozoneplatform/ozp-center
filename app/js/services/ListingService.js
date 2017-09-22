@@ -258,7 +258,7 @@ ListingActions.launch.listen(function (listing, timeout) {
             if (application == null || typeof(application) == 'undefined') {
                 swal({
                     title: "Pop-up blocked",
-                    text: "Click launch to open application manually.",
+                    text: "Click 'Launch Application' to open manually",
                     type: "warning",
                     showCancelButton: true,
                     confirmButtonText: "Launch Application",
