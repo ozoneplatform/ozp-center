@@ -16,7 +16,7 @@ function getState(profileData) {
         launchInWebtop = profile ? profile.launchInWebtop : false;
 
     return {launchInWebtop: launchInWebtop,
-            launchModal: false,
+            launchWarning: false,
             timeout: null,
             leavingOzpWarningFlag: true
         };
@@ -48,13 +48,22 @@ var CenterLaunchLink = React.createClass({
     },
 
     launchClick: function(){
-        var listingLaunchFn = ListingActions.launch.bind(null, this.props.listing)
+        var listingLaunchFn = ListingActions.launch.bind(null, this.props.listing, this.state.currentUser.leavingOzpWarningFlag);
         listingLaunchFn();
 
-        var me = this;
-        me.setState({'launchModal': true});
+        this.setState({
+            'launchWarning': true
+        });
 
-        me.setState({'timeout' : setTimeout(me.modalConfirmation, 30000)});
+        if (this.state.leavingOzpWarningFlag == true && this.state.currentUser.leavingOzpWarningFlag == true) {
+            var me = this;
+
+            setTimeout(function(){
+                me.setState({
+                    'launchWarning': false
+                });
+            }, 5000);
+        }
     },
 
     modalConfirmation: function(){
@@ -64,12 +73,11 @@ var CenterLaunchLink = React.createClass({
         ProfileActions.updateProfileFlags(profile);
         ProfileActions.fetchProfile(profile.profileId);
 
-        this.setState({'launchModal': false});
-        clearTimeout(this.state.timeout);
+        this.setState({'launchWarning': false});
     },
 
     optWarning: function(event) {
-        if (event.target.value == 'true' || event.target.value) {
+        if (event.target.value == 'true' || event.target.value == true) {
             this.setState({
                 leavingOzpWarningFlag: false
             });
@@ -83,7 +91,7 @@ var CenterLaunchLink = React.createClass({
     render: function() {
         var { className, ...otherProps } = this.props,
             linkClassName = className ? className + ' btn' : 'btn';
-        var launchWarning = this.state.launchModal;
+        var launchWarning = this.state.launchWarning;
 
         var launchModal = this.state.currentUser && this.state.currentUser.leavingOzpWarningFlag ? (<Modal ref="modal" className="LaunchConfirmation" size="small" title="Launch Requirements Notice" onCancel={this.modalConfirmation}>
                   <strong>
