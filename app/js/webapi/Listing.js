@@ -12,7 +12,7 @@ require('sweetalert');
 var FIELDS = [
     'approvedDate', 'id', 'title', 'description', 'descriptionShort', 'screenshots', 'contacts',
     'totalComments', 'avgRate', 'totalRate1', 'totalRate2', 'totalRate3','totalRate4', 'height',
-    'width', 'totalRate5','totalVotes', 'state', 'tags', 'tagsObject', 'type','uuid', 'requirements', 'singleton',
+    'width', 'totalRate5','totalVotes', 'state', 'tags', 'tagsObject', 'type','uuid', 'usage_requirements', 'system_requirements', 'singleton',
     'versionName', 'imageLargeUrl', 'imageSmallUrl', 'imageMediumUrl', 'imageXlargeUrl',
     'launchUrl', 'company', 'whatIsNew', 'owners', 'agency', 'agencyShort', 'rejection',
     'isEnabled', 'categories', 'releaseDate', 'editedDate', 'intents', 'docUrls', 'approvalStatus',
@@ -26,7 +26,7 @@ var SAVE_FORMAT_FIELDS = [
     'agency', 'approval_status', 'approved_date', 'avg_rate', 'categories', 'contacts',
     'description', 'description_short', 'doc_urls', 'id', 'intents', 'is_enabled', 'is_featured',
     'is_private', 'last_activity', 'launch_url', 'listing_type', 'owners', 'required_listings',
-    'requirements', 'screenshots', 'singleton', 'tags', 'title', 'total_comments', 'total_rate1',
+    'usage_requirements', 'system_requirements', 'screenshots', 'singleton', 'tags', 'title', 'total_comments', 'total_rate1',
     'total_rate2', 'total_rate3', 'total_rate4', 'total_rate5', 'total_votes', 'unique_name',
     'version_name', 'what_is_new', 'small_icon', 'large_icon', 'banner_icon', 'large_banner_icon',
     'security_marking', 'is_bookmarked'
@@ -127,6 +127,9 @@ function Listing (json) {
     this.changeLogs = [];
     this.similar = [];
     this.isPartialListing = true;
+    this.usage_requirements = json.usageRequirements;
+    this.system_requirements = json.systemRequirements;
+
     return this;
 }
 
