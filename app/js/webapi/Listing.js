@@ -503,6 +503,16 @@ var ListingApi = {
 
         return $.getJSON(url).then(
             (resp) => _.map(resp, this.newListing));
+    },
+
+    giveFeedback: function(id, thumbs) {
+        return $.ajax({
+            type: 'POST',
+            url: API_URL + '/api/listing/' + id + '/feedback/',
+            data: JSON.stringify({feedback: thumbs}),
+            dataType: 'json',
+            contentType: 'application/json'
+        });
     }
 };
 

@@ -319,4 +319,12 @@ ListingActions.deleteListing.listen(function (listing) {
 
 });
 
+ListingActions.giveFeedback.listen(function (listing, thumbs) {
+    ListingApi.giveFeedback(listing, thumbs)
+        .then(function (response) {
+            ListingActions.giveFeedbackCompleted(listing.id, thumbs);
+        })
+        .fail(ListingActions.giveFeedbackFailed);
+});
+
 ListingActions.setFeatured.listen(updateListingProperty.bind(null, 'isFeatured'));

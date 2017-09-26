@@ -190,7 +190,14 @@
 
     .resultsDiv {
         display: inline-block;
+        position: relative;
+        left: 5px;
     }
+
+    .negative-feedback {
+        transform: rotate(180deg) scaleX(1);
+    }
+
 }
 
 .shareLink{

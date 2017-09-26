@@ -46,6 +46,7 @@ var ListingActions = createActions({
     pendingDelete: null,
     approveDelete: null,
     undelete: null,
+    giveFeedback: null
 });
 
 ListingActions.listingChangeCompleted = Reflux.createAction();

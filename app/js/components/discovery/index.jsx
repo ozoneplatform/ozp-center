@@ -16,6 +16,7 @@ var NavBar = require('../NavBar/index.jsx');
 var Header = require('../header/index.jsx');
 var Sidebar = require('./Sidebar.jsx');
 var ListingTile = require('./ListingTile.jsx');
+var RecommendedListingTileStorefront = require('./RecommendedListingTileStorefront.jsx');
 var FeaturedListings = require('./FeaturedListings.jsx');
 var Carousel = require('../carousel/index.jsx');
 var Types = require('./Types.jsx');
@@ -198,6 +199,7 @@ var Discovery = React.createClass({
         this.listenTo(ListingActions.fetchRecentListingsFailed, this.onFetchRecentListingsFailed);
         this.listenTo(ListingActions.fetchMostPopularListingsFailed, this.onFetchMostPopularListingsFailed);
         this.listenTo(ListingActions.fetchRecommendedListingsFailed, this.onFetchRecommendedListingsFailed);
+        this.listenTo(ListingActions.giveFeedbackCompleted, ListingActions.fetchRecommendedListings);
 
         if(this.context.getCurrentParams().categories){
           this.setState({initCategories: decodeURIComponent(this.context.getCurrentParams().categories).split('+')});
@@ -493,7 +495,7 @@ var Discovery = React.createClass({
                 <section className="Discovery__Recommended" key="Discovery__Recommended">
                 <h4>{listingMessages['recommender.recommended']}</h4>
                 <Carousel className="new-arrival-listings" aria-label="Recommended Apps Carousel">
-                    { ListingTile.fromArray(this.state.recommended, listingMessages['recommender.recommended']) }
+                    { RecommendedListingTileStorefront.fromArray(this.state.recommended, listingMessages['recommender.recommended']) }
                 </Carousel>
             </section>
             );
