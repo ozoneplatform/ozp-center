@@ -2,6 +2,7 @@
 
 var React = require('react');
 var ListingActions = require('../actions/ListingActions');
+var OzpAnalytics = require('../analytics/ozp-analytics');
 
 var FeedbackButton = React.createClass({
 
@@ -11,6 +12,8 @@ var FeedbackButton = React.createClass({
     },
 
     giveFeedback: function() {
+        var feedback = this.props.thumbs == 1 ? 'Positive' : 'Negative';
+        OzpAnalytics.trackFeedback(feedback, this.props.listing.title);
         ListingActions.giveFeedback(this.props.listing.id, this.props.thumbs);
     },
 

@@ -35,5 +35,9 @@ module.exports = {
 
     trackRecommender: function(type, application){
         window._paq.push(['trackEvent', type, application]);
+    },
+
+    trackFeedback: function(feedback, application){
+        window._paq.push(['trackEvent', 'Recommender Feedback', feedback, application]);
     }
 };
