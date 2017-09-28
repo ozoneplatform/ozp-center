@@ -25,8 +25,14 @@ var FeedbackButton = React.createClass({
 
     render: function(){
         var isPositive = this.props.thumbs == 1 ? true : false;
+        var toggledOn = this.props.listing.gaveFeedback;
+        var buttonStyle = toggledOn  && isPositive ? "btn btn-default positive-feedback-toggled" : "btn btn-default"
         var thumbIcon = isPositive ? <i className="icon-thumbs-up-14-grayDark"/> : <i className="icon-thumbs-up-14-grayDark negative-feedback"/>
         var title = isPositive ? "Helpful" : "Not Helpful"
+
+        if (toggledOn && isPositive) {
+            thumbIcon = <i className="icon-thumbs-up-14-white"/>
+        }
 
         return (
             <button
@@ -35,7 +41,7 @@ var FeedbackButton = React.createClass({
               data-placement="top"
               title={title}
               type="button"
-              className="btn btn-default"
+              className={buttonStyle}
               onClick={this.giveFeedback}>
                 {thumbIcon}
             </button>

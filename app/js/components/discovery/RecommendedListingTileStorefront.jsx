@@ -99,10 +99,12 @@ var RecommendedListingTileStorefront = React.createClass({
 
         return (
                 <div className="btn-group recommended-actions">
-                    <CenterLaunchLink className="btn-default" listing={this.props.listing} />
-                    <BookmarkButton listing={this.props.listing} />
                     <FeedbackButton listing={this.props.listing} thumbs={positiveFeedback} />
                     <FeedbackButton listing={this.props.listing} thumbs={negativeFeedback} />
+                    <div className="btn-divider">
+                    <CenterLaunchLink className="btn-default" listing={this.props.listing} />
+                    <BookmarkButton listing={this.props.listing} />
+                    </div>
                 </div>
         );
     }

@@ -61,6 +61,11 @@
         padding-left: 8px;
     }
 
+    .btn-divider {
+        margin-left: 28px;
+        display: inline;
+    }
+
     .sidebar {
 
         li {
@@ -196,6 +201,11 @@
 
     .negative-feedback {
         transform: rotate(180deg) scaleX(1);
+    }
+
+    .positive-feedback-toggled {
+        background-color: #087399;
+        border-color: #087399;
     }
 
 }
