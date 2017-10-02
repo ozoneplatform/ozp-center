@@ -96,12 +96,18 @@ var RecommendedListingTileStorefront = React.createClass({
     renderActions: function () {
         var positiveFeedback = 1;
         var negativeFeedback = -1;
+        var divClass = this.props.listing.gaveFeedback
+            ? "btn-group"
+            : "btn-group recommended-actions";
+        var divDivider = this.props.listing.gaveFeedback
+            ? "btn-group actions"
+            : "btn-divider";
 
         return (
-                <div className="btn-group recommended-actions">
+                <div className={divClass}>
                     <FeedbackButton listing={this.props.listing} thumbs={positiveFeedback} />
                     <FeedbackButton listing={this.props.listing} thumbs={negativeFeedback} />
-                    <div className="btn-divider">
+                    <div className={divDivider}>
                     <CenterLaunchLink className="btn-default" listing={this.props.listing} />
                     <BookmarkButton listing={this.props.listing} />
                     </div>
