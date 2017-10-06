@@ -40,7 +40,6 @@ var ListingTile = React.createClass({
     render: function () {
         var listing = this.props.listing;
 
-        window.console.log(listing)
         var name = listing.title;
         var description = listing.descriptionShort && listing.descriptionShort.substr(0, 140);
         var imageLargeUrl;
