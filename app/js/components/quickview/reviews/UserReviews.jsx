@@ -26,12 +26,14 @@ var UserReview = React.createClass({
     },
 
     isEditAllowed: function () {
-        var { review, user, listing } = this.props;
-        return (
-            user.isAdmin() ||
-            (review.author.id === user.id ) ||
-            user.isOrgSteward(listing.agency)
-        );
+        var listingOrg = this.props.listing.agencyShort;
+        var currentUser = this.props.user;
+        var reviewer = this.props.review.author.id;
+
+        if(currentUser.id == reviewer || (currentUser.stewardedOrganizations.indexOf(listingOrg) !== -1)){
+            return true;
+        }
+        return false;
     },
 
     onResponseCompleted: function() {
