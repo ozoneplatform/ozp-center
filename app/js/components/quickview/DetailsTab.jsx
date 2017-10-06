@@ -8,8 +8,8 @@ var { Link } = require('react-router');
 
 var PubSub = require('browser-pubsub');
 var tourCh = new PubSub('tour');
-
 var ProfileLink = require('../profile/ProfileLink.jsx');
+var NotifyOwners = require('./NotifyOwners.jsx');
 
 var DetailsTab = React.createClass({
 
@@ -19,14 +19,27 @@ var DetailsTab = React.createClass({
 
     getDefaultProps() {
         return {
-          refresh: false
+            refresh: false
         };
-      },
+    },
+
+    getInitialState: function () {
+        return{
+            isResponding: false,
+            currentUser:this.props.currentUser
+        }
+    },
 
     componentDidMount: function() {
-      tourCh.publish({
-        detailsLoaded: true
-      });
+
+        var currentHash = window.location.hash.substr(1);
+        this.setState({
+            isResponding: (currentHash.substr(currentHash.indexOf('isResponding='))).split('=')[1]
+        });
+
+        tourCh.publish({
+            detailsLoaded: true
+        });
     },
 
     render: function () {
@@ -42,6 +55,7 @@ var DetailsTab = React.createClass({
         var tagsObject = this.props.listing.tagsObject;
         var usage_requirements = this.props.listing.usage_requirements;
         var system_requirements = this.props.listing.system_requirements;
+        var currentUser = this.state;
 
         return (
             <div className="tab-pane active quickview-details row" tabIndex="0">
@@ -87,14 +101,15 @@ var DetailsTab = React.createClass({
                 <div className="col-xs-4 col-right">
                     <section>
                         <h5>Ownership Information</h5>
-                        <p>
-                        <p><label>Owner(s):</label>{ this.renderOwners() }</p>
-                        <p><label>Associated Organization</label></p>
-                        <p className="col-xs-offset-1">{ organization }</p>
-                        { this.renderGovSponser() }
-                        </p>
+                        <div>
+                            <p><label>Owner(s):</label> <i className="icon-feedback-12-grayDark" onClick={this.renderCommentBox}></i> </p>
+                            <p>{ this.renderOwners() } </p>
+                            <p>{ this.state.isResponding && <NotifyOwners listing={this.props.listing} user={currentUser} responded={this.onResponseCompleted}/> }</p>
+                            <p><label>Associated Organization</label></p>
+                            <p className="col-xs-offset-1">{ organization }</p>
+                            { this.renderGovSponser() }
+                        </div>
                     </section>
-
                 </div>
             </div>
         );
@@ -124,6 +139,18 @@ var DetailsTab = React.createClass({
                 );
               }
             });
+    },
+
+    onResponseCompleted: function() {
+        this.setState({
+            isResponding: false
+        });
+    },
+
+    renderCommentBox :function() {
+        this.setState({
+            isResponding: !this.state.isResponding
+        });
     },
 
     renderIntents: function () {

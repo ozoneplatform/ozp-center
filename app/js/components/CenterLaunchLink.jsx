@@ -2,7 +2,8 @@
 
 var React = require('react');
 var Reflux = require('reflux');
-
+var { Navigation, CurrentPath } = require('react-router');
+var State = require('../mixins/ActiveStateMixin');
 var SelfStore = require('ozp-react-commons/stores/SelfStore');
 var CurrentProfileStore = require('ozp-react-commons/stores/CurrentProfileStore');
 var ProfileActions = require('ozp-react-commons/actions/ProfileActions');
@@ -27,7 +28,7 @@ function getState(profileData) {
  * this will either launch into webtop (in a new tab) or just in a new tab
  */
 var CenterLaunchLink = React.createClass({
-    mixins: [Reflux.listenTo(SelfStore, 'onStoreUpdate'), Reflux.connect(SelfStore)],
+    mixins: [Reflux.listenTo(SelfStore, 'onStoreUpdate'), Reflux.connect(SelfStore), Navigation, CurrentPath, State],
 
     propTypes: {
         listing: React.PropTypes.object.isRequired
@@ -88,6 +89,20 @@ var CenterLaunchLink = React.createClass({
         }
     },
 
+    goToContactOwners: function(){
+        this.setState({'launchWarning': false});
+
+        var href = this.makeHref(this.getActiveRoutePath(),this.getParams(), {
+            listing: this.props.listing.id,
+            action: 'view',
+            tab: 'details',
+            isResponding: true
+        });
+
+        window.location.replace(href);
+
+    },
+
     render: function() {
         var { className, ...otherProps } = this.props,
             linkClassName = className ? className + ' btn' : 'btn';
@@ -103,6 +118,8 @@ var CenterLaunchLink = React.createClass({
                       <h5>System Requirements</h5>
                       <p>{this.props.listing.system_requirements}</p>
                       <br/>
+                      <p>Or contact the owners of {this.props.listing.title} by clicking here:
+                      <button className="btn btn-info" onClick={this.goToContactOwners}>Contact Owners</button></p>
                   </strong>
                   <p>This dialog box will close automatically after 30 seconds.</p>
                   <section>
