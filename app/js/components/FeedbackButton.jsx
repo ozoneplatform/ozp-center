@@ -32,16 +32,20 @@ var FeedbackButton = React.createClass({
         var gaveFeedback = this.props.listing.gaveFeedback;
         var buttonStyle = gaveFeedback && isPositive
             ? "btn btn-default positive-feedback-toggled"
-            : "btn btn-default"
-        var thumbIcon = isPositive
-            ? <i className="icon-thumbs-up-14-grayDark"/>
-            : <i className="icon-thumbs-up-14-grayDark negative-feedback"/>
+            : "btn btn-default";
+        var thumbIcon;
+        if (isPositive) {
+            thumbIcon = <i className="icon-thumbs-up-14-grayDark"/>;
+            if (gaveFeedback) {
+                thumbIcon = <i className="icon-thumbs-up-filled-yellow"/>;
+            }
+        } else {
+            thumbIcon = <i className="icon-thumbs-up-14-grayDark negative-feedback"/>;
+        }
         var title = isPositive
             ? "Helpful"
             : "Not Helpful"
-        var feedbackButton = gaveFeedback
-            ? null
-            : <button ref="tooltipped" data-toggle="tooltip" data-placement="top" title={title} type="button" className={buttonStyle} onClick={this.giveFeedback}>{thumbIcon}</button>;
+        var feedbackButton = <button ref="tooltipped" data-toggle="tooltip" data-placement="top" title={title} type="button" className={buttonStyle} onClick={this.giveFeedback}>{thumbIcon}</button>;
 
         return (feedbackButton);
     }
