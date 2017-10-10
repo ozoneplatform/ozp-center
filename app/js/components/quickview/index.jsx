@@ -21,6 +21,7 @@ var ResourcesTab = require('./ResourcesTab.jsx');
 var AdministrationTab = require('./AdministrationTab.jsx');
 var NotificationsTab = require('./NotificationsTab.jsx');
 var Recommendations = require('./Recommendations.jsx');
+var ListingActions = require('../../actions/ListingActions');
 
 var tabs = {
     'overview': OverviewTab,
@@ -82,6 +83,22 @@ var Quickview = React.createClass({
         var { shown, listing } = this.state;
         var ActiveRouteHandler = this.getActiveRouteHandler();
         var owners, tabs;
+
+        if (listing){
+            var userIsAdmin = (currentUser.isAdmin() || (_.contains(owners, currentUser.username) && currentUser.username !== "Masked Username") ||
+                _.contains(currentUser.stewardedOrganizations, listing.agencyShort)) && (listing.isEnabled == false);
+
+            if (listing.approvalStatus == "DELETED"){
+                this.generateAlert("Could not open!", "This listing has been removed", "error",currentUser, false);
+                this.close();
+            }else if (userIsAdmin && (listing.isEnabled == false)){
+                this.generateAlert("This listing is disabled!", "This listing has been disabled; it is not available to unprivleged users. Any changes made to this listing cannot be seen by users. To enable this listing, select 'Enable Listing'", "warning", currentUser, userIsAdmin);
+            }else if(listing.isEnabled == false){
+                this.generateAlert("Could not open!", "This listing has been disabled", "error",currentUser, userIsAdmin);
+                this.close();
+            }
+        }
+
         if (listing) {
             tabs = _.cloneDeep(this.props.tabs);
             owners = listing.owners.map(function (owner) {
@@ -190,6 +207,10 @@ var Quickview = React.createClass({
         }
     },
 
+    componentWillUnmount: function() {
+        $(this.getDOMNode()).off()
+    },
+
     onShown: function () {
         // dont force focus causes infinite loop with overview tab's modal carousel
         $(document).off('focusin.bs.modal');
@@ -222,6 +243,33 @@ var Quickview = React.createClass({
         this.setState({toEdit: true});
         this.close();
         this.transitionTo('edit', {listingId: listing.id});
+    },
+
+    /**
+     * Build and output error message via SweetAlert.
+     */
+    generateAlert: function(title, text, type, currentUser, userIsAdmin) {
+        var listing = this.state.listing;
+
+            /* jshint ignore:start */
+            swal({
+                title: title,
+                text: text,
+                type: type,
+                showConfirmButton: userIsAdmin,
+                showCancelButton: true,
+                confirmButtonText: "Enable Listing",
+                confirmButtonColor: "#DD6B55",
+                cancelButtonText: "Close Warning",
+                closeOnConfirm: true,
+                closeOnCancel: true,
+                html: false
+            },
+            function(isConfirm){
+                if (isConfirm){
+                    ListingActions.enable(listing);
+                }
+            });
     }
 
 });
