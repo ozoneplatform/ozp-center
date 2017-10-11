@@ -1,5 +1,22 @@
 
-### 1.1.91 (None) 
+### 1.1.92 (None)
+
+#### Feature  
+* **notifications**:  create new contact the POCs from a listing (#870) ([e8748b93](https://github.com/aml-development/ozp-center/commit/e8748b935250a07c27dc016d0e37d6e9bb7acb92))    
+
+#### Fixes  
+* Fixing displaying the listing review total count in tiles ([01d702ce](https://github.com/aml-development/ozp-center/commit/01d702ce65ec7187682e4f3512760c1eeecb801b))     
+
+#### Merge Pull Requests  
+* Merge pull request #871 from aml-development/fix_listing_review_count ([e50fe38b](https://github.com/aml-development/ozp-center/commit/e50fe38b28357698ffc39243c4a5ec1f187dd2ac))         
+
+#### Changes  
+* Revert "Disabled listing fix (#872)" ([6109ffa6](https://github.com/aml-development/ozp-center/commit/6109ffa6d76a222abf8da8525e2632814c84caf4))
+* Disabled listing fix (#872) ([6c5b73a6](https://github.com/aml-development/ozp-center/commit/6c5b73a6f50c58faf6e65628c62e65077f371f61))
+* Removing the console.log statement ([8a159dc5](https://github.com/aml-development/ozp-center/commit/8a159dc5b74060765b0b45c028e59e642f82b6a5))    
+* **reviews**:  prevent all users from deleting reviews (#873) ([89576001](https://github.com/aml-development/ozp-center/commit/8957600191967abae03fc715b0074575d7421638))     
+
+### 1.1.91 (2017-09-28) 
 
 #### Fixes  
 * **listing**:  fix create ([87a1476c](https://github.com/aml-development/ozp-center/commit/87a1476c6260e94656f6b691001e747641c973cd))   
