@@ -126,6 +126,7 @@ var NavBar = React.createClass({
 
     showHelpModal: function () {
         this.setState({ showHelp: true });
+        return false;
     },
 
     showNotificationsModal: function () {
@@ -135,7 +136,7 @@ var NavBar = React.createClass({
     onModalHidden: function () {
         this.setState({ showHelp: false, showNotifications: false });
     },
-  
+
 
 });
 

@@ -8,6 +8,8 @@ var ListingActions = require('../actions/ListingActions');
 var PaginatedListingsStore = require('../stores/PaginatedListingsStore');
 var UnpaginatedListingsStore = require('../stores/UnpaginatedListingsStore');
 
+require('sweetalert');
+
 function updateListingProperty(propName, value, listing) {
     var data = _.cloneDeep(listing);
     data[propName] = value;
@@ -244,9 +246,37 @@ ListingActions.saveReviewResponse.listen(function (listing, review) {
         });
 });
 
-ListingActions.launch.listen(function (listing) {
+ListingActions.launch.listen(function (listing, timeout) {
     OzpAnalytics.trackEvent('Applications', listing.title, listing.agencyShort);
-    window.open(listing.launchUrl);
+
+    if (timeout) {
+        var application;
+
+        setTimeout(function() {
+            application = window.open(listing.launchUrl);
+
+            if (application == null || typeof(application) == 'undefined') {
+                swal({
+                    title: "Pop-up blocked",
+                    text: "Click 'Launch Application' to open manually",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Launch Application",
+                    cancelButtonText: "Cancel",
+                    closeOnConfirm: true,
+                    closeOnCancel: true
+                },
+                function(isConfirm){
+                    if (isConfirm) {
+                        window.open(listing.launchUrl);
+                    }
+                });
+            }
+        }, 3000);
+    } else {
+        window.open(listing.launchUrl);
+    }
+
 });
 
 ListingActions.save.listen(function (data) {

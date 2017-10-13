@@ -85,9 +85,13 @@ var formLinks = {
         title: 'Listing URL',
         id: 'create-edit-listing-url'
     },
-    requirements: {
+    usage_requirements: {
         title: 'Usage Requirements',
         id: 'create-edit-usage-requirements'
+    },
+    system_requirements: {
+        title: 'System Requirements',
+        id: 'create-edit-system-requirements'
     },
     isPrivate: {
         title: 'Private Listing',
@@ -173,7 +177,8 @@ var formLinkGroups = [{
         formLinks.versionNumber,
         formLinks.launchUrl,
         formLinks.isPrivate,
-        formLinks.requirements,
+        formLinks.usage_requirements,
+        formLinks.system_requirements,
         formLinks.whatsNew,
         formLinks.intents,
         formLinks.singleton,
@@ -401,7 +406,8 @@ var ListingForm = React.createClass({
                                     'This web application/widget is only visible to your agency']}
                     id={f.isPrivate.id} { ...p('isPrivate') } />
 
-                <TextAreaInput id={f.requirements.id} { ...p('requirements') } rows="5"/>
+                <TextAreaInput id={f.usage_requirements.id} { ...p('usage_requirements') } rows="5"/>
+                <TextAreaInput id={f.system_requirements.id} { ...p('system_requirements') } rows="5"/>
 
                 <TextAreaInput id={f.whatsNew.id} { ...p('whatIsNew') } rows="3" optional/>
                 <Select2Input id={f.intents.id} { ...p('intents') }  multiple options={

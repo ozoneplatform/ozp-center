@@ -1,7 +1,59 @@
 
-### 1.1.90 (None)   
+### 1.1.92 (None)
+
+#### Feature  
+* **notifications**:  create new contact the POCs from a listing (#870) ([e8748b93](https://github.com/aml-development/ozp-center/commit/e8748b935250a07c27dc016d0e37d6e9bb7acb92))    
+
+#### Fixes  
+* Fixing displaying the listing review total count in tiles ([01d702ce](https://github.com/aml-development/ozp-center/commit/01d702ce65ec7187682e4f3512760c1eeecb801b))     
 
 #### Merge Pull Requests  
+* Merge pull request #871 from aml-development/fix_listing_review_count ([e50fe38b](https://github.com/aml-development/ozp-center/commit/e50fe38b28357698ffc39243c4a5ec1f187dd2ac))         
+
+#### Changes  
+* Revert "Disabled listing fix (#872)" ([6109ffa6](https://github.com/aml-development/ozp-center/commit/6109ffa6d76a222abf8da8525e2632814c84caf4))
+* Disabled listing fix (#872) ([6c5b73a6](https://github.com/aml-development/ozp-center/commit/6c5b73a6f50c58faf6e65628c62e65077f371f61))
+* Removing the console.log statement ([8a159dc5](https://github.com/aml-development/ozp-center/commit/8a159dc5b74060765b0b45c028e59e642f82b6a5))    
+* **reviews**:  prevent all users from deleting reviews (#873) ([89576001](https://github.com/aml-development/ozp-center/commit/8957600191967abae03fc715b0074575d7421638))     
+
+### 1.1.91 (2017-09-28) 
+
+#### Fixes  
+* **listing**:  fix create ([87a1476c](https://github.com/aml-development/ozp-center/commit/87a1476c6260e94656f6b691001e747641c973cd))   
+* **preferences**
+  *  change wording of leaving notice ([4872e08b](https://github.com/aml-development/ozp-center/commit/4872e08bc903042b1144d6af02a0092abd82d64e))
+  *  change timeout back to 30 secs ([6e639ee7](https://github.com/aml-development/ozp-center/commit/6e639ee7f6de3d55f9247fd497c8a1a9658be344))
+  *  allow instant launch if warning turned off ([ae994190](https://github.com/aml-development/ozp-center/commit/ae99419099f7bcfa57a8b9df26038a9be6e533ee))
+  *  changing wording of launch notice ([d2aa31fb](https://github.com/aml-development/ozp-center/commit/d2aa31fb68ec1c6cedc5f1fea0eb76ef97f48602))
+  *  switch false to true logic ([b2444396](https://github.com/aml-development/ozp-center/commit/b2444396f00171347a7a103e1e876c753905d334))      
+
+#### Merge Pull Requests  
+* Merge pull request #846 from aml-development/leave_ozp ([a04d0b4b](https://github.com/aml-development/ozp-center/commit/a04d0b4b8073c2d13aec41a1d734e91a58db2528))
+* Merge pull request #833 from aml-development/508 ([e1aa7ed7](https://github.com/aml-development/ozp-center/commit/e1aa7ed77c7fa25d41d588d82a7163c8cb462c9e))     
+
+#### Style  
+* style: Fix Style Issues in Center ([eb2be04f](https://github.com/aml-development/ozp-center/commit/eb2be04f7b8e2197f657919ea56309612971a0f5))         
+
+### 1.1.90 (2017-09-20)
+
+#### Feature 
+* **preferences**
+  *  alert user if application launch is popup ([b098544e](https://github.com/aml-development/ozp-center/commit/b098544e5173d0340df681fcf371562ba3461d68))
+  *  allow ability to opt out of warning modal ([f5cd91e5](https://github.com/aml-development/ozp-center/commit/f5cd91e5cf64d74e8411bf1a6bb993da2395a7ec))    
+* **requirements**
+  *  show usage and system requirements in leaving notification ([6a8f5973](https://github.com/aml-development/ozp-center/commit/6a8f5973ff724b00fdd519674f37789c7fc4e4e1))
+  *  show usage and system requirements in Details tab ([63f75b15](https://github.com/aml-development/ozp-center/commit/63f75b15685faafbdb4679adc3e964c6f427a5c7))
+  *  split requirements into usage and system requirements ([86fb5758](https://github.com/aml-development/ozp-center/commit/86fb575857ea471fb272a8b1f75ec0583baee1d4))     
+* **enhancement**:  notify user when they're leaving OZP ([fc49fe14](https://github.com/aml-development/ozp-center/commit/fc49fe14c47c0f709a1b52e9dc44770099cf4bfe))    
+
+#### Fixes 
+* **preferences**
+  *  increase warning modal time to 30 secs from 10 secs ([a2683ac7](https://github.com/aml-development/ozp-center/commit/a2683ac7d83ec976bbe4591d94551e2e035c7731))
+  *  align styling of checkbox ([417a3bec](https://github.com/aml-development/ozp-center/commit/417a3becba7c8901e2810bee1d6fc62f3a3cb042))     
+* **prefereneces**:  uncomment out timeout ([7677240c](https://github.com/aml-development/ozp-center/commit/7677240c2d5a6cdbedb13968f7cb7c4ff6f3dbb0))     
+
+#### Merge Pull Requests  
+* Merge branch 'requirements' of github.com:aml-development/ozp-center into leave_ozp ([da0e4be0](https://github.com/aml-development/ozp-center/commit/da0e4be034a0a05d72c3f3e8bc12ca56bf92e51c))
 * Merge pull request #859 from aml-development/org_steward_modal_title ([576bf125](https://github.com/aml-development/ozp-center/commit/576bf125fdc3a1f014542b5430ae3822eff88926))
 * Merge pull request #849 from aml-development/review_respond ([395a337e](https://github.com/aml-development/ozp-center/commit/395a337e2a772b761c04ca87ed4b04232b9a099e))           
 
@@ -73,6 +125,7 @@
 * updated stores to fetchById on every app open (#835) ([3c8c9a45](https://github.com/aml-development/ozp-center/commit/3c8c9a45b323a868b711ca532324a3a4066ccaa6))
 * Separating the frontend storefront calls to use the new endpoints (#834) ([f0923a51](https://github.com/aml-development/ozp-center/commit/f0923a51d5451f7205d24c5b140a8622b9b1b7ff))
 * Adding back the Org Steward modal title ([a9388487](https://github.com/aml-development/ozp-center/commit/a9388487c01f19497736e2320675272c125185b2))
+* Allow description for listing and organization dropdown in center ([f1447c1b](https://github.com/aml-development/ozp-center/commit/f1447c1b284f5c3289a02804a35056a35dd655fc))
 * Putting a URL load delay in place to try to fix the similar listing loading issue. ([e9283f83](https://github.com/aml-development/ozp-center/commit/e9283f833252e3a1a4902850b63d0703a3507ef5))     
 
 ### 1.1.82 (2017-07-26) 

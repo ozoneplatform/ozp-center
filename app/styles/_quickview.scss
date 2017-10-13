@@ -33,6 +33,10 @@ $quickview-nav-tabs-height: 42px;
         font-weight: 400;
     }
 
+    .usage {
+        margin-bottom: 20px;
+    }
+
     h5 {
         @extend .headingBase;
         font-size: 100%;
@@ -326,7 +330,7 @@ ul.list-unstyled.RecentActivity
     }
 
     section {
-        button:first-of-type {
+        button {
             margin-right: 6px;
             margin-bottom: 6px;
         }
@@ -442,6 +446,32 @@ ul.list-unstyled.RecentActivity
 
 }
 
+.LaunchConfirmation {
+    z-index: 1050;
+}
+
+.LaunchConfirmation .modal-dialog {
+    width: 500px;
+}
+
+.LaunchConfirmation .modal-body {
+    padding: 20px 50px;
+    text-align: center;
+}
+
+.LaunchConfirmation .modal-body strong {
+    font-weight: normal;
+    font-size: 1.3em;
+    display: block;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.LaunchConfirmation .modal-body .btn {
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
 .Review {
 
     &__text {
@@ -500,4 +530,15 @@ ul.list-unstyled.RecentActivity
     height: 4em;
     display: block;
     font-size: 12px;
+}
+
+.checkbox {
+    display: inline-block;
+}
+
+.checkbox-text {
+    display: inline-block;
+    position: relative;
+    bottom: 2px;
+    padding-left: 5px;
 }
