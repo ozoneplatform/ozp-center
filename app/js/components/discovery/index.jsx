@@ -199,7 +199,6 @@ var Discovery = React.createClass({
         this.listenTo(ListingActions.fetchRecentListingsFailed, this.onFetchRecentListingsFailed);
         this.listenTo(ListingActions.fetchMostPopularListingsFailed, this.onFetchMostPopularListingsFailed);
         this.listenTo(ListingActions.fetchRecommendedListingsFailed, this.onFetchRecommendedListingsFailed);
-        this.listenTo(ListingActions.giveFeedbackCompleted, ListingActions.fetchRecommendedListings);
 
         if(this.context.getCurrentParams().categories){
           this.setState({initCategories: decodeURIComponent(this.context.getCurrentParams().categories).split('+')});

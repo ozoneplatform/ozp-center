@@ -148,7 +148,7 @@ var DiscoveryPageStore = Reflux.createStore({
         this.trigger();
     },
 
-    giveFeedbackCompleted: function(storefrontListings) {
+    giveFeedbackCompleted: function() {
         this.trigger();
     },
 

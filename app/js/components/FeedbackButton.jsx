@@ -8,15 +8,22 @@ var FeedbackButton = React.createClass({
 
     propTypes: {
         listing: React.PropTypes.object.isRequired,
-        thumbs: React.PropTypes.number.isRequired
+        thumbs: React.PropTypes.number.isRequired,
+        toggled: React.PropTypes.bool
+    },
+
+    getInitialState: function() {
+        return {
+            toggled: this.props.toggled
+        }
     },
 
     giveFeedback: function() {
-        var feedback = this.props.thumbs == 1
-            ? 'Positive'
-            : 'Negative';
-        OzpAnalytics.trackFeedback(feedback, this.props.listing.title);
-        ListingActions.giveFeedback(this.props.listing.id, this.props.thumbs);
+        this.setState({
+            toggled: !this.state.toggled
+        });
+
+        this.props.onClick();
     },
 
     componentDidMount: function() {
@@ -25,23 +32,42 @@ var FeedbackButton = React.createClass({
         }
     },
 
+    shouldComponentUpdate: function(prevProps) {
+        if (prevProps.toggled != this.state.toggled) {
+            this.setState({
+                toggled: prevProps.toggled
+            });
+            return true;
+        }
+
+        return false;
+    },
+
     render: function() {
+        var thumbIcon,
+            buttonStyle;
         var isPositive = this.props.thumbs == 1
             ? true
             : false;
-        var gaveFeedback = this.props.listing.gaveFeedback;
-        var buttonStyle = gaveFeedback && isPositive
-            ? "btn btn-default positive-feedback-toggled"
-            : "btn btn-default";
-        var thumbIcon;
+
         if (isPositive) {
             thumbIcon = <i className="icon-thumbs-up-14-grayDark"/>;
-            if (gaveFeedback) {
+            buttonStyle = "btn btn-default";
+
+            if (this.state.toggled) {
                 thumbIcon = <i className="icon-thumbs-up-filled-yellow"/>;
+                buttonStyle = "btn btn-default positive-feedback-toggled";
             }
         } else {
             thumbIcon = <i className="icon-thumbs-up-14-grayDark negative-feedback"/>;
+            buttonStyle = "btn btn-default";
+
+            if (this.state.toggled) {
+                thumbIcon = <i className="icon-thumbs-up-filled-yellow negative-feedback"/>;
+                buttonStyle = "btn btn-default positive-feedback-toggled";
+            }
         }
+
         var title = isPositive
             ? "Helpful"
             : "Not Helpful"

@@ -32,15 +32,18 @@ var RecommendedListingTileStorefront = React.createClass({
         }
     },
 
+    getInitialState: function() {
+        return {
+            positiveToggled: this.props.listing.feedback == 1 ? true : false,
+            negativeToggled: this.props.listing.feedback == -1 ? true : false,
+        }
+    },
+
     handleClick: function(from, title) {
       if(from){
         if(from == listingMessages['recommender.recommended'])
           OzpAnalytics.trackRecommender(listingMessages['recommender.recommended'], title);
       }
-    },
-
-    giveFeedback: function(listing, thumbs) {
-        ListingActions.giveFeedback(listing.id, thumbs);
     },
 
     render: function () {
@@ -93,14 +96,34 @@ var RecommendedListingTileStorefront = React.createClass({
         );
     },
 
+    giveFeedback: function(thumbs) {
+        if (thumbs == 1) {
+            this.setState({
+                positiveToggled: true,
+                negativeToggled: false
+            });
+        } else {
+            this.setState({
+                positiveToggled: false,
+                negativeToggled: true
+            });
+        }
+
+        var feedback = thumbs == 1
+            ? 'Positive'
+            : 'Negative';
+        OzpAnalytics.trackFeedback(feedback, this.props.listing.title);
+        ListingActions.giveFeedback(this.props.listing.id, thumbs);
+    },
+
     renderActions: function () {
         var positiveFeedback = 1;
         var negativeFeedback = -1;
 
         return (
                 <div className="btn-group recommended-actions">
-                    <FeedbackButton listing={this.props.listing} thumbs={positiveFeedback} />
-                    <FeedbackButton listing={this.props.listing} thumbs={negativeFeedback} />
+                    <FeedbackButton listing={this.props.listing} thumbs={positiveFeedback} toggled={this.state.positiveToggled}  onClick={()=>this.giveFeedback(1)}/>
+                    <FeedbackButton listing={this.props.listing} thumbs={negativeFeedback} toggled={this.state.negativeToggled}  onClick={()=>this.giveFeedback(-1)}/>
                     <div className="btn-divider">
                     <CenterLaunchLink className="btn-default" listing={this.props.listing} />
                     <BookmarkButton listing={this.props.listing} />
