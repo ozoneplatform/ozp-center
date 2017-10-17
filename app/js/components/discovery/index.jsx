@@ -250,7 +250,7 @@ var Discovery = React.createClass({
                         isSearching= { isSearching }
                         initCategories = { this.state.initCategories ? this.state.initCategories : false }
                         categories={ this.props.system.categories }
-                        onGoHome= { this.reset }
+                        onGoHome= { this.refresh }
                         onChange= { this.onCategoryChange } />
                     <section className="content col-xs-9 col-lg-10">
                         {
@@ -362,6 +362,10 @@ var Discovery = React.createClass({
             tags: [],
             tagId: []
         });
+    },
+
+    refresh() {
+        location.reload();
     },
 
     searchBarReset() {
