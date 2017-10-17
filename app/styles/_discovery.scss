@@ -61,6 +61,10 @@
         padding-left: 8px;
     }
 
+    .btn-divider {
+        float: right;
+    }
+
     .sidebar {
 
         li {
@@ -190,7 +194,19 @@
 
     .resultsDiv {
         display: inline-block;
+        position: relative;
+        left: 5px;
     }
+
+    .negative-feedback {
+        transform: rotate(180deg) scaleX(1);
+    }
+
+    .positive-feedback-toggled {
+        background-color: #087399;
+        border-color: #087399;
+    }
+
 }
 
 .ariaTip {

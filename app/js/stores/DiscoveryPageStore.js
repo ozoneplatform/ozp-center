@@ -35,8 +35,8 @@ var DiscoveryPageStore = Reflux.createStore({
                 (listings)=>{_newArrivals = listings; this.trigger();});
         this.listenTo(ListingActions.fetchRecommendedListingsCompleted,
                 (listings)=>{_recommended = listings; this.trigger()});
-
         this.listenTo(ListingActions.searchCompleted, this.onSearchCompleted);
+        this.listenTo(ListingActions.giveFeedbackCompleted, this.giveFeedbackCompleted);
 
         this.listenTo(ListingActions.deleteListingCompleted, this.removeListing)
     },
@@ -145,6 +145,10 @@ var DiscoveryPageStore = Reflux.createStore({
         _nextOffset = (searchResults.nextLink()) ?
             getParameterByName(searchResults.nextLink(), "offset") : 0;
 
+        this.trigger();
+    },
+
+    giveFeedbackCompleted: function() {
         this.trigger();
     },
 

@@ -16,6 +16,7 @@ var NavBar = require('../NavBar/index.jsx');
 var Header = require('../header/index.jsx');
 var Sidebar = require('./Sidebar.jsx');
 var ListingTile = require('./ListingTile.jsx');
+var RecommendedListingTileStorefront = require('./RecommendedListingTileStorefront.jsx');
 var FeaturedListings = require('./FeaturedListings.jsx');
 var Carousel = require('../carousel/index.jsx');
 var Types = require('./Types.jsx');
@@ -249,7 +250,7 @@ var Discovery = React.createClass({
                         isSearching= { isSearching }
                         initCategories = { this.state.initCategories ? this.state.initCategories : false }
                         categories={ this.props.system.categories }
-                        onGoHome= { this.reset }
+                        onGoHome= { this.refresh }
                         onChange= { this.onCategoryChange } />
                     <section className="content col-xs-9 col-lg-10">
                         {
@@ -361,6 +362,10 @@ var Discovery = React.createClass({
             tags: [],
             tagId: []
         });
+    },
+
+    refresh() {
+        location.reload();
     },
 
     searchBarReset() {
@@ -493,7 +498,7 @@ var Discovery = React.createClass({
                 <section className="Discovery__Recommended" key="Discovery__Recommended">
                 <h4>{listingMessages['recommender.recommended']}</h4>
                 <Carousel className="new-arrival-listings" aria-label="Recommended Apps Carousel">
-                    { ListingTile.fromArray(this.state.recommended, listingMessages['recommender.recommended']) }
+                    { RecommendedListingTileStorefront.fromArray(this.state.recommended, listingMessages['recommender.recommended']) }
                 </Carousel>
             </section>
             );

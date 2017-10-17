@@ -18,7 +18,7 @@ var FIELDS = [
     'isEnabled', 'categories', 'releaseDate', 'editedDate', 'intents', 'docUrls', 'approvalStatus',
     'isFeatured', 'smallIconId', 'largeIconId', 'bannerIconId', 'featuredBannerIconId',
     'currentRejection', 'isPrivate', 'securityMarking', 'smallIconMarking',
-    'largeIconMarking', 'bannerIconMarking', 'featuredBannerIconMarking', 'isBookmarked', 'certIssues'
+    'largeIconMarking', 'bannerIconMarking', 'featuredBannerIconMarking', 'isBookmarked', 'certIssues', 'feedback'
 ];
 
 // These don't have the icons, access_control
@@ -506,6 +506,16 @@ var ListingApi = {
 
         return $.getJSON(url).then(
             (resp) => _.map(resp, this.newListing));
+    },
+
+    giveFeedback: function(id, thumbs) {
+        return $.ajax({
+            type: 'POST',
+            url: API_URL + '/api/listing/' + id + '/feedback/',
+            data: JSON.stringify({feedback: thumbs}),
+            dataType: 'json',
+            contentType: 'application/json'
+        });
     }
 };
 
