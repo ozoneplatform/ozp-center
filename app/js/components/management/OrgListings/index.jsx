@@ -23,7 +23,6 @@ var OrgListings = React.createClass({
     mixins: [
         SystemStateMixin,
         ActiveStateMixin,
-        UserRoleMixin.OrgSteward,
     ],
 
     getInitialState: function () {
