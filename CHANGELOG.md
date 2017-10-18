@@ -1,8 +1,32 @@
 
-### 1.1.92 (None)
+### 1.1.93 (None) 
+
+#### Fixes  
+* Fixing the style so the private icon does not overlap ([ad3a116c](https://github.com/aml-development/ozp-center/commit/ad3a116c240bfdaa6f0047a661ce0f7e721b8db3))   
+* **feedback**
+  *  allow Center Home link to actually refresh to home ([72a65114](https://github.com/aml-development/ozp-center/commit/72a65114a0e3c85ea507d3fca2d57895f0c9c0be))
+  *  fix styling of buttons ([bfdac736](https://github.com/aml-development/ozp-center/commit/bfdac7366452bef259245ad4b2a5c42eb9156a73))
+  *  remove updating of carousel after feedback. fix buttons to toggle correctly. ([382eb938](https://github.com/aml-development/ozp-center/commit/382eb9380273c5a0ef66305453d5596697de3c17))     
+
+#### Refactor  
+* **feedback**:  remove magic numbers ([90c460a4](https://github.com/aml-development/ozp-center/commit/90c460a43064e617abead39c0815e9c05c43432b))    
+
+#### Merge Pull Requests  
+* Merge pull request #878 from aml-development/private_icon_overlap ([1a3d4a0e](https://github.com/aml-development/ozp-center/commit/1a3d4a0e764609a34defe5a50d4d7e3d15145b7a))
+* Merge pull request #867 from aml-development/feedback ([df060b16](https://github.com/aml-development/ozp-center/commit/df060b1653c520a6ae684605e8858bc0d17aa1fd))
+* Merge branch 'master' of github.com:aml-development/ozp-center into feedback ([eb556c60](https://github.com/aml-development/ozp-center/commit/eb556c607a84442bf2a8798a7730f2a650ad2981))         
+
+#### Changes  
+* Disabled listing fix (#876) ([70eafa1e](https://github.com/aml-development/ozp-center/commit/70eafa1e9ff609a78d83ccd7fc68c4895cae5ade))     
+
+### 1.1.92 (2017-10-11)
 
 #### Feature  
-* **notifications**:  create new contact the POCs from a listing (#870) ([e8748b93](https://github.com/aml-development/ozp-center/commit/e8748b935250a07c27dc016d0e37d6e9bb7acb92))    
+* **notifications**:  create new contact the POCs from a listing (#870) ([e8748b93](https://github.com/aml-development/ozp-center/commit/e8748b935250a07c27dc016d0e37d6e9bb7acb92))   
+* **feedback**
+  *  allow icons to show toggled on if given feedback. Added some styles to when icons get onhover. ([a285f5e2](https://github.com/aml-development/ozp-center/commit/a285f5e25953ed1cbe5a289816de79d177d6a73f))
+  *  remove feedback buttons if already given a feedback ([3b7584fc](https://github.com/aml-development/ozp-center/commit/3b7584fca4c40eb8c8d8b2bb06b6bad1700406ca))
+  *  allow buttons to be toggled if listing has been given a feedback already ([35d72547](https://github.com/aml-development/ozp-center/commit/35d72547a478b89db1571f1d1cb34c41406d667e))     
 
 #### Fixes  
 * Fixing displaying the listing review total count in tiles ([01d702ce](https://github.com/aml-development/ozp-center/commit/01d702ce65ec7187682e4f3512760c1eeecb801b))     
@@ -16,7 +40,12 @@
 * Removing the console.log statement ([8a159dc5](https://github.com/aml-development/ozp-center/commit/8a159dc5b74060765b0b45c028e59e642f82b6a5))    
 * **reviews**:  prevent all users from deleting reviews (#873) ([89576001](https://github.com/aml-development/ozp-center/commit/8957600191967abae03fc715b0074575d7421638))     
 
-### 1.1.91 (2017-09-28) 
+### 1.1.91 (2017-09-28)
+
+#### Feature 
+* **feedback**
+  *  add piwik tracking ([fa6c0b63](https://github.com/aml-development/ozp-center/commit/fa6c0b63db45185407e5798a78386fcc1462d5c2))
+  *  allow thumbs up ([77193424](https://github.com/aml-development/ozp-center/commit/77193424ae38a48224f371c6b4db2da322b48ea2))     
 
 #### Fixes  
 * **listing**:  fix create ([87a1476c](https://github.com/aml-development/ozp-center/commit/87a1476c6260e94656f6b691001e747641c973cd))   
