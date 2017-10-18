@@ -31,9 +31,8 @@ var QuickviewHeader = React.createClass({
         var agencyShort = listing.agencyShort;
         var totalVotes = listing.totalVotes;
         var lockStyle = {
-            position: 'absolute',
-            left: '4px',
-            top: '4px'
+            left: '6px',
+            top: '2px'
         };
         var labelStyle = {
             paddingLeft: '10px'
