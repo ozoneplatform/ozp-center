@@ -135,7 +135,19 @@ var ListingDeleteConfirmation = React.createClass({
     },
 
     onHidden: function () {
-        this.transitionTo(this.getActiveRoutePath(), {listingId: this.state.listing.id});
+        if(this.getActiveRoute().name ==='org-listings'){
+          var url = document.URL
+          var urlSplit = url.split("?");
+          location.replace(urlSplit[0])
+        }
+        else if (this.getActiveRoute().name === 'edit'){
+          url = document.URL
+          urlSplit = url.split("?");
+          location.replace(urlSplit[0])
+        }
+        else{
+          this.transitionTo('my-listings');
+        }
     },
 
     onDelete: function () {
