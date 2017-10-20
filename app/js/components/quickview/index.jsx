@@ -92,10 +92,10 @@ var Quickview = React.createClass({
                 this.generateAlert("Could not open!", "This listing has been removed", "error",currentUser, false);
                 this.close();
             }else if (userIsAdmin && (listing.approvalStatus == "PENDING_DELETION")){
-                this.generateAlert("This listing is pending deletion!", "This listing has been disabled and is pending deletion; it is not available to unprivleged users. Any changes made to this listing cannot be seen by users.", "warning", currentUser, false);
+                this.generateAlert("This listing is pending deletion!", "This listing has been disabled and is pending deletion; it is not available to unprivileged users. Any changes made to this listing cannot be seen by users.", "warning", currentUser, false);
                 this.state.warningShown = true;
             }else if (userIsAdmin && (listing.isEnabled == false)){
-                this.generateAlert("This listing is disabled!", "This listing has been disabled; it is not available to unprivleged users. Any changes made to this listing cannot be seen by users. To enable this listing, select 'Enable Listing'", "warning", currentUser, userIsAdmin);
+                this.generateAlert("This listing is disabled!", "This listing has been disabled; it is not available to unprivileged users. Any changes made to this listing cannot be seen by users. To enable this listing, select 'Enable Listing'", "warning", currentUser, userIsAdmin);
                 this.state.warningShown = true;
             }else if(listing.isEnabled == false || listing.approvalStatus == "PENDING_DELETION" ){
                 this.generateAlert("Could not open!", "This listing has been disabled", "error",currentUser, userIsAdmin);
