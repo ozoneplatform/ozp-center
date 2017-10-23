@@ -4,8 +4,8 @@ var React = require('react');
 var Reflux = require('reflux');
 var _ = require('../../utils/_');
 
-var CategorySubscriptionActions = require('../../actions/CategorySubscriptionActions');
-var CategorySubscriptionStore = require('../../stores/CategorySubscriptionStore');
+var CategorySubscriptionActions = require('ozp-react-commons/actions/CategorySubscriptionActions');
+var CategorySubscriptionStore = require('ozp-react-commons/stores/CategorySubscriptionStore');
 
 var Sidebar = React.createClass({
     mixins: [Reflux.connect(CategorySubscriptionStore, "categorySubscriptionStore"), Reflux.listenerMixin],
@@ -18,8 +18,6 @@ var Sidebar = React.createClass({
     },
 
     getInitialState() {
-        CategorySubscriptionActions.fetchSubscriptions();
-
         return {
             categories: [],
             tags: []

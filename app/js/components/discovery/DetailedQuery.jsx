@@ -7,8 +7,8 @@ var ErrorActions = require('ozp-react-commons/actions/ErrorActions');
 var ErrorStore = require('ozp-react-commons/stores/ErrorStore');
 var ErrorWindow = require('ozp-react-commons/components/error/ErrorWindow.jsx');
 
-var TagSubscriptionActions = require('../../actions/TagSubscriptionActions');
-var TagSubscriptionStore = require('../../stores/TagSubscriptionStore');
+var TagSubscriptionActions = require('ozp-react-commons/actions/TagSubscriptionActions');
+var TagSubscriptionStore = require('ozp-react-commons/stores/TagSubscriptionStore');
 
 var DetailedQuery = React.createClass({
     mixins: [Reflux.connect(ErrorStore, "errorStoreData"), Reflux.connect(TagSubscriptionStore, "tagSubscriptionStore"), Reflux.listenerMixin],

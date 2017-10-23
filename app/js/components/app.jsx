@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react');
+var Reflux = require('reflux');
 var { RouteHandler } = require('react-router');
 var State = require('../mixins/ActiveStateMixin');
 var SystemStateMixin = require('../mixins/SystemStateMixin');
@@ -15,10 +16,14 @@ var NotificationWindow = require('./notification/NotificationWindow.jsx');
 var { ListingDeleteConfirmation } = require('./shared/DeleteConfirmation.jsx');
 var { ListingPendingDeleteConfirmation } = require('./shared/PendingDeleteConfirmation.jsx');
 var { ListingUndeleteConfirmation } = require('./shared/UndeleteConfirmation.jsx');
+var TagSubscriptionActions = require('ozp-react-commons/actions/TagSubscriptionActions');
+var TagSubscriptionStore = require('ozp-react-commons/stores/TagSubscriptionStore');
+var CategorySubscriptionActions = require('ozp-react-commons/actions/CategorySubscriptionActions');
+var CategorySubscriptionStore = require('ozp-react-commons/stores/CategorySubscriptionStore');
 
 var App = React.createClass({
 
-    mixins: [ SystemStateMixin, State ],
+    mixins: [Reflux.connect(CategorySubscriptionStore, "categorySubscriptionStore"), Reflux.connect(TagSubscriptionStore, "tagSubscriptionStore"), SystemStateMixin, State ],
 
     render: function () {
         return (
@@ -62,6 +67,11 @@ var App = React.createClass({
 
     componentWillMount: function () {
         fetchLibrary();
+    },
+
+    componentDidMount: function () {
+        TagSubscriptionActions.fetchSubscriptions();
+        CategorySubscriptionActions.fetchSubscriptions();
     }
 });
 
