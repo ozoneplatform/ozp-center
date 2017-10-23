@@ -44,7 +44,7 @@ var RecommendedListingTile = React.createClass({
         var image = listing.imageMediumUrl;
         var avgRate = listing.avgRate;
         var agencyShort = listing.agencyShort;
-        var totalVotes = listing.totalVotes;
+        var totalVotes = listing.totalReviews;
         var close_href = this.makeHref(this.getActiveRoutePath(), null, {});
         var open_href = this.makeHref(this.getActiveRoutePath(), null, {
             listing: listing.id,
