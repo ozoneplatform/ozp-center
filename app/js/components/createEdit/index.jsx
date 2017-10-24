@@ -819,6 +819,7 @@ var CreateEditPage = React.createClass({
             action: 'undelete'
         });
 
+
         var header = (
             <div className="CreateEdit__titlebar">
                 <div className="btn-toolbar" role="group">
@@ -837,14 +838,14 @@ var CreateEditPage = React.createClass({
                             </button>
                         }
                         {
-                            (showDelete && inProgress) &&
+                            (showDelete && (currentUser.isAdmin() || currentUser.isOrgSteward(listing.agencyShort))) &&
                             <a href={deleteHref} className="btn btn-default tool delete-button">
                                 <span className="create-edit-button">Delete</span>
                                 <i className="icon-trash-grayDark"></i>
                             </a>
                         }
                         {
-                            showDelete && (_.contains(owners, currentUser.username) || currentUser.isAdmin()) && !showUndelete && !inProgress &&
+                            showDelete && (_.contains(owners, currentUser.username) && !(currentUser.isAdmin() || currentUser.isOrgSteward(listing.agencyShort))) && !showUndelete && !inProgress &&
                             <a href={pendDeleteHref} className="btn btn-default tool pendDelete-button">
                                 <span className="create-edit-button">Pend for Delete</span>
                                 <i className="icon-trash-grayDark"></i>

@@ -53,7 +53,7 @@ var ActionMenu = React.createClass({
 
         switch (approvalStatus) {
             case 'APPROVED':
-                if(currentUser.isAdmin()){
+                if(currentUser.isAdmin() || currentUser.isOrgSteward(listing.agencyShort)){
                   links = [edit, view, del];
                 }
                 else{
@@ -61,7 +61,7 @@ var ActionMenu = React.createClass({
                 }
                 break;
             case 'APPROVED_ORG':
-                if(currentUser.isAdmin()){
+                if(currentUser.isAdmin() || currentUser.isOrgSteward(listing.agencyShort)){
                   links = [edit, view, del];
                 }
                 else{
@@ -69,7 +69,7 @@ var ActionMenu = React.createClass({
                 }
                 break;
             case 'PENDING':
-                if(currentUser.isAdmin()){
+                if(currentUser.isAdmin() || currentUser.isOrgSteward(listing.agencyShort)){
                   links = [edit, view, del];
                 }
                 else{
@@ -77,7 +77,7 @@ var ActionMenu = React.createClass({
                 }
                 break;
             case 'REJECTED':
-                if(currentUser.isAdmin()){
+                if(currentUser.isAdmin() || currentUser.isOrgSteward(listing.agencyShort)){
                   links = [edit, view, del];
                 }
                 else{
@@ -88,7 +88,7 @@ var ActionMenu = React.createClass({
                 links = [];
                 break;
             case 'PENDING_DELETION':
-                if(currentUser.isAdmin()){
+                if(currentUser.isAdmin() || currentUser.isOrgSteward(listing.agencyShort)){
                   links = [edit, view, del];
                 }
                 else{
@@ -98,7 +98,7 @@ var ActionMenu = React.createClass({
             case 'DRAFT':
                 /* falls through */
             default:
-                links = [edit, preview, del];
+                links = [edit, preview, pendingDelete];
         }
 
         //use hidden checkbox to manage menu toggle state
