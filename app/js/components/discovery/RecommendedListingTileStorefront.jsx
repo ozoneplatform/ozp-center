@@ -53,7 +53,7 @@ var RecommendedListingTileStorefront = React.createClass({
         var imageLargeUrl;
         var avgRate = listing.avgRate;
         var agencyShort = listing.agencyShort;
-        var totalVotes = listing.totalVotes;
+        var totalVotes = listing.totalReviews;
         var href = this.makeHref(this.getActiveRoutePath(), null, {
             listing: listing.id,
             action: 'view',
