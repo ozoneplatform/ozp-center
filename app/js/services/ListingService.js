@@ -344,7 +344,7 @@ ListingActions.deleteListing.listen(function (listing) {
     listing.approvalStatus = 'DELETED';
     ListingApi.del(listing.id)
         .then(ListingActions.deleteListingCompleted.bind(null, listing))
-        .then(ListingActions.listingChangeCompleted(listing))
+        .then(ListingActions.listingChangeCompleted)
         .fail(ListingActions.deleteListingFailed);
 
 });
