@@ -346,7 +346,6 @@ ListingActions.deleteListing.listen(function (listing) {
         .then(ListingActions.deleteListingCompleted.bind(null, listing))
         .then(ListingActions.listingChangeCompleted)
         .fail(ListingActions.deleteListingFailed);
-
 });
 
 ListingActions.giveFeedback.listen(function (listing, thumbs) {
@@ -355,6 +354,14 @@ ListingActions.giveFeedback.listen(function (listing, thumbs) {
             ListingActions.giveFeedbackCompleted(listing.id, thumbs);
         })
         .fail(ListingActions.giveFeedbackFailed);
+});
+
+ListingActions.deleteFeedback.listen(function (listing) {
+    ListingApi.deleteFeedback(listing)
+        .then(function (response) {
+            ListingActions.deleteFeedbackCompleted(listing.id);
+        })
+        .fail(ListingActions.deleteFeedbackFailed);
 });
 
 ListingActions.setFeatured.listen(updateListingProperty.bind(null, 'isFeatured'));

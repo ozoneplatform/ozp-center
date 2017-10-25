@@ -96,17 +96,19 @@ var RecommendedListingTileStorefront = React.createClass({
         );
     },
 
-    giveFeedback: function(thumbs) {
+    giveFeedback : function(thumbs) {
         if (thumbs == 1) {
-            this.setState({
-                positiveToggled: true,
-                negativeToggled: false
-            });
+            if (this.state.positiveToggled) {
+                this.removeFeedback(thumbs);
+                return;
+            }
+            this.setState({positiveToggled: true, negativeToggled: false});
         } else {
-            this.setState({
-                positiveToggled: false,
-                negativeToggled: true
-            });
+            if (this.state.negativeToggled) {
+                this.removeFeedback(thumbs);
+                return;
+            }
+            this.setState({positiveToggled: false, negativeToggled: true});
         }
 
         var feedback = thumbs == 1
@@ -114,6 +116,18 @@ var RecommendedListingTileStorefront = React.createClass({
             : 'Negative';
         OzpAnalytics.trackFeedback(feedback, this.props.listing.title);
         ListingActions.giveFeedback(this.props.listing.id, thumbs);
+    },
+
+    removeFeedback : function(thumbs) {
+        OzpAnalytics.trackFeedback('Remove feedback', this.props.listing.title);
+
+        if (thumbs == 1) {
+            this.setState({positiveToggled: false});
+            ListingActions.deleteFeedback(this.props.listing.id);
+        } else {
+            this.setState({negativeToggled: false});
+            ListingActions.deleteFeedback(this.props.listing.id);
+        }
     },
 
     renderActions: function () {
