@@ -516,6 +516,14 @@ var ListingApi = {
             dataType: 'json',
             contentType: 'application/json'
         });
+    },
+
+    deleteFeedback: function(id) {
+        return $.ajax({
+            type: 'DELETE',
+            url: API_URL + '/api/listing/' + id + '/feedback/' + id + '/',
+            contentType: 'application/json'
+        });
     }
 };
 

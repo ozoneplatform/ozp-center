@@ -1,7 +1,6 @@
 'use strict';
 
 var React = require('react');
-var ListingActions = require('../actions/ListingActions');
 var OzpAnalytics = require('../analytics/ozp-analytics');
 
 var FeedbackButton = React.createClass({

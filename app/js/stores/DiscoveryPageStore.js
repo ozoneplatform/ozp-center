@@ -37,6 +37,7 @@ var DiscoveryPageStore = Reflux.createStore({
                 (listings)=>{_recommended = listings; this.trigger()});
         this.listenTo(ListingActions.searchCompleted, this.onSearchCompleted);
         this.listenTo(ListingActions.giveFeedbackCompleted, this.giveFeedbackCompleted);
+        this.listenTo(ListingActions.deleteFeedbackCompleted, this.giveFeedbackCompleted);
 
         this.listenTo(ListingActions.deleteListingCompleted, this.removeListing)
     },
