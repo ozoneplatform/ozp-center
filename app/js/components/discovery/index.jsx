@@ -477,8 +477,9 @@ var Discovery = React.createClass({
         }
 
         return (
-            <FeaturedListings key="FeaturedListings"
-                listings={ this.state.featured } />
+            <section className="FeaturedListings" key="FeaturedListings">
+                <FeaturedListings listings={ this.state.featured } />
+            </section>
         );
     },
 

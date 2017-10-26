@@ -3,6 +3,8 @@
 var {CENTER_URL, HUD_URL} = require('ozp-react-commons/OzoneConfig');
 CENTER_URL = `/${CENTER_URL.match(/http.?:\/\/[^/]*\/(.*?)\/?$/)[1]}/`;
 
+var listingID;
+
 var PubSub = require('browser-pubsub');
 var tourCh = new PubSub('tour');
 var ObjectDB = require('object-db');
@@ -23,6 +25,7 @@ if (typeof tourDB.hud !== 'undefined' && (tourDB.hud.ran === true)){
 }
 
 var ProfileSearchActions = require('../actions/ProfileSearchActions');
+var DiscoveryPageStore = require('../stores/DiscoveryPageStore');
 var readyObject = {};
 
 // HACK: for some reason window.localstorage is lost in this file.
@@ -47,7 +50,6 @@ const meTour = new Tour({
       orphan: true,
       onShown: function(){
         $('#content').focus();
-
         $('#end-tour-btn').keypress(function(e) {
             // Enter key is pressed
             if (e.keyCode == 13) {
@@ -177,12 +179,47 @@ const meTour = new Tour({
       title: "Center Home",
       content: "After searching and filtering, click here to return to the Center Discovery page to see featured listings, new arrivals and most popular listings.",
       placement: "right",
-      onNext: function(){meTour.goTo(10);},
       onShown: function(){
         $('#tourstop-center-home').focus();
       }
     },
     //10
+    {
+      path: `${CENTER_URL}#/home/?%2F%3F=`,
+      element: ".FeaturedListings",
+      title: "Feature Listings",
+      content: "Feature Listings are listings that have been selected to be highlighted.  This may be due to newly added listings, new listing updates, or advertising campaigns.",
+      placement: "top",
+      orphan:true
+    },
+    //11
+    {
+      path: `${CENTER_URL}#/home/?%2F%3F=`,
+      element: ".Discovery__Recommended",
+      title: "Recommended Listings",
+      content: "These listings are selected by an algorithm using your personal bookmarks, bookmarks across all users, and content of the listings to build a lineup designed specifically for you.",
+      placement: "top",
+      orphan:true
+    },
+    //12
+    {
+      path: `${CENTER_URL}#/home/?%2F%3F=`,
+      element: ".Discovery__NewArrivals",
+      title: "New Arrivals",
+      content: `These are the newest listings to be added.  Check out what they have to offer.`,
+      placement: "top",
+      orphan:true
+    },
+    //13
+    {
+      path: `${CENTER_URL}#/home/?%2F%3F=`,
+      element: ".Discovery__MostPopular",
+      title: "Most Popular",
+      content: `Most Popular Listings are the highest rated listings.  You can choose to sort these listings by rating or alphabetically using the Sort By dropdown.`,
+      placement: "top",
+      orphan:true
+    },
+    //14
     {
       path: `${CENTER_URL}#/home/?%2F%3F=`,
       element: ".Discovery__SearchResults .listing:first, .infiniteScroll .listing:first",
@@ -195,21 +232,9 @@ const meTour = new Tour({
       },
       onHide: function() {
         $(".Discovery__SearchResults .listing:first .slide-up, .infiniteScroll .listing:first .slide-up").css("top", "137px");
-      },
-      onNext: function() {
-        var nextStep = function() {
-          meTour.goTo(12);
-        };
-        (function checkStatus() {
-          if (readyObject.overviewLoaded) {
-            nextStep();
-          } else {
-            setTimeout(checkStatus, 100);
-          }
-        })();
       }
     },
-    //11
+    //15
     {
       path: `${CENTER_URL}#/home/?%2F%3F=`,
       element: ".Discovery__SearchResults .listing:first, .infiniteScroll",
@@ -223,23 +248,24 @@ const meTour = new Tour({
       },
       onHide: function() {
         $(".Discovery__SearchResults .listing:first .slide-up, .infiniteScroll .listing:first .slide-up").css("top", "137px");
-      },
-      onNext: function() {
+    },
+    onNext: function() {
+        window.location.href =`${CENTER_URL}#/home/?%2F%3F=&listing=${DiscoveryPageStore.getMostPopular()[0].id}&action=view&tab=overview`;
         var nextStep = function() {
-          meTour.goTo(12);
+          meTour.goTo(16);
         };
         (function checkStatus() {
           if (readyObject.overviewLoaded) {
             nextStep();
           } else {
-            setTimeout(checkStatus, 100);
+            setTimeout(checkStatus, 1);
           }
         })();
-      }
+      },
     },
-    //12
+    //16
     {
-      path: `${CENTER_URL}#/home/?%2F%3F=&listing=1&action=view&tab=overview`,
+      path: "",
       element: ".modal-body",
       title: "Listing Overview",
       content: "Within this view are screenshots, long descriptions, reviews, and other resources. Use the links at the top right of the listing to launch, bookmark or close it.",
@@ -248,28 +274,15 @@ const meTour = new Tour({
       backdropPadding: 0,
       orphan:true,
       onNext: function() {
-        var nextStep = function() {
-          tourCh.publish({
-            overviewLoaded: false
-          });
-          meTour.goTo(13);
-        };
-        (function checkStatus() {
-          if (readyObject.reviewsLoaded) {
-            nextStep();
-          } else {
-            setTimeout(checkStatus, 200);
-          }
-        })();
+          window.location.href =`${CENTER_URL}#/home/?%2F%3F=&listing=${DiscoveryPageStore.getMostPopular()[0].id}&action=view&tab=reviews`;
       },
       onPrev: function() {
-        $(".quickview").modal("hide");
-        meTour.goTo(10);
+          window.location.href =`${CENTER_URL}#/home/?%2F%3F=`;
       }
     },
-    //13
+    //17
     {
-      path: `${CENTER_URL}#/home/?%2F%3F=&listing=1&action=view&tab=reviews`,
+      path: "",
       element: ".modal-body .nav .active",
       title: "Listing Reviews",
       content: "Rate and review the listing, or read reviews from other users.",
@@ -278,36 +291,15 @@ const meTour = new Tour({
       backdropPadding: 0,
       orphan:true,
       onNext: function() {
-        var nextStep = function() {
-          tourCh.publish({
-            reviewsLoaded: false
-          });
-          meTour.goTo(14);
-        };
-        (function checkStatus() {
-          if (readyObject.detailsLoaded) {
-            nextStep();
-          } else {
-            setTimeout(checkStatus, 200);
-          }
-        })();
+          window.location.href =`${CENTER_URL}#/home/?%2F%3F=&listing=${DiscoveryPageStore.getMostPopular()[0].id}&action=view&tab=details`;
       },
       onPrev: function() {
-        var prevStep = function() {
-          meTour.goTo(12);
-        };
-        (function checkStatus() {
-          if (readyObject.overviewLoaded) {
-            prevStep();
-          } else {
-            setTimeout(checkStatus, 200);
-          }
-        })();
+          window.location.href =`${CENTER_URL}#/home/?%2F%3F=&listing=${DiscoveryPageStore.getMostPopular()[0].id}&action=view&tab=overview`;
       }
     },
-    //14
+    //18
     {
-      path: `${CENTER_URL}#/home/?%2F%3F=&listing=1&action=view&tab=details`,
+      path: "",
       element: ".modal-body .nav .active",
       title: "Listing Details",
       content: "Here you'll find a list of new features, usage requirements, ownership information, tags, categories, etc.",
@@ -316,36 +308,15 @@ const meTour = new Tour({
       backdropPadding: 0,
       orphan:true,
       onNext: function() {
-        var nextStep = function() {
-          tourCh.publish({
-            detailsLoaded: false
-          });
-          meTour.goTo(15);
-        };
-        (function checkStatus() {
-          if (readyObject.resourcesLoaded) {
-            nextStep();
-          } else {
-            setTimeout(checkStatus, 200);
-          }
-        })();
+          window.location.href =`${CENTER_URL}#/home/?%2F%3F=&listing=${DiscoveryPageStore.getMostPopular()[0].id}&action=view&tab=resources`;
       },
       onPrev: function() {
-        var prevStep = function() {
-          meTour.goTo(13);
-        };
-        (function checkStatus() {
-          if (readyObject.reviewsLoaded) {
-            prevStep();
-          } else {
-            setTimeout(checkStatus, 200);
-          }
-        })();
+          window.location.href =`${CENTER_URL}#/home/?%2F%3F=&listing=${DiscoveryPageStore.getMostPopular()[0].id}&action=view&tab=reviews`;
       }
     },
-    //15
+    //19
     {
-      path: `${CENTER_URL}#/home/?%2F%3F=&listing=1&action=view&tab=resources`,
+      path: "",
       element: ".modal-body .nav .active",
       title: "Listing Resources",
       content: "If the listing includes instructions like user manuals and contact information, you will find it here. Thank you for taking the time to tour AppsMall.",
@@ -370,19 +341,7 @@ const meTour = new Tour({
         }
       },
       onPrev: function() {
-        var prevStep = function() {
-          tourCh.publish({
-            resourcesLoaded: false
-          });
-          meTour.goTo(14);
-        };
-        (function checkStatus() {
-          if (readyObject.detailsLoaded) {
-            prevStep();
-          } else {
-            setTimeout(checkStatus, 200);
-          }
-        })();
+        window.location.href =`${CENTER_URL}#/home/?%2F%3F=&listing=${DiscoveryPageStore.getMostPopular()[0].id}&action=view&tab=details`;
       }
     },
     {
