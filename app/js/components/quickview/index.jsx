@@ -149,7 +149,7 @@ var Quickview = React.createClass({
             <Modal ref="modal" className="quickview" onShown={this.onShown} onHidden={this.onHidden} tabIndex="0">
                 {
                     !listing || !listing.title ?
-                        <h1 className="quickview-header listing-title">Loading...<span className="icon-loader-36 loader loader-animate"></span></h1> :
+                        <h1 style={{'height': '550px'}} className="quickview-header listing-title">Loading...<span className="icon-loader-36 loader loader-animate"></span></h1> :
                         [
                             <Header { ...headerProps }  key="header"></Header>,
                             <div className="tabs-container" key="tabs-container">
