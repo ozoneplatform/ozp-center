@@ -22,7 +22,8 @@
 		border-left: 1px solid $gray-lighter;
 		margin-bottom: 0;
 		padding: 0 2px;
-        background-color: $white;
+        	background-color: $white;
+        	line-height: 0;
 
 		> .form-control {
 		    position: relative;
@@ -278,6 +279,7 @@
 
 .tt-menu {
   padding: 15px 0px !important;
+  line-height: 1.5;
 }
 
 .tt-suggestion {
