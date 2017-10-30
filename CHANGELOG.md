@@ -1,7 +1,38 @@
 
-### 1.1.93 (None) 
+### 1.1.94 (None)
+
+#### Feature  
+* **feedback**:  allow ability to remomve feedback when un-toggled ([9bd26baf](https://github.com/aml-development/ozp-center/commit/9bd26baf7ef01b68d4c140a00574fb447051dfcf))    
 
 #### Fixes  
+* **listing_loading**:  update loading a listing to prevent tabs from being visible before they can be clicked ([67bccd5d](https://github.com/aml-development/ozp-center/commit/67bccd5d732d7dd3ec18b2e36db0d45d0cafd920))   
+* **deletion**
+  *  fix bug where delete listing wouldn't remove tile ([74f834a2](https://github.com/aml-development/ozp-center/commit/74f834a25905fdebf7e8ed251c2c66234ddd89ac))
+  *  fix url when canceling delete modal ([657fde92](https://github.com/aml-development/ozp-center/commit/657fde929d1c6ef2d2612fc2a9c4b5fcf3c5115e))
+  *  re-add auth ([71646662](https://github.com/aml-development/ozp-center/commit/71646662f06d56b60963857f93b03c76f3f8bbaf))     
+* Fixing the missing rating count in the recommender tiles ([ff1d153b](https://github.com/aml-development/ozp-center/commit/ff1d153b24abe73156ec702fdf03275ee22f90e6))     
+
+#### Merge Pull Requests  
+* Merge pull request #890 from aml-development/hide_tabs_before_load ([4b275583](https://github.com/aml-development/ozp-center/commit/4b275583c2e4669c1482d595ba8688b0375f0521))
+* Merge pull request #883 from aml-development/feedback ([e6151a55](https://github.com/aml-development/ozp-center/commit/e6151a559775482a9303fb4f88b03e9e58817bec))
+* Merge pull request #877 from aml-development/deletion_process ([f5cc72fc](https://github.com/aml-development/ozp-center/commit/f5cc72fc0dbf5f21b211bd331baba0cb4f0a037c))
+* Merge pull request #881 from aml-development/recommended_rating_count ([4ec638e8](https://github.com/aml-development/ozp-center/commit/4ec638e833fece1da1383029c204053ab0da83a3))
+* Merge pull request #880 from aml-development/disabled_spelling_fix ([290011d6](https://github.com/aml-development/ozp-center/commit/290011d6f15f63790e65ac4aa4ef2cbbb62a4cd5))         
+
+#### Changes  
+* Forcing the initial height of the loading dialog listing window to be close to the height of the loaded listing ([9230602f](https://github.com/aml-development/ozp-center/commit/9230602fbaaf6d4e212f5fe1168bf2c30d45a322))
+* Center tour style fix (#889) ([12c24cb9](https://github.com/aml-development/ozp-center/commit/12c24cb9e7ce2a45388509aae6f43df25378548c))
+* Tour fixes and modificaitons (#882) ([eb887d36](https://github.com/aml-development/ozp-center/commit/eb887d36c8fd76be3bced2e433456cb5d59f73e4))
+* Unsubscribe in profile (#879) ([67edc6aa](https://github.com/aml-development/ozp-center/commit/67edc6aa800a239904f9a980a87b098a430c4ee2))
+* Correcting the spelling in the disabled/deleted listing popup ([bfd1ee4b](https://github.com/aml-development/ozp-center/commit/bfd1ee4b0f68c47f4fa73cc35e73ee955a183f2a))     
+
+### 1.1.93 (2017-10-18)
+
+#### Feature  
+* **delete**:  Allow admin and org stewards to delete without pending deletion workflow. Rest must go through workflow ([83a815bb](https://github.com/aml-development/ozp-center/commit/83a815bb4726ea4565360e2e7f487998fb5304ac))    
+
+#### Fixes  
+* **deletion**:  fix authorization for listing management org tabs ([3f5ee3c0](https://github.com/aml-development/ozp-center/commit/3f5ee3c0d662ff0eb9640a184838243a293c96a2))    
 * Fixing the style so the private icon does not overlap ([ad3a116c](https://github.com/aml-development/ozp-center/commit/ad3a116c240bfdaa6f0047a661ce0f7e721b8db3))   
 * **feedback**
   *  allow Center Home link to actually refresh to home ([72a65114](https://github.com/aml-development/ozp-center/commit/72a65114a0e3c85ea507d3fca2d57895f0c9c0be))
