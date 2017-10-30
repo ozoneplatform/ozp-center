@@ -86,7 +86,7 @@ const meTour = new Tour({
     {
       element: "#tourstop-center",
       title: "Center",
-      content: "Opens the Center where you can search and discover app listings from across the IC. You can bookmark listings to your HUD and you can also launch apps into a seperate tab directly from the Center.",
+      content: "Opens the Center where you can search and discover app listings from across the IC. You can bookmark listings to your HUD and you can also launch apps into a separate tab directly from the Center.",
       placement: "bottom",
       onShown: function(){
         $('#tourstop-center').focus();
