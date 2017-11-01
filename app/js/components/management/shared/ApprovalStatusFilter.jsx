@@ -35,7 +35,8 @@ var ApprovalStatusFilter = React.createClass({
         value: React.PropTypes.object.isRequired,
         counts: React.PropTypes.object.isRequired,
         onFilterChanged: React.PropTypes.func.isRequired,
-        organizations: React.PropTypes.array
+        organizations: React.PropTypes.array,
+        tab:React.PropTypes.string
     },
 
     handleChange: function (evt) {
@@ -56,20 +57,27 @@ var ApprovalStatusFilter = React.createClass({
             filterOption(value, 'Published', 'APPROVED', counts.APPROVED, 'all-listings-filter-published', 'label-published', 'icon-thumbs-up-12-greenDark')
         ];
 
-        if (this.props.role === UserRole.APPS_MALL_STEWARD) {
+        if (this.props.tab === "MyListings"){
+            components.push(
+                filterOption(value, 'Needs action', 'REJECTED', counts.REJECTED, 'all-listings-filter-needs-action', 'label-needs-action', 'icon-exclamation-12-redOrangeDark'),
+                filterOption(value, 'Pending', 'PENDING', counts.PENDING, 'all-listings-filter-pending', 'label-pending', 'icon-loader-12-blueDark')
+            );
+        }
+        else if (this.props.role === UserRole.APPS_MALL_STEWARD) {
             components.push(
                 filterOption(value, 'Needs action', 'APPROVED_ORG', counts.APPROVED_ORG, 'all-listings-filter-needs-action', 'label-needs-action', 'icon-exclamation-12-redOrangeDark'),
-                filterOption(value, 'Pending, Org.', 'PENDING', counts.PENDING, 'all-listings-filter-pending', 'label-pending', 'icon-loader-12-blueDark')
+                filterOption(value, 'Pending, Org.', 'PENDING', counts.PENDING, 'all-listings-filter-pending', 'label-pending', 'icon-loader-12-blueDark'),
+                filterOption(value, 'Returned', 'REJECTED', counts.REJECTED, 'all-listings-filter-rejected', 'label-rejected', 'icon-reload-12-blueDark')
             );
         }
         else if (this.props.role === UserRole.ORG_STEWARD) {
             components.push(
                 filterOption(value, 'Needs action', 'PENDING', counts.PENDING, 'all-listings-filter-needs-action', 'label-needs-action', 'icon-exclamation-12-redOrangeDark'),
-                filterOption(value, 'Org approved', 'APPROVED_ORG', counts.APPROVED_ORG, 'all-listings-filter-pending', 'label-pending', 'icon-loader-12-blueDark')
+                filterOption(value, 'Org approved', 'APPROVED_ORG', counts.APPROVED_ORG, 'all-listings-filter-pending', 'label-pending', 'icon-loader-12-blueDark'),
+                filterOption(value, 'Returned', 'REJECTED', counts.REJECTED, 'all-listings-filter-rejected', 'label-rejected', 'icon-reload-12-blueDark')
             );
         }
         components.push(
-            filterOption(value, 'Returned', 'REJECTED', counts.REJECTED, 'all-listings-filter-rejected', 'label-rejected', 'icon-reload-12-blueDark'),
             filterOption(value, 'Draft', 'IN_PROGRESS', counts.IN_PROGRESS, 'all-listings-filter-draft', 'label-draft', 'icon-paper-12-grayDark'),
             filterOption(value, 'Deleted', 'DELETED', counts.DELETED, 'all-listings-filter-deleted', 'label-deleted', 'icon-trash-12-blueDarker'),
             filterOption(value, 'Pending Deletion', 'PENDING_DELETION', counts.PENDING_DELETION, 'all-listings-filter-pending-deletion', 'label-pending-deletion', 'icon-delete-12-redOrangeDark')

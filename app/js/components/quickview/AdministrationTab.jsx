@@ -203,7 +203,7 @@ var AdministrationTab = React.createClass({
                         <FeaturedControl key="featured" listing={this.props.listing} />
                     ] : [enabledControl];
 
-                statusClass = 'label-published';
+                statusClass = 'published';
                 iconClass= 'icon-thumbs-up-14';
                 break;
             case 'Pending, Organization':
