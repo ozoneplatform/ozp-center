@@ -72,6 +72,7 @@ var ApprovalStatusClass = React.createClass({
     propTypes: {
         listing: React.PropTypes.object,
         user: React.PropTypes.object,
+        style: React.PropTypes.object
     },
 
     getInitialState: function() {
@@ -85,17 +86,13 @@ var ApprovalStatusClass = React.createClass({
        statusText = listingStatus[listing.approvalStatus],
        isAdmin = true,
        role = null;
+       var lockStyle = this.props.style;
        if (user.isOrgSteward(listing.agencyShort)) {
            role = "orgSteward";
        }else if(user.isAdmin()){
            role = "admin";
        }
        var classes = getRenderingVariables.getVariables(listing, status, role);
-        var lockStyle = {
-            position: 'absolute',
-            left: '0px',
-            top: '0'
-        };
         return(
             <i className={classes.iconClass} style={lockStyle}></i>
         );

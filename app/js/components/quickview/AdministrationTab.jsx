@@ -16,6 +16,8 @@ var LoadMore = require('../shared/LoadMore.jsx');
 var PaginatedChangeLogByIDStore = require('../../stores/PaginatedChangeLogByIDStore');
 var SystemStateMixin = require('../../mixins/SystemStateMixin');
 
+var ApprovalStatusClass = require('../ApprovalStatusClass.jsx');
+
 var Toggle = React.createClass({
     propTypes: {
         listing: React.PropTypes.object
@@ -189,7 +191,8 @@ var AdministrationTab = React.createClass({
         var listing = this.props.listing,
             status = listingStatus[listing.approvalStatus],
             statusText = status,
-            isAdmin = UserRole[this.props.currentUser.highestRole] >= UserRole.APPS_MALL_STEWARD,
+            user = this.props.currentUser,
+            isAdmin = UserRole[user.highestRole] >= UserRole.APPS_MALL_STEWARD,
             isStewardOfOrg = _.contains(this.props.currentUser.stewardedOrganizations, listing.agencyShort),
             controls, statusClass, iconClass;
 
@@ -197,76 +200,56 @@ var AdministrationTab = React.createClass({
             case 'Published':
                 var enabledControl =
                         <EnabledControl key="enabled" listing={this.props.listing} />;
-
                 controls = isAdmin ? [
                         enabledControl,
                         <FeaturedControl key="featured" listing={this.props.listing} />
                     ] : [enabledControl];
-
                 statusClass = 'published';
-                iconClass= 'icon-thumbs-up-14';
                 break;
+
             case 'Pending, Organization':
                 if (isStewardOfOrg) {
                     controls = this.renderReviewSection();
                     statusClass = 'label-needs-action';
-                    iconClass= 'icon-exclamation-14';
-
                 } else if (isAdmin) {
                     controls = this.renderReviewSection();
                     statusClass = 'label-pending';
-                    iconClass= 'icon-loader-14';
-
                 } else {
                     controls = [];
                     statusClass = 'label-pending';
-                    iconClass= 'icon-loader-14';
-
                 }
                 break;
+
             case 'Pending Deletion':
                 if (isStewardOfOrg) {
                     controls = this.renderReviewSection();
                     statusClass = 'label-needs-action';
-                    iconClass= 'icon-delete-14-redOrangeDark';
-
                 } else if (isAdmin) {
                     controls = this.renderReviewSection();
                     statusClass = 'label-pending';
-                    iconClass= 'icon-delete-14-redOrangeDark';
-
                 } else {
                     controls = this.renderReviewSection();
                     statusClass = 'label-pending';
-                    iconClass= 'icon-delete-14-redOrangeDark';
-
                 }
                 break;
+
             case 'Pending, Center':
                 if (isAdmin) {
                     controls = this.renderReviewSection();
                     statusClass = 'label-needs-action';
-                    iconClass= 'icon-exclamation-14';
-
                 } else {
                     controls = [];
                     statusClass = 'label-pending';
-                    iconClass= 'icon-loader-14';
-
                 }
                 break;
 
             case 'Returned to Owner':
                 statusClass = 'label-needs-action';
-                iconClass= 'icon-exclamation-14';
-
                 controls = [];
                 break;
 
             case 'Draft':
                 statusClass = 'label-draft';
-                iconClass= 'icon-paper-14';
-
                 controls = [];
                 break;
         }
@@ -275,7 +258,7 @@ var AdministrationTab = React.createClass({
             <div className="col-xs-4 col-left ListingAdmin__Controls">
                 <section>
                     <h5>Listing Status</h5>
-                    <p className={statusClass}><i className={iconClass} />{ statusText }</p>
+                    <p className={statusClass}><ApprovalStatusClass listing={listing} user={user} />{ statusText }</p>
                 </section>
                 { controls }
             </div>

@@ -114,14 +114,6 @@ var ActionMenu = React.createClass({
     }
 });
 
-var ListingStatus = React.createClass({
-    render: function () {
-        return (
-            <div className="approvalStatus"></div>
-        );
-    }
-});
-
 var PrivateListing = React.createClass({
     render: function () {
         var isPrivate = this.props.listing.isPrivate;
@@ -157,10 +149,15 @@ var InfoBar = React.createClass({
     render: function () {
         var listing = this.props.listing,
         user = this.props.user;
+        var lockStyle = {
+            position: 'absolute',
+            left: '0px',
+            top: '0'
+        };
 
         return (
             <h5 className="AdminOwnerListingTile__infoBar">
-                <ApprovalStatusClass listing={listing} user={user} />
+                <ApprovalStatusClass listing={listing} user={user} style={lockStyle}/>
                 <PrivateListing listing={listing} />
                 <p className="title">{listing.title}</p>
                 <EditedDate listing={listing} />
