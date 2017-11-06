@@ -7,36 +7,30 @@ var listingStatus = require('ozp-react-commons/constants').approvalStatus;
 
 var getRenderingVariables = {
 
-    getVariables: function(listing, status, role){
-        var controls, statusClass, iconClass;
+    getVariables: function(status, role, owner){
+        var iconClass;
         switch (status) {
             case 'APPROVED':
-                statusClass = 'published';
                 iconClass= 'icon-thumbs-up-14';
                 break;
 
             case 'PENDING_DELETION':
-                statusClass = 'label-pending';
                 iconClass= 'icon-delete-14-redOrangeDark';
                 break;
 
             case 'IN_PROGRESS':
-                statusClass = 'label-draft';
                 iconClass= 'icon-paper-14';
                 break;
 
 
             case 'DELETED':
-                statusClass = 'label-deleted';
                 iconClass= 'icon-trash-12-blueDarker';
                 break;
 
             case 'PENDING':
                  if (role === "orgSteward"){
-                    statusClass = 'label-needs-action';
                     iconClass= 'icon-exclamation-14';
                 }else{
-                    statusClass = 'label-pending';
                     iconClass= 'icon-loader-14';
                 }
                 break;
@@ -44,22 +38,22 @@ var getRenderingVariables = {
 
             case 'APPROVED_ORG':
                 if (role === "admin"){
-                    statusClass = 'label-needs-action';
                     iconClass= 'icon-exclamation-14';
                 }else{
-                    statusClass = 'label-pending';
                     iconClass= 'icon-loader-14';
                 }
                 break;
 
             case 'REJECTED':
-                statusClass = 'label-needs-action';
-                iconClass= 'icon-exclamation-14';
+                if (role !== null && !owner){
+                    iconClass= 'icon-reload-14';
+                }else{
+                    iconClass= 'icon-exclamation-14';
+                }
                 break;
         }
 
         return {
-            statusClass: statusClass,
             iconClass: iconClass
         };
     }
@@ -70,9 +64,12 @@ var getRenderingVariables = {
 var ApprovalStatusClass = React.createClass({
 
     propTypes: {
-        listing: React.PropTypes.object,
-        user: React.PropTypes.object,
-        style: React.PropTypes.object
+        listing: React.PropTypes.object,//pass listing
+        user: React.PropTypes.object,//pass user to determine if admin
+        style: React.PropTypes.object,//pass style to format icon
+        definedStatus: React.PropTypes.object,//pass status to shortcut dynamic creation
+        userType: React.PropTypes.string,//pass user type when shortcutting to get correct icon. usertype expects "admin" or "orgSteward"
+
     },
 
     getInitialState: function() {
@@ -80,19 +77,28 @@ var ApprovalStatusClass = React.createClass({
     },
 
     render: function(){
-        var listing = this.props.listing,
-        user = this.props.user,
-       status = listing.approvalStatus,
-       statusText = listingStatus[listing.approvalStatus],
-       isAdmin = true,
-       role = null;
-       var lockStyle = this.props.style;
-       if (user.isOrgSteward(listing.agencyShort)) {
-           role = "orgSteward";
-       }else if(user.isAdmin()){
-           role = "admin";
-       }
-       var classes = getRenderingVariables.getVariables(listing, status, role);
+        var role = null,
+        owner = false;
+        if (this.props.definedStatus != null){
+            status = this.props.definedStatus;
+            role=this.props.userType;
+        }else{
+            var listing = this.props.listing,
+            user = this.props.user,
+            status = listing.approvalStatus,
+            lockStyle = this.props.style;
+            if (user.isOrgSteward(listing.agencyShort)) {
+                role = "orgSteward";
+            }else if(user.isAdmin()){
+                role = "admin";
+            }
+            if(listing.owners[0].id === user.id){
+                owner = true;
+            }
+        }
+
+
+        var classes = getRenderingVariables.getVariables(status, role, owner);
         return(
             <i className={classes.iconClass} style={lockStyle}></i>
         );
