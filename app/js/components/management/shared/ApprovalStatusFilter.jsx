@@ -3,13 +3,17 @@ var React = require('react');
 var _ = require('../../../utils/_');
 var RadioGroup = require('react-radio-group');
 var { UserRole } = require('ozp-react-commons/constants');
+var ApprovalStatusClass = require('../../ApprovalStatusClass.jsx');
 
 function filterOption (currentValue, label, value, count, htmlFor, className, iconClass) {
     var badge;
     var statusIcon;
 
     if(iconClass) {
-        statusIcon = <i className={iconClass} />;
+        statusIcon = <ApprovalStatusClass definedStatus={value} userType={'user'}/>;
+    }
+    if(iconClass && label==='Needs action') {
+        statusIcon = <ApprovalStatusClass definedStatus={'REJECTED'} />;
     }
 
     if (currentValue === 'all') {
@@ -54,40 +58,39 @@ var ApprovalStatusFilter = React.createClass({
 
         var components = [
             filterOption(value, 'All', 'all', counts.total, 'all-listings-filter-all', 'label-all', undefined),
-            filterOption(value, 'Published', 'APPROVED', counts.APPROVED, 'all-listings-filter-published', 'label-published', 'icon-thumbs-up-12-greenDark')
+            filterOption(value, 'Published', 'APPROVED', counts.APPROVED, 'all-listings-filter-published', 'label-published', true)
         ];
 
         if (this.props.tab === "MyListings"){
             components.push(
-                filterOption(value, 'Needs action', 'REJECTED', counts.REJECTED, 'all-listings-filter-needs-action', 'label-needs-action', 'icon-exclamation-12-redOrangeDark'),
-                filterOption(value, 'Pending', 'PENDING', counts.PENDING, 'all-listings-filter-pending', 'label-pending', 'icon-loader-12-blueDark')
+                filterOption(value, 'Needs action', 'REJECTED', counts.REJECTED, 'all-listings-filter-needs-action', 'label-needs-action', true),
+                filterOption(value, 'Pending', 'PENDING', counts.PENDING, 'all-listings-filter-pending', 'label-pending', true)
             );
         }
         else if (this.props.role === UserRole.APPS_MALL_STEWARD) {
             components.push(
-                filterOption(value, 'Needs action', 'APPROVED_ORG', counts.APPROVED_ORG, 'all-listings-filter-needs-action', 'label-needs-action', 'icon-exclamation-12-redOrangeDark'),
-                filterOption(value, 'Pending, Org.', 'PENDING', counts.PENDING, 'all-listings-filter-pending', 'label-pending', 'icon-loader-12-blueDark'),
-                filterOption(value, 'Returned', 'REJECTED', counts.REJECTED, 'all-listings-filter-rejected', 'label-rejected', 'icon-reload-12-blueDark')
+                filterOption(value, 'Needs action', 'APPROVED_ORG', counts.APPROVED_ORG, 'all-listings-filter-needs-action', 'label-needs-action', true),
+                filterOption(value, 'Pending, Org.', 'PENDING', counts.PENDING, 'all-listings-filter-pending', 'label-pending', true),
+                filterOption(value, 'Returned', 'REJECTED', counts.REJECTED, 'all-listings-filter-rejected', 'label-rejected', true)
             );
         }
         else if (this.props.role === UserRole.ORG_STEWARD) {
             components.push(
-                filterOption(value, 'Needs action', 'PENDING', counts.PENDING, 'all-listings-filter-needs-action', 'label-needs-action', 'icon-exclamation-12-redOrangeDark'),
-                filterOption(value, 'Org approved', 'APPROVED_ORG', counts.APPROVED_ORG, 'all-listings-filter-pending', 'label-pending', 'icon-loader-12-blueDark'),
-                filterOption(value, 'Returned', 'REJECTED', counts.REJECTED, 'all-listings-filter-rejected', 'label-rejected', 'icon-reload-12-blueDark')
+                filterOption(value, 'Needs action', 'PENDING', counts.PENDING, 'all-listings-filter-needs-action', 'label-needs-action', true),
+                filterOption(value, 'Org approved', 'APPROVED_ORG', counts.APPROVED_ORG, 'all-listings-filter-pending', 'label-pending', true),
+                filterOption(value, 'Returned', 'REJECTED', counts.REJECTED, 'all-listings-filter-rejected', 'label-rejected', true)
             );
         }
         components.push(
-            filterOption(value, 'Draft', 'IN_PROGRESS', counts.IN_PROGRESS, 'all-listings-filter-draft', 'label-draft', 'icon-paper-12-grayDark'),
-            filterOption(value, 'Deleted', 'DELETED', counts.DELETED, 'all-listings-filter-deleted', 'label-deleted', 'icon-trash-12-blueDarker'),
-            filterOption(value, 'Pending Deletion', 'PENDING_DELETION', counts.PENDING_DELETION, 'all-listings-filter-pending-deletion', 'label-pending-deletion', 'icon-delete-12-redOrangeDark')
+            filterOption(value, 'Draft', 'IN_PROGRESS', counts.IN_PROGRESS, 'all-listings-filter-draft', 'label-draft', true),
+            filterOption(value, 'Deleted', 'DELETED', counts.DELETED, 'all-listings-filter-deleted', 'label-deleted', true),
+            filterOption(value, 'Pending Deletion', 'PENDING_DELETION', counts.PENDING_DELETION, 'all-listings-filter-pending-deletion', 'label-pending-deletion', true)
         );
         return components;
     },
 
     render: function() {
         var value = this.props.value.approval_status || 'all';
-
         return (
             <div>
                 <h4>State</h4>

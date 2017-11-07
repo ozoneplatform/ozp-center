@@ -67,8 +67,8 @@ var ApprovalStatusClass = React.createClass({
         listing: React.PropTypes.object,//pass listing
         user: React.PropTypes.object,//pass user to determine if admin
         style: React.PropTypes.object,//pass style to format icon
-        definedStatus: React.PropTypes.object,//pass status to shortcut dynamic creation
-        userType: React.PropTypes.string,//pass user type when shortcutting to get correct icon. usertype expects "admin" or "orgSteward"
+        definedStatus: React.PropTypes.string,//pass status to shortcut dynamic creation
+        userType: React.PropTypes.string,//pass user type when shortcutting to get correct icon. usertype expects "admin"/"orgSteward"/"user"
 
     },
 
@@ -81,7 +81,9 @@ var ApprovalStatusClass = React.createClass({
         owner = false;
         if (this.props.definedStatus != null){
             status = this.props.definedStatus;
-            role=this.props.userType;
+            if (this.props.userType) {
+                role=this.props.userType;
+            }
         }else{
             var listing = this.props.listing,
             user = this.props.user,
