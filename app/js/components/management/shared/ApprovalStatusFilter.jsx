@@ -3,17 +3,17 @@ var React = require('react');
 var _ = require('../../../utils/_');
 var RadioGroup = require('react-radio-group');
 var { UserRole } = require('ozp-react-commons/constants');
-var ApprovalStatusClass = require('../../ApprovalStatusClass.jsx');
+var ApprovalStatusIcons = require('../../shared/ApprovalStatusIcons.jsx');
 
 function filterOption (currentValue, label, value, count, htmlFor, className, iconClass) {
     var badge;
     var statusIcon;
 
     if(iconClass) {
-        statusIcon = <ApprovalStatusClass definedStatus={value} userType={'user'}/>;
+        statusIcon = <ApprovalStatusIcons definedStatus={value} userType={'user'}/>;
     }
-    if(iconClass && label==='Needs action') {
-        statusIcon = <ApprovalStatusClass definedStatus={'REJECTED'} />;
+    if(iconClass && label==='Needs Action') {
+        statusIcon = <ApprovalStatusIcons definedStatus={'REJECTED'} />;
     }
 
     if (currentValue === 'all') {
@@ -63,21 +63,22 @@ var ApprovalStatusFilter = React.createClass({
 
         if (this.props.tab === "MyListings"){
             components.push(
-                filterOption(value, 'Needs action', 'REJECTED', counts.REJECTED, 'all-listings-filter-needs-action', 'label-needs-action', true),
-                filterOption(value, 'Pending', 'PENDING', counts.PENDING, 'all-listings-filter-pending', 'label-pending', true)
+                filterOption(value, 'Needs Action', 'REJECTED', counts.REJECTED, 'all-listings-filter-needs-action', 'label-needs-action', true),
+                filterOption(value, 'Pending Org. Approval', 'PENDING', counts.PENDING, 'all-listings-filter-pending-org', 'label-pending-org', true),
+                filterOption(value, 'Pending AML Approval', 'APPROVED_ORG', counts.APPROVED_ORG, 'all-listings-filter-pending-center', 'label-pending-center', true),
             );
         }
         else if (this.props.role === UserRole.APPS_MALL_STEWARD) {
             components.push(
-                filterOption(value, 'Needs action', 'APPROVED_ORG', counts.APPROVED_ORG, 'all-listings-filter-needs-action', 'label-needs-action', true),
+                filterOption(value, 'Needs Action', 'APPROVED_ORG', counts.APPROVED_ORG, 'all-listings-filter-needs-action', 'label-needs-action', true),
                 filterOption(value, 'Pending, Org.', 'PENDING', counts.PENDING, 'all-listings-filter-pending', 'label-pending', true),
                 filterOption(value, 'Returned', 'REJECTED', counts.REJECTED, 'all-listings-filter-rejected', 'label-rejected', true)
             );
         }
         else if (this.props.role === UserRole.ORG_STEWARD) {
             components.push(
-                filterOption(value, 'Needs action', 'PENDING', counts.PENDING, 'all-listings-filter-needs-action', 'label-needs-action', true),
-                filterOption(value, 'Org approved', 'APPROVED_ORG', counts.APPROVED_ORG, 'all-listings-filter-pending', 'label-pending', true),
+                filterOption(value, 'Needs Action', 'PENDING', counts.PENDING, 'all-listings-filter-needs-action', 'label-needs-action', true),
+                filterOption(value, 'Org Approved', 'APPROVED_ORG', counts.APPROVED_ORG, 'all-listings-filter-pending', 'label-pending', true),
                 filterOption(value, 'Returned', 'REJECTED', counts.REJECTED, 'all-listings-filter-rejected', 'label-rejected', true)
             );
         }

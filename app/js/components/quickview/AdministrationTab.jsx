@@ -15,8 +15,7 @@ var { form, Str, subtype, struct } = require('tcomb-form');
 var LoadMore = require('../shared/LoadMore.jsx');
 var PaginatedChangeLogByIDStore = require('../../stores/PaginatedChangeLogByIDStore');
 var SystemStateMixin = require('../../mixins/SystemStateMixin');
-
-var ApprovalStatusClass = require('../ApprovalStatusClass.jsx');
+var ApprovalStatusIcons = require('../shared/ApprovalStatusIcons.jsx');
 
 var Toggle = React.createClass({
     propTypes: {
@@ -258,7 +257,7 @@ var AdministrationTab = React.createClass({
             <div className="col-xs-4 col-left ListingAdmin__Controls">
                 <section>
                     <h5>Listing Status</h5>
-                    <p className={statusClass}><ApprovalStatusClass listing={listing} user={user} />{ statusText }</p>
+                    <p className={statusClass}><ApprovalStatusIcons listing={listing} user={user} />{ statusText }</p>
                 </section>
                 { controls }
             </div>

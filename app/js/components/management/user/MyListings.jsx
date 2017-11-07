@@ -85,7 +85,6 @@ var MyListings = React.createClass({
             }
         },
 
-
         render: function () {
             var sidebarFilterOptions = {
                 tab: "MyListings",
@@ -123,7 +122,6 @@ var MyListings = React.createClass({
                 </div>
             );
         }
+});
 
-    });
-
-        module.exports = MyListings;
+module.exports = MyListings;

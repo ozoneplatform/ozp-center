@@ -7,8 +7,7 @@ var ActiveState = require('../../mixins/ActiveStateMixin');
 var { UserRole } = require('ozp-react-commons/constants');
 var deleted = './images/deleted_360.png';
 var SelfStore = require('ozp-react-commons/stores/SelfStore');
-
-var ApprovalStatusClass = require('../ApprovalStatusClass.jsx');
+var ApprovalStatusIcons = require('../shared/ApprovalStatusIcons.jsx');
 
 var ActionMenu = React.createClass({
 
@@ -56,45 +55,45 @@ var ActionMenu = React.createClass({
         switch (approvalStatus) {
             case 'APPROVED':
                 if(currentUser.isAdmin() || currentUser.isOrgSteward(listing.agencyShort)){
-                  links = [edit, view, del];
+                    links = [edit, view, del];
                 }
                 else{
-                  links = [edit, view, pendingDelete];
+                    links = [edit, view, pendingDelete];
                 }
                 break;
             case 'APPROVED_ORG':
                 if(currentUser.isAdmin() || currentUser.isOrgSteward(listing.agencyShort)){
-                  links = [edit, view, del];
+                    links = [edit, view, del];
                 }
                 else{
-                  links = [edit, view, pendingDelete];
+                    links = [edit, view, pendingDelete];
                 }
                 break;
             case 'PENDING':
                 if(currentUser.isAdmin() || currentUser.isOrgSteward(listing.agencyShort)){
-                  links = [edit, view, del];
+                    links = [edit, view, del];
                 }
                 else{
-                  links = [edit, view, pendingDelete];
+                    links = [edit, view, pendingDelete];
                 }
                 break;
             case 'REJECTED':
                 if(currentUser.isAdmin() || currentUser.isOrgSteward(listing.agencyShort)){
-                  links = [edit, view, del];
+                    links = [edit, view, del];
                 }
                 else{
-                  links = [edit, view, pendingDelete];
+                    links = [edit, view, pendingDelete];
                 }
                 break;
             case 'DELETED':
-                links = [];
+                    links = [];
                 break;
             case 'PENDING_DELETION':
                 if(currentUser.isAdmin() || currentUser.isOrgSteward(listing.agencyShort)){
-                  links = [edit, view, del];
+                    links = [edit, view, del];
                 }
                 else{
-                  links = [view, edit,undelete];
+                    links = [view, edit,undelete];
                 }
                 break;
             case 'DRAFT':
@@ -127,7 +126,7 @@ var PrivateListing = React.createClass({
         return (
             <div style={lockStyle}>
                 { isPrivate &&
-                 <i className="icon-lock-blue"></i>
+                    <i className="icon-lock-blue"></i>
                 }
             </div>
         );
@@ -157,7 +156,7 @@ var InfoBar = React.createClass({
 
         return (
             <h5 className="AdminOwnerListingTile__infoBar">
-                <ApprovalStatusClass listing={listing} user={user} style={lockStyle}/>
+                <ApprovalStatusIcons listing={listing} user={user} style={lockStyle}/>
                 <PrivateListing listing={listing} />
                 <p className="title">{listing.title}</p>
                 <EditedDate listing={listing} />
@@ -187,40 +186,40 @@ var AdminOwnerListingTile = React.createClass({
     },
 
     render: function () {
-      var { listing } = this.props;
-      var user = this.state.user;
-      var overview = this.makeHref(this.getActiveRoutePath(), this.getParams(), {
-          listing: listing.id,
-          action: 'view',
-          tab: 'overview'
-      });
-      var imageLargeUrl = listing.imageLargeUrl;
-      if(this.props.listing.approvalStatus !== 'DELETED'){
-          return (
-              <li className={'AdminOwnerListingTile'}>
-                { (this.props.listing.approvalStatus !== "DELETED")  &&
+        var { listing } = this.props;
+        var user = this.state.user;
+        var overview = this.makeHref(this.getActiveRoutePath(), this.getParams(), {
+            listing: listing.id,
+            action: 'view',
+            tab: 'overview'
+        });
+        var imageLargeUrl = listing.imageLargeUrl;
+        if(this.props.listing.approvalStatus !== 'DELETED'){
+            return (
+                <li className={'AdminOwnerListingTile'}>
+                    { (this.props.listing.approvalStatus !== "DELETED")  &&
                     <ActionMenu listing={listing} />
                 }
                 <a href={overview}>
-                  <img alt={`Click to manage ${listing.title}`} className="AdminOwnerListingTile__img" src={(this.props.listing.approvalStatus !== "DELETED") ? imageLargeUrl : deleted} />
+                    <img alt={`Click to manage ${listing.title}`} className="AdminOwnerListingTile__img" src={(this.props.listing.approvalStatus !== "DELETED") ? imageLargeUrl : deleted} />
                     <span className="hidden-span">{listing.title}</span>
                 </a>
                 <InfoBar listing={listing} user={user}/>
+            </li>
+        );
+        }
+        else{
+            return (
+                <li className={'AdminOwnerListingTile'}>
+                    <a >
+                        <img className="AdminOwnerListingTile__img" src={deleted} />
+                        <span className="hidden-span">{listing.title}</span>
+                    </a>
+                    <InfoBar listing={listing} user={user}/>
                 </li>
-          );
-      }
-      else{
-        return (
-            <li className={'AdminOwnerListingTile'}>
-              <a >
-                <img className="AdminOwnerListingTile__img" src={deleted} />
-                  <span className="hidden-span">{listing.title}</span>
-              </a>
-              <InfoBar listing={listing} user={user}/>
-              </li>
             );
-          }
-      }
-      });
+        }
+    }
+});
 
 module.exports = AdminOwnerListingTile;
