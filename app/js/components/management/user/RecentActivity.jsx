@@ -78,6 +78,13 @@ var RecentActivity = React.createClass({
                 action: 'view',
                 tab: 'overview'
             });
+            if (changeLog.action === "REVIEWED" || changeLog.action === "REVIEW_EDITED"){
+                href = this.makeHref(this.getActiveRoutePath(), this.getParams(), {
+                    listing: changeLog.listing.id,
+                    action: 'view',
+                    tab: 'reviews'
+                });
+            }
 
             if (!this.state.currentUser.isAdmin()) {
                 linkMap.APPROVED_ORG = 'View';
