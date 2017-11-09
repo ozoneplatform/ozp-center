@@ -67,6 +67,7 @@ var RecentActivity = React.createClass({
                 'DISABLED' : 'View',
                 'CREATED' : 'View Draft',
                 'APPROVED_ORG' : 'Review Listing',
+                'REVIEWED' : 'View',
                 'REVIEW_EDITED' : 'View',
                 'REVIEW_DELETED' : 'View',
                 'PENDING_DELETION' : 'View'
