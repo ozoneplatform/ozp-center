@@ -180,8 +180,8 @@ var ReviewEditedChangeLog = React.createClass({
         return (
             <div>
                 <AuthorLink author={changeLog.author} />
-                <span> edited </span>
-                { (changeLog.changeDetails[0] === undefined) ? ' ' : changeLog.changeDetails[0].fieldName } in { this.props.listingName }
+                <span> edited review for </span>
+                { this.props.listingName }
             </div>
         );
     }
