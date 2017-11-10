@@ -135,4 +135,16 @@
         text-align: center;
         @include text-overflow();
     }
+
+    > .lockStyle {
+        position: absolute;
+        top: 0;
+        left: 18px;
+    }
+
+    > .iconStyle {
+        position: absolute;
+        top: 0;
+        left: 0px;
+    }
 }

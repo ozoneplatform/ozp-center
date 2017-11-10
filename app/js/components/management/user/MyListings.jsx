@@ -75,7 +75,7 @@ var MyListings = React.createClass({
             return (
                 <TableView className="ListingsManagement__TableView"
                     filter={this.state.filter} onCountsChanged={this.onCountsChanged} tableName="MyListings_Listings"
-                    isAdmin={false} showOrg={false} listings={this.getListings()}></TableView>
+                    isAdmin={false} showOrg={false}></TableView>
             );
         } else {
             return (

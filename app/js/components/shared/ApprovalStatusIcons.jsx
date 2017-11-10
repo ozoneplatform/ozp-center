@@ -24,7 +24,7 @@ function getVariables (status, role, owner){
         break;
 
         case 'PENDING':
-        if (role === "orgSteward"){
+        if (role === "orgSteward" && !owner){
             iconClass= 'icon-exclamation-14';
         }else{
             iconClass= 'icon-loader-14';
@@ -32,7 +32,7 @@ function getVariables (status, role, owner){
         break;
 
         case 'APPROVED_ORG':
-        if (role === "admin"){
+        if (role === "admin" && !owner){
             iconClass= 'icon-exclamation-14';
         }else{
             iconClass= 'icon-loader-14';
@@ -58,7 +58,6 @@ var ApprovalStatusIcons = React.createClass({
     propTypes: {
         listing: React.PropTypes.object,//pass listing
         user: React.PropTypes.object,//pass user to determine if admin
-        style: React.PropTypes.object,//pass style to format icon
         definedStatus: React.PropTypes.string,//pass status to shortcut dynamic creation
         userType: React.PropTypes.string,//pass user type when shortcutting to get correct icon. usertype expects "admin"/"orgSteward"/"user"
     },
@@ -78,8 +77,7 @@ var ApprovalStatusIcons = React.createClass({
         }else{
             var listing = this.props.listing,
             user = this.props.user,
-            status = listing.approvalStatus,
-            lockStyle = this.props.style;
+            status = listing.approvalStatus;
             if (user.highestRole === 'APPS_MALL_STEWARD') {
                 role = "admin";
             }else if(user.highestRole === 'ORG_STEWARD'){
@@ -92,7 +90,7 @@ var ApprovalStatusIcons = React.createClass({
 
         var classes = getVariables(status, role, owner);
         return(
-            <i className={classes.iconClass} style={lockStyle}></i>
+            <i className={classes.iconClass}></i>
         );
     }
 });

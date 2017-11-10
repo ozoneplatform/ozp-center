@@ -117,14 +117,8 @@ var PrivateListing = React.createClass({
     render: function () {
         var isPrivate = this.props.listing.isPrivate;
 
-        var lockStyle = {
-            position: 'absolute',
-            left: '18px',
-            top: '0'
-        };
-
         return (
-            <div style={lockStyle}>
+            <div className={"lockStyle"}>
                 { isPrivate &&
                     <i className="icon-lock-blue"></i>
                 }
@@ -148,15 +142,12 @@ var InfoBar = React.createClass({
     render: function () {
         var listing = this.props.listing,
         user = this.props.user;
-        var lockStyle = {
-            position: 'absolute',
-            left: '0px',
-            top: '0'
-        };
 
         return (
             <h5 className="AdminOwnerListingTile__infoBar">
-                <ApprovalStatusIcons listing={listing} user={user} style={lockStyle}/>
+                <div className="iconStyle">
+                    <ApprovalStatusIcons listing={listing} user={user} />
+                </div>
                 <PrivateListing listing={listing} />
                 <p className="title">{listing.title}</p>
                 <EditedDate listing={listing} />
