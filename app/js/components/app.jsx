@@ -20,10 +20,11 @@ var TagSubscriptionActions = require('ozp-react-commons/actions/TagSubscriptionA
 var TagSubscriptionStore = require('ozp-react-commons/stores/TagSubscriptionStore');
 var CategorySubscriptionActions = require('ozp-react-commons/actions/CategorySubscriptionActions');
 var CategorySubscriptionStore = require('ozp-react-commons/stores/CategorySubscriptionStore');
+var SystemStore = require('../stores/SystemStore');
 
 var App = React.createClass({
 
-    mixins: [Reflux.connect(CategorySubscriptionStore, "categorySubscriptionStore"), Reflux.connect(TagSubscriptionStore, "tagSubscriptionStore"), SystemStateMixin, State ],
+    mixins: [Reflux.connect(CategorySubscriptionStore, "categorySubscriptionStore"), Reflux.connect(TagSubscriptionStore, "tagSubscriptionStore"), Reflux.connect(SystemStore, "systemStore"), SystemStateMixin, State ],
 
     render: function () {
         return (

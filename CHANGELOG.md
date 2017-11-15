@@ -1,5 +1,18 @@
 
-### 1.1.94 (None)
+### 1.1.95 (None) 
+
+#### Fixes  
+* **management**:  correct credential checking in listing management (#891) ([188bcbc1](https://github.com/aml-development/ozp-center/commit/188bcbc116236d47eadc83e28119ad3abb8cc635))    
+* **sort**:  fix # reviews when sorting ([213179de](https://github.com/aml-development/ozp-center/commit/213179def3832a16edf1750e8f4ba95711e75370))     
+
+#### Merge Pull Requests  
+* Merge pull request #894 from aml-development/sortby_fix ([b4b8703e](https://github.com/aml-development/ozp-center/commit/b4b8703e58deb48facf9cd4d5af1f6f03c94456c))
+* Merge pull request #892 from aml-development/tour_spelling ([b37c83fc](https://github.com/aml-development/ozp-center/commit/b37c83fc6ccfba3f25de9cdd65a889eaf6897897))         
+
+#### Changes  
+* Spelling fix in Tour ([b67c133f](https://github.com/aml-development/ozp-center/commit/b67c133f70678e899ae71014dd1d6382004f145d))     
+
+### 1.1.94 (2017-10-30)
 
 #### Feature  
 * **feedback**:  allow ability to remomve feedback when un-toggled ([9bd26baf](https://github.com/aml-development/ozp-center/commit/9bd26baf7ef01b68d4c140a00574fb447051dfcf))    

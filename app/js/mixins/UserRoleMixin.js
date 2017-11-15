@@ -2,6 +2,8 @@
 
 var SelfStore = require('ozp-react-commons/stores/SelfStore');
 
+var SystemStore = require('../stores/SystemStore');
+
 var currentUser;
 SelfStore.listen((profileData) => {
     currentUser = profileData.currentUser;
@@ -29,11 +31,20 @@ var OrgSteward = {
         willTransitionTo(transition, params, query) {
         /* eslint-enable no-unused-vars */
             var { org } = params;
-            if (org && !currentUser.isOrgSteward(org)) {
-                transitionToHome(transition);
+            if (org){
+                var organization = SystemStore.getSystem().organizations.filter(function(organization) {
+                    return organization.title === org;
+                })[0];
+                if (organization == undefined){
+                    organization = org;
+                }else{
+                    organization = organization.shortName;
+                }
+                if (!currentUser.isOrgSteward(organization)) {
+                    transitionToHome(transition);
+                }
             }
         }
-
     }
 };
 
