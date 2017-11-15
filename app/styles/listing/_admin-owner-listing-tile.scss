@@ -135,35 +135,16 @@
         text-align: center;
         @include text-overflow();
     }
-}
 
-.AdminOwnerListingTile.pending .approvalStatus {
-    @extend .icon-loader-14-blueDark;
-    color: $blue-dark;
-}
+    > .lockStyle {
+        position: absolute;
+        top: 0;
+        left: 18px;
+    }
 
-.AdminOwnerListingTile.published .approvalStatus {
-    @extend .icon-thumbs-up-14-greenDark;
-    color: $green-dark;
-}
-
-.AdminOwnerListingTile.needs-action .approvalStatus {
-    @extend .icon-exclamation-14-redOrangeDark;
-}
-
-.AdminOwnerListingTile.draft .approvalStatus {
-    @extend .icon-paper-14-grayDark;
-}
-
-.AdminOwnerListingTile.rejected .approvalStatus {
-    @extend .icon-reload-14-blueDark;
-    color: $blue-dark;
-}
-.AdminOwnerListingTile.deleted .approvalStatus {
-    @extend .icon-trash-12-blueDarker;
-    color: $gray-dark;
-}
-.AdminOwnerListingTile.pending-delete .approvalStatus {
-    @extend .icon-delete-14-redOrangeDark;
-    color: $gray-dark;
+    > .iconStyle {
+        position: absolute;
+        top: 0;
+        left: 0px;
+    }
 }

@@ -4,173 +4,124 @@ var React = require('react');
 var Router = require('react-router');
 var Reflux = require('reflux');
 
+var PaginatedListingsStore = require('../../../stores/PaginatedListingsStore');
+var UnpaginatedListingsStore = require('../../../stores/UnpaginatedListingsStore');
 var Sidebar = require('../shared/Sidebar.jsx');
-var ListingTile = require('../../listing/ListingTile.jsx');
-var RadioGroup = require('react-radio-group');
-
-var GlobalListingStore = require('../../../stores/GlobalListingStore');
+var ApprovalStatusFilter = require('../shared/ApprovalStatusFilter.jsx');
+var SystemStateMixin = require('../../../mixins/SystemStateMixin');
 var SelfStore = require('ozp-react-commons/stores/SelfStore');
-var ListingActions = require('../../../actions/ListingActions');
 var _ = require('../../../utils/_');
-
-var MyListingsStatusFilter = React.createClass({
-
-    propTypes: {
-        listings: React.PropTypes.array.isRequired,
-        value: React.PropTypes.object.isRequired,
-        onFilterChanged: React.PropTypes.func.isRequired
-    },
-
-    handleChange: function (key, evt) {
-        var { value } = evt.target;
-        if (value === 'all') {
-            value = null;
-        }
-        this.props.onFilterChanged(key, value);
-    },
-
-    render: function () {
-        var counts = this.props.listings.reduce(function (acc, i) {
-            (acc[i.approvalStatus])++;
-            return acc;
-        }, {
-            APPROVED: 0,
-            APPROVED_ORG: 0,
-            REJECTED: 0,
-            PENDING: 0,
-            IN_PROGRESS: 0,
-            PENDING_DELETION: 0
-        });
-
-
-        return (
-            <div>
-                <h4>State</h4>
-                <RadioGroup
-                    name="approval-status"
-                    value={this.props.value.approval_status || 'all' }
-                    onChange={ _.partial(this.handleChange, "approval_status") }
-                >
-                        <input id="my-listings-filter-all" type="radio" value="all"/>
-                        <label htmlFor="my-listings-filter-all" className="label-all">
-                            All
-                            <strong className="badge">{this.props.listings.length}</strong>
-                        </label>
-                        <div className="clear"></div>
-                        <input id="my-listings-filter-published" type="radio" value="APPROVED"/>
-                        <label htmlFor="my-listings-filter-published" className="label-published">
-                            <i className="icon-thumbs-up-12-greenDark" />
-                            Published
-                            <strong className="badge">{counts.APPROVED || 0}</strong>
-                        </label>
-                        <div className="clear"></div>
-                        <input id="my-listings-filter-needs-action" type="radio" value="REJECTED"/>
-                        <label htmlFor="my-listings-filter-needs-action"
-                        className="label-needs-action">
-                            <i className="icon-exclamation-12-redOrangeDark" />
-                            Needs action
-                            <strong className="badge">{counts.REJECTED || 0}</strong>
-                        </label>
-                        <div className="clear"></div>
-                        <input id="my-listings-filter-pending" type="radio" value="PENDING"/>
-                        <label htmlFor="my-listings-filter-pending" className="label-pending">
-                            <i className="icon-loader-12-blueDark" />
-                            Pending
-                            <strong className="badge">{ (counts.PENDING || 0) + (counts.APPROVED_ORG || 0) }</strong>
-                        </label>
-                        <div className="clear"></div>
-                        <input id="my-listings-filter-draft" type="radio" value="IN_PROGRESS"/>
-                        <label htmlFor="my-listings-filter-draft" className="label-draft">
-                            <i className="icon-paper-12-grayDark" />
-                            Draft
-                            <strong className="badge">{counts.IN_PROGRESS || 0}</strong>
-                        </label>
-                        <div className="clear"></div>
-                        <input id="my-listings-filter-pending-delete" type="radio" value="PENDING_DELETION"/>
-                        <label htmlFor="my-listings-filter-pending-delete" className="label-pending-delete">
-                            <i className="icon-delete-12-redOrangeDark" />
-                            Pending Deletion
-                            <strong className="badge">{counts.PENDING_DELETION || 0}</strong>
-                        </label>
-                    </RadioGroup>
-            </div>
-        );
-    }
-});
+var LoadMore = require('../shared/LoadMore.jsx');
+var TableView = require('../shared/TableView.jsx');
 
 var MyListings = React.createClass({
 
     mixins: [
-        Router.State,
-        Reflux.listenTo(ListingActions.fetchOwnedListingsCompleted, 'onStoreChanged'),
-        Reflux.listenTo(ListingActions.deleteListingCompleted, 'listingRefresh' ),
-        Reflux.listenTo(ListingActions.pendingDeleteCompleted,'listingRefresh' ),
-        Reflux.listenTo(ListingActions.saveCompleted,'listingRefresh' )
+        SystemStateMixin,
+        Router.State
     ],
-    listingRefresh: function(){
-      ListingActions.fetchOwnedListings()
-    },
 
-    getListings: function () {
-        var profile = SelfStore.getDefaultData().currentUser;
-        var listings = GlobalListingStore.getByOwner(profile)
-        return listings;
+    componentWillMount: function () {
+        this.addOwnerToFilter();
     },
 
     getInitialState: function () {
-        var filter = this.getQuery().approval_status || 'all';
-
+        var useTableView = JSON.parse(sessionStorage.getItem('myListings-toggleView'));
         return {
-            listings: this.getListings(),
-            filter: filter
+            counts: {},
+            filter: this.getQuery(),
+            tableView: useTableView
         };
     },
 
-    onStoreChanged: function () {
+    onFilterChanged: function (key, value) {
+        this.state.filter[key] = value;
         this.setState({
-            listings: this.getListings()
+            filter: this.state.filter
         });
-    },
-
-    onFilterChanged: function (key, filter) {
-        if (filter === null) {
-            filter = 'all';
+        if(this.state.tableView){
+            this.state.filter.offset = 0;
+            w2ui.grid.offset = 0;
+            UnpaginatedListingsStore.filterChange(this.state.filter);
+        } else {
+            PaginatedListingsStore.filterChange(this.state.filter);
         }
+    },
+
+    onViewToggle: function (event) {
+        event.preventDefault();
+        sessionStorage.setItem("myListings-toggleView", !this.state.tableView);
         this.setState({
-            filter: filter
+            tableView: !this.state.tableView
         });
-        ListingActions.fetchOwnedListings();
     },
 
-    componentWillMount: function () {
-        ListingActions.fetchOwnedListings();
+    onCountsChanged: function (counts) {
+        this.setState({
+            counts: counts
+        });
     },
 
-    render: function () {
-        var filter = this.state.filter || 'all';
-        var listings = this.state.listings || [];
-        var filterProps = {
-            value: {
-                approval_status: filter
-            },
-            listings: listings,
-            onFilterChanged: this.onFilterChanged
-        };
+    addOwnerToFilter: function(){
+        var profile = SelfStore.getDefaultData().currentUser;
+        this.state.filter['owners_id'] = profile.id;
+        this.setState({
+            filter: this.state.filter
+        });
+    },
 
-        return (
-            <div className="MyListings row">
-                <div className="Listings__Sidebar col-xs-3 col-lg-2" >
-                    <Sidebar>
-                        <MyListingsStatusFilter { ...filterProps } />
-                    </Sidebar>
+    renderListings: function () {
+        if (this.state.tableView === true) {
+            return (
+                <TableView className="ListingsManagement__TableView"
+                    filter={this.state.filter} onCountsChanged={this.onCountsChanged} tableName="MyListings_Listings"
+                    isAdmin={false} showOrg={false}></TableView>
+            );
+        } else {
+            return (
+                <LoadMore className="ListingsManagement__LoadMore col-xs-9 col-lg-10 all"
+                    filter={this.state.filter} onCountsChanged={this.onCountsChanged}></LoadMore>
+                );
+            }
+        },
+
+        render: function () {
+            var sidebarFilterOptions = {
+                tab: "MyListings",
+                value: this.state.filter,
+                counts: this.state.counts,
+                onFilterChanged: this.onFilterChanged,
+                organizations: this.state.system.organizations || []
+            };
+            var toggleSwitch = (this.state.tableView===true) ?
+            <span className="switchBox" onClick={this.onViewToggle}>
+                <span className="switch-white" title="Grid view">
+                    <i className="icon-grid-grayDark"/>
+                </span>
+                <span className="switch-blueDark" title="Table view">
+                    <i className="icon-align-justify-white"/>
+                </span>
+            </span> :
+            <span className="switchBox" onClick={this.onViewToggle}>
+                <span className="switch-blueDark" title="Grid view">
+                    <i className="icon-grid-white"/>
+                </span>
+                <span className="switch-white" title="Table view">
+                    <i className="icon-align-justify-grayDark"/>
+                </span>
+            </span> ;
+            return this.transferPropsTo (
+                <div className="AllListings row">
+                    <div className="Listings__Sidebar col-xs-3 col-lg-2">
+                        <Sidebar>
+                            {toggleSwitch}
+                            <ApprovalStatusFilter { ...sidebarFilterOptions } />
+                        </Sidebar>
+                    </div>
+                    { this.renderListings() }
                 </div>
-                <ul className={"MyListings__listings col-xs-9 col-lg-10 " + filter}>
-                    { ListingTile.fromArray(listings) }
-                </ul>
-            </div>
-        );
-    }
-
+            );
+        }
 });
 
 module.exports = MyListings;
