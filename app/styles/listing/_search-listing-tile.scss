@@ -60,6 +60,16 @@
         font-size: $font-size-small;
     }
 
+    .clickable-rating{
+        display: inline-block;
+        position: relative;
+        z-index: 2;
+        &:hover{
+            border: 1px dotted lightblue;
+            margin: -1px;
+        }
+    }
+
     .company {
         background: $gray-lighter;
         padding: 2px 10px;
