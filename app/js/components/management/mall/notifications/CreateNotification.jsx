@@ -23,7 +23,9 @@ var CreateNotification = React.createClass({
             hours: _.range(0, 24).map((x) => {
                 return x < 10 ? `0${x}` : `${x}`;
             }),
-            minutes: ['00', '15', '30', '45', '59']
+            minutes: ['00', '15', '30', '45', '59'],
+            types: [{key: 'System', value: 'System'},
+                    {key: 'StewardAppNotification', value: 'Update Request'}]
         };
     },
 
@@ -33,7 +35,8 @@ var CreateNotification = React.createClass({
             date: null,
             message: '',
             hour: '00',
-            minute: '00'
+            minute: '00',
+            type: 'System'
         };
     },
 
@@ -46,13 +49,7 @@ var CreateNotification = React.createClass({
             event.preventDefault();
         }
 
-        this.setState({
-            uuid: uuid(),
-            date: null,
-            message: '',
-            hour: '00',
-            minute: '00'
-        });
+        this.setState(this.getInitialState());
 
         this.props.fn('');
     },
@@ -66,16 +63,25 @@ var CreateNotification = React.createClass({
         this.setState({message: value.substring(0, 600)});
     },
 
+    onTypeChange(event) {
+        var { value } = event.target;
+        if (value === 'StewardAppNotification')
+            this.setState({type: value, message:'Please review your agency\'s apps and make sure their information is up to date'});
+        else
+            this.setState({type: value, message: ''});
+    },
+
     onSend(event) {
         event.preventDefault();
-        var { message, date, hour, minute } = this.state;
+        var { message, date, hour, minute, type} = this.state;
         var expiresDate = new Date(
             Date.UTC(date.year(), date.month(), date.date(), parseInt(hour, 10), parseInt(minute, 10))
         );
 
         NotificationActions.createNotification(this.state.uuid, {
             expiresDate: expiresDate,
-            message: message
+            message: message,
+            notificationType: type
         });
     },
 
@@ -93,7 +99,15 @@ var CreateNotification = React.createClass({
                 <h4 style={{marginTop: 0}}>Send a Notification</h4>
                 <form>
                     <div className="row">
-                        <div className="col-md-6">
+                        <div className="col-xs-6 col-md-4" style={{paddingRight: '0px'}}>
+                            <div className="form-group">
+                                <label>Type</label>
+                                <div>
+                                    <Select ref="type" name="type" options={ this.props.types } onChange={this.onTypeChange} />
+                                </div>
+                            </div>
+                        </div>
+                        <div className="col-xs-4 col-md-4" style={{paddingRight: '0px'}}>
                             <div className="form-group">
                                 <label htmlFor="notification-expires-time">Expires On</label>
                                 <DatePicker
@@ -105,7 +119,7 @@ var CreateNotification = React.createClass({
                                 />
                             </div>
                         </div>
-                        <div className="col-md-6">
+                        <div className="col-xs-2 col-md-4" style={{paddingRight: '0px'}}>
                             <div className="form-group">
                                 <label>Expires At (Z)</label>
                                 <div>
@@ -114,6 +128,7 @@ var CreateNotification = React.createClass({
                                 </div>
                             </div>
                         </div>
+                        
                     </div>
                     <div className="form-group">
                         <label htmlFor="notification-message">Notification text</label>
