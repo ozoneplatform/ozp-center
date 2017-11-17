@@ -161,14 +161,27 @@ var ModifiedChangeLog = React.createClass({
     }
 });
 
+var ReviewedChangeLog = React.createClass({
+    render: function() {
+        var changeLog = this.props.changeLog;
+        return (
+            <div>
+                <AuthorLink author={changeLog.author} />
+                <span> reviewed </span>
+                 { this.props.listingName }
+            </div>
+        );
+    }
+});
+
 var ReviewEditedChangeLog = React.createClass({
     render: function() {
         var changeLog = this.props.changeLog;
         return (
             <div>
                 <AuthorLink author={changeLog.author} />
-                <span> edited </span>
-                { (changeLog.changeDetails[0] === undefined) ? ' ' : changeLog.changeDetails[0].fieldName } in { this.props.listingName }
+                <span> edited review for </span>
+                { this.props.listingName }
             </div>
         );
     }
@@ -217,6 +230,7 @@ var ChangeLog = React.createClass({
         'DELETED' : ActionChangeLog,
         'REJECTED' : RejectedChangeLog,
         'APPROVED_ORG' : OrgApprovalChangeLog,
+        'REVIEWED' : ReviewedChangeLog,
         'REVIEW_EDITED' : ReviewEditedChangeLog,
         'REVIEW_DELETED' : ReviewDeletedChangeLog,
         'PENDING_DELETION' : PendingDeletionChangeLog

@@ -1,5 +1,7 @@
 
-### 1.1.95 (None) 
+### 1.1.96 (2017-11-15)           
+
+### 1.1.95 (2017-11-08) 
 
 #### Fixes  
 * **management**:  correct credential checking in listing management (#891) ([188bcbc1](https://github.com/aml-development/ozp-center/commit/188bcbc116236d47eadc83e28119ad3abb8cc635))    
