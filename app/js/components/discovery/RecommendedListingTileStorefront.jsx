@@ -46,6 +46,16 @@ var RecommendedListingTileStorefront = React.createClass({
       }
     },
 
+    goToReviews: function(e){
+        var href = this.makeHref(this.getActiveRoutePath(), null, {
+            listing: this.props.listing.id,
+            action: 'view',
+            tab: 'reviews'
+        });
+        window.location = href;
+        e.stopPropagation();
+    },
+
     render: function () {
         var listing = this.props.listing;
         var name = listing.title;
@@ -54,32 +64,36 @@ var RecommendedListingTileStorefront = React.createClass({
         var avgRate = listing.avgRate;
         var agencyShort = listing.agencyShort;
         var totalVotes = listing.totalReviews;
+
+        imageLargeUrl = listing.imageLargeUrl;
+
         var href = this.makeHref(this.getActiveRoutePath(), null, {
             listing: listing.id,
             action: 'view',
             tab: 'overview'
         });
 
-        imageLargeUrl = listing.imageLargeUrl;
-
         return (
-            <li onClick={this.handleClick.bind(this, this.props.from, listing.title)} className="listing SearchListingTile">
+            <div className="listing SearchListingTile">
                 <a className="listing-link"  href={ href }>
-                    {/* Empty link - css will make it cover entire <li>*/}
+                    {/* Empty link - css will make it cover entire <div>*/}
                     <span className="hidden-span">{listing.title}</span>
                 </a>
                 <img alt={`${listing.title} app tile`} src={ imageLargeUrl } />
                 <section className="slide-up">
                     <p className="title">{ name }</p>
-                    <IconRating
-                        {...this.props}
-                        className="icon-rating"
-                        viewOnly
-                        currentRating = { avgRate }
-                        toggledClassName="icon-star-filled-yellow"
-                        untoggledClassName="icon-star-filled-grayLighter"
-                        halfClassName="icon-star-half-filled-yellow"
-                        totalVotes={totalVotes} />
+                    <a className="clickable-rating" onClick={this.goToReviews}>
+                        <IconRating
+                            {...this.props}
+                            className="icon-rating"
+                            viewOnly
+                            currentRating = { avgRate }
+                            toggledClassName="icon-star-filled-yellow"
+                            untoggledClassName="icon-star-filled-grayLighter"
+                            halfClassName="icon-star-half-filled-yellow"
+                            totalVotes={totalVotes}
+                        />
+                    </a>
                     {
                         agencyShort &&
                         <span className="company">
@@ -92,7 +106,7 @@ var RecommendedListingTileStorefront = React.createClass({
                     <p className="description">{ description }</p>
                     { this.renderActions() }
                 </section>
-            </li>
+            </div>
         );
     },
 

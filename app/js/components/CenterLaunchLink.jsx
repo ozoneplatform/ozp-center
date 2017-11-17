@@ -64,7 +64,7 @@ var CenterLaunchLink = React.createClass({
 
         if (this.state.leavingOzpWarningFlag == true && this.state.currentUser.leavingOzpWarningFlag == true) {
             var me = this;
-
+            $(".SearchListingTile .clickable-rating").css({"z-index":"1"});
             timeout = setTimeout(function(){
                 me.reset();
             }, me.state.timeleft*1000);
@@ -137,6 +137,7 @@ var CenterLaunchLink = React.createClass({
     },
 
     reset: function(){
+        $(".SearchListingTile .clickable-rating").css({"z-index":"2"});
         this.setState({
             'launchWarning': false,
             'timeleft': time,
