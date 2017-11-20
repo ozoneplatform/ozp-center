@@ -115,19 +115,6 @@ var CenterLaunchLink = React.createClass({
 
     },
 
-    goToDetails: function(){
-        this.reset();
-
-        var href = this.makeHref(this.getActiveRoutePath(),this.getParams(), {
-            listing: this.props.listing.id,
-            action: 'view',
-            tab: 'details'
-        });
-
-        window.location.replace(href);
-
-    },
-
     cancelTimer : function(e){
         this.setState({'showTimeout': false, 'timeleft': time});
         clearTimeout(timeout);
@@ -154,24 +141,19 @@ var CenterLaunchLink = React.createClass({
         var { listing } = this.getQuery();
         var modalClass = "LaunchConfirmation"
         if(!listing)
-            modalClass += ' listingLaunchConfirmation';
+            modalClass += ' listingLaunchConfirmation quickview';
 
         var launchModal = this.state.currentUser && this.state.currentUser.leavingOzpWarningFlag ? (<Modal ref="modal" className={modalClass} size="small" modaltitle={"Notice: You are leaving " + APP_TITLE + "!"} onCancel={this.modalConfirmation}>
                   <strong>
                       <p className="LaunchConfirmation__content">Please review the requirements below if you have problems launching <b>{this.props.listing.title}</b>:</p>
                       <br/>
-                      { listing &&
-                          <div className="LaunchConfirmation__columns">
-                              <h5>Usage Requirements</h5>
-                              <p>{this.props.listing.usage_requirements}</p>
+                      <div className="LaunchConfirmation__columns">
+                          <h5>Usage Requirements</h5>
+                          <p>{this.props.listing.usage_requirements}</p>
 
-                              <h5>System Requirements</h5>
-                              <p>{this.props.listing.system_requirements}</p>
-                          </div>
-                      }
-                      {!listing &&
-                          <button style={{'marginBottom': '40px'}} className="btn btn-info" onClick={this.goToDetails}>Click Here</button>
-                      }
+                          <h5>System Requirements</h5>
+                          <p>{this.props.listing.system_requirements}</p>
+                      </div>
                       <span style={{'clear': 'both'}}>
                           <p>Or contact the owners of {this.props.listing.title} by clicking here:
                           <button className="btn btn-info" onClick={this.goToContactOwners}>Contact Owners</button></p>
