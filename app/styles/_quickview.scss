@@ -504,6 +504,12 @@ ul.list-unstyled.RecentActivity
 .LaunchConfirmation__columns {
     column-count: 2;
     padding-bottom: 45px;
+
+    p {
+        -webkit-column-break-inside: avoid;
+        page-break-inside: avoid;
+        break-inside: avoid-column;
+    }
 }
 
 .Review {
