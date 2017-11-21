@@ -57,7 +57,7 @@ describe('AdministrationTab', function () {
         expect(setFeaturedSpy.calledOnce).to.be.ok();
         expect(setFeaturedSpy.calledWith(true, listing)).to.be.true();
 
-        listing.isFeatured = true
+        listing.isFeatured = true;
         adminTab = TestUtils.renderIntoDocument(
                 <AdministrationTab listing={listing}
                     currentUser={{highestRole: 'APPS_MALL_STEWARD'}} />

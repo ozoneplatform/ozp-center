@@ -21,7 +21,7 @@ describe ('OrgListings', function () {
         params: {
             org: "Test Organization"
         }
-    }
+    };
 
     beforeEach( function () {
         ProfileMock.mockOrgSteward(mockOrg);
@@ -52,7 +52,7 @@ describe ('OrgListings', function () {
     });
 
     afterEach( function () {
-        router.stop()
+        router.stop();
         ProfileMock.restore();
     });
 });

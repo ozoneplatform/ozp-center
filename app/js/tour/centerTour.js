@@ -55,7 +55,7 @@ const meTour = new Tour({
             if (e.keyCode == 13) {
                 document.getElementById('start-tour-btn').setAttribute("hidden", "true");
             }
-        })
+        });
 
         $('#start-tour-btn').keydown(function(e) {
             // Tab key is pressed
@@ -63,7 +63,7 @@ const meTour = new Tour({
                 e.preventDefault();
                 document.getElementById('end-tour-btn').focus();
             }
-        })
+        });
       },
       template: '<div id="welcome" class="popover" role="tooltip" aria-labelledby="tourTitle" aria-describedby="tourContent"> <h1 class="popover-header">Welcome to <img src="./images/marketplace-logo.png" alt="AppsMall Marketplace"></h1> <div id="content" aria-labelledby="tourTitle tourContent" role="tooltip" tabIndex="0"> <h3 id="tourTitle" class="popover-title popover-subtitle"></h3> <div id="tourContent" class="popover-content"></div> <div class="popover-navigation"> <button class="btn btn-sm" id="end-tour-btn" data-role="end" tabIndex="0">No thanks</button>  <button class="btn btn-sm btn-default" id="start-tour-btn" data-role="next" tabIndex="0">' + contentLocalStart + '</button></div> </div> </div> </div>'
     },
@@ -261,7 +261,7 @@ const meTour = new Tour({
             setTimeout(checkStatus, 1);
           }
         })();
-      },
+      }
     },
     //16
     {

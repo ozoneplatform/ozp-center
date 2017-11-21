@@ -10,7 +10,7 @@ var TabMixin = {
         return {
             tabLimit: 6, //Current artibtrary limit
             tabIndex: 0
-        }
+        };
     },
 
     handleBeginArrowClick: function(tabTotal, event) {

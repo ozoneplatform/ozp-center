@@ -123,7 +123,7 @@ var CurrentListingStore = createStore({
         Object.assign({}, CreateEditActions, {
             systemUpdated: SystemStore,
             cacheUpdated: GlobalListingStore,
-            similarUpdated: ListingActions.fetchSimilarCompleted,
+            similarUpdated: ListingActions.fetchSimilarCompleted
         }),
         { profileUpdate: SelfStore, saveResponseFailed: ListingActions.saveReviewResponseFailed }
     ],
@@ -356,7 +356,7 @@ var CurrentListingStore = createStore({
         } else {
             newListing = new Listing({ owners: [this.currentUser] });
             this.refreshListing(newListing);
-            deferred.resolve(newListing)
+            deferred.resolve(newListing);
         }
         return promise;
     },
