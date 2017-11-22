@@ -1,5 +1,48 @@
 
-### 1.1.96 (2017-11-15)           
+### 1.1.97 (None)
+
+#### Feature 
+* **reviews**
+  *  clicking stars ([fced04cb](https://github.com/aml-development/ozp-center/commit/fced04cb56942bdea1ebf2c9308306e1253cf709))
+  *  clicking stars ([ed1eab6b](https://github.com/aml-development/ozp-center/commit/ed1eab6bff5630251d351cfb4f56567fc0e87eb0))     
+
+#### Fixes  
+* **w2ui**:  fix table not updating ([774c94e4](https://github.com/aml-development/ozp-center/commit/774c94e48fdb9db5508c8cada1dd5ef0476297c7))    
+* **launch popup**:  show requirements information ([5da4baef](https://github.com/aml-development/ozp-center/commit/5da4baef7c74fa0367de62bddce235ae005f90ca))    
+* **launch_notice**:  stop column break in requirements p ([aa73562d](https://github.com/aml-development/ozp-center/commit/aa73562de6a23d890d86556192250c62b1bdad55))    
+* **reviews**:  backdrop visibility fix ([8b2b083b](https://github.com/aml-development/ozp-center/commit/8b2b083b8d9cd1903224279f7480d5010bf1fdaa))     
+
+#### Merge Pull Requests  
+* Merge pull request #904 from aml-development/amlng798 ([274a5dff](https://github.com/aml-development/ozp-center/commit/274a5dff49bd5f6d4bec2baaca8f1a17a3378bb8))
+* Merge pull request #902 from aml-development/stop_column_break ([c7e29bf4](https://github.com/aml-development/ozp-center/commit/c7e29bf41c7cf35eab7fbe54a3ac4d4e954fb0d0))
+* Merge pull request #901 from aml-development/Review_Link_In_Tile_Slider ([81f4c194](https://github.com/aml-development/ozp-center/commit/81f4c1941a908d6373f353597326fe692fb9d64d))
+* Merge branch 'master' into Review_Link_In_Tile_Slider ([5d16e426](https://github.com/aml-development/ozp-center/commit/5d16e426196ebe12733291eac3748b6ced3bee67))
+* Merge pull request #899 from aml-development/cleanup_launch_notice ([f2333862](https://github.com/aml-development/ozp-center/commit/f2333862a131d2656ba6099dd2175458fb8e06e7))
+* Merge pull request #900 from aml-development/addNotificationType_updated ([b5b76a03](https://github.com/aml-development/ozp-center/commit/b5b76a039a93bece1eb860f4791abe3b291f79a4))
+* Merge pull request #897 from aml-development/Listing_Management_refactor ([cb39bc6d](https://github.com/aml-development/ozp-center/commit/cb39bc6dd37938b5887f72b489f4d6afa3430476))
+* Merge pull request #898 from aml-development/New_Recent_Activity_entry ([8838a081](https://github.com/aml-development/ozp-center/commit/8838a08130dc00f9ee1975746187c3df29ffb719))           
+
+### 1.1.96 (2017-11-15)
+
+#### Feature  
+* **launch_notice**:  update styles and closing options for the launch notice window ([7f78b1c8](https://github.com/aml-development/ozp-center/commit/7f78b1c884bce16931f18b77e23975df12ec41fc))   
+* **activity log**
+  *  add reviews to activity log ([e1dcb4dd](https://github.com/aml-development/ozp-center/commit/e1dcb4dd6b95a38145d5addad81f7aa22d6a8390))
+  *  add reviews to activity log ([925e44e6](https://github.com/aml-development/ozp-center/commit/925e44e661dfe98966ac018b6e10c732fbd0a7e4))
+  *  add reviews to activity log ([30f7658b](https://github.com/aml-development/ozp-center/commit/30f7658b748b7551047370ea46bc475220d1c7d5))      
+
+#### Refactor 
+* **icons**
+  * : ([38002902](https://github.com/aml-development/ozp-center/commit/380029021f49852fc10b4a7a909ccabd695d26ae))
+  *  Rename ApprovalStatusClass ([8bb68d2c](https://github.com/aml-development/ozp-center/commit/8bb68d2cefa670769b90233715e278a1e8cbcf33))
+  *  Remove independent calls to ApprovalStatusIcons. ([18ef1fcd](https://github.com/aml-development/ozp-center/commit/18ef1fcde43c11829c197da519571af48f6f2957))
+  *  refactor RecentActivitySidebar to use ApprovalStatusClass ([9836c41f](https://github.com/aml-development/ozp-center/commit/9836c41f137deb3c8b9878dafd9b120f29e46bdf))
+  *  remove icons in Administration tab. ([3a5e3125](https://github.com/aml-development/ozp-center/commit/3a5e3125db97f1c53344bf21d358175133793d5e))
+  * : ([89783f6f](https://github.com/aml-development/ozp-center/commit/89783f6fa69de060234b47a4071feda45ba70e40))     
+
+#### Merge Pull Requests  
+* Merge branch 'master' of github.com:aml-development/ozp-center into addNotificationType_updated ([5ae366c9](https://github.com/aml-development/ozp-center/commit/5ae366c93f6d2d07d158413fd4f9f7bcedc762c8))
+* Merge branch 'master' into Listing_Management_refactor ([67e690b3](https://github.com/aml-development/ozp-center/commit/67e690b3d4aac4c708e6a37e531fbffac357fbd8))           
 
 ### 1.1.95 (2017-11-08) 
 
@@ -12,6 +55,7 @@
 * Merge pull request #892 from aml-development/tour_spelling ([b37c83fc](https://github.com/aml-development/ozp-center/commit/b37c83fc6ccfba3f25de9cdd65a889eaf6897897))         
 
 #### Changes  
+* modifying center setting notifications to have a type field ([dc8dcf95](https://github.com/aml-development/ozp-center/commit/dc8dcf95d550a0aabcbe5f1c068e1b1b9bd5c0d2))
 * Spelling fix in Tour ([b67c133f](https://github.com/aml-development/ozp-center/commit/b67c133f70678e899ae71014dd1d6382004f145d))     
 
 ### 1.1.94 (2017-10-30)
