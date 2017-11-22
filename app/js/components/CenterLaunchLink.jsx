@@ -79,12 +79,17 @@ var CenterLaunchLink = React.createClass({
 
     modalConfirmation: function(){
         var profile = this.state.currentUser;
+        var { listing } = this.getQuery();
         profile.leavingOzpWarningFlag = this.state.leavingOzpWarningFlag;
 
         ProfileActions.updateProfileFlags(profile);
         ProfileActions.fetchProfile(profile.profileId);
 
         this.reset();
+
+        if(!listing) {
+            this.close();
+        }
     },
 
     optWarning: function(event) {
@@ -132,6 +137,10 @@ var CenterLaunchLink = React.createClass({
         });
         clearTimeout(timeout);
         clearInterval(timer);
+    },
+
+    close: function () {
+        this.refs.modal.close();
     },
 
     render: function() {
