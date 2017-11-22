@@ -1,14 +1,21 @@
 
-### 1.1.97 (None)
+### 1.1.98 (None)   
+
+#### Merge Pull Requests  
+* Merge pull request #907 from aml-development/amlng833 ([7beed79a](https://github.com/aml-development/ozp-center/commit/7beed79ae7451902144dcc26553113f07ee99295))           
+
+### 1.1.97 (2017-11-22)
 
 #### Feature 
 * **reviews**
   *  clicking stars ([fced04cb](https://github.com/aml-development/ozp-center/commit/fced04cb56942bdea1ebf2c9308306e1253cf709))
   *  clicking stars ([ed1eab6b](https://github.com/aml-development/ozp-center/commit/ed1eab6bff5630251d351cfb4f56567fc0e87eb0))     
 
-#### Fixes  
+#### Fixes 
+* **launch popup**
+  *  properly close modal when clicking OK ([01ebb54a](https://github.com/aml-development/ozp-center/commit/01ebb54a0df3e46e38288463d6cef6cfe0c50cd0))
+  *  show requirements information ([5da4baef](https://github.com/aml-development/ozp-center/commit/5da4baef7c74fa0367de62bddce235ae005f90ca))     
 * **w2ui**:  fix table not updating ([774c94e4](https://github.com/aml-development/ozp-center/commit/774c94e48fdb9db5508c8cada1dd5ef0476297c7))    
-* **launch popup**:  show requirements information ([5da4baef](https://github.com/aml-development/ozp-center/commit/5da4baef7c74fa0367de62bddce235ae005f90ca))    
 * **launch_notice**:  stop column break in requirements p ([aa73562d](https://github.com/aml-development/ozp-center/commit/aa73562de6a23d890d86556192250c62b1bdad55))    
 * **reviews**:  backdrop visibility fix ([8b2b083b](https://github.com/aml-development/ozp-center/commit/8b2b083b8d9cd1903224279f7480d5010bf1fdaa))     
 
