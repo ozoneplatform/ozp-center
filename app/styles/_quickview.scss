@@ -240,23 +240,11 @@ ul.list-unstyled.RecentActivity
 }
 
 .quickview-overview {
-
     .carousel-wrapper {
         margin: 0 auto;
-        width: 600px;
+        width: 617px;
         height: 375px;
-
-        > .carousel {
-            height: 100%;
-            overflow: hidden;
-            margin: 0 auto !important;
-        }
-
-        img {
-            width: 600px;
-            height: 375px;
-            cursor: pointer;
-        }
+        cursor: pointer;
     }
 }
 

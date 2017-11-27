@@ -68,9 +68,7 @@ var QuickViewRecommendations = React.createClass({
                         listing={ listing }
                     />;
         });
-        return <Carousel options = {carouselOptions} autoInit = {this.props.shown} >
-                {children}
-               </Carousel>
+        return <Carousel slides={children} />
         }
     },
 

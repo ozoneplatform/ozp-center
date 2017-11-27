@@ -79,17 +79,14 @@ var OverviewTab = React.createClass({
             }
 
             return (<div key={`screenshot.${i}`}>
-                        <img alt="show large screenshot once click" src={screenshot.smallImageUrl} onClick={ me.showLargeScreenshots.bind(me, i) }/>
+                        <img className="carousel-wrapper" alt="show large screenshot once click" src={screenshot.smallImageUrl} onClick={ me.showLargeScreenshots.bind(me, i) }/>
                             <ScreenshotDescription/>
                     </div>);
         });
 
         return (
             <div className="col-xs-12 col-md-9">
-                <Carousel autoInit={ shown }>
-                    { smallImageUrls }
-                </Carousel>
-
+                <Carousel slides={ smallImageUrls } />
             </div>
         );
     },
