@@ -617,7 +617,10 @@ var Discovery = React.createClass({
                 </ul>
                 <p className="text-center">
                   { this.state.loadingMore &&
-                    <h3 className="col-xs-12">Searching...</h3>
+                    <section>
+                        <h4>Loading...</h4>
+                        <span className="icon-loader-36 loader loader-animate"></span>
+                    </section>
                   }
                 </p>
             </section>
@@ -678,7 +681,10 @@ var Discovery = React.createClass({
                 </ul>
                 <div className="list-unstyled listings-search-results row clearfix">
                     { this.state.searching &&
-                      <h3 className="col-xs-12">Searching...</h3>
+                      <section>
+                          <h4>Loading...</h4>
+                          <span className="icon-loader-36 loader loader-animate"></span>
+                      </section>
                     }
                 </div>
             </section>
