@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react');
+var Reflux = require('reflux');
 var { Navigation } = require('react-router');
 var Sidebar = require('./RecentActivitySidebar.jsx');
 var ListingActions = require('../../../actions/ListingActions');
@@ -16,7 +17,8 @@ var RecentActivity = React.createClass({
     mixins: [
         Navigation,
         ActiveState,
-        SystemStateMixin
+        SystemStateMixin,
+        Reflux.listenTo(ListingActions.fetchAllChangeLogsFailed, 'onFetchAllChangeLogsFailed')
     ],
 
     getInitialState: function () {
@@ -26,11 +28,13 @@ var RecentActivity = React.createClass({
     },
 
     componentDidMount: function () {
+        this.refs.loadMore.initLoad();
         this.fetchAllChangeLogsIfEmpty();
         this.listenTo(PaginatedChangeLogStore, this.onChangeLogsReceived);
     },
 
     onLoadMore: function() {
+        this.refs.loadMore.initLoad();
         ListingActions.fetchAllChangeLogs(this.state.currentUser);
     },
 
@@ -44,6 +48,7 @@ var RecentActivity = React.createClass({
             changeLogs: data,
             hasMore: hasMore
         });
+        this.refs.loadMore.loadSuccess();
     },
 
     createLink: function (changeLog) {
@@ -113,6 +118,10 @@ var RecentActivity = React.createClass({
         this.onChangeLogsReceived();
     },
 
+    onFetchAllChangeLogsFailed() {
+        this.refs.loadMore.loadError();
+    },
+
     renderChangeLogs: function () {
         var me = this;
 
@@ -148,7 +157,7 @@ var RecentActivity = React.createClass({
                 <div className="RecentActivity__Sidebar col-xs-5 col-lg-4"><Sidebar /></div>
                 <div className="RecentActivity__Content col-xs-7 col-lg-8">
                     <h3>Recent Activity</h3>
-                        <LoadMore className="RecentActivity__activities all"
+                        <LoadMore ref="loadMore" className="RecentActivity__activities all"
                                   hasMore={hasMore} onLoadMore={this.onLoadMore}>
                             { logs }
                         </LoadMore>
@@ -156,7 +165,6 @@ var RecentActivity = React.createClass({
             </div>
         );
     }
-
 
 });
 

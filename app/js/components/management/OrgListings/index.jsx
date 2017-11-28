@@ -23,7 +23,7 @@ var OrgListings = React.createClass({
     mixins: [
         SystemStateMixin,
         ActiveStateMixin,
-        UserRoleMixin.OrgSteward,
+        UserRoleMixin.OrgSteward
     ],
 
     getInitialState: function () {
@@ -42,6 +42,10 @@ var OrgListings = React.createClass({
 
     onFilterChanged: function (key, value) {
         this.state.filter[key] = value;
+        if(this.refs.loadMore) {
+            this.refs.loadMore.clear();
+            this.refs.loadMore.initLoad();
+        }
         if(this.state.tableView){
             UnpaginatedListingsStore.filterChange(this.state.filter);
         } else {
@@ -81,7 +85,7 @@ var OrgListings = React.createClass({
             );
         } else {
             return (
-                <LoadMore className="ListingsManagement__LoadMore col-xs-9 col-lg-10 all"
+                <LoadMore ref="loadMore" className="ListingsManagement__LoadMore col-xs-9 col-lg-10 all"
                     filter={this.state.filter} onCountsChanged={this.onCountsChanged}></LoadMore>
             );
         }

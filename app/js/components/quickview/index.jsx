@@ -151,7 +151,7 @@ var Quickview = React.createClass({
                 {
                     !listing || !listing.title ?
                         <h1 style={{'height': '550px'}} className="quickview-header listing-title">
-                            Loading...<LoadIndicator title=""/>
+                            <LoadIndicator/>
                         </h1> :
                         [
                             <Header { ...headerProps }  key="header"></Header>,

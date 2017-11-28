@@ -17,8 +17,6 @@ var LoadMore = React.createClass({
     mixins: [
         Reflux.listenTo(PaginatedListingsStore, 'onStoreChanged'),
         Reflux.listenTo(ListingActions.listingChangeCompleted, 'onListingChangeCompleted'),
-        Reflux.listenTo(ListingActions.fetchAllListings, 'onFetchAllListings'),
-        Reflux.listenTo(ListingActions.fetchAllListingsCompleted, 'onFetchAllListingsCompleted'),
         Reflux.listenTo(ListingActions.fetchAllListingsFailed, 'onFetchAllListingsFailed')
     ],
 
@@ -54,6 +52,9 @@ var LoadMore = React.createClass({
 
         if (children && children.length > 0 && !this.state.loadingError) {
             return <ol className="list-unstyled">{ children }</ol>;
+        }
+        else if(!this.state.loading) {
+            return <h5 style={{marginTop: "0"}}>No results found!</h5>;
         }
     },
 
@@ -96,50 +97,54 @@ var LoadMore = React.createClass({
 
         this.setState({
             listings: data,
-            hasMore: hasMore,
-            loading: false,
-            loadingError: false
+            hasMore: hasMore
         });
+        this.loadSuccess();
 
         this.props.onCountsChanged(counts);
     },
 
     onListingChangeCompleted: function () {
+        this.initLoad();
         ListingActions.fetchAllListings(this.props.filter);
+    },
+
+    onFetchAllListingsFailed: function () {
+        this.loadError();
     },
 
     onLoadMore: function () {
+        this.initLoad();
         ListingActions.fetchAllListings(this.props.filter);
     },
 
-    onFetchAllListings() {
+    clear() {
+        this.setState({
+            listings: []
+        });
+    },
+
+    initLoad() {
         this.setState({
             loading: true,
             loadingError: false
         });
     },
 
-    onFetchAllListingsCompleted() {
+    loadSuccess() {
         this.setState({
             loading: false,
             loadingError: false
         });
     },
 
-    onFetchAllListingsFailed() {
+    loadError() {
         this.setState({
             loading: false,
             loadingError: true
         });
-    },
-
-    clearListings() {
-        this.setState({
-            listings: [],
-            loading: true,
-            loadingError: false
-        });
     }
+
 });
 
 module.exports = LoadMore;

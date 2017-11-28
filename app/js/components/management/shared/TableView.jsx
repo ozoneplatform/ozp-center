@@ -10,13 +10,16 @@ var { PropTypes } = React;
 var { Navigation } = require('react-router');
 var ActiveState = require('../../../mixins/ActiveStateMixin');
 
+var LoadMask = require('../../LoadMask.jsx');
+
 var moment = require('moment');
 
 var TableView = React.createClass({
-
     mixins: [
         Reflux.listenTo(UnpaginatedListingsStore, 'onStoreChanged'),
         Reflux.listenTo(ListingActions.listingChangeCompleted, 'onListingChangeCompleted'),
+        Reflux.listenTo(ListingActions.fetchAllListingsAtOnce, 'onFetchAllListingsAtOnce'),
+        Reflux.listenTo(ListingActions.fetchAllListingsAtOnceCompleted, 'onFetchAllListingsAtOnceCompleted'),
         Navigation,
         ActiveState
     ],
@@ -29,10 +32,23 @@ var TableView = React.createClass({
         showOrg: PropTypes.bool
     },
 
-    render: function () {
-         var props = this.props;
-         return (<div ref="grid" {...props} ></div>);
+    getInitialState: function () {
+        return {
+            loading: false
+        };
+    },
 
+    render: function () {
+        var props = this.props;
+
+        return (
+            <div>
+                { this.state.loading &&
+                    <LoadMask/>
+                }
+                <div ref="grid" {...props} ></div>
+            </div>
+        );
     },
 
     componentWillUnmount: function () {
@@ -70,14 +86,11 @@ var TableView = React.createClass({
                 event.preventDefault();
                 if(event.postData.cmd === 'get-records'){
                     if (thisTable.props.filter.limit + thisTable.props.filter.offset < this.total){
-                        thisTable.props.filter.offset += thisTable.props.filter.limit;                                        
+                        thisTable.props.filter.offset += thisTable.props.filter.limit;
                     } else if (this.total > 0)
                         return;
-                    //show spinner while loading
-                    var more = $('#grid_'+ this.name +'_rec_more');
-                    more.show().find('td').html('<div><div style="width: 20px; height: 20px;" class="w2ui-spinner"></div></div>');
                     UnpaginatedListingsStore.filterChange(thisTable.props.filter);
-                } 
+                }
                 return;
             },
             onSort: function(event){
@@ -106,7 +119,7 @@ var TableView = React.createClass({
                 }
                 this.last.search = event.searchValue
                 UnpaginatedListingsStore.filterChange(thisTable.props.filter);
-                
+
                 event.preventDefault();
                 var str = [event.searchValue];
                 $(this.box).find('.w2ui-grid-data > div').w2marker(str);
@@ -150,7 +163,7 @@ var TableView = React.createClass({
                 event.preventDefault();
                 event.stopPropagation();
                 var target = event.originalEvent.target;
-                if (this.columns[event.column].field==="featured") {
+                if (this.columns[event.column] && this.columns[event.column].field==="featured") {
                     if (target.type==='checkbox') {
                         if(thisTable.props.isAdmin && thisTable.props.isAdmin===true){
                             var listing = thisTable.getUnpaginatedList().data.filter(
@@ -362,7 +375,7 @@ var TableView = React.createClass({
             this.grid.records = records;
             this.grid.refresh();
             this.grid.requestComplete('success','get-records', function(){});
-            
+
         }else{
             "warn";
         }
@@ -372,6 +385,18 @@ var TableView = React.createClass({
 
     onListingChangeCompleted: function () {
        this.onStoreChanged();
+    },
+
+    onFetchAllListingsAtOnce: function () {
+       this.setState({
+            loading: true
+       });
+    },
+
+    onFetchAllListingsAtOnceCompleted: function () {
+       this.setState({
+            loading: false
+       });
     },
 
     JSONToCSVConvertor: function (JSONData, ReportTitle, ShowLabel) {
