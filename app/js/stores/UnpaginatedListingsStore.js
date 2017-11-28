@@ -55,7 +55,7 @@ var UnpaginatedListingsStore = Reflux.createStore({
     },
 
     filterChange: function (filter) {
-        var listings = this.getListingsByFilter(filter)
+        var listings = this.getListingsByFilter(filter);
         if ( listings){
             this.trigger();
         } else {
@@ -74,7 +74,7 @@ var UnpaginatedListingsStore = Reflux.createStore({
             clonedFilter.offset = offset;
             offset += filter.limit;
             var key = filterKey(clonedFilter);
-            var results = _unpaginatedListByFilter[key]
+            var results = _unpaginatedListByFilter[key];
             if(results && results.data.length){
                 data = data.concat(results.data);
             }

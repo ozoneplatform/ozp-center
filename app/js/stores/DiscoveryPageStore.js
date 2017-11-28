@@ -34,12 +34,12 @@ var DiscoveryPageStore = Reflux.createStore({
         this.listenTo(ListingActions.fetchRecentListingsCompleted,
                 (listings)=>{_newArrivals = listings; this.trigger();});
         this.listenTo(ListingActions.fetchRecommendedListingsCompleted,
-                (listings)=>{_recommended = listings; this.trigger()});
+                (listings)=>{_recommended = listings; this.trigger();});
         this.listenTo(ListingActions.searchCompleted, this.onSearchCompleted);
         this.listenTo(ListingActions.giveFeedbackCompleted, this.giveFeedbackCompleted);
         this.listenTo(ListingActions.deleteFeedbackCompleted, this.giveFeedbackCompleted);
 
-        this.listenTo(ListingActions.deleteListingCompleted, this.removeListing)
+        this.listenTo(ListingActions.deleteListingCompleted, this.removeListing);
     },
 
     onStorefrontListingsFetched: function (storefrontListings) {
@@ -115,11 +115,11 @@ var DiscoveryPageStore = Reflux.createStore({
     sortMostPopular(order) {
         var me = this;
         var sortOptions = [
-            {option: 'Newest', searchParam: '-approved_date', sortMethod: function(){me.sortNewest(_mostPopular)}},
-            {option: 'Title: A to Z', searchParam: 'title', sortMethod: function(){me.sortAlphabetically(_mostPopular)}},
-            {option: 'Title: Z to A', searchParam: '-title', sortMethod: function(){me.sortAlphabetically(_mostPopular, "desc")}},
-            {option: 'Rating: Low to High', searchParam: ['avg_rate', '-total_votes'], sortMethod: function(){me.sortRating(_mostPopular)}},
-            {option: 'Rating: High to Low', searchParam: ['-avg_rate', '-total_votes'], sortMethod: function(){me.sortRating(_mostPopular, "desc")}}
+            {option: 'Newest', searchParam: '-approved_date', sortMethod: function(){me.sortNewest(_mostPopular);}},
+            {option: 'Title: A to Z', searchParam: 'title', sortMethod: function(){me.sortAlphabetically(_mostPopular);}},
+            {option: 'Title: Z to A', searchParam: '-title', sortMethod: function(){me.sortAlphabetically(_mostPopular, "desc");}},
+            {option: 'Rating: Low to High', searchParam: ['avg_rate', '-total_votes'], sortMethod: function(){me.sortRating(_mostPopular);}},
+            {option: 'Rating: High to Low', searchParam: ['-avg_rate', '-total_votes'], sortMethod: function(){me.sortRating(_mostPopular, "desc");}}
         ];
 
         sortOptions.forEach(function(element) {
@@ -173,7 +173,7 @@ var DiscoveryPageStore = Reflux.createStore({
                 });
         _recommended = _recommended.filter(function (item) {
                     return item.id !== listing.id;
-        })
+        });
     }
 
 });

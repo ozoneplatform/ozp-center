@@ -6,7 +6,7 @@ var AjaxMixin = {
         return {
             errors: null,
             errorMessage: null,
-            errorStatus: null,
+            errorStatus: null
         };
     },
 

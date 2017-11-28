@@ -204,7 +204,7 @@ ListingActions.fetchOwnedListings.listen(function (profile) {
 ListingActions.fetchSimilar.listen(function (listingId) {
     ListingApi.getSimilarListings(listingId)
         .then(ListingActions.fetchSimilarCompleted.bind(null, listingId));
-})
+});
 
 
 ListingActions.fetchReviews.listen(function (listing) {
@@ -313,7 +313,7 @@ ListingActions.pendingDelete.listen(function (listing) {
     ListingApi.save(data)
     .then(ListingActions.pendingDeleteCompleted.bind(null, data))
     .then(ListingActions.listingChangeCompleted(data))
-    .fail(ListingActions.pendingDeleteFailed)
+    .fail(ListingActions.pendingDeleteFailed);
 });
 
 ListingActions.approve.listen(function (listing) {
@@ -335,7 +335,7 @@ ListingActions.undelete.listen(function (listing) {
     ListingApi.save(data)
     .then(ListingActions.undeleteCompleted.bind(null, data))
     .then(ListingActions.listingChangeCompleted(data))
-    .fail(ListingActions.pendingDeleteFailed)
+    .fail(ListingActions.pendingDeleteFailed);
 });
 
 ListingActions.deleteListing.listen(function (listing) {

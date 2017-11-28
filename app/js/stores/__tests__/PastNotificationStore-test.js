@@ -26,7 +26,7 @@ describe('PastNotificationStore', () => {
         setTimeout(() => {
             expect(notificationList).to.not.eql(PastNotificationStore.getNotifications());
             done();
-        }, 0)
+        }, 0);
     });
 
 });
