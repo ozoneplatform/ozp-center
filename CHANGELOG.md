@@ -1,5 +1,14 @@
 
-### 1.1.98 (None)   
+### 1.1.99 (None)
+
+#### Feature  
+* **discovery**:  show spinner when performing a search (category, agency, listing type, text search) ([b96cba77](https://github.com/aml-development/ozp-center/commit/b96cba7734504ad1f1749cdcf69b3354ee49a933))      
+
+#### Merge Pull Requests  
+* Merge pull request #905 from aml-development/dependency_refactor ([562e0995](https://github.com/aml-development/ozp-center/commit/562e0995e68597228266bce270044d34049776d6))
+* Merge pull request #908 from aml-development/amlng810 ([f4040472](https://github.com/aml-development/ozp-center/commit/f4040472786485ed5d41f0d6833b71d277c5353a))           
+
+### 1.1.98 (2017-11-22)   
 
 #### Merge Pull Requests  
 * Merge pull request #907 from aml-development/amlng833 ([7beed79a](https://github.com/aml-development/ozp-center/commit/7beed79ae7451902144dcc26553113f07ee99295))           
@@ -27,7 +36,10 @@
 * Merge pull request #899 from aml-development/cleanup_launch_notice ([f2333862](https://github.com/aml-development/ozp-center/commit/f2333862a131d2656ba6099dd2175458fb8e06e7))
 * Merge pull request #900 from aml-development/addNotificationType_updated ([b5b76a03](https://github.com/aml-development/ozp-center/commit/b5b76a039a93bece1eb860f4791abe3b291f79a4))
 * Merge pull request #897 from aml-development/Listing_Management_refactor ([cb39bc6d](https://github.com/aml-development/ozp-center/commit/cb39bc6dd37938b5887f72b489f4d6afa3430476))
-* Merge pull request #898 from aml-development/New_Recent_Activity_entry ([8838a081](https://github.com/aml-development/ozp-center/commit/8838a08130dc00f9ee1975746187c3df29ffb719))           
+* Merge pull request #898 from aml-development/New_Recent_Activity_entry ([8838a081](https://github.com/aml-development/ozp-center/commit/8838a08130dc00f9ee1975746187c3df29ffb719))     
+
+#### Style  
+* **ozp**:  address all eslint errors ([12c2fdc4](https://github.com/aml-development/ozp-center/commit/12c2fdc4c86856941b3471428d6a6d78701f21cc))         
 
 ### 1.1.96 (2017-11-15)
 
