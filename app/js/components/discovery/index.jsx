@@ -461,8 +461,7 @@ var Discovery = React.createClass({
         if(!this.state.featured.length) {
             return (
                 [<h4>Featured</h4>,
-                <LoadIndicator title=""
-                    showError={this.state.featuredError}
+                <LoadIndicator showError={this.state.featuredError}
                     errorMessage="Error loading Featured Listings"/>]
             );
         }
@@ -478,8 +477,7 @@ var Discovery = React.createClass({
         if(!this.state.recommended.length) {
             return (
                 [<h4>{listingMessages['recommender.recommended']}</h4>,
-                <LoadIndicator title=""
-                    showError={this.state.recommendedError}
+                <LoadIndicator showError={this.state.recommendedError}
                     errorMessage="Error loading Recommended Listings"/>]
             );
         }
@@ -498,8 +496,7 @@ var Discovery = React.createClass({
         if(!this.state.newArrivals.length) {
             return (
                 [<h4>New Arrivals</h4>,
-                <LoadIndicator title=""
-                    showError={this.state.newArrivalsError}
+                <LoadIndicator showError={this.state.newArrivalsError}
                     errorMessage="Error loading New Arrivals Listings"/>]
             );
         }
@@ -567,8 +564,7 @@ var Discovery = React.createClass({
         if(!this.state.mostPopular.length) {
             return (
                 [<h4>Most Popular</h4>,
-                <LoadIndicator title=""
-                    showError={this.state.mostPopularError}
+                <LoadIndicator showError={this.state.mostPopularError}
                     errorMessage="Error loading Most Popular Listings"/>]
             );
         }

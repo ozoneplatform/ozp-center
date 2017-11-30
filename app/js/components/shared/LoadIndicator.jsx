@@ -3,12 +3,6 @@
 var React = require('react');
 
 var LoadIndicator = React.createClass({
-    getDefaultProps() {
-        return {
-            title: 'Loading...'
-        };
-    },
-
     render() {
         var title = this.props.showError ? null : this.props.title;
         var loadIcon = this.props.showError ?
