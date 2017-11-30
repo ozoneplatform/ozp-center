@@ -2,6 +2,7 @@
 
 var UnpaginatedListingsStore = require('../../../stores/UnpaginatedListingsStore');
 var ListingActions = require('../../../actions/ListingActions');
+var { ListingApi } = require('../../../webapi/Listing');
 
 var React = require('react');
 var Reflux = require('reflux');
@@ -340,6 +341,7 @@ var TableView = React.createClass({
     },
 
     onStoreChanged: function () {
+        var me = this;
         var unpaginatedList = this.getUnpaginatedList();
         if (!unpaginatedList) {
             return;
@@ -370,21 +372,26 @@ var TableView = React.createClass({
             return result;
 
         });
+
         if (this.grid) {
             this.grid.total = counts.total;
             this.grid.records = records;
             this.grid.refresh();
             this.grid.requestComplete('success','get-records', function(){});
-
         }else{
             "warn";
         }
 
         this.props.onCountsChanged(counts);
+
+        // TODO: Figure out better way for counts updating
+        ListingApi.getAllListings(undefined, this.props.filter).then(function (response){
+            me.props.onCountsChanged(response._response.counts);
+        });
     },
 
     onListingChangeCompleted: function () {
-       this.onStoreChanged();
+        this.onStoreChanged();
     },
 
     onFetchAllListingsAtOnce: function () {
