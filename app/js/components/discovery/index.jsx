@@ -25,6 +25,7 @@ var DetailedQuery = require('./DetailedQuery.jsx');
 var ActiveStateMixin = require('../../mixins/ActiveStateMixin');
 
 var SelectBox = require('../shared/SelectBox.jsx');
+var LoadIndicator = require('../shared/LoadIndicator.jsx');
 
 var $ = require('jquery');
 require('../../utils/typeahead.js');
@@ -458,21 +459,10 @@ var Discovery = React.createClass({
 
     renderFeaturedListings() {
         if(!this.state.featured.length) {
-            if (this.state.featuredError) {
-                return(
-                    <section>
-                        <h4>Featured</h4>
-                        <span className="icon-exclamation-36 loader"></span>
-                        <h5 className="loader-message">Error loading Featured Listings</h5>
-                    </section>
-                )
-            }
-
             return (
-                <section>
-                    <h4>Featured</h4>
-                    <span className="icon-loader-36 loader loader-animate"></span>
-                </section>
+                [<h4>Featured</h4>,
+                <LoadIndicator showError={this.state.featuredError}
+                    errorMessage="Error loading Featured Listings"/>]
             );
         }
 
@@ -483,47 +473,31 @@ var Discovery = React.createClass({
         );
     },
 
-    renderRecommended(){
-        if(this.state.recommended.length){
-            if (this.state.recommendedError) {
-                return(
-                    <section>
-                        <h4>{listingMessages['recommender.recommended']}</h4>
-                        <span className="icon-exclamation-36 loader"></span>
-                        <h5 className="loader-message">Error loading Recommended Listings</h5>
-                    </section>
-                )
-            }
-
+    renderRecommended() {
+        if(!this.state.recommended.length) {
             return (
-                <section className="Discovery__Recommended" key="Discovery__Recommended">
+                [<h4>{listingMessages['recommender.recommended']}</h4>,
+                <LoadIndicator showError={this.state.recommendedError}
+                    errorMessage="Error loading Recommended Listings"/>]
+            );
+        }
+
+        return (
+            <section className="Discovery__Recommended" key="Discovery__Recommended">
                 <h4>{listingMessages['recommender.recommended']}</h4>
                 <Carousel className="new-arrival-listings" aria-label="Recommended Apps Carousel">
                     { RecommendedListingTileStorefront.fromArray(this.state.recommended, listingMessages['recommender.recommended']) }
                 </Carousel>
             </section>
-            );
-        }
-
+        );
     },
 
     renderNewArrivals() {
         if(!this.state.newArrivals.length) {
-            if (this.state.featuredError) {
-                return(
-                    <section>
-                        <h4>New Arrivals</h4>
-                        <span className="icon-exclamation-36 loader"></span>
-                        <h5 className="loader-message">Error loading New Arrivals Listings</h5>
-                    </section>
-                )
-            }
-
             return (
-                <section>
-                    <h4>New Arrivals</h4>
-                    <span className="icon-loader-36 loader loader-animate"></span>
-                </section>
+                [<h4>New Arrivals</h4>,
+                <LoadIndicator showError={this.state.newArrivalsError}
+                    errorMessage="Error loading New Arrivals Listings"/>]
             );
         }
 
@@ -588,21 +562,10 @@ var Discovery = React.createClass({
 
     renderMostPopular() {
         if(!this.state.mostPopular.length) {
-            if (this.state.featuredError) {
-                return(
-                    <section className="loader">
-                        <h4>Most Popular</h4>
-                        <span className="icon-exclamation-36 loader"></span>
-                        <h5 className="loader-message">Error loading Most Popular Listings</h5>
-                    </section>
-                )
-            }
-
             return (
-                <section>
-                    <h4>Most Popular</h4>
-                    <span className="icon-loader-36 loader loader-animate"></span>
-                </section>
+                [<h4>Most Popular</h4>,
+                <LoadIndicator showError={this.state.mostPopularError}
+                    errorMessage="Error loading Most Popular Listings"/>]
             );
         }
 
@@ -616,12 +579,7 @@ var Discovery = React.createClass({
                     { InfiniTiles }
                 </ul>
                 <p className="text-center">
-                  { this.state.loadingMore &&
-                    <section>
-                        <h4>Loading...</h4>
-                        <span className="icon-loader-36 loader loader-animate"></span>
-                    </section>
-                  }
+                  { this.state.loadingMore && <LoadIndicator/> }
                 </p>
             </section>
         );
@@ -680,12 +638,7 @@ var Discovery = React.createClass({
                     { results }
                 </ul>
                 <div className="list-unstyled listings-search-results row clearfix">
-                    { this.state.searching &&
-                      <section>
-                          <h4>Loading...</h4>
-                          <span className="icon-loader-36 loader loader-animate"></span>
-                      </section>
-                    }
+                    { this.state.searching && <LoadIndicator/> }
                 </div>
             </section>
         );

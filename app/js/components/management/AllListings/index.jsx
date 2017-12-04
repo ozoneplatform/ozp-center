@@ -40,6 +40,10 @@ var AllListings = React.createClass({
         this.setState({
             filter: this.state.filter
         });
+        if(this.refs.loadMore) {
+            this.refs.loadMore.clear();
+            this.refs.loadMore.initLoad();
+        }
         if(this.state.tableView){
             this.state.filter.offset = 0;
             w2ui.grid.offset = 0;
@@ -72,7 +76,7 @@ var AllListings = React.createClass({
             );
         } else {
             return (
-                <LoadMore className="ListingsManagement__LoadMore col-xs-9 col-lg-10 all"
+                <LoadMore ref="loadMore" className="ListingsManagement__LoadMore col-xs-9 col-lg-10 all"
                     filter={this.state.filter} onCountsChanged={this.onCountsChanged}></LoadMore>
             );
         }

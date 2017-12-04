@@ -4,6 +4,7 @@ var PaginatedListingsStore = require('../../../stores/PaginatedListingsStore');
 var ListingActions = require('../../../actions/ListingActions.js');
 
 var ListingTile = require('../../listing/ListingTile.jsx');
+var LoadIndicator = require('../../shared/LoadIndicator.jsx');
 var { UserRole } = require('ozp-react-commons/constants');
 
 
@@ -15,7 +16,8 @@ var LoadMore = React.createClass({
 
     mixins: [
         Reflux.listenTo(PaginatedListingsStore, 'onStoreChanged'),
-        Reflux.listenTo(ListingActions.listingChangeCompleted, 'onListingChangeCompleted')
+        Reflux.listenTo(ListingActions.listingChangeCompleted, 'onListingChangeCompleted'),
+        Reflux.listenTo(ListingActions.fetchAllListingsFailed, 'onFetchAllListingsFailed')
     ],
 
     propTypes: {
@@ -26,7 +28,9 @@ var LoadMore = React.createClass({
     getInitialState: function () {
         return {
             listings: [],
-            hasMore: false
+            hasMore: false,
+            loading: true,
+            loadingError: false
         };
     },
 
@@ -34,6 +38,10 @@ var LoadMore = React.createClass({
         return this.transferPropsTo(
             <div className="LoadMore">
                 { this.renderList() }
+                { (this.state.loading || this.state.loadingError) &&
+                    <LoadIndicator showError={this.state.loadingError}
+                        errorMessage="Error Loading Listings"/>
+                }
                 { this.renderLoadMoreButton() }
             </div>
         );
@@ -42,16 +50,16 @@ var LoadMore = React.createClass({
     renderList: function () {
         var children = this.generateChildren();
 
-        if (children && children.length > 0) {
+        if (children && children.length > 0 && !this.state.loadingError) {
             return <ol className="list-unstyled">{ children }</ol>;
         }
-        else {
-            return <h5 style={{marginTop: 0}}>No results found!</h5>;
+        else if(!this.state.loading) {
+            return <h5 style={{marginTop: "0"}}>No results found!</h5>;
         }
     },
 
     renderLoadMoreButton: function () {
-        if (this.state.hasMore) {
+        if (this.state.hasMore && !this.state.loading) {
             return (
                 <div className="text-center LoadMore__Toolbar">
                     <button className="btn btn-default LoadMore__Button" onClick={this.onLoadMore}>Load More</button>
@@ -89,19 +97,54 @@ var LoadMore = React.createClass({
 
         this.setState({
             listings: data,
-            hasMore: hasMore,
+            hasMore: hasMore
         });
+        this.loadSuccess();
 
         this.props.onCountsChanged(counts);
     },
 
     onListingChangeCompleted: function () {
+        this.initLoad();
         ListingActions.fetchAllListings(this.props.filter);
     },
 
+    onFetchAllListingsFailed: function () {
+        this.loadError();
+    },
+
     onLoadMore: function () {
+        this.initLoad();
         ListingActions.fetchAllListings(this.props.filter);
     },
+
+    clear() {
+        this.setState({
+            listings: []
+        });
+    },
+
+    initLoad() {
+        this.setState({
+            loading: true,
+            loadingError: false
+        });
+    },
+
+    loadSuccess() {
+        this.setState({
+            loading: false,
+            loadingError: false
+        });
+    },
+
+    loadError() {
+        this.setState({
+            loading: false,
+            loadingError: true
+        });
+    }
+
 });
 
 module.exports = LoadMore;
