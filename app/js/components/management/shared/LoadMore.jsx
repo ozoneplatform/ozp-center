@@ -4,7 +4,7 @@ var PaginatedListingsStore = require('../../../stores/PaginatedListingsStore');
 var ListingActions = require('../../../actions/ListingActions.js');
 
 var ListingTile = require('../../listing/ListingTile.jsx');
-var LoadIndicator = require('../../shared/LoadIndicator.jsx');
+var LoadIndicator = require('ozp-react-commons/components/LoadIndicator.jsx');
 var { UserRole } = require('ozp-react-commons/constants');
 
 

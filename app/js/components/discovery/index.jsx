@@ -25,7 +25,7 @@ var DetailedQuery = require('./DetailedQuery.jsx');
 var ActiveStateMixin = require('../../mixins/ActiveStateMixin');
 
 var SelectBox = require('../shared/SelectBox.jsx');
-var LoadIndicator = require('../shared/LoadIndicator.jsx');
+var LoadIndicator = require('ozp-react-commons/components/LoadIndicator.jsx');
 
 var $ = require('jquery');
 require('../../utils/typeahead.js');

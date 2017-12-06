@@ -3,7 +3,7 @@
 var React = require('react');
 var { PropTypes } = React;
 
-var LoadIndicator = require('../shared/LoadIndicator.jsx');
+var LoadIndicator = require('ozp-react-commons/components/LoadIndicator.jsx');
 
 var LoadMore = React.createClass({
 
