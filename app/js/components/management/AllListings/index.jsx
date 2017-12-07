@@ -112,8 +112,8 @@ var AllListings = React.createClass({
                     <Sidebar>
                         {toggleSwitch}
                         <ApprovalStatusFilter role={ UserRole.APPS_MALL_STEWARD } { ...sidebarFilterOptions } />
-                        <OrgFilter { ...sidebarFilterOptions } />
                         <EnabledFilter { ...sidebarFilterOptions } />
+                        <OrgFilter { ...sidebarFilterOptions } />
                     </Sidebar>
                 </div>
                 { this.renderListings() }
