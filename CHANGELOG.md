@@ -1,7 +1,28 @@
 
-### 1.1.99 (None)
+### 1.1.100 (None)
 
 #### Feature  
+* **listing management**:  add load indicators to recent activity view ([0fb6331a](https://github.com/aml-development/ozp-center/commit/0fb6331a56f6224b4ed3225135cad5121836afc8))    
+
+#### Fixes  
+* **listing management**:  fix the listings not updating within the grid and fix the count not updating on left side ([fecf3c53](https://github.com/aml-development/ozp-center/commit/fecf3c5302f551519af316bfc4b38ccd60bd67a0))     
+
+#### Merge Pull Requests  
+* Merge pull request #911 from aml-development/amlng-805-806-807 ([2f43e228](https://github.com/aml-development/ozp-center/commit/2f43e228b26ff0e29bfd4d957e6ab3bf53ac02d0))
+* Merge pull request #910 from aml-development/update_package ([b03495e6](https://github.com/aml-development/ozp-center/commit/b03495e6d6f8e65c91e1a220895e658672c4b7d2))
+* Merge branch 'master' into amlng-805-806-807 ([ada5cebb](https://github.com/aml-development/ozp-center/commit/ada5cebb33eb1af8ee12881782ba66e97aa3407d))
+* Merge pull request #912 from aml-development/grid_refresh_clean ([d4e1a971](https://github.com/aml-development/ozp-center/commit/d4e1a971cb02f26d313367e1888fc284b7bbd9a9))        
+
+#### Chore  
+* **packages**:  update moment.js to patch vulnerability ([a9b06f3d](https://github.com/aml-development/ozp-center/commit/a9b06f3d9344889321db01e1faf375f6b2dee92d))    
+
+#### Changes  
+* remove default 'Loading...' title ([1647f112](https://github.com/aml-development/ozp-center/commit/1647f112c6135fece63ceed6a2c79a8ae96f475d))     
+
+### 1.1.99 (2017-11-29)
+
+#### Feature  
+* **listing management**:  add load indicators to all listings and my listings views ([05ab6e54](https://github.com/aml-development/ozp-center/commit/05ab6e5464f1a2bd0fe7fbe315513372cfc9d93d))    
 * **discovery**:  show spinner when performing a search (category, agency, listing type, text search) ([b96cba77](https://github.com/aml-development/ozp-center/commit/b96cba7734504ad1f1749cdcf69b3354ee49a933))      
 
 #### Merge Pull Requests  
