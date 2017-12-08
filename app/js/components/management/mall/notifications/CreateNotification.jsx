@@ -5,6 +5,7 @@ var Reflux = require('reflux');
 var DatePicker = require('react-datepicker');
 var moment = require('moment');
 var Select = require('../../../shared/Select.jsx');
+var LoadIndicator = require('ozp-react-commons/components/LoadIndicator.jsx');
 
 var _ = require('../../../../utils/_.js');
 var uuid = require('../../../../utils/uuid.js');
@@ -14,7 +15,8 @@ var CreateNotification = React.createClass({
 
     mixins: [
         React.addons.LinkedStateMixin,
-        Reflux.listenTo(NotificationActions.createNotificationCompleted, 'onNotificationCreated')
+        Reflux.listenTo(NotificationActions.createNotificationCompleted, 'onNotificationCreated'),
+        Reflux.listenTo(NotificationActions.createNotificationFailed, 'onNotificationCreateFailed')
     ],
 
     getDefaultProps() {
@@ -36,7 +38,9 @@ var CreateNotification = React.createClass({
             message: '',
             hour: '00',
             minute: '00',
-            type: 'System'
+            type: 'System',
+            loading: false,
+            loadingError: false
         };
     },
 
@@ -78,6 +82,11 @@ var CreateNotification = React.createClass({
             Date.UTC(date.year(), date.month(), date.date(), parseInt(hour, 10), parseInt(minute, 10))
         );
 
+        this.setState({
+            loading: true,
+            loadingError: false
+        });
+
         NotificationActions.createNotification(this.state.uuid, {
             expiresDate: expiresDate,
             message: message,
@@ -87,11 +96,22 @@ var CreateNotification = React.createClass({
 
     /* eslint-disable no-unused-vars */
     onNotificationCreated(uuid, notification) {
+        this.setState({
+            loading: false,
+            loadingError: false
+        });
         if (this.state.uuid === uuid) {
             this.onReset();
         }
     },
     /* eslint-enable no-unused-vars */
+
+    onNotificationCreateFailed() {
+        this.setState({
+            loading: false,
+            loadingError: true
+        });
+    },
 
     render() {
         return (
@@ -128,7 +148,7 @@ var CreateNotification = React.createClass({
                                 </div>
                             </div>
                         </div>
-                        
+
                     </div>
                     <div className="form-group">
                         <label htmlFor="notification-message">Notification text</label>
@@ -140,12 +160,19 @@ var CreateNotification = React.createClass({
                         <button
                             ref="send"
                             className="btn btn-success btn-small"
-                            disabled={!this.state.message || !this.state.date}
+                            disabled={!this.state.message || !this.state.date || this.state.loading}
                             onClick={ this.onSend }
                         >
                             Send
                         </button>
                     </div>
+                    { (this.state.loading || this.state.loadingError) &&
+                        <div>
+                            <LoadIndicator showError={this.state.loadingError}
+                                errorMessage="Error Creating Notification"
+                            />
+                        </div>
+                    }
                 </form>
             </div>
         );

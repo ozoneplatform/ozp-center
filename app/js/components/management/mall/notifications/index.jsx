@@ -6,6 +6,7 @@ var CreateNotification = require('./CreateNotification.jsx');
 var ActiveNotification = require('./ActiveNotification.jsx');
 var PastNotification = require('./PastNotification.jsx');
 var LoadMore = require('../../../shared/LoadMore.jsx');
+var LoadIndicator = require('ozp-react-commons/components/LoadIndicator.jsx');
 
 var ActiveNotificationsStore = require('../../../../stores/ActiveNotificationStore.js');
 var PastNotificationsStore = require('../../../../stores/PastNotificationStore.js');
@@ -13,7 +14,10 @@ var NotificationActions = require('../../../../actions/NotificationActions.js');
 
 var ActiveNotifications = React.createClass({
     mixins: [
-        Reflux.listenTo(ActiveNotificationsStore, 'onStoreChanged')
+        Reflux.listenTo(ActiveNotificationsStore, 'onStoreChanged'),
+        Reflux.listenTo(NotificationActions.fetchActive, 'onFetchActive'),
+        Reflux.listenTo(NotificationActions.fetchActiveCompleted, 'onFetchActiveCompleted'),
+        Reflux.listenTo(NotificationActions.fetchActiveFailed, 'onFetchActiveFailed')
     ],
 
     getState() {
@@ -22,6 +26,27 @@ var ActiveNotifications = React.createClass({
             notifications: notificationList.data,
             hasMore: notificationList.hasMore
         };
+    },
+
+    onFetchActive() {
+        this.setState({
+            loading: true,
+            loadingError: false
+        });
+    },
+
+    onFetchActiveCompleted() {
+        this.setState({
+            loading: false,
+            loadingError: false
+        });
+    },
+
+    onFetchActiveFailed() {
+        this.setState({
+            loading: false,
+            loadingError: true
+        });
     },
 
     getInitialState() {
@@ -47,7 +72,10 @@ var ActiveNotifications = React.createClass({
         return (
             <div>
                 <h4 style={{marginTop: 0}}>Active Notifications</h4>
-                { notificationComponents }
+                { this.state.loading || this.state.loadingError ?
+                    <LoadIndicator showError={this.state.loadingError}
+                        errorMessage="Error Loading Active Notifications"/>
+                    : notificationComponents }
             </div>
         );
     }
@@ -55,7 +83,10 @@ var ActiveNotifications = React.createClass({
 
 var PastNotifications = React.createClass({
     mixins: [
-        Reflux.listenTo(PastNotificationsStore, 'onStoreChanged')
+        Reflux.listenTo(PastNotificationsStore, 'onStoreChanged'),
+        Reflux.listenTo(NotificationActions.fetchPast, 'onFetchPast'),
+        Reflux.listenTo(NotificationActions.fetchPastCompleted, 'onFetchPastCompleted'),
+        Reflux.listenTo(NotificationActions.fetchPastFailed, 'onFetchPastFailed')
     ],
 
     getState() {
@@ -68,6 +99,24 @@ var PastNotifications = React.createClass({
 
     getInitialState() {
         return this.getState();
+    },
+
+    onFetchPast() {
+        if(this.refs.loadMore) {
+            this.refs.loadMore.initLoad();
+        }
+    },
+
+    onFetchPastCompleted() {
+        if(this.refs.loadMore) {
+            this.refs.loadMore.loadSuccess();
+        }
+    },
+
+    onFetchPastFailed() {
+        if(this.refs.loadMore) {
+            this.refs.loadMore.loadError();
+        }
     },
 
     onStoreChanged() {
@@ -95,7 +144,7 @@ var PastNotifications = React.createClass({
         return (
             <div>
                 <h4 style={{marginTop: 0}}>Past Notifications</h4>
-                <LoadMore hasMore={this.state.hasMore} onLoadMore={this.fetchMore}>
+                <LoadMore ref="loadMore" hasMore={this.state.hasMore} onLoadMore={this.fetchMore}>
                     { PastNotification.fromArray(this.state.notifications, null, true, this.props.fn) }
                 </LoadMore>
             </div>
