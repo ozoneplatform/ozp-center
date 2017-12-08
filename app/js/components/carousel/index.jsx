@@ -30,26 +30,6 @@ var CarouselRightArrow = React.createClass({
     }
 });
 
-var CarouselSlide = React.createClass({
-    render() {
-        return(
-            <div className="carousel__slide">
-                {this.props.slide}
-            </div>
-        );
-    }
-});
-
-var FeaturedCarouselSlide = React.createClass({
-    render() {
-        return(
-            <div className="carousel__slide carousel__slide--featured">
-                {this.props.slide}
-            </div>
-        );
-    }
-});
-
 var Carousel = React.createClass({
 
     propTypes: {
@@ -80,7 +60,6 @@ var Carousel = React.createClass({
             }, 500, function() {
             });
         });
-
     },
 
     goToNextSlide: function (e) {
@@ -97,7 +76,6 @@ var Carousel = React.createClass({
                 "margin-left": '0px'
             });
         });
-
     },
 
     getFeaturedSlideDeck: function() {
@@ -108,21 +86,13 @@ var Carousel = React.createClass({
 
     render: function() {
         var items;
+        var classes = "carousel__slide" + (this.state.slides[0].type.displayName==="FeaturedListingTile" ? " carousel__slide--featured" : "");
 
-        //is this bad practice in react?
-        if (this._currentElement.ref==="featured"){
-            items = this.state.slides.map((slide, index) =>
-                <FeaturedCarouselSlide
-                    slide={slide}
-                />
-            );
-        }else{
-            items = this.state.slides.map((slide, index) =>
-                <CarouselSlide
-                    slide={slide}
-                />
-            );
-        }
+        items = this.state.slides.map((slide, index) =>
+            <div className={classes}>
+                {slide}
+            </div>
+        );
 
         return (
             <div className="carousel">
@@ -138,7 +108,6 @@ var Carousel = React.createClass({
             </div>
         );
     }
-
 });
 
 module.exports = Carousel;
