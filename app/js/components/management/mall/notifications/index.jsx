@@ -102,24 +102,21 @@ var PastNotifications = React.createClass({
     },
 
     onFetchPast() {
-        this.setState({
-            loading: true,
-            loadingError: false
-        });
+        if(this.refs.loadMore) {
+            this.refs.loadMore.initLoad();
+        }
     },
 
     onFetchPastCompleted() {
-        this.setState({
-            loading: false,
-            loadingError: false
-        });
+        if(this.refs.loadMore) {
+            this.refs.loadMore.loadSuccess();
+        }
     },
 
     onFetchPastFailed() {
-        this.setState({
-            loading: false,
-            loadingError: true
-        });
+        if(this.refs.loadMore) {
+            this.refs.loadMore.loadError();
+        }
     },
 
     onStoreChanged() {
@@ -147,13 +144,9 @@ var PastNotifications = React.createClass({
         return (
             <div>
                 <h4 style={{marginTop: 0}}>Past Notifications</h4>
-                { this.state.loading || this.state.loadingError ?
-                    <LoadIndicator showError={this.state.loadingError}
-                        errorMessage="Error Loading Past Notifications"/> :
-                    <LoadMore hasMore={this.state.hasMore} onLoadMore={this.fetchMore}>
-                        { PastNotification.fromArray(this.state.notifications, null, true, this.props.fn) }
-                    </LoadMore>
-                }
+                <LoadMore ref="loadMore" hasMore={this.state.hasMore} onLoadMore={this.fetchMore}>
+                    { PastNotification.fromArray(this.state.notifications, null, true, this.props.fn) }
+                </LoadMore>
             </div>
         );
     }

@@ -28,7 +28,7 @@ var LoadMore = React.createClass({
                 { this.renderList() }
                 { (this.state.loading || this.state.loadingError) &&
                     <LoadIndicator showError={this.state.loadingError}
-                        errorMessage="Error Loading Listings"/>
+                        errorMessage="Error Loading Data"/>
                 }
                 { this.renderLoadMoreButton() }
             </div>
