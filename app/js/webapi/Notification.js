@@ -70,7 +70,7 @@ module.exports = {
         url = url || `${API_URL}/api/notifications/expired/?offset=0&limit=${PAGINATION_MAX}`;
 
         if (id) {
-          url += `&id=${id}`;
+          url += `&listing=${id}`;
         }
         return $.getJSON(url)
             .then((response) => new PaginatedResponse(humps.camelizeKeys(response), this.parse));

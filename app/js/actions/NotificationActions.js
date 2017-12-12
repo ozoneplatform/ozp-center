@@ -55,13 +55,8 @@ var NotificationActions = createActions({
             .fail(NotificationActions.fetchPastFailed);
     },
 
-    fetchPastById(paginatedList, id) {
-      var url;
-      if (paginatedList && paginatedList.nextLink) {
-          url = paginatedList.nextLink;
-      }
-
-      NotificationApi.fetchPast(url, id)
+    fetchPastById(id) {
+      NotificationApi.fetchPast(null, id)
           .then(NotificationActions.fetchPastCompleted)
           .fail(NotificationActions.fetchPastFailed);
     },

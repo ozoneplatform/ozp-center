@@ -16,6 +16,7 @@ var LoadMore = require('../shared/LoadMore.jsx');
 var PaginatedChangeLogByIDStore = require('../../stores/PaginatedChangeLogByIDStore');
 var SystemStateMixin = require('../../mixins/SystemStateMixin');
 var ApprovalStatusIcons = require('../shared/ApprovalStatusIcons.jsx');
+var LoadIndicator = require('ozp-react-commons/components/LoadIndicator.jsx');
 
 var Toggle = React.createClass({
     propTypes: {
@@ -110,7 +111,14 @@ var AdministrationTab = React.createClass({
 
     getInitialState: function () {
         PaginatedChangeLogByIDStore.resetChangeLogByIDStore();
-        return { prevId: this.props.listing.id, editingRejection: false, hasMore: true, changeLogs: [] };
+        return { prevId: this.props.listing.id, editingRejection: false, hasMore: true, changeLogs: [], loading: false, loadingError: false  };
+    },
+
+    componentWillMount: function(){
+        this.setState({
+            loading: true,
+            loadingError: false
+        });
     },
 
     componentWillReceiveProps: function (newProps) {
@@ -135,7 +143,9 @@ var AdministrationTab = React.createClass({
         var { data, hasMore } = paginatedList;
         this.setState({
             changeLogs: data,
-            hasMore: hasMore
+            hasMore: hasMore,
+            loading: false,
+            loadingError: false
         });
     },
 
@@ -174,13 +184,18 @@ var AdministrationTab = React.createClass({
             <div className="tab-pane active Quickview__ChangeLog row">
                 { this.renderStatus() }
                 <div className="col-xs-8 col-right">
-                    <section>
-                        <h5>Listing Changes</h5>
-                        <LoadMore className="RecentActivity__activities all"
+                    {(this.state.loading) ?
+                        <LoadIndicator showError={this.state.loadingError}
+                            errorMessage="Error Getting Reviews"
+                        /> :
+                        <section>
+                            <h5>Listing Changes</h5>
+                            <LoadMore className="RecentActivity__activities all"
                                   hasMore={hasMore} onLoadMore={this.onLoadMore}>
                             { logs }
-                        </LoadMore>
-                    </section>
+                            </LoadMore>
+                        </section>
+                    }
                 </div>
             </div>
         );
