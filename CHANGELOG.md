@@ -1,19 +1,47 @@
 
-### 1.1.100 (None)
+### 1.1.101 (None)
+
+#### Feature 
+* **notifications**
+  *  failing test fix ([515b26c5](https://github.com/aml-development/ozp-center/commit/515b26c555262c2642b0b20bc0d23c4243142f93))
+  *  add loading indicators to center settings  ([de1454de](https://github.com/aml-development/ozp-center/commit/de1454de6033faa2fbf65a2188bc3f2ba5061c83))
+  *  add loading indicators to center settings  ([cbd2426a](https://github.com/aml-development/ozp-center/commit/cbd2426af4f1a7666e61698c641a52f4c464d592))     
+* **quickview**:  Add loading indicator to tabs ([98c981ed](https://github.com/aml-development/ozp-center/commit/98c981ed0da59022b880615eeeca5d4c744e7307))     
+
+#### Refactor 
+* **carousel**
+  *  remove hardcoded values ([e47fb54d](https://github.com/aml-development/ozp-center/commit/e47fb54d8e11449a11bebc538f74f95e90d65fae))
+  *  create arrows when needed ([9caedd60](https://github.com/aml-development/ozp-center/commit/9caedd606f2a2f73f3963a637f194171e9031f17))
+  *  Modifications to render logic ([bca81d27](https://github.com/aml-development/ozp-center/commit/bca81d277005f8729f9036602ab7db6765eed749))     
+
+#### Merge Pull Requests  
+* Merge pull request #916 from aml-development/additional_load_indicators ([d99a6aa3](https://github.com/aml-development/ozp-center/commit/d99a6aa3973a47c1c94149d80e1193b034d48d15))
+* Merge pull request #913 from aml-development/new_carousel_work ([a0a2934f](https://github.com/aml-development/ozp-center/commit/a0a2934fd7006e9af4af130c754c96dfe5b3b107))
+* Merge branch 'additional_load_indicators' of github.com:aml-development/ozp-center into additional_load_indicators ([7052bee3](https://github.com/aml-development/ozp-center/commit/7052bee382e3aeae2bf52da29a4a06cbd38b0f2a))
+* Merge pull request #914 from aml-development/move_enabled_listing_management ([513a96be](https://github.com/aml-development/ozp-center/commit/513a96beb3004662b92b3c36ac728a1cdfbba827))           
+
+### 1.1.100 (2017-12-07)
 
 #### Feature  
 * **listing management**:  add load indicators to recent activity view ([0fb6331a](https://github.com/aml-development/ozp-center/commit/0fb6331a56f6224b4ed3225135cad5121836afc8))    
 
 #### Fixes  
-* **listing management**:  fix the listings not updating within the grid and fix the count not updating on left side ([fecf3c53](https://github.com/aml-development/ozp-center/commit/fecf3c5302f551519af316bfc4b38ccd60bd67a0))     
+* **listing management**:  fix the listings not updating within the grid and fix the count not updating on left side ([fecf3c53](https://github.com/aml-development/ozp-center/commit/fecf3c5302f551519af316bfc4b38ccd60bd67a0))    
+
+#### Refactor  
+* **carousel**:  Remove and Replace caroufredsel ([4cfb475c](https://github.com/aml-development/ozp-center/commit/4cfb475c538b149f69aafe240432900adc27dc4c))    
 
 #### Merge Pull Requests  
 * Merge pull request #911 from aml-development/amlng-805-806-807 ([2f43e228](https://github.com/aml-development/ozp-center/commit/2f43e228b26ff0e29bfd4d957e6ab3bf53ac02d0))
 * Merge pull request #910 from aml-development/update_package ([b03495e6](https://github.com/aml-development/ozp-center/commit/b03495e6d6f8e65c91e1a220895e658672c4b7d2))
 * Merge branch 'master' into amlng-805-806-807 ([ada5cebb](https://github.com/aml-development/ozp-center/commit/ada5cebb33eb1af8ee12881782ba66e97aa3407d))
-* Merge pull request #912 from aml-development/grid_refresh_clean ([d4e1a971](https://github.com/aml-development/ozp-center/commit/d4e1a971cb02f26d313367e1888fc284b7bbd9a9))        
+* Merge pull request #912 from aml-development/grid_refresh_clean ([d4e1a971](https://github.com/aml-development/ozp-center/commit/d4e1a971cb02f26d313367e1888fc284b7bbd9a9))     
+
+#### Style  
+* **listing managment**:  move enabled filter ([d0e9637e](https://github.com/aml-development/ozp-center/commit/d0e9637ed5ef42839e83d77c89c3a75d3c15ff25))      
 
 #### Chore  
+* **load indicator**:  refactor indicator, moving it to ozp-react-commons ([cd5c3c41](https://github.com/aml-development/ozp-center/commit/cd5c3c41c92b8eb66be3ca89d6da96de54d37bd3))    
 * **packages**:  update moment.js to patch vulnerability ([a9b06f3d](https://github.com/aml-development/ozp-center/commit/a9b06f3d9344889321db01e1faf375f6b2dee92d))    
 
 #### Changes  
