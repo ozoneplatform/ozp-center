@@ -33,8 +33,8 @@ var ActiveNotification = React.createClass({
         e.innerHTML = message;
 
         return (
-            <div className="PastNotification">
-                <div className="PastNotification__Header">
+            <div className="ActiveNotification">
+                <div className="ActiveNotification__Header">
                     <h5 style={{margin: 0, fontWeight: 400}}>{(listing) ? listing.title : 'AppsMall'}</h5>
                     <em>Created: <_Date date={created} /> at <Time date={created} /><br/></em>
                     <em>Expires: <_Date date={expiresDate} /> at <Time date={expiresDate} /></em>

@@ -30,13 +30,8 @@ var PastNotificationStore = Reflux.createStore({
     },
 
     fetchPastCompleted(notifications) {
-        if (_resetNotifications) {
-            _notifications = new PaginatedList(notifications);
-            _resetNotifications = false;
-        }
-        else {
+        this.init();
             _notifications.receivePage(notifications);
-        }
         this.trigger();
     },
 

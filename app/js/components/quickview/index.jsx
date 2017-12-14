@@ -22,7 +22,7 @@ var AdministrationTab = require('./AdministrationTab.jsx');
 var NotificationsTab = require('./NotificationsTab.jsx');
 var Recommendations = require('./Recommendations.jsx');
 var ListingActions = require('../../actions/ListingActions');
-var LoadIndicator = require('../shared/LoadIndicator.jsx');
+var LoadIndicator = require('ozp-react-commons/components/LoadIndicator.jsx');
 
 var tabs = {
     'overview': OverviewTab,

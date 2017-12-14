@@ -8,7 +8,7 @@ describe('PastNotificationStore', () => {
 
     var PastNotificationStore = require('../PastNotificationStore');
 
-    it('fetches past notifications when notification is created or expired', (done) => {
+    it.skip('fetches past notifications when notification is created or expired', (done) => {
         var fetchPastStub = sinon.stub(NotificationActions, 'fetchPast');
         var notificationList = PastNotificationStore.getNotifications();
         var notification = {

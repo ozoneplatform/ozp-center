@@ -3,7 +3,7 @@
 var React = require('react');
 var { PropTypes } = React;
 
-var LoadIndicator = require('../shared/LoadIndicator.jsx');
+var LoadIndicator = require('ozp-react-commons/components/LoadIndicator.jsx');
 
 var LoadMore = React.createClass({
 
@@ -28,7 +28,7 @@ var LoadMore = React.createClass({
                 { this.renderList() }
                 { (this.state.loading || this.state.loadingError) &&
                     <LoadIndicator showError={this.state.loadingError}
-                        errorMessage="Error Loading Listings"/>
+                        errorMessage="Error Loading Data"/>
                 }
                 { this.renderLoadMoreButton() }
             </div>
