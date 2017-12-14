@@ -47,7 +47,9 @@ var Carousel = React.createClass({
     goToPrevSlide: function (e) {
         e.preventDefault();
         var me = this;
-        var img_width = ((this.refs.slides.getDOMNode()).getBoundingClientRect()).width + 30;
+        var slide = this.refs.slides.getDOMNode();
+        var margin = parseInt($(slide).css('margin-right')) + parseInt($(slide).css('margin-left'));
+        var img_width = (slide.getBoundingClientRect()).width + margin;
         let { slides } = me.state;
         let slidesLength = slides.length;
         var temp = slides.splice(0, slidesLength-1);
@@ -65,7 +67,9 @@ var Carousel = React.createClass({
     goToNextSlide: function (e) {
         e.preventDefault();
         var me = this;
-        var img_width = ((this.refs.slides.getDOMNode()).getBoundingClientRect()).width + 30;
+        var slide = this.refs.slides.getDOMNode();
+        var margin = parseInt($(slide).css('margin-right')) + parseInt($(slide).css('margin-left'));
+        var img_width = (slide.getBoundingClientRect()).width + margin;
         $(this.refs.slideList.getDOMNode()).animate({
             "margin-left": '-=' + img_width
         }, 500, function() {
@@ -87,7 +91,9 @@ var Carousel = React.createClass({
     checkArrows: function() {
     //This will make arrows go away if there are fewer listings than screen size.
         var space = ((this.refs.slideList.getDOMNode()).getBoundingClientRect()).width;
-        var slide = ((this.refs.slides.getDOMNode()).getBoundingClientRect()).width + 30;
+        var slides = this.refs.slides.getDOMNode();
+        var margin = parseInt($(slides).css('margin-right')) + parseInt($(slides).css('margin-left'));
+        var slide = (slides.getBoundingClientRect()).width + margin;
         slide = slide * this.state.slides.length;
         if(slide < space){
             this.setState({
