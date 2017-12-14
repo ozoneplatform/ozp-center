@@ -27,7 +27,6 @@
     "babel-core": "^6.8.0",
     "babel-loader": "^6.2.4",
     "babel-runtime": "^6.6.1",
-    "caroufredsel": "git://github.com/ozone-utils/caroufredsel",
     "chai": "1.10.0",
     "coffee-script": "1.8.0",
     "conventional-changelog": "0.0.11",

@@ -2,76 +2,147 @@
 
 var React = require('react');
 
-require('caroufredsel');
+var CarouselLeftArrow = React.createClass({
+    render() {
+        return (
+            <a
+                href="#"
+                className="carousel__arrow carousel__arrow--left"
+                onClick={this.props.onClick}
+                >
+                    <i className="center__icon icon-caret-left-white"></i>
+            </a>
+        );
+    }
+});
 
+var CarouselRightArrow = React.createClass({
+    render() {
+        return (
+            <a
+                href="#"
+                className="carousel__arrow carousel__arrow--right"
+                onClick={this.props.onClick}
+                >
+                    <i className="center__icon icon-caret-right-white"></i>
+            </a>
+        );
+    }
+});
 
 var Carousel = React.createClass({
 
-    // http://docs.dev7studios.com/jquery-plugins/caroufredsel-advanced
     propTypes: {
-        children: React.PropTypes.array,
-
-        // auto init jquery plugin on mount
-        autoInit: React.PropTypes.bool
+        slides: React.PropTypes.array
     },
 
-    getDefaultProps: function () {
-        return {
-            autoInit: true
-        };
+    getInitialState: function() {
+        // Leaving this for if Featured ever becomes a chronological array
+        // if (this._currentElement.ref==="featured"){
+        //     return {slides: this.props.slides.reverse()  };
+        // }
+        return {slides: this.props.slides, showArrows : true};
     },
 
-    render: function () {
-        var { className, ...other } = this.props;
-        var classes = [className, 'carousel-wrapper'].join(' ');
+    goToPrevSlide: function (e) {
+        e.preventDefault();
+        var me = this;
+        var slide = this.refs.slides.getDOMNode();
+        var margin = parseInt($(slide).css('margin-right')) + parseInt($(slide).css('margin-left'));
+        var img_width = (slide.getBoundingClientRect()).width + margin;
+        let { slides } = me.state;
+        let slidesLength = slides.length;
+        var temp = slides.splice(0, slidesLength-1);
+        me.setState({slides: slides.concat(temp)});
+        $(this.refs.slideList.getDOMNode()).animate({
+            "margin-left": '-=' + img_width
+        }, 0, function() {
+            $(this).animate({
+                "margin-left": '+=' + img_width
+            }, 500, function() {
+            });
+        });
+    },
 
-        return (
-            <div className={classes} {...other}>
-                <div className="carousel">
-                    <ul ref="list" className="list-unstyled">
-                        { this.props.children }
-                    </ul>
-                    <div className="clearfix"></div>
-                </div>
-                <button className="prev btn hidden" href="#" ref="prev" aria-label="previous carousel button"><i className="icon-caret-left-white" alt=""></i></button>
-                <button className="next btn hidden" href="#" ref="next" aria-label="next carousel button"><i className="icon-caret-right-white" alt=""></i></button>
+    goToNextSlide: function (e) {
+        e.preventDefault();
+        var me = this;
+        var slide = this.refs.slides.getDOMNode();
+        var margin = parseInt($(slide).css('margin-right')) + parseInt($(slide).css('margin-left'));
+        var img_width = (slide.getBoundingClientRect()).width + margin;
+        $(this.refs.slideList.getDOMNode()).animate({
+            "margin-left": '-=' + img_width
+        }, 500, function() {
+            let { slides } = me.state;
+            var temp = slides.splice(0, 1);
+            me.setState({slides: slides.concat(temp)});
+            $(this).css({
+                "margin-left": '0px'
+            });
+        });
+    },
+
+    getFeaturedSlideDeck: function() {
+        let {slides} = this.state;
+        slides.reverse();
+        this.setState({slides: slides});
+    },
+
+    checkArrows: function() {
+    //This will make arrows go away if there are fewer listings than screen size.
+        var space = ((this.refs.slideList.getDOMNode()).getBoundingClientRect()).width;
+        var slides = this.refs.slides.getDOMNode();
+        var margin = parseInt($(slides).css('margin-right')) + parseInt($(slides).css('margin-left'));
+        var slide = (slides.getBoundingClientRect()).width + margin;
+        slide = slide * this.state.slides.length;
+        if(slide < space){
+            this.setState({
+                showArrows : false
+            })
+        }else{
+            this.setState({
+                showArrows : true
+            })
+        }
+    },
+
+    componentDidMount: function() {
+        var me = this;
+        $( window ).resize(function(){
+            me.checkArrows()
+        });
+        this.checkArrows();
+    },
+
+    render: function() {
+        var items;
+        var showArrows = this.state.showArrows;
+        var classes = "carousel__slide" + (this.state.slides[0].type.displayName==="FeaturedListingTile" ? " carousel__slide--featured" : "");
+
+        items = this.state.slides.map((slide, index) =>
+            <div className={classes} ref="slides">
+                {slide}
             </div>
         );
-    },
 
-    componentDidMount: function () {
-        this.renderCarousel();
-    },
-
-    componentDidUpdate: function (prevProps) {
-        if (prevProps.autoInit === false && this.props.autoInit === true) {
-            this.renderCarousel();
-        }
-    },
-
-    renderCarousel: function () {
-        if (this.props.autoInit) {
-            var options = Object.assign({
-                prev: $(this.refs.prev.getDOMNode()),
-                next: $(this.refs.next.getDOMNode()),
-                auto: false,
-                scroll: {
-                    easing: 'quadratic'
+        return (
+            <div className="carousel" onResize={() => console.log('resized!')}>
+                {showArrows ?
+                    <div>
+                        {items.length === 1 ?
+                            null : <CarouselLeftArrow onClick={e => this.goToPrevSlide(e)} /> }
+                        {items.length === 1 ?
+                            null : <CarouselRightArrow onClick={e => this.goToNextSlide(e)} /> }
+                    </div> : null
                 }
-            }, this.props.options);
 
-            this._$carousel = $(this.refs.list.getDOMNode()).carouFredSel(options, {
-                wrapper: 'parent'
-            });
-        }
-    },
+                <ul className="carousel__slides" ref="slideList">
+                    {items}
+                </ul>
 
-    componentWillUnmount: function () {
-        if (this._$carousel) {
-            this._$carousel.trigger('destroy');
-        }
+            </div>
+        );
     }
-
 });
 
 module.exports = Carousel;

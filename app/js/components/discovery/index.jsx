@@ -485,9 +485,7 @@ var Discovery = React.createClass({
         return (
             <section className="Discovery__Recommended" key="Discovery__Recommended">
                 <h4>{listingMessages['recommender.recommended']}</h4>
-                <Carousel className="new-arrival-listings" aria-label="Recommended Apps Carousel">
-                    { RecommendedListingTileStorefront.fromArray(this.state.recommended, listingMessages['recommender.recommended']) }
-                </Carousel>
+                <Carousel className="new-arrival-listings" aria-label="Recommended Apps Carousel" slides={ RecommendedListingTileStorefront.fromArray(this.state.recommended, listingMessages['recommender.recommended']) } />
             </section>
         );
     },
@@ -504,9 +502,7 @@ var Discovery = React.createClass({
         return (
             <section className="Discovery__NewArrivals" key="Discovery__NewArrivals">
                 <h4>New Arrivals</h4>
-                <Carousel className="new-arrival-listings" aria-label="New Arrivals Carousel">
-                    { ListingTile.fromArray(this.state.newArrivals) }
-                </Carousel>
+                <Carousel className="new-arrival-listings" aria-label="New Arrivals Carousel" slides={ListingTile.fromArray(this.state.newArrivals)} />
             </section>
         );
     },
