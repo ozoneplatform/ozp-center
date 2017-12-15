@@ -35,6 +35,8 @@ function getState(profileData) {
 var CenterLaunchLink = React.createClass({
     mixins: [Reflux.listenTo(SelfStore, 'onStoreUpdate'), Reflux.connect(SelfStore), Navigation, CurrentPath, State],
 
+    _elementsToFixOnLaunch: ".SearchListingTile .clickable-rating, .carousel__arrow, #header, #sub-header, #globalNav",
+
     propTypes: {
         listing: React.PropTypes.object.isRequired
     },
@@ -63,8 +65,12 @@ var CenterLaunchLink = React.createClass({
         });
 
         if (this.state.leavingOzpWarningFlag == true && this.state.currentUser.leavingOzpWarningFlag == true) {
+            $(this._elementsToFixOnLaunch).each(function() {
+                $(this).attr('data-original-z-index', $(this).css('z-index'));
+                $(this).css('z-index', 1);
+            });
+
             var me = this;
-            $(".SearchListingTile .clickable-rating").css({"z-index":"1"});
             timeout = setTimeout(function(){
                 me.reset();
             }, me.state.timeleft*1000);
@@ -129,7 +135,13 @@ var CenterLaunchLink = React.createClass({
     },
 
     reset: function(){
-        $(".SearchListingTile .clickable-rating").css({"z-index":"2"});
+        $(this._elementsToFixOnLaunch).each(function() {
+            if($(this).is("[data-original-z-index]")) {
+                $(this).css('z-index', '');
+                $(this).removeAttr('data-original-z-index');
+            }
+        });
+
         this.setState({
             'launchWarning': false,
             'timeleft': time,
