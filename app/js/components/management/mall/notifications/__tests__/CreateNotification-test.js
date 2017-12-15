@@ -41,9 +41,12 @@ describe('CreateNotification', function () {
         var createNotification = TestUtils.renderIntoDocument(<CreateNotification fn={() => function(){this.setState({message: message});}}/>);
         var resetSpy = sinon.spy(createNotification, 'onReset');
         var setStateSpy = sinon.spy(createNotification, 'setState');
+        var date = new Date();
+        date.setDate(date.getDate() + 1);
         NotificationActions.createNotificationCompleted(createNotification.state.uuid, {
             id: Math.random(),
-            message: 'TEST'
+            message: 'TEST',
+            expiresDate: date
         });
         expect(resetSpy.calledOnce).to.be.ok;
 
