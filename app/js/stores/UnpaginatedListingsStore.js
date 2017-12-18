@@ -35,22 +35,25 @@ var UnpaginatedListingsStore = Reflux.createStore({
     onFetchAllListingsAtOnceCompleted: function (filter, response) {
         var key = filterKey(filter);
         var page = new PaginatedList (response);
-     
+
         _unpaginatedListByFilter[key] = page;
         this.trigger();
     },
 
     onListingChangeCompleted: function (data) {
+        var dataChanged = false;
         for (var key in _unpaginatedListByFilter){
             var list = _unpaginatedListByFilter[key].data;
             for (var listing in list){
                 var entry = list[listing];
                 if (entry.id == data.id){
                     list[listing] = data;
-                    this.trigger();
-                    return;
+                    dataChanged = true;
                 }
             }
+        }
+        if(dataChanged) {
+            this.trigger();
         }
     },
 
