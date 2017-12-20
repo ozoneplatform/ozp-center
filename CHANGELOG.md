@@ -1,12 +1,28 @@
 
-### 1.1.101 (None)
+### 1.1.102 (None) 
+
+#### Fixes  
+* **launch popup**:  modal correctly stacks on top when launched ([15a1a963](https://github.com/aml-development/ozp-center/commit/15a1a96348b636fbcaa6ce9869c592a9fe20a949))    
+
+#### Refactor  
+* **pastnotification**:  refactor to use store ([b364764d](https://github.com/aml-development/ozp-center/commit/b364764d75fa06f1b657c43ae871c0af72b4e0b3))    
+
+#### Merge Pull Requests  
+* Merge pull request #918 from aml-development/PastNotification_refactor ([f891729e](https://github.com/aml-development/ozp-center/commit/f891729e19c6cc418e26a3ca165aaa5c16991b79))
+* Merge pull request #915 from aml-development/grid_refresh_clean ([e2bb72fc](https://github.com/aml-development/ozp-center/commit/e2bb72fca70d7e932c5018b26f687a5bb151e9ae))
+* Merge pull request #917 from aml-development/modal_stacking_hotfix ([47e90043](https://github.com/aml-development/ozp-center/commit/47e900431005795aa5cb243363bb12ec775582ab))           
+
+### 1.1.101 (2017-12-14)
 
 #### Feature 
 * **notifications**
   *  failing test fix ([515b26c5](https://github.com/aml-development/ozp-center/commit/515b26c555262c2642b0b20bc0d23c4243142f93))
   *  add loading indicators to center settings  ([de1454de](https://github.com/aml-development/ozp-center/commit/de1454de6033faa2fbf65a2188bc3f2ba5061c83))
   *  add loading indicators to center settings  ([cbd2426a](https://github.com/aml-development/ozp-center/commit/cbd2426af4f1a7666e61698c641a52f4c464d592))     
-* **quickview**:  Add loading indicator to tabs ([98c981ed](https://github.com/aml-development/ozp-center/commit/98c981ed0da59022b880615eeeca5d4c744e7307))     
+* **quickview**:  Add loading indicator to tabs ([98c981ed](https://github.com/aml-development/ozp-center/commit/98c981ed0da59022b880615eeeca5d4c744e7307))    
+
+#### Fixes  
+* **listing management**:  correctly sync data with table views on edit ([94e15f14](https://github.com/aml-development/ozp-center/commit/94e15f1495dc6b4bcc12840ba3d48cf61fa8722f))    
 
 #### Refactor 
 * **carousel**
