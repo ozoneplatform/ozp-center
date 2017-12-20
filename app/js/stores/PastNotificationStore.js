@@ -1,26 +1,26 @@
 'use strict';
 
 var Reflux = require('reflux');
+var _ = require('../utils/_');
 var NotificationActions = require('../actions/NotificationActions.js');
 var PaginatedList = require('../utils/PaginatedList.js');
+var _notifications;
 
 var _resetNotifications = false;
 var resetNotifications = function () {
     _resetNotifications = true;
-    NotificationActions.fetchPast();
 };
 
 NotificationActions.createNotificationCompleted.listen(resetNotifications);
 NotificationActions.expireNotificationCompleted.listen(resetNotifications);
 NotificationActions.deleteNotificationCompleted.listen(resetNotifications);
 
-var _notifications;
-
 var PastNotificationStore = Reflux.createStore({
 
     init() {
         _notifications = new PaginatedList();
         this.listenTo(NotificationActions.fetchPastCompleted, this.fetchPastCompleted);
+        this.listenTo(NotificationActions.createNotificationCompleted, this.onCreateCompleted);
         this.listenTo(NotificationActions.expireNotificationCompleted, this.onExpireCompleted);
         this.listenTo(NotificationActions.deleteNotificationCompleted, this.onDeleteCompleted);
     },
@@ -31,8 +31,15 @@ var PastNotificationStore = Reflux.createStore({
 
     fetchPastCompleted(notifications) {
         this.init();
-            _notifications.receivePage(notifications);
+        _notifications.receivePage(notifications);
         this.trigger();
+    },
+
+    onCreateCompleted(uuid, notification) {
+        if (notification.expiresDate.toISOString() <= notification.createdDate){
+            _notifications.data.unshift(notification);
+            this.trigger();
+        }
     },
 
     onExpireCompleted(notification) {
@@ -41,6 +48,7 @@ var PastNotificationStore = Reflux.createStore({
     },
 
     onDeleteCompleted(id) {
+        _.remove(_notifications.data, { id: id });
         this.trigger();
     }
 

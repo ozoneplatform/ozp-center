@@ -57,6 +57,10 @@ var ActiveNotifications = React.createClass({
         this.setState(this.getState());
     },
 
+    componentWillMount() {
+        NotificationActions.fetchActive();
+    },
+
     componentDidMount() {
         var { hasMore } = this.state;
         if (hasMore) {
@@ -133,6 +137,11 @@ var PastNotifications = React.createClass({
             NotificationActions.fetchPast(this.notifications());
         }
     },
+
+    componentWillMount() {
+        NotificationActions.fetchPast();
+    },
+
 
     componentDidMount() {
         if (!this.state.notifications || this.state.notifications.length === 0) {

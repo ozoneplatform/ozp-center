@@ -66,8 +66,8 @@ module.exports = {
       });
     },
 
-    fetchPast(url, id) {
-        url = url || `${API_URL}/api/notifications/expired/?offset=0&limit=${PAGINATION_MAX}`;
+    fetchPast(id) {
+        var url = `${API_URL}/api/notifications/expired/?offset=0&limit=${PAGINATION_MAX}`;
 
         if (id) {
           url += `&listing=${id}`;

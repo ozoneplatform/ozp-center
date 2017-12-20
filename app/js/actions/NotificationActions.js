@@ -44,19 +44,14 @@ var NotificationActions = createActions({
           .fail(NotificationActions.fetchOwnNotificationsFailed);
     },
 
-    fetchPast(paginatedList) {
-        var url;
-        if (paginatedList && paginatedList.nextLink) {
-            url = paginatedList.nextLink;
-        }
-
-        NotificationApi.fetchPast(url)
+    fetchPast() {
+        NotificationApi.fetchPast()
             .then(NotificationActions.fetchPastCompleted)
             .fail(NotificationActions.fetchPastFailed);
     },
 
     fetchPastById(id) {
-      NotificationApi.fetchPast(null, id)
+      NotificationApi.fetchPast(id)
           .then(NotificationActions.fetchPastCompleted)
           .fail(NotificationActions.fetchPastFailed);
     },
