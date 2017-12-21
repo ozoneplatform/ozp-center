@@ -10,6 +10,10 @@
     vertical-align: top;
 }
 
+.AdminOwnerListingTile--disabled{
+    opacity: 0.4;
+}
+
 .MyListings__listings.all .AdminOwnerListingTile,
 .MyListings__listings.IN_PROGRESS .AdminOwnerListingTile.draft,
 .MyListings__listings.REJECTED .AdminOwnerListingTile.needs-action,

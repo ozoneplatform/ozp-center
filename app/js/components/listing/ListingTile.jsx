@@ -187,17 +187,17 @@ var AdminOwnerListingTile = React.createClass({
         var imageLargeUrl = listing.imageLargeUrl;
         if(this.props.listing.approvalStatus !== 'DELETED'){
             return (
-                <li className={'AdminOwnerListingTile'}>
+                <li className={(this.props.listing.approvalStatus !== "APPROVED" || !this.props.listing.isEnabled ) ? "AdminOwnerListingTile AdminOwnerListingTile--disabled " : "AdminOwnerListingTile"}>
                     { (this.props.listing.approvalStatus !== "DELETED")  &&
-                    <ActionMenu listing={listing} />
-                }
-                <a href={overview}>
-                    <img alt={`Click to manage ${listing.title}`} className="AdminOwnerListingTile__img" src={(this.props.listing.approvalStatus !== "DELETED") ? imageLargeUrl : deleted} />
-                    <span className="hidden-span">{listing.title}</span>
-                </a>
-                <InfoBar listing={listing} user={user}/>
-            </li>
-        );
+                        <ActionMenu listing={listing} />
+                    }
+                    <a href={overview}>
+                        <img alt={`Click to manage ${listing.title}`} className="AdminOwnerListingTile__img" src={(this.props.listing.approvalStatus !== "DELETED") ? imageLargeUrl : deleted} />
+                        <span className="hidden-span">{listing.title}</span>
+                    </a>
+                    <InfoBar listing={listing} user={user}/>
+                </li>
+            );
         }
         else{
             return (
