@@ -2,7 +2,15 @@
     padding: 30px;
     background: $white;
     min-height: 500px;
-    
+
+    .SelectBox.sortBy {
+        top: -15px;
+    }
+
+    .list-unstyled {
+        margin-top: 30px;
+    }
+
     .AdminOwnerListingTile {
         display: inline-block;
     }

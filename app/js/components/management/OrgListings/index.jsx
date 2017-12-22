@@ -70,6 +70,10 @@ var OrgListings = React.createClass({
         });
     },
 
+    onSortChanged: function (sortOption) {
+        this.onFilterChanged('ordering', sortOption.searchParam);
+    },
+
     componentWillReceiveProps: function(nextProps) {
         if (this.props.org && (this.props.org.name !== nextProps.org.name)) {
             this.onFilterChanged('org', nextProps.org.params.org);
@@ -86,7 +90,8 @@ var OrgListings = React.createClass({
         } else {
             return (
                 <LoadMore ref="loadMore" className="ListingsManagement__LoadMore col-xs-9 col-lg-10 all"
-                    filter={this.state.filter} onCountsChanged={this.onCountsChanged}></LoadMore>
+                    filter={this.state.filter} onCountsChanged={this.onCountsChanged}
+                    onSortChanged={this.onSortChanged}></LoadMore>
             );
         }
     },
