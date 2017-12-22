@@ -13,7 +13,8 @@ var PastNotification = React.createClass({
         fromArray: function (notifications, id, centerSettings, fn) {
             if (notifications) {
                 return notifications.map(function (notification) {
-                    return <PastNotification key={notification.id} notification={notification} centerSettings={centerSettings} fn={fn}/>;
+                    if(notification.notificationType !== "restore_bookmark" && notification.notificationType !== "peer_bookmark")
+                        return <PastNotification key={notification.id} notification={notification} centerSettings={centerSettings} fn={fn}/>;
                 });
             }
         }
