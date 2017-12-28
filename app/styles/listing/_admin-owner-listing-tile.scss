@@ -10,6 +10,10 @@
     vertical-align: top;
 }
 
+.AdminOwnerListingTile__img--disabled{
+    opacity: 0.4;
+}
+
 .MyListings__listings.all .AdminOwnerListingTile,
 .MyListings__listings.IN_PROGRESS .AdminOwnerListingTile.draft,
 .MyListings__listings.REJECTED .AdminOwnerListingTile.needs-action,
@@ -78,7 +82,7 @@
 
 .AdminOwnerListingTile__actionMenu {
     position: absolute;
-
+    z-index: 1;
     top: 0px;
     right: 0px;
     border: none;
