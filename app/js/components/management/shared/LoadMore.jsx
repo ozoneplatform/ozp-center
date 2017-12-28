@@ -101,7 +101,7 @@ var LoadMore = React.createClass({
         var children = this.generateChildren();
 
         if (children && children.length > 0 && !this.state.loadingError) {
-            return <ol className="list-unstyled">{ children }</ol>;
+            return <ol className="LoadMore__List list-unstyled">{ children }</ol>;
         }
         else if(!this.state.loading) {
             return <h5 style={{marginTop: "0"}}>No results found!</h5>;
