@@ -494,3 +494,63 @@ $icons: (
 .rating-text {
     font-size: 12px;
 }
+
+.SelectBox.sortBy {
+    border: 1px solid #dbdcdd;
+    width: 190px;
+    border-radius: 0;
+    box-shadow: none;
+    height:27px;
+    float: right;
+    display: inline-block;
+    top: 5px;
+
+    > button {
+        padding-top: 4px;
+        height: 27px;
+    }
+
+    > .react-select-box {
+
+        > .react-select-box-label {
+            font-size: inherit;
+            font-weight: 400;
+            line-height: 19px;
+            color: $gray-dark;
+
+            & .react-select-box-empty {
+                color: $gray-dark;
+            }
+        }
+    }
+
+    > .react-select-box::after {
+        top: 8px;
+    }
+
+    > .react-select-box-options {
+        margin: 0;
+        border-radius: 0;
+        box-shadow: none;
+        border: 0;
+        background: $gray-lightest;
+        width: 100%;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    > .react-select-box-clear {
+        top: 20px;
+        background-color: $white;
+
+        &:before{
+            background-color: transparent;
+            @extend .icon-cross-14-grayDark;
+            content: ' ';
+        }
+
+    }
+
+}
