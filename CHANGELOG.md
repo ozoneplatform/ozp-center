@@ -1,5 +1,16 @@
 
-### 1.1.103 (None)
+### 1.1.104 (None) 
+
+#### Fixes  
+* **profile**:  fix bugs in HUD profile window ([b99b9ceb](https://github.com/aml-development/ozp-center/commit/b99b9ceb07f79754dcb747982f1972d3da9c2ba9))     
+
+#### Merge Pull Requests  
+* Merge pull request #924 from aml-development/fix_profile ([70078a65](https://github.com/aml-development/ozp-center/commit/70078a65b9cbb842992417dd910eba627028a54d))         
+
+#### Changes  
+* **jenkins**:  add build script ([c795b8e6](https://github.com/aml-development/ozp-center/commit/c795b8e60dc0bc82df768e65e576c4f4b2492116))     
+
+### 1.1.103 (2018-01-03)
 
 #### Feature 
 * **listing management**
