@@ -167,11 +167,9 @@ var CreateNotification = React.createClass({
                         </button>
                     </div>
                     { (this.state.loading || this.state.loadingError) &&
-                        <div>
-                            <LoadIndicator showError={this.state.loadingError}
-                                errorMessage="Error Creating Notification"
-                            />
-                        </div>
+                        <LoadIndicator showError={this.state.loadingError}
+                            errorMessage="Error Creating Notification"
+                        />
                     }
                 </form>
             </div>
