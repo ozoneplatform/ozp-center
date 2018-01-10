@@ -196,7 +196,7 @@ const meTour = new Tour({
     {
       path: `${CENTER_URL}#/home/?%2F%3F=`,
       element: ".Discovery__Recommended",
-      title: "Recommended Listings",
+      title: "Recommended For You",
       content: "These listings are selected by an algorithm using your personal bookmarks, bookmarks across all users, and content of the listings to build a lineup designed specifically for you.",
       placement: "top",
       orphan:true

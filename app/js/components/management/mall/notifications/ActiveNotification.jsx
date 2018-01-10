@@ -15,7 +15,8 @@ var ActiveNotification = React.createClass({
         fromArray: function (notifications) {
             if (notifications) {
                 return notifications.map(function (notification) {
-                    return <ActiveNotification key={notification.id} notification={notification}/>;
+                    if(notification.notificationType !== "restore_bookmark" && notification.notificationType !== "peer_bookmark")
+                        return <ActiveNotification key={notification.id} notification={notification}/>;
                 });
             }
         }

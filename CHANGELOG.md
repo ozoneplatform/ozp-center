@@ -1,5 +1,27 @@
 
-### 1.1.102 (None) 
+### 1.1.103 (None)
+
+#### Feature 
+* **listing management**
+  *  Visual Indicator Disabled ([e194e1df](https://github.com/aml-development/ozp-center/commit/e194e1df530fc4589523b01e3d253bacb1455d1f))
+  *  add ability to sort list view like storefront most popular ([f4d08406](https://github.com/aml-development/ozp-center/commit/f4d08406888f10cc861ec077b820b611053c36ea))
+  *  Visual Indicator Disabled ([54941cbe](https://github.com/aml-development/ozp-center/commit/54941cbecaaa9bea4c97cabf19b7cf4c4e23d466))     
+* **notification**:  remove restore notifications from past notifications ([73d2a7ce](https://github.com/aml-development/ozp-center/commit/73d2a7ceb7540ecfd51f15500ab2d22f3d1f3425))    
+
+#### Fixes  
+* **tour**:  fix tour wording ([5e4fc588](https://github.com/aml-development/ozp-center/commit/5e4fc58891147fd381c1d46fc9002cc75e5df2bc))    
+* fix margin top issue ([aeb88e73](https://github.com/aml-development/ozp-center/commit/aeb88e73485807c53aaa98fb2465eef9b64c1c9f))     
+
+#### Merge Pull Requests  
+* Merge pull request #922 from aml-development/Tour_text_fix ([302527d0](https://github.com/aml-development/ozp-center/commit/302527d01370a1fe0beb523cdb3de3c34ec60875))
+* Merge pull request #920 from aml-development/undo_delete_folder ([81f78062](https://github.com/aml-development/ozp-center/commit/81f78062bc95f8ce1ead469d328710e234f69851))
+* Merge pull request #921 from aml-development/listing_mgmt_sortable_grid ([e70bdb6d](https://github.com/aml-development/ozp-center/commit/e70bdb6d3bf75b4f49dc5b48e4be9121d12e76b2))
+* Merge pull request #919 from aml-development/Disabled_Listings_Managment_View ([5339febe](https://github.com/aml-development/ozp-center/commit/5339febe30d503e20382a4bbb91e987c24a23da4))         
+
+#### Changes  
+* Removing notifications that don't need to be seen in the Active Notification section of Center Settings.  They just cause clutter. ([da76fd63](https://github.com/aml-development/ozp-center/commit/da76fd63883d9b47b4406bea52a3c2d9c5d54553))     
+
+### 1.1.102 (2017-12-20) 
 
 #### Fixes  
 * **launch popup**:  modal correctly stacks on top when launched ([15a1a963](https://github.com/aml-development/ozp-center/commit/15a1a96348b636fbcaa6ce9869c592a9fe20a949))    
