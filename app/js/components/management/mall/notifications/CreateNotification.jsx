@@ -32,6 +32,8 @@ var CreateNotification = React.createClass({
     },
 
     getInitialState() {
+        var loadingState = this.getLoadingState();
+
         return {
             uuid: uuid(),
             date: null,
@@ -39,8 +41,9 @@ var CreateNotification = React.createClass({
             hour: '00',
             minute: '00',
             type: 'System',
-            loading: false,
-            loadingError: false
+            loading: loadingState.loading,
+            loadingError: loadingState.loadingError,
+            errorMessage: loadingState.errorMessage
         };
     },
 
@@ -81,10 +84,12 @@ var CreateNotification = React.createClass({
         var expiresDate = new Date(
             Date.UTC(date.year(), date.month(), date.date(), parseInt(hour, 10), parseInt(minute, 10))
         );
+        var displayType = _.find(this.props.types, { key: type });
 
-        this.setState({
+        this.updateLoadingState({
             loading: true,
-            loadingError: false
+            loadingError: false,
+            errorMessage: "Error Creating " + displayType['value'] + " Notification ('" + message + "' set to expire on " + expiresDate.toString() + ")"
         });
 
         NotificationActions.createNotification(this.state.uuid, {
@@ -96,21 +101,49 @@ var CreateNotification = React.createClass({
 
     /* eslint-disable no-unused-vars */
     onNotificationCreated(uuid, notification) {
-        this.setState({
+        this.updateLoadingState({
             loading: false,
             loadingError: false
         });
+
         if (this.state.uuid === uuid) {
             this.onReset();
         }
     },
     /* eslint-enable no-unused-vars */
 
-    onNotificationCreateFailed() {
-        this.setState({
+    onNotificationCreateFailed(uuid, response) {
+        // if readyState is 0, the failure is caused by a window unload
+        // (navigating away from the page, forcing an app reload)
+        this.updateLoadingState({
             loading: false,
-            loadingError: true
+            loadingError: response.readyState != 0
         });
+    },
+
+    getLoadingState() {
+        var storageData = JSON.parse(sessionStorage.getItem('create-notification-loading-data'));
+
+        if(!storageData) {
+            return {
+                loading: false,
+                loadingError: false
+            };
+        }
+
+        return storageData;
+    },
+
+    updateLoadingState(loadingData) {
+        var storageData = this.getLoadingState();
+
+        storageData.loading = _.has(loadingData, 'loading') ? loadingData.loading : storageData.loading;
+        storageData.loadingError = _.has(loadingData, 'loadingError') ? loadingData.loadingError : storageData.loadingError;
+        storageData.errorMessage = _.has(loadingData, 'errorMessage') ? loadingData.errorMessage : storageData.errorMessage;
+
+        sessionStorage.setItem('create-notification-loading-data', JSON.stringify(storageData));
+
+        this.setState(storageData);
     },
 
     render() {
@@ -167,9 +200,12 @@ var CreateNotification = React.createClass({
                         </button>
                     </div>
                     { (this.state.loading || this.state.loadingError) &&
-                        <LoadIndicator showError={this.state.loadingError}
-                            errorMessage="Error Creating Notification"
-                        />
+                        <div>
+                            <LoadIndicator showError={this.state.loadingError}
+                                message="Sending notification.  This process may take a few minutes."
+                                errorMessage={this.state.errorMessage || "Error Creating Notification"}
+                            />
+                        </div>
                     }
                 </form>
             </div>

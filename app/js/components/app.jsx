@@ -16,6 +16,7 @@ var NotificationWindow = require('./notification/NotificationWindow.jsx');
 var { ListingDeleteConfirmation } = require('./shared/DeleteConfirmation.jsx');
 var { ListingPendingDeleteConfirmation } = require('./shared/PendingDeleteConfirmation.jsx');
 var { ListingUndeleteConfirmation } = require('./shared/UndeleteConfirmation.jsx');
+var MessageQueue = require('./shared/MessageQueue.jsx');
 var TagSubscriptionActions = require('ozp-react-commons/actions/TagSubscriptionActions');
 var TagSubscriptionStore = require('ozp-react-commons/stores/TagSubscriptionStore');
 var CategorySubscriptionActions = require('ozp-react-commons/actions/CategorySubscriptionActions');
@@ -31,6 +32,7 @@ var App = React.createClass({
             <div id="App">
                 <RouteHandler system={this.state.system} currentUser={this.state.currentUser} {...this.props} />
                 { this.renderModal() }
+                <MessageQueue/>
             </div>
         );
     },
