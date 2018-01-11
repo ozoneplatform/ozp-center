@@ -33,7 +33,7 @@ var OrgSteward = {
             var { org } = params;
             if (org){
                 var organization = SystemStore.getSystem().organizations.filter(function(organization) {
-                    return organization.title === org;
+                    return organization.shortName === org;
                 })[0];
                 if (organization == undefined){
                     organization = org;

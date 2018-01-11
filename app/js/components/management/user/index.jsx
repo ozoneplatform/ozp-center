@@ -54,7 +54,7 @@ var ListingManagement = React.createClass({
                     to: 'org-listings',
                     name: org.title + ' Listings',
                     params: {
-                        org: org.title
+                        org: org.shortName
                     }
                 });
             });

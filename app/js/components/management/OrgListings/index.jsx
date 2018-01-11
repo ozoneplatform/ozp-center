@@ -28,14 +28,18 @@ var OrgListings = React.createClass({
 
     getInitialState: function () {
         var useTableView = JSON.parse(sessionStorage.getItem('center-orgListings-toggleView'));
+        var filter = {};
         if (!this.props.org) {
             this.props.org = null;
         }
+        else {
+            filter = _.assign(this.getQuery(), {
+                org: this.props.org.params.org
+            });
+        }
         return {
             counts: {},
-            filter: _.assign(this.getQuery(), {
-                org: this.props.org.params.org
-            }),
+            filter: filter,
             tableView: useTableView
         };
     },
