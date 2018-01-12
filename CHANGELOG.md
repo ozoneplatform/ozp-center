@@ -1,10 +1,19 @@
 
-### 1.1.104 (None) 
+### 1.1.105 (None)   
+
+#### Merge Pull Requests  
+* Merge pull request #923 from aml-development/notification_indicator ([63f28e47](https://github.com/aml-development/ozp-center/commit/63f28e47903d362b973e5dd6f8d38d7d4bc290c6))           
+
+### 1.1.104 (2018-01-10)
+
+#### Feature  
+* **loading messages**:  display loading message for long running back-end tasks ([9479aa70](https://github.com/aml-development/ozp-center/commit/9479aa706928fb85adbd550efd72325be74aa2c7))    
 
 #### Fixes  
 * **profile**:  fix bugs in HUD profile window ([b99b9ceb](https://github.com/aml-development/ozp-center/commit/b99b9ceb07f79754dcb747982f1972d3da9c2ba9))     
 
 #### Merge Pull Requests  
+* Merge branch 'master' into notification_indicator ([2ff476d7](https://github.com/aml-development/ozp-center/commit/2ff476d7da85b1f1821a17b83b3e20aa7ffb7316))
 * Merge pull request #924 from aml-development/fix_profile ([70078a65](https://github.com/aml-development/ozp-center/commit/70078a65b9cbb842992417dd910eba627028a54d))         
 
 #### Changes  
