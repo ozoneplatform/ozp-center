@@ -1,5 +1,10 @@
 
-### 1.1.105 (None)   
+### 1.1.106 (None)         
+
+#### Changes  
+* **script**:  add release.sh ([0dfe5e86](https://github.com/aml-development/ozp-center/commit/0dfe5e86739eb1cf484f85d0e8cd3f397cc82846))     
+
+### 1.1.105 (2018-01-12)   
 
 #### Merge Pull Requests  
 * Merge pull request #923 from aml-development/notification_indicator ([63f28e47](https://github.com/aml-development/ozp-center/commit/63f28e47903d362b973e5dd6f8d38d7d4bc290c6))           
