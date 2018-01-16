@@ -113,7 +113,7 @@ var OrgListingsSidebarFilter = React.createClass({
     render: function () {
         return (
             <RadioGroup name="recent-activity-org-listings" onChange={this.props.handleChange}>
-                <Link id="recent-activity-pending" to="org-listings" query={{approval_status: "PENDING"}} params={{org: this.props.org.title}}>
+                <Link id="recent-activity-pending" to="org-listings" query={{approval_status: "PENDING"}} params={{org: this.props.org.shortName}}>
                     <label htmlFor="recent-activity-org-pending" className="label-needs-action">
                         <ApprovalStatusIcons definedStatus={"PENDING"} userType={"orgSteward"}/>
                         Pending { this.props.org.shortName } Review
@@ -121,7 +121,7 @@ var OrgListingsSidebarFilter = React.createClass({
                     </label>
                 </Link>
 
-                <Link id="recent-activity-pending" to="org-listings" query={{approval_status: "APPROVED_ORG"}} params={{org: this.props.org.title}}>
+                <Link id="recent-activity-pending" to="org-listings" query={{approval_status: "APPROVED_ORG"}} params={{org: this.props.org.shortName}}>
                     <label htmlFor="recent-activity-org-pending" className="label-pending">
                         <ApprovalStatusIcons definedStatus={"APPROVED_ORG"}/>
                         Organization Approved
@@ -129,7 +129,7 @@ var OrgListingsSidebarFilter = React.createClass({
                     </label>
                 </Link>
 
-                <Link id="recent-activity-published" to="org-listings" query={{approval_status: "APPROVED"}} params={{org: this.props.org.title}}>
+                <Link id="recent-activity-published" to="org-listings" query={{approval_status: "APPROVED"}} params={{org: this.props.org.shortName}}>
                     <label htmlFor="recent-activity-org-published" className="label-published">
                         <ApprovalStatusIcons definedStatus={"APPROVED"}/>
                         Published
@@ -137,7 +137,7 @@ var OrgListingsSidebarFilter = React.createClass({
                     </label>
                 </Link>
 
-                <Link id="recent-activity-returned" to="org-listings" query={{approval_status: "REJECTED"}} params={{org: this.props.org.title}}>
+                <Link id="recent-activity-returned" to="org-listings" query={{approval_status: "REJECTED"}} params={{org: this.props.org.shortName}}>
                     <label htmlFor="recent-activity-org-returned" className="label-rejected">
                         <ApprovalStatusIcons definedStatus={"REJECTED"}/>
                         Returned to Owner
@@ -145,7 +145,7 @@ var OrgListingsSidebarFilter = React.createClass({
                     </label>
                 </Link>
 
-                <Link id="recent-activity-deleted" to="org-listings" query={{approval_status: "DELETED"}} params={{org: this.props.org.title}}>
+                <Link id="recent-activity-deleted" to="org-listings" query={{approval_status: "DELETED"}} params={{org: this.props.org.shortName}}>
                     <label htmlFor="recent-activity-org-deleted" className="label-deleted">
                         <ApprovalStatusIcons definedStatus={"DELETED"}/>
                         Deleted
@@ -153,7 +153,7 @@ var OrgListingsSidebarFilter = React.createClass({
                     </label>
                 </Link>
 
-                <Link id="recent-activity-pending-deletion" to="org-listings" query={{approval_status: "PENDING_DELETION"}} params={{org: this.props.org.title}}>
+                <Link id="recent-activity-pending-deletion" to="org-listings" query={{approval_status: "PENDING_DELETION"}} params={{org: this.props.org.shortName}}>
                     <label htmlFor="recent-activity-org-pending-deletion" className="label-pending-deletion">
                         <i className="icon-caret-right"></i>
                         Pending Deletion
