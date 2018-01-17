@@ -1,10 +1,18 @@
 
-### 1.1.106 (None)         
+### 1.1.107 (None)   
+
+#### Merge Pull Requests  
+* Merge pull request #925 from aml-development/org_listing_shortname ([228cc75d](https://github.com/aml-development/ozp-center/commit/228cc75d885a4bebf203010776c338c485956528))           
+
+### 1.1.106 (2018-01-12)         
 
 #### Changes  
 * **script**:  add release.sh ([0dfe5e86](https://github.com/aml-development/ozp-center/commit/0dfe5e86739eb1cf484f85d0e8cd3f397cc82846))     
 
-### 1.1.105 (2018-01-12)   
+### 1.1.105 (2018-01-12) 
+
+#### Fixes  
+* **listing management**:  use org short name instead of titles for URLs ([72040579](https://github.com/aml-development/ozp-center/commit/72040579e8566a02240b9fccd50c9e351a05bdb9))     
 
 #### Merge Pull Requests  
 * Merge pull request #923 from aml-development/notification_indicator ([63f28e47](https://github.com/aml-development/ozp-center/commit/63f28e47903d362b973e5dd6f8d38d7d4bc290c6))           
