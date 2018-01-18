@@ -32,7 +32,7 @@ ul {
 }
 
 .carousel__slides {
-    display: flex;
+    display: inline-flex;
     left: 0;
     // &--featured{ //May be used if it becomes necessary to center the listings for window minimization
     //     justify-content: center;
