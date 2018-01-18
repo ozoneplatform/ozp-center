@@ -25,7 +25,7 @@ var MyListings = React.createClass({
     },
 
     getInitialState: function () {
-        var useTableView = JSON.parse(sessionStorage.getItem('myListings-toggleView'));
+        var useTableView = JSON.parse(sessionStorage.getItem('center-listings-toggleView'));
         return {
             counts: {},
             filter: this.getQuery(),
@@ -53,7 +53,7 @@ var MyListings = React.createClass({
 
     onViewToggle: function (event) {
         event.preventDefault();
-        sessionStorage.setItem("myListings-toggleView", !this.state.tableView);
+        sessionStorage.setItem("center-listings-toggleView", !this.state.tableView);
         this.setState({
             tableView: !this.state.tableView
         });
