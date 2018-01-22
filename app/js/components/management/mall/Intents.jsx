@@ -89,6 +89,7 @@ var Intent = struct({
     iconInput: maybe(t.union([Str, iconInputFileType, Num]))
 });
 
+//TODO: Intents code needs complete refactor. Is not working. 
 var Intents = React.createClass({
 
     getDefaultProps: function () {
@@ -192,6 +193,7 @@ var Intents = React.createClass({
             //or null (if the image was removed)
             iconSave = (inputVal && typeof inputVal !== 'number') ?
                 this.saveIcon(data.iconInput) :
+                //TODO: This is broken in Jquery3.
                 $.Deferred().resolve(inputVal).promise();
 
         iconSave.then(function(iconId) {
