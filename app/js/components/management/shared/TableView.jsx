@@ -383,15 +383,14 @@ var TableView = React.createClass({
         }
 
         this.props.onCountsChanged(counts);
-
-        // TODO: Figure out better way for counts updating
-        ListingApi.getAllListings(undefined, this.props.filter).then(function (response){
-            me.props.onCountsChanged(response._response.counts);
-        });
     },
 
     onListingChangeCompleted: function () {
-        this.onStoreChanged();
+        this.props.filter.offset = 0;
+        this.offset = 0;
+
+        // trigger a store refresh to sync table info/counts with listing change
+        UnpaginatedListingsStore.filterChange(this.props.filter);
     },
 
     onFetchAllListingsAtOnce: function () {
