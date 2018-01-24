@@ -1,5 +1,23 @@
 
-### 1.1.107 (None)   
+### 1.1.108 (None) 
+
+#### Fixes 
+* **listing management**
+  *  deleting a listing correctly updates the table view ([82e49801](https://github.com/aml-development/ozp-center/commit/82e498017450c3dc757c1291b1c18d2030f12bb8))
+  *  make toggling between list and table view consistent through all tabs ([d46d8303](https://github.com/aml-development/ozp-center/commit/d46d83036cc0314b487eace6748cc2c104c49cd1))     
+* **carousel**:  Styling fix ([ae5cad61](https://github.com/aml-development/ozp-center/commit/ae5cad616eed4cc0c3992ee1109a4419f7e3bb79))     
+
+#### Merge Pull Requests  
+* Merge pull request #927 from aml-development/inconsistent_state_fix ([70dc7687](https://github.com/aml-development/ozp-center/commit/70dc76871f5fa22e5f1d81e936ad1ae98f53d127))
+* Merge pull request #928 from aml-development/pending_delete_fix ([7d7ef487](https://github.com/aml-development/ozp-center/commit/7d7ef48795f786aff876e0b935f3fa4d68093cce))
+* Merge pull request #929 from aml-development/fix_carousel_style_again ([8c178b50](https://github.com/aml-development/ozp-center/commit/8c178b507b6b8154ead3d877a1b51b69d80bc1d6))
+* Merge pull request #926 from aml-development/carousel_styling_fix ([54e2b68a](https://github.com/aml-development/ozp-center/commit/54e2b68a298a97de7613f900abd27582ae79be01))         
+
+#### Changes  
+* Missed the style that fixes old chrome ([28212c23](https://github.com/aml-development/ozp-center/commit/28212c2342b451bad20768a1d1c432d11acaf7d4))
+* Adding in the rest of the flex/flexbox styles to support IE, etc ([6d883b2c](https://github.com/aml-development/ozp-center/commit/6d883b2c08fef2f68f851a3b030c49fefc483d0d))     
+
+### 1.1.107 (2018-01-17)   
 
 #### Merge Pull Requests  
 * Merge pull request #925 from aml-development/org_listing_shortname ([228cc75d](https://github.com/aml-development/ozp-center/commit/228cc75d885a4bebf203010776c338c485956528))           
