@@ -17,7 +17,7 @@ describe ('AllListings', function () {
 
     beforeEach( function () {
         ProfileMock.mockAdmin("Test Organization");
-        sessionStorage.setItem("center-allListings-toggleView", false);
+        sessionStorage.setItem("center-listings-toggleView", false);
         router = Router.run(routes, location, function (Handler) {
             listingManagement = TestUtils.renderIntoDocument(
                 <Handler/>
