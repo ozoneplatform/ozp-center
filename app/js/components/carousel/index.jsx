@@ -126,7 +126,7 @@ var Carousel = React.createClass({
         );
 
         return (
-            <div className="carousel" onResize={() => console.log('resized!')}>
+            <div className="carousel">
                 {showArrows ?
                     <div>
                         {items.length === 1 ?
