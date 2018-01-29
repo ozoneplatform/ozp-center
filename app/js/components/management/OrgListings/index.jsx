@@ -27,7 +27,7 @@ var OrgListings = React.createClass({
     ],
 
     getInitialState: function () {
-        var useTableView = JSON.parse(sessionStorage.getItem('center-orgListings-toggleView'));
+        var useTableView = JSON.parse(sessionStorage.getItem('center-listings-toggleView'));
         var filter = {};
         if (!this.props.org) {
             this.props.org = null;
@@ -62,7 +62,7 @@ var OrgListings = React.createClass({
 
     onViewToggle: function (event) {
         event.preventDefault();
-        sessionStorage.setItem("center-orgListings-toggleView", !this.state.tableView);
+        sessionStorage.setItem("center-listings-toggleView", !this.state.tableView);
         this.setState({
             tableView: !this.state.tableView
         });

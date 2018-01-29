@@ -25,7 +25,7 @@ describe ('OrgListings', function () {
 
     beforeEach( function () {
         ProfileMock.mockOrgSteward(mockOrg);
-        sessionStorage.setItem("center-orgListings-toggleView", false);
+        sessionStorage.setItem("center-listings-toggleView", false);
         router = Router.run(routes, location, function (Handler) {
             listingManagement = TestUtils.renderIntoDocument(
                 <Handler org={mockOrg}/>
