@@ -1,5 +1,14 @@
 
-### 1.1.108 (None) 
+### 1.1.109 (None) 
+
+#### Fixes  
+* **dependencies**:  Upgrade Jquery Dependency ([1ce7efb8](https://github.com/aml-development/ozp-center/commit/1ce7efb804bcb662155db586b53135704df2c42a))     
+
+#### Merge Pull Requests  
+* Merge pull request #930 from aml-development/dependency_update ([2b769f76](https://github.com/aml-development/ozp-center/commit/2b769f76ac8b0f66e7a1245b6b863d1ea514cf15))
+* Merge branch 'master' of github.com:aml-development/ozp-center into dependency_update ([93d28983](https://github.com/aml-development/ozp-center/commit/93d289831066969a2c465ff164cbdd00dcbc3c24))           
+
+### 1.1.108 (2018-01-24) 
 
 #### Fixes 
 * **listing management**
