@@ -30,7 +30,7 @@ var UserReview = React.createClass({
         var currentUser = this.props.user;
         var reviewer = this.props.review.author.id;
 
-        if(currentUser.id == reviewer || (currentUser.stewardedOrganizations.indexOf(listingOrg) !== -1)){
+        if(currentUser.id == reviewer || currentUser.highestRole == "APPS_MALL_STEWARD" || (currentUser.stewardedOrganizations.indexOf(listingOrg) !== -1)){
             return true;
         }
         return false;
