@@ -58,6 +58,7 @@ var RecentActivity = React.createClass({
             'ADD_RELATED_TO_ITEM',
             'REMOVE_RELATED_TO_ITEM',
             'REJECTED',
+            'PENDING_DELETION',
             'TAG_CREATED',
             'DELETED'
         ];
@@ -74,8 +75,7 @@ var RecentActivity = React.createClass({
                 'APPROVED_ORG' : 'Review Listing',
                 'REVIEWED' : 'View',
                 'REVIEW_EDITED' : 'View',
-                'REVIEW_DELETED' : 'View',
-                'PENDING_DELETION' : 'View'
+                'REVIEW_DELETED' : 'View'
             };
 
             var href = this.makeHref(this.getActiveRoutePath(), this.getParams(), {

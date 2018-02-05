@@ -42,10 +42,21 @@ var ActionChangeLog = React.createClass({
 var PendingDeletionChangeLog = React.createClass({
     render: function() {
         var changeLog = this.props.changeLog;
+        var details = 'Details: ' + changeLog.description;
+        var id = uuid();
+        
         return (
             <div>
-                <AuthorLink author={changeLog.author} />
-                <span> submitted { this.props.listingName } for deletion</span>
+                <div>
+                    <AuthorLink author={changeLog.author} />
+                    <span> submitted { this.props.listingName } for deletion</span>
+                </div>
+                <a data-toggle="collapse" data-target={ '#' + id } onClick={ this.toggleIcon }>
+                    <i className="icon-plus-10-blueDark"></i> Feedback
+                </a>
+                <ul id={ id } className="collapse list-unstyled ListingActivity__Changes">
+                    <li>{ details }</li>
+                </ul>
             </div>
         );
     }
