@@ -314,7 +314,7 @@ var AdministrationTab = React.createClass({
             return (
                 <section className="return-feedback">
                     <h5>Reject Deletion Feedback</h5>
-                    <p>Please provide feedback for the listing owner about why thier listing cannot be deleted.</p>
+                    <p>Please provide feedback for the listing owner about why their listing cannot be deleted.</p>
                     <form>
                         <Justification ref="justification" />
                         <button type="button" className="btn btn-default" onClick={ this.cancelRejection }>Cancel</button>
