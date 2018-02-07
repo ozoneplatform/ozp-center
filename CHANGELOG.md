@@ -1,12 +1,28 @@
 
-### 1.1.109 (None) 
+### 1.1.110 (None) 
+
+#### Fixes 
+* **management**
+  *  reject deletion text change ([72bdcb94](https://github.com/aml-development/ozp-center/commit/72bdcb948ce5054642a884111265f4259a90ab4c))
+  *  reject deletion text change ([d99ebda2](https://github.com/aml-development/ozp-center/commit/d99ebda2ce4b7f06821cdcfb0f1cbcab09fa0b63))     
+* **reviews**:  admin review deletion fix ([83ae18b9](https://github.com/aml-development/ozp-center/commit/83ae18b92fd669a543f9dbe4910f9505616f388b))     
+
+#### Merge Pull Requests  
+* Merge pull request #934 from aml-development/change_reject_deletion_text ([b31f79b0](https://github.com/aml-development/ozp-center/commit/b31f79b0b1fd49e28747561332d9f4fc70588e91))
+* Merge pull request #935 from aml-development/admin_review_deletion_fix ([615f9d8d](https://github.com/aml-development/ozp-center/commit/615f9d8d95920ef22285092df2d122f296099f31))
+* Merge pull request #931 from aml-development/fix_carousel_style ([88064e27](https://github.com/aml-development/ozp-center/commit/88064e27fb1e70787c9d5a12e4435e8581640a78))           
+
+### 1.1.109 (2018-01-31) 
 
 #### Fixes  
 * **dependencies**:  Upgrade Jquery Dependency ([1ce7efb8](https://github.com/aml-development/ozp-center/commit/1ce7efb804bcb662155db586b53135704df2c42a))     
 
 #### Merge Pull Requests  
 * Merge pull request #930 from aml-development/dependency_update ([2b769f76](https://github.com/aml-development/ozp-center/commit/2b769f76ac8b0f66e7a1245b6b863d1ea514cf15))
-* Merge branch 'master' of github.com:aml-development/ozp-center into dependency_update ([93d28983](https://github.com/aml-development/ozp-center/commit/93d289831066969a2c465ff164cbdd00dcbc3c24))           
+* Merge branch 'master' of github.com:aml-development/ozp-center into dependency_update ([93d28983](https://github.com/aml-development/ozp-center/commit/93d289831066969a2c465ff164cbdd00dcbc3c24))         
+
+#### Changes  
+* Reordering the flex styles for carousel ([9ead8581](https://github.com/aml-development/ozp-center/commit/9ead8581398227405a3217027686d56b920d0944))     
 
 ### 1.1.108 (2018-01-24) 
 
