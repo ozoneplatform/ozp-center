@@ -111,7 +111,7 @@ var AdministrationTab = React.createClass({
 
     getInitialState: function () {
         PaginatedChangeLogByIDStore.resetChangeLogByIDStore();
-        return { prevId: this.props.listing.id, editingRejection: false, hasMore: true, changeLogs: [], loading: false, loadingError: false  };
+        return { prevId: this.props.listing.id, editingReviewRejection: false, editingDeleteRejection: false, hasMore: true, changeLogs: [], loading: false, loadingError: false  };
     },
 
     componentWillMount: function(){
@@ -280,7 +280,8 @@ var AdministrationTab = React.createClass({
     },
 
     renderReviewSection: function () {
-        var editing = this.state.editingRejection;
+        var editingReviewNote = this.state.editingReviewRejection;
+        var editingDeleteNote = this.state.editingDeleteRejection;
 
         var Justification = form.createForm(
             struct({ description: subtype(Str, s => s.length >= 1 && s.length <= 2000) }),
@@ -297,7 +298,7 @@ var AdministrationTab = React.createClass({
             pendingDelete = (listingStatus[this.props.listing.approvalStatus] === 'Pending Deletion')  ? true : false,
             agency = this.props.listing.agencyShort;
 
-        if (editing) {
+        if (editingReviewNote) {
             return (
                 <section className="return-feedback">
                     <h5>Return to Owner Feedback</h5>
@@ -309,6 +310,18 @@ var AdministrationTab = React.createClass({
                     </form>
                 </section>
             );
+        } else if (editingDeleteNote) {
+            return (
+                <section className="return-feedback">
+                    <h5>Reject Deletion Feedback</h5>
+                    <p>Please provide feedback for the listing owner about why their listing cannot be deleted.</p>
+                    <form>
+                        <Justification ref="justification" />
+                        <button type="button" className="btn btn-default" onClick={ this.cancelRejection }>Cancel</button>
+                        <button type="button" className="btn btn-warning" onClick={ this.returnToOwner }>Reject Deletion</button>
+                    </form>
+                </section>
+            );
         } else {
             if (pendingDelete){
               if(isAdmin && !isStewardOfOrg) {
@@ -316,15 +329,15 @@ var AdministrationTab = React.createClass({
                     <section className="review-listing">
                         <h5>{"Listing Pending Deletion"}</h5>
                         <button type="button" className="btn btn-success" onClick={ this.approveDelete }>{"Approve deletion for " + agency}</button>
-                        <button type="button" className="btn btn-warning" onClick={ this.editRejection }>{"Reject deletion for " + agency}</button>
+                        <button type="button" className="btn btn-warning" onClick={ this.editDeleteRejection }>{"Reject deletion for " + agency}</button>
                     </section>
                 );
               } else if(isStewardOfOrg) {
                   return (
                       <section className="review-listing">
-                         <h5>Review Listing</h5>
+                         <h5>{"Listing Pending Deletion"}</h5>
                           <button type="button" className="btn btn-success" onClick={ this.approveDelete }>Approve deletion</button>
-                          <button type="button" className="btn btn-warning" onClick={ this.editRejection }>Return to Owner</button>
+                          <button type="button" className="btn btn-warning" onClick={ this.editDeleteRejection }>Reject Deletion</button>
                        </section>
                   );
               }
@@ -336,7 +349,7 @@ var AdministrationTab = React.createClass({
                         <section className="review-listing">
                             <h5>{"Review Listing for " + org}</h5>
                             <button type="button" className="btn btn-success" onClick={ this.approve }>{"Approve for " + agency}</button>
-                            <button type="button" className="btn btn-warning" onClick={ this.editRejection }>{"Reject for " + agency}</button>
+                            <button type="button" className="btn btn-warning" onClick={ this.editReviewRejection }>{"Reject for " + agency}</button>
                         </section>
                     );
                 } else if(isStewardOfOrg) {
@@ -344,7 +357,7 @@ var AdministrationTab = React.createClass({
                         <section className="review-listing">
                            <h5>Review Listing</h5>
                             <button type="button" className="btn btn-success" onClick={ this.approve }>Approve</button>
-                            <button type="button" className="btn btn-warning" onClick={ this.editRejection }>Return to Owner</button>
+                            <button type="button" className="btn btn-warning" onClick={ this.editReviewRejection }>Return to Owner</button>
                          </section>
                     );
                 }
@@ -356,7 +369,7 @@ var AdministrationTab = React.createClass({
                         <section className="review-listing">
                            <h5>Review Listing</h5>
                             <button type="button" className="btn btn-success" onClick={ this.approve }>Approve</button>
-                            <button type="button" className="btn btn-warning" onClick={ this.editRejection }>Return to Owner</button>
+                            <button type="button" className="btn btn-warning" onClick={ this.editReviewRejection }>Return to Owner</button>
                          </section>
                     );
                 }
@@ -364,9 +377,14 @@ var AdministrationTab = React.createClass({
         }
     },
 
-    editRejection: function (event) {
+    editReviewRejection: function (event) {
         event.preventDefault();
-        this.setState({ editingRejection: true });
+        this.setState({ editingReviewRejection: true });
+    },
+
+    editDeleteRejection: function (event) {
+        event.preventDefault();
+        this.setState({ editingDeleteRejection: true });
     },
 
     returnToOwner: function (event) {
@@ -374,13 +392,19 @@ var AdministrationTab = React.createClass({
         var justification = this.refs.justification.getValue();
         if (justification) {
             rejectListing(this.props.listing.id, justification.description);
-            this.setState({ editingRejection: false });
+            this.setState({
+                editingReviewRejection: false,
+                editingDeleteRejection: false
+             });
         }
     },
 
     cancelRejection: function (event) {
         event.preventDefault();
-        this.setState({ editingRejection: false });
+        this.setState({
+            editingReviewRejection: false,
+            editingDeleteRejection: false
+         });
     },
 
     approve: function (event) {
