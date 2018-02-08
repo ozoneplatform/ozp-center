@@ -490,8 +490,10 @@ ul.list-unstyled.RecentActivity
 }
 
 .LaunchConfirmation__columns {
-    column-count: 2;
-    padding-bottom: 45px;
+  column-count: 2;
+  -moz-colomn-count: 2;
+  -webkit-column-count: 2;
+  padding-bottom: 45px;
 
     p {
         -webkit-column-break-inside: avoid;
