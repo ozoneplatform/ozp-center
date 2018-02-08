@@ -465,6 +465,16 @@ var ListingApi = {
         });
     },
 
+    pendDeleteListing: function (id, description) {
+        return $.ajax({
+            type: 'POST',
+            url: API_URL + '/api/listing/' + id + '/pendingdeletion/',
+            data: JSON.stringify({description: description}),
+            dataType: 'json',
+            contentType: 'application/json'
+        });
+    },
+
     getAllListings: function (url, options) {
         if (!_.isString(url)) {
             url = API_URL + '/api/listing/?' + $.param(options);

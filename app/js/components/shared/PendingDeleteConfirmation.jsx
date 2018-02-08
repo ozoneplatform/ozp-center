@@ -29,14 +29,18 @@ var PendingDeleteConfirmation = React.createClass({
     },
 
     getInitialState: function () {
-        return {};
+        return {
+            showJustificationError: false
+        };
     },
 
     render: function () {
         var kind = this.props.kind,
             title = this.props.title,
             onDelete = this.props.onDelete,
-            errorMessage = this.props.errorMessage;
+            errorMessage = this.props.errorMessage,
+            requireJustification = this.props.requireJustification,
+            showJustificationError = this.state.showJustificationError;
 
         return (
             <Modal ref="modal" className="DeleteConfirmation" size="small" onHidden={this.props.onHidden}>
@@ -44,13 +48,47 @@ var PendingDeleteConfirmation = React.createClass({
                 {
                     errorMessage && <div className="alert alert-danger">{errorMessage}</div>
                 }
-                <strong>
-                    Are you sure that you would like to pend the {kind} &quot;{title}&quot; for deletion ?
-                </strong>
+                { !requireJustification &&
+                    <strong>
+                        Are you sure that you would like to pend the {kind} &quot;{title}&quot; for deletion ?
+                    </strong>
+                }
+                { requireJustification &&
+                    <div>
+                        <strong>
+                            Please enter a reason for pending the {kind} &quot;{title}&quot; for deletion
+                        </strong>
+                        <div className="form-group">
+                            <textarea ref="justification" name="description" className="form-control" placeholder="Description" rows="4"></textarea>
+                        </div>
+                    </div>
+                }
+                { showJustificationError &&
+                    <p className="text-danger">You must enter a reason</p>
+                }
                 <button className="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button className="btn btn-danger" onClick={onDelete}>Pend for deletion</button>
+                <button className="btn btn-danger" onClick={this.onDeleteClick}>Pend for deletion</button>
             </Modal>
         );
+    },
+
+    onDeleteClick: function() {
+        var onDelete = this.props.onDelete,
+            requireJustification = this.props.requireJustification,
+            justification = $(this.refs.justification.getDOMNode()).val();
+
+        if (requireJustification) {
+            if (justification) {
+                onDelete(justification);
+                this.setState({ showJustificationError: false });
+            }
+            else {
+                this.setState({ showJustificationError: true });
+            }
+        }
+        else {
+            onDelete();
+        }
     },
 
     close: function () {
@@ -109,7 +147,7 @@ var ListingPendingDeleteConfirmation = React.createClass({
 
         return (
             <PendingDeleteConfirmation ref="modal" kind="listing" title={title}
-                errorMessage={this.state.errorMessage}
+                errorMessage={this.state.errorMessage} requireJustification={true}
                 onHidden={this.onHidden} onDelete={this.onDelete}/>
         );
     },
@@ -143,11 +181,13 @@ var ListingPendingDeleteConfirmation = React.createClass({
 
     },
 
-    onDelete: function () {
+    onDelete: function (justification) {
         var listing = this.getListing();
 
-        ListingActions.pendingDelete(listing);
-        //this.close()
+        if (justification) {
+            ListingActions.pendingDelete(listing, justification);
+            //this.close()
+        }
     }
 });
 

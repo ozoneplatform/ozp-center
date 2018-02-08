@@ -28,7 +28,7 @@ function updateOwnerCache (listings) {
 
 function updateCacheFromPaginatedResponse (listingsAsPaginatedResponse) {
     var listings = listingsAsPaginatedResponse.getItemAsList();
-    
+
     updateCache(listings);
 }
 
@@ -96,15 +96,15 @@ var GlobalListingStore = Reflux.createStore({
             this.trigger();
         });
         this.listenTo(ListingActions.pendingDeleteCompleted, function (data) {
-          var listing = data;
-          listing.owners.forEach(function (owner) {
-              var ownedListings = _listingsByOwnerCache.filter(function (item) {
-                  return item.id !== listing.id;
-              });
-              _listingsByOwnerCache = ownedListings;
-          });
-          ListingActions.fetchChangeLogs(listing.id);
-          this.trigger();
+            var listing = data;
+            listing.owners.forEach(function (owner) {
+                var ownedListings = _listingsByOwnerCache.filter(function (item) {
+                    return item.id !== listing.id;
+                });
+                _listingsByOwnerCache = ownedListings;
+            });
+            ListingActions.fetchChangeLogs(listing.id);
+            this.trigger();
         });
         this.listenTo(ListingActions.fetchByIdCompleted, function (data) {
             data.isPartialListing = false;

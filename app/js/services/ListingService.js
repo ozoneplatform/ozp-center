@@ -305,15 +305,16 @@ ListingActions.disable.listen(setEnabled.bind(null, false));
 ListingActions.enableBookmarked.listen(setEnabledBookmarked.bind(null, true));
 ListingActions.disableBookmarked.listen(setEnabledBookmarked.bind(null, false));
 
-ListingActions.pendingDelete.listen(function (listing) {
+ListingActions.pendingDelete.listen(function (listing, description) {
     //OzpAnalytics.trackListingApproval(listing.title, listing.agencyShort);
     var data = _.cloneDeep(listing);
     data.approvalStatus = "PENDING_DELETION";
-    data.isEnabled=false;
-    ListingApi.save(data)
-    .then(ListingActions.pendingDeleteCompleted.bind(null, data))
-    .then(() => ListingActions.listingChangeCompleted(data))
-    .fail(ListingActions.pendingDeleteFailed);
+    data.isEnabled = false;
+
+    ListingApi.pendDeleteListing(listing.id, description)
+        .then(ListingActions.pendingDeleteCompleted.bind(null, data))
+        .then(() => ListingActions.listingChangeCompleted(data))
+        .fail(ListingActions.pendingDeleteFailed);
 });
 
 ListingActions.approve.listen(function (listing) {
