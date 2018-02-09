@@ -79,30 +79,48 @@ var Quickview = React.createClass({
         return {shown: false, warningShown : false};
     },
 
-    render: function () {
-        var currentUser = this.props.currentUser;
-        var { shown, listing } = this.state;
-        var ActiveRouteHandler = this.getActiveRouteHandler();
-        var owners, tabs;
+    checkStatus: function (currentUser, shown, listing) {
+        var owners = [];
 
         if (listing && !this.state.warningShown){
-            var userIsAdmin = (currentUser.isAdmin() || (_.contains(owners, currentUser.username) && currentUser.username !== "Masked Username") ||
-                _.contains(currentUser.stewardedOrganizations, listing.agencyShort)) && (listing.isEnabled == false);
-
+            owners = listing.owners.map(function (owner) {
+                return owner.username;
+            });
+            var userIsAdmin = currentUser.isAdmin() || (_.contains(owners, currentUser.username) && currentUser.username !== "Masked Username") ||
+                _.contains(currentUser.stewardedOrganizations, listing.agencyShort);
             if (listing.approvalStatus == "DELETED"){
                 this.generateAlert("Could not open!", "This listing has been removed", "error",currentUser, false);
                 this.close();
+            }else if (listing.approvalStatus == "APPROVED" && listing.isEnabled == true){
+                return;
             }else if (userIsAdmin && (listing.approvalStatus == "PENDING_DELETION")){
                 this.generateAlert("This listing is pending deletion!", "This listing has been disabled and is pending deletion; it is not available to unprivileged users. Any changes made to this listing cannot be seen by users.", "warning", currentUser, false);
                 this.state.warningShown = true;
-            }else if (userIsAdmin && (listing.isEnabled == false)){
+                return;
+            }else if (userIsAdmin && (listing.isEnabled == false) && (listing.approvalStatus == "APPROVED")){
                 this.generateAlert("This listing is disabled!", "This listing has been disabled; it is not available to unprivileged users. Any changes made to this listing cannot be seen by users. To enable this listing, select 'Enable Listing'", "warning", currentUser, userIsAdmin);
                 this.state.warningShown = true;
-            }else if(listing.isEnabled == false || listing.approvalStatus == "PENDING_DELETION" ){
+                return;
+            }else if (listing.id && userIsAdmin){
+                return;
+            }else if(listing.id){
                 this.generateAlert("Could not open!", "This listing has been disabled", "error",currentUser, userIsAdmin);
                 this.close();
             }
+            return;
         }
+        return;
+    },
+
+    render: function () {
+
+        var currentUser = this.props.currentUser;
+        var { shown, listing } = this.state;
+        var ActiveRouteHandler = this.getActiveRouteHandler();
+        var owners = [];
+        var tabs;
+
+        this.checkStatus(currentUser, shown, listing);
 
         if (listing) {
             tabs = _.cloneDeep(this.props.tabs);
