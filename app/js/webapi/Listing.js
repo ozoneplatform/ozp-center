@@ -365,9 +365,10 @@ var ListingApi = {
         });
     },
 
-    del: function (id) {
+    del: function (id, description) {
         return $.ajax({
             type: 'DELETE',
+            data: { description: description },
             url: API_URL + '/api/listing/' + encodeURIComponent(id) + '/'
         });
     },

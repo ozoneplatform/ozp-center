@@ -339,11 +339,11 @@ ListingActions.undelete.listen(function (listing) {
     .fail(ListingActions.pendingDeleteFailed);
 });
 
-ListingActions.deleteListing.listen(function (listing) {
+ListingActions.deleteListing.listen(function (listing, description) {
     listing.isEnabled = false;
     listing.status = 'DELETED';
     listing.approvalStatus = 'DELETED';
-    ListingApi.del(listing.id)
+    ListingApi.del(listing.id, description)
         .then(ListingActions.deleteListingCompleted.bind(null, listing))
         .then(() => ListingActions.listingChangeCompleted(listing))
         .fail(ListingActions.deleteListingFailed);
