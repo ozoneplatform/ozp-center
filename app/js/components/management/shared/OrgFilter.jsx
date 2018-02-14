@@ -21,7 +21,7 @@ var OrgFilter = React.createClass({
             var count = (counts && counts.organizations) ? counts.organizations[organization.id] : 0;
             return (
                 <div key={ organization.id }>
-                    <input id={ "all-listings-filter-organization-" + organization.shortName.toLowerCase() } type="radio" value={ organization.title }/>
+                    <input id={ "all-listings-filter-organization-" + organization.shortName.toLowerCase() } type="radio" value={ organization.shortName }/>
                     <label htmlFor={ "all-listings-filter-organization-" + organization.shortName.toLowerCase() } className="label-organization">
                         { organization.shortName }
                         {
