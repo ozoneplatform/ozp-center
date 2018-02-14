@@ -29,7 +29,9 @@ var DeleteConfirmation = React.createClass({
     },
 
     getInitialState: function () {
-        return {};
+        return {
+            showJustificationError: false
+        };
     },
 
     render: function () {
@@ -37,13 +39,31 @@ var DeleteConfirmation = React.createClass({
             title = this.props.title,
             onDelete = this.props.onDelete,
             onCancel = this.props.onCancel,
-            errorMessage = this.props.errorMessage;
+            errorMessage = this.props.errorMessage,
+            requireJustification = this.props.requireJustification,
+            showJustificationError = this.state.showJustificationError;
+
         var content = <div>
-        <strong>
-            Are you sure that you would like to delete the {kind}{title}?
-        </strong>
+        { !requireJustification &&
+            <strong>
+                Are you sure that you would like to delete the {kind}{title}?
+            </strong>
+        }
+        { requireJustification &&
+            <div>
+                <strong>
+                    Please enter a reason for deleting the {kind}{title}
+                </strong>
+                <div className="form-group">
+                    <textarea ref="justification" name="description" className="form-control" placeholder="Description" rows="4"></textarea>
+                </div>
+            </div>
+        }
+        { showJustificationError &&
+            <p className="text-danger">You must enter a reason</p>
+        }
         <button className="btn btn-default" data-dismiss="modal" onClick={onCancel}>Cancel</button>
-        <button className="btn btn-danger" onClick={onDelete}>Delete</button></div>;
+        <button className="btn btn-danger" onClick={this.onDeleteClick}>Delete</button></div>;
 
         if (errorMessage) {
             content = <div>
@@ -57,6 +77,26 @@ var DeleteConfirmation = React.createClass({
                 {content}
             </Modal>
         );
+    },
+
+    onDeleteClick: function() {
+        var onDelete = this.props.onDelete,
+            requireJustification = this.props.requireJustification;
+
+        if (requireJustification) {
+            var justification = $(this.refs.justification.getDOMNode()).val();
+
+            if (justification) {
+                onDelete(justification);
+                this.setState({ showJustificationError: false });
+            }
+            else {
+                this.setState({ showJustificationError: true });
+            }
+        }
+        else {
+            onDelete();
+        }
     },
 
     close: function () {
@@ -117,7 +157,7 @@ var ListingDeleteConfirmation = React.createClass({
 
         return (
             <DeleteConfirmation ref="modal" kind="listing" title={title}
-                errorMessage={this.state.errorMessage}
+                errorMessage={this.state.errorMessage} requireJustification={true}
                 onHidden={this.onHidden} onDelete={this.onDelete}/>
         );
     },
@@ -150,10 +190,12 @@ var ListingDeleteConfirmation = React.createClass({
         }
     },
 
-    onDelete: function () {
+    onDelete: function (justification) {
         var listing = this.getListing();
 
-        ListingActions.deleteListing(listing);
+        if (justification) {
+            ListingActions.deleteListing(listing, justification);
+        }
     }
 });
 

@@ -111,7 +111,16 @@ var AdministrationTab = React.createClass({
 
     getInitialState: function () {
         PaginatedChangeLogByIDStore.resetChangeLogByIDStore();
-        return { prevId: this.props.listing.id, editingReviewRejection: false, editingDeleteRejection: false, hasMore: true, changeLogs: [], loading: false, loadingError: false  };
+        return {
+            prevId: this.props.listing.id,
+            editingReviewRejection: false,
+            editingDeleteRejection: false,
+            editingDeleteApproval: false,
+            hasMore: true,
+            changeLogs: [],
+            loading: false,
+            loadingError: false
+        };
     },
 
     componentWillMount: function(){
@@ -282,6 +291,7 @@ var AdministrationTab = React.createClass({
     renderReviewSection: function () {
         var editingReviewNote = this.state.editingReviewRejection;
         var editingDeleteNote = this.state.editingDeleteRejection;
+        var editingDeleteApproval = this.state.editingDeleteApproval;
 
         var Justification = form.createForm(
             struct({ description: subtype(Str, s => s.length >= 1 && s.length <= 2000) }),
@@ -322,13 +332,25 @@ var AdministrationTab = React.createClass({
                     </form>
                 </section>
             );
+        } else if (editingDeleteApproval) {
+            return (
+                <section className="return-feedback">
+                    <h5>Approve Deletion Feedback</h5>
+                    <p>Please enter a reason for deleting the listing.</p>
+                    <form>
+                        <Justification ref="justification" />
+                        <button type="button" className="btn btn-default" onClick={ this.cancelApproval }>Cancel</button>
+                        <button type="button" className="btn btn-success" onClick={ this.approveDelete }>Approve Deletion</button>
+                    </form>
+                </section>
+            );
         } else {
             if (pendingDelete){
               if(isAdmin && !isStewardOfOrg) {
                 return (
                     <section className="review-listing">
                         <h5>{"Listing Pending Deletion"}</h5>
-                        <button type="button" className="btn btn-success" onClick={ this.approveDelete }>{"Approve deletion for " + agency}</button>
+                        <button type="button" className="btn btn-success" onClick={ this.editDeleteApproval }>{"Approve deletion for " + agency}</button>
                         <button type="button" className="btn btn-warning" onClick={ this.editDeleteRejection }>{"Reject deletion for " + agency}</button>
                     </section>
                 );
@@ -336,7 +358,7 @@ var AdministrationTab = React.createClass({
                   return (
                       <section className="review-listing">
                          <h5>{"Listing Pending Deletion"}</h5>
-                          <button type="button" className="btn btn-success" onClick={ this.approveDelete }>Approve deletion</button>
+                          <button type="button" className="btn btn-success" onClick={ this.editDeleteApproval }>Approve deletion</button>
                           <button type="button" className="btn btn-warning" onClick={ this.editDeleteRejection }>Reject Deletion</button>
                        </section>
                   );
@@ -377,6 +399,11 @@ var AdministrationTab = React.createClass({
         }
     },
 
+    editDeleteApproval: function (event) {
+        event.preventDefault();
+        this.setState({ editingDeleteApproval: true });
+    },
+
     editReviewRejection: function (event) {
         event.preventDefault();
         this.setState({ editingReviewRejection: true });
@@ -399,6 +426,11 @@ var AdministrationTab = React.createClass({
         }
     },
 
+    cancelApproval: function (event) {
+        event.preventDefault();
+        this.setState({ editingDeleteApproval: false });
+    },
+
     cancelRejection: function (event) {
         event.preventDefault();
         this.setState({
@@ -418,7 +450,10 @@ var AdministrationTab = React.createClass({
 
     approveDelete: function (event) {
         //event.preventDefault();
-      ListingActions.deleteListing(this.props.listing);
+        var justification = this.refs.justification.getValue();
+        if (justification) {
+            ListingActions.deleteListing(this.props.listing, justification.description);
+        }
     }
 
 });

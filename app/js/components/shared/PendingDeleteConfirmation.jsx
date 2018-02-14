@@ -74,10 +74,11 @@ var PendingDeleteConfirmation = React.createClass({
 
     onDeleteClick: function() {
         var onDelete = this.props.onDelete,
-            requireJustification = this.props.requireJustification,
-            justification = $(this.refs.justification.getDOMNode()).val();
+            requireJustification = this.props.requireJustification;
 
         if (requireJustification) {
+            var justification = $(this.refs.justification.getDOMNode()).val();
+
             if (justification) {
                 onDelete(justification);
                 this.setState({ showJustificationError: false });
