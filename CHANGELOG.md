@@ -1,5 +1,27 @@
 
-### 1.1.110 (None) 
+### 1.1.111 (None)
+
+#### Feature  
+* **listing**:  require feedback when deleting a listing ([fb61cf4f](https://github.com/aml-development/ozp-center/commit/fb61cf4fba4592aadf8f2edb2961ba2f2c402cae))    
+
+#### Fixes  
+* **listing api**:  use org short name when filtering by org in listing management ([a5d87659](https://github.com/aml-development/ozp-center/commit/a5d876593ddc0d0b0e466e041c37d7a9cc3cafe2))    
+* **access**:  fix listing access issues ([b7fbf236](https://github.com/aml-development/ozp-center/commit/b7fbf23637e3b68c2bb2cf0987b1f52ed95debb5))     
+
+#### Merge Pull Requests  
+* Merge pull request #939 from aml-development/delete_listing_feedback ([81e23259](https://github.com/aml-development/ozp-center/commit/81e2325965765afbd8821a6f2619877639b1959b))
+* Merge pull request #940 from aml-development/org_url_short_name_fix ([31e4a77e](https://github.com/aml-development/ozp-center/commit/31e4a77ef19d0cb534f9063058d334de72c587c9))
+* Merge pull request #938 from aml-development/listing_access_fix ([e6063a23](https://github.com/aml-development/ozp-center/commit/e6063a23084f15009c5719461dbd67e06302248b))
+* Merge pull request #937 from aml-development/fix_launch_notice_columns ([62301258](https://github.com/aml-development/ozp-center/commit/62301258ff1c0ac57d66dc75f87398398f535991))
+* Merge pull request #936 from aml-development/pending_deletion_feedback ([a11454b7](https://github.com/aml-development/ozp-center/commit/a11454b707c8ba66f8e4d52d010752dc231ae6c7))         
+
+#### Changes  
+* Older browsers don't support just column-count, need to add the -moz and -webkit variations ([b1c0a074](https://github.com/aml-development/ozp-center/commit/b1c0a0745d3e04d92c2ae3d92a2879353c1096f8))     
+
+### 1.1.110 (2018-02-07)
+
+#### Feature  
+* **listing**:  require and display feedback when a user pends a listing for deletion ([f04b503f](https://github.com/aml-development/ozp-center/commit/f04b503fb9d7b3ab91003bd0567d2fd1013f512f))    
 
 #### Fixes 
 * **management**
