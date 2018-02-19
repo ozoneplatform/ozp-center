@@ -13,7 +13,7 @@ var Category = struct({
         return s.length <= 50;
     }),
     description: maybe(subtype(Str, function (s) {
-        return s.length <= 255;
+        return s.length <= 500;
     }))
 });
 
@@ -34,7 +34,7 @@ var Categories = React.createClass({
                     },
                     description: {
                         type: 'textarea',
-                        help: 'Max. 255 characters'
+                        help: 'Max. 500 characters'
                     }
                 }
             },
