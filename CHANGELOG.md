@@ -1,5 +1,13 @@
 
-### 1.1.111 (None)
+### 1.1.112 (None)
+
+#### Feature  
+* **category_description**:  increase category description length ([bd02934f](https://github.com/aml-development/ozp-center/commit/bd02934f16884068f241c0b76270ff4f9066db19))      
+
+#### Merge Pull Requests  
+* Merge pull request #941 from aml-development/category_length_increase ([87738d1e](https://github.com/aml-development/ozp-center/commit/87738d1eda26ef713db29716e9a75e13d9213a3c))           
+
+### 1.1.111 (2018-02-14)
 
 #### Feature  
 * **listing**:  require feedback when deleting a listing ([fb61cf4f](https://github.com/aml-development/ozp-center/commit/fb61cf4fba4592aadf8f2edb2961ba2f2c402cae))    
