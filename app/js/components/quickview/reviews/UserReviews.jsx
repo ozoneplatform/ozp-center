@@ -54,7 +54,7 @@ var UserReview = React.createClass({
 
     render: function () {
         var { review, onEdit, listing, user } = this.props;
-        var time = review.editedDate || review.createdDate || "";
+        var time = review.createdDate || "";
 
         return (
             <li className="Review">
