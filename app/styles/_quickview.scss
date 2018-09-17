@@ -97,7 +97,7 @@ $quickview-nav-tabs-height: 42px;
     }
 
     i.icon-share-alt {
-        @extend .icon-share-alt;
+        @extend .icon-share-alt !optional;
     }
 }
 

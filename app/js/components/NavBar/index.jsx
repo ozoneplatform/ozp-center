@@ -6,7 +6,7 @@ var HelpModal = require('./helpmodal.jsx');
 var NotificationWindow = require('../notification/NotificationWindow.jsx');
 var ProfileLink = require('../profile/ProfileLink.jsx');
 var ModalLink = require('../ModalLink.jsx');
-var { HUD_URL, METRICS_URL, WEBTOP_URL, DEVELOPER_RESOURCES_URL} = require('ozp-react-commons/OzoneConfig');
+var { HUD_URL, METRICS_URL, WEBTOP_URL, DEVELOPER_RESOURCES_URL, LOGOUT_URL } = require('ozp-react-commons/OzoneConfig');
 var CreateEditActions = require('../../actions/CreateEditActions');
 var ProfileSearchActions = require('../../actions/ProfileSearchActions');
 
@@ -66,13 +66,16 @@ var NavBar = React.createClass({
                             <li data-toggle="tooltip" id="tourstop-global-menu" data-placement="bottom" title="Menu" className="dropdown user-menu-dropdown tooltiped">
                                 <a href="#" className="lrg" data-toggle="dropdown"><i className="icon-menu-grayLightest"></i><span className="hidden-span">Menu</span></a>
                                 <ul className="dropdown-menu">
-                                    <li className="dropdown-header">Personalize</li>
+                                    <li className="dropdown-header">Account</li>
                                     <li><a href={HUD_URL}><i className="icon-ribbon-grayLightest"></i>Bookmarks</a></li>
                                     <li>
                                         <ProfileLink profileId="self">
                                             <i className="icon-head-grayLightest"/>Profile
                                         </ProfileLink>
                                     </li>
+                                    { (LOGOUT_URL && LOGOUT_URL !== "") &&
+                                        <li><a href={LOGOUT_URL}><i className="icon-rewind-grayLightest"></i>Logout</a></li>
+                                    }
                                     { !secondParty &&
                                         <li className="divider"></li>
                                     }

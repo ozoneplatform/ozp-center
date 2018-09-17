@@ -46,7 +46,7 @@
             }
 
             .icon-caret-right {
-                @extend .icon-caret-right-grayDark;
+                @extend .icon-caret-right-grayDark !optional;
                 position: absolute;
                 right: 20px;
                 top: 17px;

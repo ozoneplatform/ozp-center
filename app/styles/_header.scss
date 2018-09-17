@@ -92,8 +92,8 @@
 
 .react-select-box {
     &:before {
-        @extend .icons;
-        @extend .icon-caret-down;
+        @extend .icons !optional;
+        @extend .icon-caret-down !optional;
 
         border-left: 0;
         padding-top: 7px;

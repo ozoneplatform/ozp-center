@@ -227,7 +227,7 @@ button.btn.image-remove {
 ==============================*/
 
 .label-draft, .label-pending, .label-needs-action, .label-published, .label-rejected, .label-pending-delete {
-    @extend .icons;
+    @extend .icons !optional;
     font-family: 'Ubuntu';
     font-weight: 400;
 
