@@ -17,7 +17,7 @@ describe ('AllListings', function () {
 
     beforeEach( function () {
         ProfileMock.mockAdmin("Test Organization");
-        sessionStorage.setItem("center-allListings-toggleView", false);
+        sessionStorage.setItem("center-listings-toggleView", false);
         router = Router.run(routes, location, function (Handler) {
             listingManagement = TestUtils.renderIntoDocument(
                 <Handler/>
@@ -39,12 +39,12 @@ describe ('AllListings', function () {
         expect($(listingManagementPage).find('div[class="LoadMore ListingsManagement__LoadMore col-xs-9 col-lg-10 all"]')[0]).to.exist;
 
         TestUtils.Simulate.click(switchBox);
-        
+
         expect($(listingManagementPage).find('div[class="LoadMore ListingsManagement__LoadMore col-xs-9 col-lg-10 all"]')[0]).to.not.exist;
     });
 
     afterEach( function () {
-        router.stop()
+        router.stop();
         ProfileMock.restore();
     });
 });

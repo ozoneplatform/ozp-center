@@ -5,7 +5,13 @@
 position: relative;
 }
 .ActiveNotification, .PastNotification {
+    word-wrap: break-word;
     margin-bottom: 20px;
+
+    .resend {
+        margin-left: 10px;
+        cursor: pointer;
+    }
 }
 
 .ActiveNotification__Header, .PastNotification__Header {
@@ -25,11 +31,14 @@ position: relative;
 }
 
 .CreateNotification {
+    select {
+        height: 34px;   
+        width: 100%;     
+    }
     select[name="hour"],
     select[name="minute"] {
         display: inline-block;
         width: auto;
         margin-right: 5px;
-        height: 34px;
     }
 }

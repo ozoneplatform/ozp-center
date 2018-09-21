@@ -46,7 +46,7 @@
             }
 
             .icon-caret-right {
-                @extend .icon-caret-right-grayDark;
+                @extend .icon-caret-right-grayDark !optional;
                 position: absolute;
                 right: 20px;
                 top: 17px;
@@ -57,23 +57,7 @@
                 margin-right: 5px;
                 margin-left: -25px;
                 float: left;
-
-                .icon-exclamation-14 {
-                    @extend .icon-exclamation-14-redOrangeDark;
-                }
-
-                .icon-loader-14 {
-                    @extend .icon-loader-14-blueDark;
-                }
-
-                .icon-thumbs-up-14 {
-                    @extend .icon-thumbs-up-14-greenDark;
-                }
-                .icon-reload-14 {
-                    @extend .icon-reload-14-blueDark;
-                }
             }
-
         }
 
         &:hover, &:focus {

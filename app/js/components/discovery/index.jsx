@@ -2,10 +2,11 @@
 
 var React = require('react');
 var Reflux = require('reflux');
-var Router = require('react-router');
+var { Navigation } = require('react-router');
 var _ = require('../../utils/_');
 var {CENTER_URL, API_URL} = require('ozp-react-commons/OzoneConfig');
 var { PAGINATION_MAX } = require('ozp-react-commons/constants');
+var { listingMessages } = require('ozp-react-commons/constants/messages');
 
 // actions
 var ListingActions = require('../../actions/ListingActions');
@@ -15,21 +16,34 @@ var NavBar = require('../NavBar/index.jsx');
 var Header = require('../header/index.jsx');
 var Sidebar = require('./Sidebar.jsx');
 var ListingTile = require('./ListingTile.jsx');
+var RecommendedListingTileStorefront = require('./RecommendedListingTileStorefront.jsx');
 var FeaturedListings = require('./FeaturedListings.jsx');
 var Carousel = require('../carousel/index.jsx');
 var Types = require('./Types.jsx');
 var Organizations = require('./Organizations.jsx');
 var DetailedQuery = require('./DetailedQuery.jsx');
+var ActiveStateMixin = require('../../mixins/ActiveStateMixin');
 
+var SelectBox = require('../shared/SelectBox.jsx');
+var LoadIndicator = require('ozp-react-commons/components/LoadIndicator.jsx');
 
 var $ = require('jquery');
 require('../../utils/typeahead.js');
 
 // store dependencies
 var DiscoveryPageStore = require('../../stores/DiscoveryPageStore');
+var GlobalListingStore = require('../../stores/GlobalListingStore');
+var timeout;
 
 
-var FILTERS = ['categories', 'type', 'agency'];
+var FILTERS = ['categories', 'type', 'agency', 'tags'];
+var sortOptions = [
+    {option: 'Newest', searchParam: '-approved_date'},
+    {option: 'Title: A to Z', searchParam: 'title'},
+    {option: 'Title: Z to A', searchParam: '-title'},
+    {option: 'Rating: Low to High', searchParam: ['avg_rate', 'total_votes']},
+    {option: 'Rating: High to Low', searchParam: ['-avg_rate', '-total_votes']}
+];
 
 var areFiltersApplied = (state) => {
     return _.reduce(FILTERS, function (memo, filter) {
@@ -39,33 +53,68 @@ var areFiltersApplied = (state) => {
 
 var Discovery = React.createClass({
 
-    mixins: [ Router.State, Reflux.ListenerMixin ],
+    mixins: [ Reflux.ListenerMixin, ActiveStateMixin, Navigation],
 
     getInitialState() {
         return {
             initCategories: [],
+            initTags: [],
             featured: DiscoveryPageStore.getFeatured(),
             newArrivals: DiscoveryPageStore.getNewArrivals(),
             mostPopular: DiscoveryPageStore.getMostPopular(),
             searchResults: DiscoveryPageStore.getSearchResults(),
+            recommended: DiscoveryPageStore.getRecommended(),
             mostPopularTiles: 12,
             initialMostPopularTiles: 12,
             queryString: this.state ? this.state.queryString : '',
             categories: this.state ? this.state.categories : [],
+            tags: this.state ? this.state.tags : [],
+            tagId: this.state ? this.state.tagId : [],
             type: this.state ? this.state.type : [],
             agency: this.state ? this.state.agency : [],
             nextOffset: DiscoveryPageStore.getNextOffset(),
             currentOffset: this.state ? this.state.currentOffset : 0,
             limit: this.state ? this.state.limit : PAGINATION_MAX,
+            ordering: this.state ? this.state.ordering : [],
+            orderingText: this.state ? this.state.orderingText : 'Sort By',
             loadingMore: false,
-            searching: false
+            searching: false,
+            featuredError: this.state ? this.state.featuredError : false,
+            newArrivalsError: this.state ? this.state.newArrivalsError : false,
+            mostPopularError: this.state ? this.state.mostPopularError : false,
+            recommendedError: this.state ? this.state.recommendedError : false
         };
+    },
+
+    onFetchFeaturedListingsFailed: function() {
+        this.setState({
+            featuredError: true
+        });
+    },
+
+    onFetchRecentListingsFailed: function() {
+        this.setState({
+            newArrivalsError: true
+        });
+    },
+
+    onFetchMostPopularListingsFailed: function() {
+        this.setState({
+            mostPopularError: true
+        });
+    },
+
+    onFetchRecommendedListingsFailed: function() {
+        this.setState({
+            recommendedError: true
+        });
     },
 
     onSearchInputChange(evt) {
         this._searching = true;
         this.setState({
             queryString: evt.target.value,
+            orderingText: 'Sort By',
             currentOffset: 0
         });
     },
@@ -78,19 +127,43 @@ var Discovery = React.createClass({
         }
     },
 
-    onCategoryChange(categories) {
+    resetSearchState() {
         this._searching = true;
-        this.setState({ categories, currentOffset: 0 });
+        this.setState({currentOffset: 0, orderingText: 'Sort By', ordering: []});
+
+        // Need to reset Most Popular in store after search
+        DiscoveryPageStore.resetMostPopular();
+    },
+
+    onCategoryChange(categories) {
+        this.resetSearchState();
+        this.setState({ categories });
+    },
+
+    onTagsChange(tags) {
+        this.resetSearchState();
+        this.setState({ tags });
     },
 
     onTypeChange(type) {
-        this._searching = true;
-        this.setState({ type, currentOffset: 0 });
+        this.resetSearchState();
+        this.setState({ type });
     },
 
     onOrganizationChange(agency) {
-        this._searching = true;
-        this.setState({ agency, currentOffset: 0 });
+        this.resetSearchState();
+        this.setState({ agency });
+    },
+
+    onSortChange(order) {
+        var me = this;
+        if (order != this.state.ordering) {
+            sortOptions.forEach(function(element) {
+                if (order == element.option) {
+                    me.setState({orderingText: element.option, ordering: element.searchParam, currentOffset: 0});
+                }
+            });
+        }
     },
 
     componentDidUpdate(prevProps, prevState) {
@@ -98,9 +171,11 @@ var Discovery = React.createClass({
             this.debounceSearch();
         }
         else if(!_.isEqual(this.state.categories, prevState.categories) ||
+            !_.isEqual(this.state.tags, prevState.tags)||
             !_.isEqual(this.state.type, prevState.type) ||
             !_.isEqual(this.state.agency, prevState.agency) ||
-            !_.isEqual(this.state.currentOffset, prevState.currentOffset)) {
+            !_.isEqual(this.state.currentOffset, prevState.currentOffset) ||
+            !_.isEqual(this.state.ordering, prevState.ordering)) {
             this.search();
         }
     },
@@ -111,15 +186,31 @@ var Discovery = React.createClass({
         // Notice when a search is finished
         this.listenTo(ListingActions.searchCompleted, this.onSearchCompleted);
 
-        // Reload when a new review is added
-        this.listenTo(ListingActions.saveReviewCompleted, ListingActions.fetchStorefrontListings);
+        // // Reload when a new review is added
+         this.listenTo(ListingActions.saveReviewCompleted, ListingActions.fetchStorefrontListings);
+        //this.listenTo(GlobalListingStore, ListingActions.fetchStorefrontListings);
 
         // fetch data when instantiated
-        ListingActions.fetchStorefrontListings();
+        ListingActions.fetchFeaturedListings();
+        ListingActions.fetchRecentListings();
+        ListingActions.fetchMostPopularListings();
+        ListingActions.fetchRecommendedListings();
+
+        this.listenTo(ListingActions.fetchFeaturedListingsFailed, this.onFetchFeaturedListingsFailed);
+        this.listenTo(ListingActions.fetchRecentListingsFailed, this.onFetchRecentListingsFailed);
+        this.listenTo(ListingActions.fetchMostPopularListingsFailed, this.onFetchMostPopularListingsFailed);
+        this.listenTo(ListingActions.fetchRecommendedListingsFailed, this.onFetchRecommendedListingsFailed);
 
         if(this.context.getCurrentParams().categories){
           this.setState({initCategories: decodeURIComponent(this.context.getCurrentParams().categories).split('+')});
         }
+        if(this.context.getCurrentParams().tags){
+          this.setState({initTags: decodeURIComponent(this.context.getCurrentParams().tags).split('+')});
+        }
+        if(this.context.getCurrentParams().tagId){
+            this.setState({tagId: decodeURIComponent(this.context.getCurrentParams().tagId).split('+')});
+        }
+
 
     },
 
@@ -160,7 +251,7 @@ var Discovery = React.createClass({
                         isSearching= { isSearching }
                         initCategories = { this.state.initCategories ? this.state.initCategories : false }
                         categories={ this.props.system.categories }
-                        onGoHome= { this.reset }
+                        onGoHome= { this.refresh }
                         onChange= { this.onCategoryChange } />
                     <section className="content col-xs-9 col-lg-10">
                         {
@@ -168,6 +259,7 @@ var Discovery = React.createClass({
                                 this.renderSearchResults() :
                                 [
                                     this.renderFeaturedListings(),
+                                    this.renderRecommended(),
                                     this.renderNewArrivals(),
                                     this.renderMostPopular()
                                 ]
@@ -179,28 +271,6 @@ var Discovery = React.createClass({
     },
 
     componentDidMount(){
-        var substringMatcher = function(strs) {
-          return function findMatches(q, cb) {
-            // an array that will be populated with substring matches
-            var matches = [];
-
-            // regex used to determine if a string contains the substring `q`
-            var substrRegex = new RegExp(q, 'i');
-
-            // iterate through the pool of strings and for any string that
-            // contains the substring `q`, add it to the `matches` array
-            $.each(strs, function(i, str) {
-              if (substrRegex.test(str)) {
-                matches.push(str);
-              }
-            });
-
-            cb(matches);
-          };
-        };
-
-        $.get(`${API_URL}/api/metadata/`, data => {
-          var listings = data.listing_titles;
 
           $(this.refs.search.getDOMNode()).typeahead({
             hint: true,
@@ -209,15 +279,23 @@ var Discovery = React.createClass({
           },
           {
             name: 'listings',
-            source: substringMatcher(listings)
+            source: this.suggest,
+            async: true,
+            display: 'title'
           }).on('typeahead:selected', (evt, item) => {
-            this.onSearchInputChange({
-              target: {
-                value: item
-              }
+             this.onSearchInputChange({
+               target: {
+                 value: item.title
+               }
+             });
+             // when typeahead value is selected, it should open the details of the selected app
+            this.transitionTo(this.getActiveRoutePath(), null, {
+                listing: item.id,
+                action: 'view',
+                tab: 'overview'
             });
           });
-        });
+
 
 
         $(window).scroll(() => {
@@ -254,10 +332,16 @@ var Discovery = React.createClass({
         if(this.context.getCurrentParams().org){
           this.onOrganizationChange(decodeURIComponent(this.context.getCurrentParams().org).split('+'));
         }
+        if(this.context.getCurrentParams().tags){
+          this.onTagsChange(this.state.initTags);
+        }
     },
 
 
     onStoreChange() {
+        if (!this.state.searching) {
+            this.setState({orderingText: 'Sort By'});
+        }
         this.setState(this.getInitialState());
     },
 
@@ -275,8 +359,14 @@ var Discovery = React.createClass({
             queryString: '',
             currentOffset: 0,
             type: [],
-            agency: []
+            agency: [],
+            tags: [],
+            tagId: []
         });
+    },
+
+    refresh() {
+        location.reload();
     },
 
     searchBarReset() {
@@ -293,15 +383,50 @@ var Discovery = React.createClass({
         this.search();
     }, 500),
 
+    suggest(q, ab, cb) {
+        var { type, agency } = this.state;
+        var combinedObj = _.assign(
+            { search: q,
+              offset: this.state.currentOffset,
+              category: this.state.categories,
+              limit: this.state.limit
+            },
+            { type, agency }
+        );
+        var get= function(){
+              if(timeout){
+                  clearTimeout(timeout);
+              }
+              timeout = setTimeout(function(){
+                $.get(`${API_URL}/api/listings/essearch/suggest/`,
+                    $.param(combinedObj,true),
+                    function(result){
+                        cb(result);
+                    },
+                   'json'
+                );
+            },300);
+        };
+        get();
+    },
+
     search() {
         var { type, agency } = this.state;
         var combinedObj = _.assign(
             { search: this.state.queryString,
               offset: this.state.currentOffset,
               category: this.state.categories,
+              tag: this.state.tags,
+              tagId: this.state.tagId,
               limit: this.state.limit
             },
             { type, agency });
+
+        if (this.state.ordering) {
+            combinedObj = _.assign(combinedObj, {
+                ordering: this.state.ordering
+            },{ type, agency });
+        }
 
         ListingActions.search(_.assign(combinedObj));
 
@@ -334,26 +459,50 @@ var Discovery = React.createClass({
 
     renderFeaturedListings() {
         if(!this.state.featured.length) {
-            return;
+            return (
+                [<h4>Featured</h4>,
+                <LoadIndicator showError={this.state.featuredError}
+                    errorMessage="Error loading Featured Listings"/>]
+            );
         }
 
         return (
-            <FeaturedListings key="FeaturedListings"
-                listings={ this.state.featured } />
+            <section className="FeaturedListings" key="FeaturedListings">
+                <FeaturedListings listings={ this.state.featured } />
+            </section>
+        );
+    },
+
+    renderRecommended() {
+        if(!this.state.recommended.length) {
+            return (
+                [<h4>{listingMessages['recommender.recommended']}</h4>,
+                <LoadIndicator showError={this.state.recommendedError}
+                    errorMessage="Error loading Recommended Listings"/>]
+            );
+        }
+
+        return (
+            <section className="Discovery__Recommended" key="Discovery__Recommended">
+                <h4>{listingMessages['recommender.recommended']}</h4>
+                <Carousel className="new-arrival-listings" aria-label="Recommended Apps Carousel" slides={ RecommendedListingTileStorefront.fromArray(this.state.recommended, listingMessages['recommender.recommended']) } />
+            </section>
         );
     },
 
     renderNewArrivals() {
         if(!this.state.newArrivals.length) {
-            return;
+            return (
+                [<h4>New Arrivals</h4>,
+                <LoadIndicator showError={this.state.newArrivalsError}
+                    errorMessage="Error loading New Arrivals Listings"/>]
+            );
         }
 
         return (
             <section className="Discovery__NewArrivals" key="Discovery__NewArrivals">
                 <h4>New Arrivals</h4>
-                <Carousel className="new-arrival-listings" aria-label="New Arrivals Carousel">
-                    { ListingTile.fromArray(this.state.newArrivals) }
-                </Carousel>
+                <Carousel className="new-arrival-listings" aria-label="New Arrivals Carousel" slides={ListingTile.fromArray(this.state.newArrivals)} />
             </section>
         );
     },
@@ -383,9 +532,37 @@ var Discovery = React.createClass({
           }, 500);
         }
     },
+
+    sortMostPopular(order) {
+        var me = this;
+        DiscoveryPageStore.sortMostPopular(order);
+
+        sortOptions.forEach(function(element) {
+            if (order == element.option) {
+                me.setState({orderingText: element.option});
+            }
+        });
+    },
+
+    renderSortOptions(sortMethod) {
+        return (
+            <SelectBox className="SelectBox sortBy" label={this.state.orderingText} onChange={sortMethod}>
+                <option className="sortBy" value={sortOptions[0].option}>{sortOptions[0].option}</option>
+                <option className="sortBy" value={sortOptions[1].option}>{sortOptions[1].option}</option>
+                <option className="sortBy" value={sortOptions[2].option}>{sortOptions[2].option}</option>
+                <option className="sortBy" value={sortOptions[3].option}>{sortOptions[3].option}</option>
+                <option className="sortBy" value={sortOptions[4].option}>{sortOptions[4].option}</option>
+            </SelectBox>
+        );
+    },
+
     renderMostPopular() {
         if(!this.state.mostPopular.length) {
-            return;
+            return (
+                [<h4>Most Popular</h4>,
+                <LoadIndicator showError={this.state.mostPopularError}
+                    errorMessage="Error loading Most Popular Listings"/>]
+            );
         }
 
         var InfiniTiles = ListingTile.renderLimitedTiles(this.state.mostPopularTiles, this.state.mostPopular);
@@ -393,13 +570,12 @@ var Discovery = React.createClass({
         return (
             <section className="Discovery__MostPopular" key="Discovery__MostPopular">
                 <h4>Most Popular</h4>
+                    {this.renderSortOptions(this.sortMostPopular)}
                 <ul className="infiniteScroll row clearfix">
                     { InfiniTiles }
                 </ul>
                 <p className="text-center">
-                  { this.state.loadingMore &&
-                    <h3 className="col-xs-12">Searching...</h3>
-                  }
+                  { this.state.loadingMore && <LoadIndicator/> }
                 </p>
             </section>
         );
@@ -413,6 +589,7 @@ var Discovery = React.createClass({
 
     renderSearchResults() {
         var results = '';
+        let listingResults;
 
         if (!this._searching) {
             results = this.state.searchResults.length > 0 ?
@@ -420,9 +597,17 @@ var Discovery = React.createClass({
                 <h3 className="col-xs-12">No results found.</h3>;
         }
 
-        var searchLink = `${CENTER_URL}/#/home/${encodeURIComponent(this.state.queryString)}/${(this.state.categories.length) ? encodeURIComponent(this.state.categories.toString()).replace(/%2C/g,'+') : ''}/${(this.state.type.length) ? encodeURIComponent(this.state.type.toString()).replace(/%2C/g,'+') : ''}/${(this.state.agency.length) ? encodeURIComponent(this.state.agency.toString()).replace(/%2C/g,'+') : ''}`;
+        if (this.state.searchResults.length != 0) {
+            listingResults = <div role="alert" aria-live="polite" aria-label={'Showing ' + this.state.searchResults.length + ' out of ' + DiscoveryPageStore.getTotalSearchResults() + ' listings'}>
+                Showing {this.state.searchResults.length} out of {DiscoveryPageStore.getTotalSearchResults()} listings.
+            </div>
+        }
+
+        var searchLink = `${CENTER_URL}/#/home/${encodeURIComponent(this.state.queryString)}/${(this.state.categories.length) ? encodeURIComponent(this.state.categories.toString()).replace(/%2C/g,'+') : ''}/${(this.state.type.length) ? encodeURIComponent(this.state.type.toString()).replace(/%2C/g,'+') : ''}/${(this.state.agency.length) ? encodeURIComponent(this.state.agency.toString()).replace(/%2C/g,'+') : ''}/${(this.state.tags.length) ? encodeURIComponent(this.state.tags.toString()).replace(/%2C/g,'+') : ''}/${(this.state.tagId.length) ? encodeURIComponent(this.state.tagId.toString()).replace(/%2C/g,'+') : ''}`;
+
         return (
             <section className="Discovery__SearchResults">
+                {this.renderSortOptions(this.onSortChange)}
                 <h4 ref="searchResults">Search Results &nbsp;
                   <span tabIndex="0"
                     className="shareLink"
@@ -433,20 +618,23 @@ var Discovery = React.createClass({
                     &nbsp;<span className="icon-share-10-blueDark"></span>
                   </span>
                 </h4>
-                <p><DetailedQuery
-                  onCategoryChange={this.onCategoryChange}
-                  onTypeChange={this.onTypeChange}
-                  onOrganizationChange={this.onOrganizationChange}
-                  reset={this.reset}
-                  data={this.state}
-                  /></p>
+                {listingResults}
+                <div className="resultsDiv">
+                    <p>
+                        <DetailedQuery
+                          onCategoryChange={this.onCategoryChange}
+                          onTypeChange={this.onTypeChange}
+                          onOrganizationChange={this.onOrganizationChange}
+                          reset={this.reset}
+                          data={this.state}
+                          />
+                    </p>
+                </div>
                 <ul className="list-unstyled listings-search-results row clearfix">
                     { results }
                 </ul>
                 <div className="list-unstyled listings-search-results row clearfix">
-                    { this.state.searching &&
-                      <h3 className="col-xs-12">Searching...</h3>
-                    }
+                    { this.state.searching && <LoadIndicator/> }
                 </div>
             </section>
         );

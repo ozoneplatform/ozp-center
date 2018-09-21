@@ -204,7 +204,8 @@
               wrapper: {
                   position: "relative",
                   display: "inline-block",
-                  height: "54px"
+                  height: "54px",
+                  width: "calc(100% - 120px)"
               },
               hint: {
                   position: "absolute",

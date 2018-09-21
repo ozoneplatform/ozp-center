@@ -19,7 +19,7 @@ $quickview-nav-tabs-height: 42px;
     }
     .tab-content {
         overflow: auto;
-        height: 425px;
+        height: 455px;
         padding: 25px;
         color: $gray-dark;
     }
@@ -31,6 +31,10 @@ $quickview-nav-tabs-height: 42px;
     .headingBase{
         @extend .textBase;
         font-weight: 400;
+    }
+
+    .usage {
+        margin-bottom: 20px;
     }
 
     h5 {
@@ -49,7 +53,7 @@ $quickview-nav-tabs-height: 42px;
     p, section > p, section > span {
         @extend .textBase;
         margin-top: 3px;
-        margin-bottom: 3px;
+        margin-bottom: 5px;
     }
 
     .alert-warning {
@@ -59,6 +63,7 @@ $quickview-nav-tabs-height: 42px;
     label {
         font-weight: 400;
         margin-right: 5px;
+        margin-bottom: 0px;
     }
 
     .intentName {
@@ -90,6 +95,10 @@ $quickview-nav-tabs-height: 42px;
             @extend .icon-pencil-blueDark;
         }
     }
+
+    i.icon-share-alt {
+        @extend .icon-share-alt !optional;
+    }
 }
 
 ul.list-unstyled.RecentActivity
@@ -111,7 +120,52 @@ ul.list-unstyled.RecentActivity
         }
     }
 
+.quickview-recommendations {
+    position: relative;
+    padding: 25px;
+    border-top: 4px solid #eeeeef;
+    height: 156px;
+    overflow: hidden;
 
+    .carousel, .carousel-wrapper {
+        max-height: 89px;
+    }
+
+    .recommendations-title {
+        font-size: 18px;
+        line-height: 18px;
+        font-weight: normal;
+        margin: 0;
+        display: inline-block;
+    }
+
+    .listing-title{
+        width: 147px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .recommendations-tile{
+        @extend .quickview-header;
+        cursor: pointer;
+        border-right: 1px solid #eeeeef !important;
+        width: 255px;
+        display: inline-block;
+
+        .listing-link {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+
+            z-index: 1;
+        }
+
+    }
+
+}
 
 .quickview-header {
     position: relative;
@@ -126,6 +180,8 @@ ul.list-unstyled.RecentActivity
         left: 100px;
         bottom: -30px;
         white-space: nowrap;
+        margin-left: 23px;
+        padding-left: 0px;
     }
 
     .quickview-header-info {
@@ -180,28 +236,15 @@ ul.list-unstyled.RecentActivity
         padding: 0 0 0 20px;
         margin: 0;
         display: inline-block;
-        width-max:50px;
     }
 }
 
 .quickview-overview {
-
     .carousel-wrapper {
         margin: 0 auto;
-        width: 600px;
+        width: 617px;
         height: 375px;
-
-        > .carousel {
-            height: 100%;
-            overflow: hidden;
-            margin: 0 auto !important;
-        }
-
-        img {
-            width: 600px;
-            height: 375px;
-            cursor: pointer;
-        }
+        cursor: pointer;
     }
 }
 
@@ -275,8 +318,9 @@ ul.list-unstyled.RecentActivity
     }
 
     section {
-        button:first-of-type {
+        button {
             margin-right: 6px;
+            margin-bottom: 6px;
         }
     }
 
@@ -313,6 +357,149 @@ ul.list-unstyled.RecentActivity
     > section {
         margin-bottom: 20px;
     }
+
+    .switch {
+        position: relative;
+        width: 54px;
+        top: 10px;
+    }
+
+    .switch-checkbox {
+        display: none;
+    }
+
+    .switch-label {
+        display: inline-block;
+        overflow: hidden;
+        cursor: pointer;
+        border-radius: 20px;
+        background-color: #487a4b;
+    }
+
+    .switch-inner {
+        display: block;
+        width: 200%;
+        margin-left: -100%;
+        transform: 0.4s;
+    }
+
+    .switch-inner:before, .switch-inner:after {
+        display: block;
+        float: left;
+        width: 50%;
+        height: 20px;
+        padding: 0;
+        line-height: 19px;
+        font-size: 11px;
+        color: #FFFFFF;
+        font-family: inherit;;
+        font-weight: bold;
+        box-sizing: border-box;
+    }
+
+    .switch-inner:before {
+        content: "ON";
+        padding-left: 10px;
+        color: #FFFFFF;
+    }
+
+    .switch-inner:after {
+        content: "OFF";
+        padding-right: 10px;
+        color: #FFFFFF;
+        background-color: #ccc;
+        text-align: right;
+    }
+
+    .switch-slider {
+        display: block;
+        width: 12px;
+        margin: 4px;
+        background: #FFFFFF;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 34px;
+        border-radius: 20px;
+        transition: 0.4s;
+    }
+
+    .switch-checkbox:checked + .switch-label .switch-inner {
+        margin-left: 0;
+    }
+
+    .switch-checkbox:checked + .switch-label .switch-slider {
+        right: 0px;
+    }
+
+}
+
+.LaunchConfirmation {
+    z-index: 1050;
+}
+
+.LaunchConfirmation .modal-dialog {
+    width: 500px;
+}
+
+.LaunchConfirmation .modal-body {
+    padding: 20px 50px;
+    text-align: center;
+}
+
+.LaunchConfirmation .modal-body strong {
+    font-weight: normal;
+    font-size: 1.3em;
+    display: block;
+    margin-bottom: 40px;
+    border: 1px solid #eeeeef;
+    padding: 20px;
+    box-shadow: 0px 4px 13px #eeeeef
+}
+
+.LaunchConfirmation section {
+    position: absolute;
+    right: 9px;
+    bottom: 0px;
+}
+
+.listingLaunchConfirmation .modal-dialog {
+    width: 830px;
+    padding-top: 115px;
+}
+
+.listingLaunchConfirmation .modal-title {
+    color: #3b4246 !important;
+    font-weight: 300 !important;
+    font-size: 18px !important;
+}
+
+.LaunchConfirmation .modal-body .btn {
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+.LaunchConfirmation__header {
+    float: left;
+    margin-top: -5px;
+}
+
+.LaunchConfirmation__content {
+    clear: both;
+    padding-top: 9px;
+}
+
+.LaunchConfirmation__columns {
+  column-count: 2;
+  -moz-colomn-count: 2;
+  -webkit-column-count: 2;
+  padding-bottom: 45px;
+
+    p {
+        -webkit-column-break-inside: avoid;
+        page-break-inside: avoid;
+        break-inside: avoid-column;
+    }
 }
 
 .Review {
@@ -336,6 +523,11 @@ ul.list-unstyled.RecentActivity
         margin-top: 3px;
         cursor: pointer;
     }
+
+    .icon-feedback-12-grayDark {
+        cursor: pointer;
+        left: 5px;
+    }
 }
 
 .SubmitReview__Rating {
@@ -347,4 +539,36 @@ ul.list-unstyled.RecentActivity
         margin-left: 6px;
         color: $link-color;
     }
+}
+
+.Response {
+    background: #eeeeef;
+    border-left: solid 1px black;
+    margin-top: 5px;
+    padding: 5px 5px 5px 15px;
+}
+
+.list-unstyled.list-reviews ul {
+    margin-left: 30px;
+}
+
+.response-textarea {
+    padding: $table-cell-padding;
+    resize: none;
+    margin: 0 0 10px 0;
+    width: 100%;
+    height: 4em;
+    display: block;
+    font-size: 12px;
+}
+
+.checkbox {
+    display: inline-block;
+}
+
+.checkbox-text {
+    display: inline-block;
+    position: relative;
+    bottom: 2px;
+    padding-left: 5px;
 }

@@ -11,6 +11,7 @@
         color: $gray;
         font-weight: bold;
         font-size: 14pt;
+        display: inline-block;
     }
 
     .facet-group {
@@ -49,10 +50,28 @@
         }
     }
 
+    .tag_subscribe {
+        visibility: visible;
+        cursor: pointer;
+        color: #ecc44d;
+        padding-left: 8px;
+    }
+
+    .divider {
+        padding-left: 8px;
+    }
+
+    .btn-divider {
+        float: right;
+    }
+
     .sidebar {
 
         li {
             border-left: transparent 5px solid;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
 
             i.icon-shopping {
                 @extend .icon-shopping-grayDarker;
@@ -65,6 +84,24 @@
 
                 > i.icon-shopping {
                     @extend .icon-shopping-blueDark;
+                }
+
+                > span:first-child {
+                  max-width: 60%;
+                  display: inline-block;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  white-space: nowrap;
+                  height: 23px;
+                }
+
+                > span.subscribe {
+                    visibility: visible;
+                    color: gray;
+                    font-size: 75%;
+                    padding-right: 10px;
+                    right: 0px;
+                    position: absolute;
                 }
             }
 
@@ -83,6 +120,10 @@
                     @extend .icon-shopping-blueDark;
                 }
             }
+
+            > span.subscribe {
+                visibility: hidden;
+            }
         }
     }
 
@@ -90,6 +131,26 @@
         padding: 30px;
         min-height: 500px;
     }
+
+    .resultsDiv {
+        display: inline-block;
+        position: relative;
+        left: 5px;
+    }
+
+    .negative-feedback {
+        transform: rotate(180deg) scaleX(1);
+    }
+
+    .positive-feedback-toggled {
+        background-color: #087399;
+        border-color: #087399;
+    }
+
+}
+
+.ariaTip {
+    display: none;
 }
 
 .shareLink{
@@ -99,7 +160,7 @@
     font-weight: normal;
 }
 
-.Discovery__NewArrivals, .Discovery__MostPopular {
+.Discovery__NewArrivals, .Discovery__MostPopular, .Discovery__Recommended {
     margin-top: 40px;
 }
 
@@ -111,5 +172,6 @@
 .carousel {
     .SearchListingTile {
         margin-bottom: 0;
+        margin: unset;
     }
 }

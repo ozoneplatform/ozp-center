@@ -6,7 +6,7 @@ var AjaxMixin = {
         return {
             errors: null,
             errorMessage: null,
-            errorStatus: null,
+            errorStatus: null
         };
     },
 
@@ -18,7 +18,7 @@ var AjaxMixin = {
             errors: response ? response.errors : null,
             errorStatus: status,
             errorMessage: response ?
-                    (response.message || response.responseText) :
+                    (response.message || response.responseText || response.detail) :
                     response.responseText
         });
     }

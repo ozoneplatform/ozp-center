@@ -12,13 +12,13 @@ require('sweetalert');
 var FIELDS = [
     'approvedDate', 'id', 'title', 'description', 'descriptionShort', 'screenshots', 'contacts',
     'totalComments', 'avgRate', 'totalRate1', 'totalRate2', 'totalRate3','totalRate4', 'height',
-    'width', 'totalRate5','totalVotes', 'state', 'tags', 'type','uuid', 'requirements', 'singleton',
+    'width', 'totalRate5','totalVotes', 'totalReviews', 'state', 'tags', 'tagsObject', 'type','uuid', 'usage_requirements', 'system_requirements', 'singleton',
     'versionName', 'imageLargeUrl', 'imageSmallUrl', 'imageMediumUrl', 'imageXlargeUrl',
     'launchUrl', 'company', 'whatIsNew', 'owners', 'agency', 'agencyShort', 'rejection',
     'isEnabled', 'categories', 'releaseDate', 'editedDate', 'intents', 'docUrls', 'approvalStatus',
     'isFeatured', 'smallIconId', 'largeIconId', 'bannerIconId', 'featuredBannerIconId',
     'currentRejection', 'isPrivate', 'securityMarking', 'smallIconMarking',
-    'largeIconMarking', 'bannerIconMarking', 'featuredBannerIconMarking', 'isBookmarked'
+    'largeIconMarking', 'bannerIconMarking', 'featuredBannerIconMarking', 'isBookmarked', 'certIssues', 'feedback'
 ];
 
 // These don't have the icons, access_control
@@ -26,8 +26,8 @@ var SAVE_FORMAT_FIELDS = [
     'agency', 'approval_status', 'approved_date', 'avg_rate', 'categories', 'contacts',
     'description', 'description_short', 'doc_urls', 'id', 'intents', 'is_enabled', 'is_featured',
     'is_private', 'last_activity', 'launch_url', 'listing_type', 'owners', 'required_listings',
-    'requirements', 'screenshots', 'singleton', 'tags', 'title', 'total_comments', 'total_rate1',
-    'total_rate2', 'total_rate3', 'total_rate4', 'total_rate5', 'total_votes', 'unique_name',
+    'usage_requirements', 'system_requirements', 'screenshots', 'singleton', 'tags', 'title', 'total_comments', 'total_rate1',
+    'total_rate2', 'total_rate3', 'total_rate4', 'total_rate5', 'total_votes', 'total_reviews', 'unique_name',
     'version_name', 'what_is_new', 'small_icon', 'large_icon', 'banner_icon', 'large_banner_icon',
     'security_marking', 'is_bookmarked'
 ];
@@ -36,6 +36,14 @@ function Listing (json) {
 
     if (!(this instanceof Listing)) {
         throw new Error("This object must be created with new");
+    }
+    //if object is already listing do not try to map listing again
+    if (json instanceof Listing)
+        return json;
+    if (json.isExistingListing ){
+        for(var i in json)
+            this[i] = json[i];
+        return this;
     }
 
     json = json || {};
@@ -47,25 +55,22 @@ function Listing (json) {
 
     function viewingExistingListing(json) {
         // This data comes from the API/listing endpoint
-        return ('listingType' in json);
-    }
-
-    function creatingFreshListing(json) {
-        // Fresh create/edit pages are prepopulated with owner info
-        return ('owners' in json) && !('listingType' in json) && !('type' in json);
+        return json && json.id;
     }
 
     if (viewingExistingListing(json)) {
+        this.isExistingListing = true;
         this.type = json.listingType ? json.listingType.title : "";
         this.categories = _.map(json.categories, 'title') || [];
         this.tags = _.map(json.tags, 'name') || [];
-        this.agency = json.agency ? json.agency.title : "";
-        this.agencyShort = json.agency ? json.agency.shortName : "";
+        this.tagsObject = _.map(json.tags) || [];
+        this.agency = json.agency ? json.agency.title : json.agencyTitle || "";
+        this.agencyShort = json.agency ? json.agency.shortName : json.agencyShortName || "";
         this.owners = _.map(json.owners, function (o) {
             return {displayName: o.displayName,
                     id: o.id,
-                    username: o.user.username};
-        });
+                    username: o.user ? o.user.username : o.username};
+        }) || [];
         this.intents = _.map(this.intents, x => x.action);
         _.map(this.contacts, x => x.type = x.contactType.name);
 
@@ -98,34 +103,32 @@ function Listing (json) {
 
         this.uuid = json.uniqueName;
 
-    } else if (creatingFreshListing(json)) {
+    } else  {
         this.owners = _.map(json.owners, function (o) {
             return {displayName: o.displayName,
                     id: o.id,
                     username: o.username};
-        });
+        }) || [];
         this.categories = json.categories || [];
         this.tags = json.tags || [];
+        this.tagsObject = json.tags || [];
         this.agency = json.agency || "";
         this.agencyShort = json.agencyShort || "";
         this.intents = json.intents || [];
         this.contacts = this.contacts || [];
-
-    } else {
-        this.title = json.title || "";
         this.type = json.type || "";
-        this.owners = json.owners || [];
-        this.categories = json.categories || [];
-        this.tags = json.tags || [];
-        this.agency = json.agency || "";
-        this.agencyShort = json.agencyShort || "";
-        this.intents = json.intents || [];
-        this.contacts = this.contacts || [];
+        this.title = json.title || "";
+
+
     }
 
     this.screenshots = this.screenshots || [];
     this.docUrls = this.docUrls || [];
     this.changeLogs = [];
+    this.similar = [];
+    this.isPartialListing = true;
+    this.usage_requirements = json.usageRequirements;
+    this.system_requirements = json.systemRequirements;
 
     return this;
 }
@@ -256,22 +259,56 @@ var ListingApi = {
         return new Listing(listingData);
     },
 
-    getStorefrontListings: function() {
+    getStorefrontListings: function() { //depricated
         return $.getJSON(API_URL + '/api/storefront/').then(
             resp => ({
                 featured: _.map(resp.featured, this.newListing),
                 newArrivals: _.map(resp.recent, this.newListing),
-                mostPopular: _.map(resp.most_popular, this.newListing)
+                mostPopular: _.map(resp.most_popular, this.newListing),
+                recommended: _.map(resp.recommended, this.newListing)
             }));
+    },
+
+    getFeaturedListings: function() {
+        return $.getJSON(API_URL + '/api/storefront/featured/').then(
+            resp => {
+                return _.map(resp.featured, this.newListing);
+            });
+    },
+
+    getRecentListings: function() {
+        return $.getJSON(API_URL + '/api/storefront/recent/').then(
+            resp => {
+                return _.map(resp.recent, this.newListing);
+            });
+    },
+
+    getMostPopularListings: function() {
+        return $.getJSON(API_URL + '/api/storefront/most_popular/').then(
+            resp => {
+                return _.map(resp.most_popular, this.newListing);
+            });
+    },
+
+    getRecommendedListings: function() {
+        return $.getJSON(API_URL + '/api/storefront/recommended/').then(
+            resp => {
+                return _.map(resp.recommended, this.newListing);
+            });
     },
 
     search: function (options) {
         var params = $.param(options, true);
-        return $.getJSON(API_URL + '/api/listings/search/?' + params).then(
+        return $.getJSON(API_URL + '/api/listings/essearch/?' + params).then(
             (response) => {
                 if (options.category && options.category.length > 0) {
                     for(var index = 0; index < options.category.length; index++) {
                         OzpAnalytics.trackCategorization('Categorization', options.category[index], response.count);
+                    }
+                }
+                if (options.tag && options.tag.length > 0) {
+                    for(var tagIndex = 0; tagIndex < options.tag.length; tagIndex++) {
+                        OzpAnalytics.trackCategorization('Tags', options.tag[tagIndex], response.count);
                     }
                 }
 
@@ -280,13 +317,13 @@ var ListingApi = {
                         var queryStringNoStar = options.search.replace(/[*]$/,"");
                         if ((options.type && options.type.length > 0) ||
                             (options.category && options.category.length > 0) ||
+                            (options.tag && options.tag.length > 0) ||
                             (options.agency && options.agency.length > 0)) {
                             queryStringNoStar = queryStringNoStar + ' (+)';
                         }
                         OzpAnalytics.trackSiteSearch('Application Search', queryStringNoStar, response.count);
                     }
                 }, 800);
-
                 response.results = _.map(response.results, this.newListing);
                 return response;
 
@@ -328,16 +365,21 @@ var ListingApi = {
         });
     },
 
-    del: function (id) {
+    del: function (id, description) {
         return $.ajax({
             type: 'DELETE',
+            data: { description: description },
             url: API_URL + '/api/listing/' + encodeURIComponent(id) + '/'
         });
     },
 
-    getChangeLogs: function (id) {
-        return $.getJSON(API_URL + '/api/listing/' + id + '/activity/?offset=0&limit=' + PAGINATION_MAX).then(
-            (response) => new PaginatedResponse(humps.camelizeKeys(response)).getItemAsList());
+    getChangeLogs: function (id, url, options) {
+        if(!_.isString(url)) {
+                url = API_URL + '/api/listing/' + id + '/activity/?' + $.param(options);
+        }
+
+        return $.getJSON(url).then(
+            (response) => new PaginatedResponse(humps.camelizeKeys(response)));
     },
 
     fetchReviews: function (id) {
@@ -351,11 +393,13 @@ var ListingApi = {
         if (review.id) {
             method = 'PUT';
             url += `${review.id}/`;
+            review.author = undefined;
         }
         // default rate to 1 if not specified
         if (!review.rate) {
             review.rate = 1;
         }
+        review.listing= listingId;
 
         return $.ajax({
             type: method,
@@ -375,6 +419,33 @@ var ListingApi = {
         });
     },
 
+    saveReviewResponse: function (parentId, review) {
+        var url = `${API_URL}/api/listing/${review.listing.id}/review/`,
+            method = 'POST';
+
+        // default rate to 1 if not specified
+        if (!review.rate) {
+            review.rate = 1;
+        }
+
+        review.review_parent = review.review.id;
+        review.listing = review.listing.id;
+
+        if (review.parentReview) {
+            method = 'PUT';
+            url += `${review.reviewId}/`;
+            review.review_parent = review.parentReview.id;
+        }
+
+        return $.ajax({
+            type: method,
+            url: url,
+            data: JSON.stringify(review),
+            dataType: 'json',
+            contentType: 'application/json'
+        });
+    },
+
     getOwnedListings: function (profile) {
         var url = API_URL + '/api/self/listing/';
 
@@ -389,6 +460,16 @@ var ListingApi = {
         return $.ajax({
             type: 'POST',
             url: API_URL + '/api/listing/' + id + '/rejection/',
+            data: JSON.stringify({description: description}),
+            dataType: 'json',
+            contentType: 'application/json'
+        });
+    },
+
+    pendDeleteListing: function (id, description) {
+        return $.ajax({
+            type: 'POST',
+            url: API_URL + '/api/listing/' + id + '/pendingdeletion/',
             data: JSON.stringify({description: description}),
             dataType: 'json',
             contentType: 'application/json'
@@ -429,6 +510,31 @@ var ListingApi = {
         }
         return $.getJSON(url).then(
             (response) => new PaginatedResponse(humps.camelizeKeys(response)));
+    },
+
+    getSimilarListings: function(listingId) {
+        var url =`${API_URL}/api/listing/${listingId}/similar/`;
+
+        return $.getJSON(url).then(
+            (resp) => _.map(resp, this.newListing));
+    },
+
+    giveFeedback: function(id, thumbs) {
+        return $.ajax({
+            type: 'POST',
+            url: API_URL + '/api/listing/' + id + '/feedback/',
+            data: JSON.stringify({feedback: thumbs}),
+            dataType: 'json',
+            contentType: 'application/json'
+        });
+    },
+
+    deleteFeedback: function(id) {
+        return $.ajax({
+            type: 'DELETE',
+            url: API_URL + '/api/listing/' + id + '/feedback/' + id + '/',
+            contentType: 'application/json'
+        });
     }
 };
 

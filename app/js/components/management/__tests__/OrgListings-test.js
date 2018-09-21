@@ -21,11 +21,11 @@ describe ('OrgListings', function () {
         params: {
             org: "Test Organization"
         }
-    }
+    };
 
     beforeEach( function () {
         ProfileMock.mockOrgSteward(mockOrg);
-        sessionStorage.setItem("center-orgListings-toggleView", false);
+        sessionStorage.setItem("center-listings-toggleView", false);
         router = Router.run(routes, location, function (Handler) {
             listingManagement = TestUtils.renderIntoDocument(
                 <Handler org={mockOrg}/>
@@ -52,7 +52,7 @@ describe ('OrgListings', function () {
     });
 
     afterEach( function () {
-        router.stop()
+        router.stop();
         ProfileMock.restore();
     });
 });

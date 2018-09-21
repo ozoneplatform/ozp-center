@@ -6,6 +6,8 @@ var { Link, Navigation } = require('react-router');
 var ActiveState = require('../../mixins/ActiveStateMixin');
 var { UserRole } = require('ozp-react-commons/constants');
 var deleted = './images/deleted_360.png';
+var SelfStore = require('ozp-react-commons/stores/SelfStore');
+var ApprovalStatusIcons = require('../shared/ApprovalStatusIcons.jsx');
 
 var ActionMenu = React.createClass({
 
@@ -13,6 +15,9 @@ var ActionMenu = React.createClass({
 
     render: function () {
         //TODO fill in hrefs
+        var currentUser = SelfStore.getDefaultData().currentUser;
+        var owners = this.props.listing.owners;
+
         var listing = this.props.listing,
             activeRoutePath = this.getActiveRoutePath(),
             overviewHref = this.makeHref(activeRoutePath, this.getParams(), {
@@ -24,9 +29,17 @@ var ActionMenu = React.createClass({
                 listing: listing.id,
                 action: 'delete'
             }),
+            pendDeleteHref = this.makeHref(activeRoutePath, this.getParams(), {
+                listing: listing.id,
+                action: 'pending_deletion'
+            }),
             feedbackHref = this.makeHref(activeRoutePath, this.getParams(), {
                 listing: listing.id,
                 action: 'feedback'
+            }),
+            undeleteHref = this.makeHref(activeRoutePath, this.getParams(), {
+                listing: listing.id,
+                action: 'undelete'
             }),
             linkParams = {listingId: listing.id},
             edit = <li key="edit"><Link to="edit" params={linkParams}>Edit</Link></li>,
@@ -34,29 +47,59 @@ var ActionMenu = React.createClass({
             del = <li key="del"><a href={deleteHref}>Delete</a></li>,
             view = <li key="view"><a href={overviewHref}>View</a></li>,
             feedback = <li key="feedback"><a href={feedbackHref}>Read Feedback</a></li>,
+            pendingDelete = <li key="penddelete"><a href={pendDeleteHref}>Pend for Deletion</a></li>,
+            undelete  = <li key="undelete"><a href={undeleteHref}>Undelete</a></li>,
             links,
             approvalStatus = listing.approvalStatus;
 
         switch (approvalStatus) {
             case 'APPROVED':
-                links = [edit, view, del];
+                if(currentUser.isAdmin() || currentUser.isOrgSteward(listing.agencyShort)){
+                    links = [edit, view, del];
+                }
+                else{
+                    links = [edit, view, pendingDelete];
+                }
                 break;
             case 'APPROVED_ORG':
-                links = [edit, preview, del];
+                if(currentUser.isAdmin() || currentUser.isOrgSteward(listing.agencyShort)){
+                    links = [edit, view, del];
+                }
+                else{
+                    links = [edit, view, pendingDelete];
+                }
                 break;
             case 'PENDING':
-                links = [edit, preview, del];
+                if(currentUser.isAdmin() || currentUser.isOrgSteward(listing.agencyShort)){
+                    links = [edit, view, del];
+                }
+                else{
+                    links = [edit, view, pendingDelete];
+                }
                 break;
             case 'REJECTED':
-                links = [edit, feedback, preview, del];
+                if(currentUser.isAdmin() || currentUser.isOrgSteward(listing.agencyShort)){
+                    links = [edit, view, del];
+                }
+                else{
+                    links = [edit, view, pendingDelete];
+                }
                 break;
             case 'DELETED':
-                links = [view];
+                    links = [];
+                break;
+            case 'PENDING_DELETION':
+                if(currentUser.isAdmin() || currentUser.isOrgSteward(listing.agencyShort)){
+                    links = [edit, view, del];
+                }
+                else{
+                    links = [view, edit,undelete];
+                }
                 break;
             case 'DRAFT':
                 /* falls through */
             default:
-                links = [edit, preview, del];
+                links = [edit, preview, pendingDelete];
         }
 
         //use hidden checkbox to manage menu toggle state
@@ -70,28 +113,14 @@ var ActionMenu = React.createClass({
     }
 });
 
-var ListingStatus = React.createClass({
-    render: function () {
-        return (
-            <div className="approvalStatus"></div>
-        );
-    }
-});
-
 var PrivateListing = React.createClass({
     render: function () {
         var isPrivate = this.props.listing.isPrivate;
 
-        var lockStyle = {
-            position: 'absolute',
-            left: '18px',
-            top: '0'
-        };
-
         return (
-            <div style={lockStyle}>
+            <div className={"lockStyle"}>
                 { isPrivate &&
-                 <i className="icon-lock-blue"></i>
+                    <i className="icon-lock-blue"></i>
                 }
             </div>
         );
@@ -111,11 +140,14 @@ var EditedDate = React.createClass({
 
 var InfoBar = React.createClass({
     render: function () {
-        var listing = this.props.listing;
+        var listing = this.props.listing,
+        user = this.props.user;
 
         return (
             <h5 className="AdminOwnerListingTile__infoBar">
-                <ListingStatus listing={listing} />
+                <div className="iconStyle">
+                    <ApprovalStatusIcons listing={listing} user={user} />
+                </div>
                 <PrivateListing listing={listing} />
                 <p className="title">{listing.title}</p>
                 <EditedDate listing={listing} />
@@ -126,96 +158,59 @@ var InfoBar = React.createClass({
 
 var AdminOwnerListingTile = React.createClass({
     propTypes: {
-        role: React.PropTypes.oneOf([UserRole.APPS_MALL_STEWARD, UserRole.ORG_STEWARD, null]),
+        user: React.PropTypes.object,
         listing: React.PropTypes.object
     },
 
     mixins: [ Navigation, ActiveState ],
 
     statics: {
-        fromArray: function (array, role) {
+        fromArray: function (array, user) {
             return array.map((listing) =>
-                <AdminOwnerListingTile listing={listing} key={listing.id} role={role} />
+                <AdminOwnerListingTile listing={listing} key={listing.id} user={user} />
             );
         }
     },
 
-    _getApprovalStatusClass: function () {
-        var {listing, role} = this.props;
-        var approvalStatus = listing.approvalStatus;
-        var approvalStatusClasses;
-
-        if (role === UserRole.APPS_MALL_STEWARD) {
-            approvalStatusClasses = {
-                'draft': approvalStatus === 'IN_PROGRESS',
-                'pending': approvalStatus === 'PENDING',
-                'needs-action': approvalStatus === 'APPROVED_ORG',
-                'published': approvalStatus === 'APPROVED',
-                'rejected': approvalStatus === 'REJECTED',
-                'deleted': approvalStatus === 'DELETED',
-                'AdminOwnerListingTile': true
-            };
-        }
-        else if (role === UserRole.ORG_STEWARD) {
-            approvalStatusClasses = {
-                'draft': approvalStatus === 'IN_PROGRESS',
-                'pending': approvalStatus === 'APPROVED_ORG',
-                'needs-action': approvalStatus === 'PENDING',
-                'published': approvalStatus === 'APPROVED',
-                'rejected': approvalStatus === 'REJECTED',
-                'deleted': approvalStatus === 'DELETED',
-                'AdminOwnerListingTile': true
-            };
-        }
-        else {
-            approvalStatusClasses = {
-                'draft': approvalStatus === 'IN_PROGRESS',
-                'pending': approvalStatus === 'PENDING' || approvalStatus === 'APPROVED_ORG',
-                'needs-action': approvalStatus === 'REJECTED',
-                'published': approvalStatus === 'APPROVED',
-                'deleted': approvalStatus === 'DELETED',
-                'AdminOwnerListingTile': true
-            };
-        }
-        return approvalStatusClasses;
+    getInitialState: function() {
+        return {listing: this.props.listing, user: SelfStore.getDefaultData().currentUser};
     },
 
     render: function () {
-      var { listing } = this.props;
-
-      var overview = this.makeHref(this.getActiveRoutePath(), this.getParams(), {
-          listing: listing.id,
-          action: 'view',
-          tab: 'overview'
-      });
-      var classSet = React.addons.classSet(this._getApprovalStatusClass());
-      var imageLargeUrl = listing.imageLargeUrl;
-      if(this.props.listing.approvalStatus !== 'DELETED'){
-          return (
-              <li className={classSet}>
-                { (this.props.listing.approvalStatus !== "DELETED")  &&
-                    <ActionMenu listing={listing} />
-                }
-                <a href={overview}>
-                  <img alt={`Click to manage ${listing.title}`} className="AdminOwnerListingTile__img" src={(this.props.listing.approvalStatus !== "DELETED") ? imageLargeUrl : deleted} />
-                    <span className="hidden-span">{listing.title}</span>
-                </a>
-                <InfoBar listing={listing} />
+        var { listing } = this.props;
+        var user = this.state.user;
+        var overview = this.makeHref(this.getActiveRoutePath(), this.getParams(), {
+            listing: listing.id,
+            action: 'view',
+            tab: 'overview'
+        });
+        var imageLargeUrl = listing.imageLargeUrl;
+        if(this.props.listing.approvalStatus !== 'DELETED'){
+            return (
+                <li className="AdminOwnerListingTile">
+                    { (this.props.listing.approvalStatus !== "DELETED")  &&
+                        <ActionMenu listing={listing} />
+                    }
+                    <a href={overview}>
+                        <img alt={`Click to manage ${listing.title}`} className={(this.props.listing.approvalStatus !== "APPROVED" || !this.props.listing.isEnabled ) ? "AdminOwnerListingTile__img AdminOwnerListingTile__img--disabled" : "AdminOwnerListingTile__img"} src={(this.props.listing.approvalStatus !== "DELETED") ? imageLargeUrl : deleted} />
+                        <span className="hidden-span">{listing.title}</span>
+                    </a>
+                    <InfoBar listing={listing} user={user}/>
                 </li>
-          );
-      }
-      else{
-        return (
-            <li className={classSet}>
-              <a >
-                <img className="AdminOwnerListingTile__img" src={deleted} />
-                  <span className="hidden-span">{listing.title}</span>
-              </a>
-              <InfoBar listing={listing} />
-              </li>
             );
-          }
-      }
-      });
+        }
+        else{
+            return (
+                <li className={'AdminOwnerListingTile'}>
+                    <a >
+                        <img className="AdminOwnerListingTile__img" src={deleted} />
+                        <span className="hidden-span">{listing.title}</span>
+                    </a>
+                    <InfoBar listing={listing} user={user}/>
+                </li>
+            );
+        }
+    }
+});
 
 module.exports = AdminOwnerListingTile;

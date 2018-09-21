@@ -27,7 +27,7 @@ var AllListings = React.createClass({
     ],
 
     getInitialState: function () {
-        var useTableView = JSON.parse(sessionStorage.getItem('center-allListings-toggleView'));
+        var useTableView = JSON.parse(sessionStorage.getItem('center-listings-toggleView'));
         return {
             counts: {},
             filter: this.getQuery(),
@@ -37,20 +37,25 @@ var AllListings = React.createClass({
 
     onFilterChanged: function (key, value) {
         this.state.filter[key] = value;
+        this.setState({
+            filter: this.state.filter
+        });
+        if(this.refs.loadMore) {
+            this.refs.loadMore.clear();
+            this.refs.loadMore.initLoad();
+        }
         if(this.state.tableView){
+            this.state.filter.offset = 0;
+            w2ui.grid.offset = 0;
             UnpaginatedListingsStore.filterChange(this.state.filter);
         } else {
             PaginatedListingsStore.filterChange(this.state.filter);
         }
-        this.setState({
-            filter: this.state.filter
-        });
-        w2ui['grid'].searchReset();
     },
 
     onViewToggle: function (event) {
         event.preventDefault();
-        sessionStorage.setItem("center-allListings-toggleView", !this.state.tableView);
+        sessionStorage.setItem("center-listings-toggleView", !this.state.tableView);
         this.setState({
             tableView: !this.state.tableView
         });
@@ -62,6 +67,10 @@ var AllListings = React.createClass({
         });
     },
 
+    onSortChanged: function (sortOption) {
+        this.onFilterChanged('ordering', sortOption.searchParam);
+    },
+
     renderListings: function () {
         if (this.state.tableView === true) {
             return (
@@ -71,8 +80,9 @@ var AllListings = React.createClass({
             );
         } else {
             return (
-                <LoadMore className="ListingsManagement__LoadMore col-xs-9 col-lg-10 all"
-                    filter={this.state.filter} onCountsChanged={this.onCountsChanged}></LoadMore>
+                <LoadMore ref="loadMore" className="ListingsManagement__LoadMore col-xs-9 col-lg-10 all"
+                    filter={this.state.filter} onCountsChanged={this.onCountsChanged}
+                    onSortChanged={this.onSortChanged}></LoadMore>
             );
         }
     },
@@ -107,8 +117,8 @@ var AllListings = React.createClass({
                     <Sidebar>
                         {toggleSwitch}
                         <ApprovalStatusFilter role={ UserRole.APPS_MALL_STEWARD } { ...sidebarFilterOptions } />
-                        <OrgFilter { ...sidebarFilterOptions } />
                         <EnabledFilter { ...sidebarFilterOptions } />
+                        <OrgFilter { ...sidebarFilterOptions } />
                     </Sidebar>
                 </div>
                 { this.renderListings() }

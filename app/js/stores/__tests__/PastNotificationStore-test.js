@@ -10,23 +10,23 @@ describe('PastNotificationStore', () => {
 
     it('fetches past notifications when notification is created or expired', (done) => {
         var fetchPastStub = sinon.stub(NotificationActions, 'fetchPast');
-        var notificationList = PastNotificationStore.getNotifications();
+        var notificationList = JSON.parse(JSON.stringify(PastNotificationStore.getNotifications()));
+        var date = new Date();
+        date.setDate(date.getDate() - 1);
         var notification = {
             id: 1,
-            message: 'TEST'
+            message: 'TEST',
+            createdDate: new Date().toISOString(),
+            expiresDate: date
         };
+
         NotificationActions.createNotificationCompleted(Math.random(), notification);
         NotificationActions.expireNotificationCompleted(notification);
-
-        expect(fetchPastStub.calledTwice).to.be.ok;
-        expect(fetchPastStub.calledWith(undefined)).to.be.ok;
-
-        NotificationActions.fetchPastCompleted();
 
         setTimeout(() => {
             expect(notificationList).to.not.eql(PastNotificationStore.getNotifications());
             done();
-        }, 0)
+        }, 0);
     });
 
 });

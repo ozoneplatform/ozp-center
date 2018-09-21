@@ -2,7 +2,7 @@
 
 var React = require('react');
 var { classSet } = React.addons;
-var SystemHighMessage = require('../../shared/SystemHighMessage.jsx');
+var ReviewWarningMessage = require('../../shared/ReviewWarningMessage.jsx');
 var _ = require('../../../utils/_');
 var IconRating = require('../../shared/IconRating.jsx');
 var ListingActions = require('../../../actions/ListingActions');
@@ -71,7 +71,7 @@ var ReviewListing = React.createClass({
                 </div>
                 <div className={hasError}>
                     <h6>Description</h6>
-                    <SystemHighMessage />
+                    <ReviewWarningMessage />
                     <textarea ref="text" value={ text } onChange={ this.onTextChange }></textarea>
                     <p className="help-block small">Must have more than {limit} characters</p>
                 </div>

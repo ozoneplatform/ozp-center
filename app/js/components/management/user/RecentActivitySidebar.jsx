@@ -5,33 +5,42 @@ var { Link, Navigation } = require('react-router');
 var RadioGroup = require('react-radio-group');
 var SystemStateMixin = require('../../../mixins/SystemStateMixin');
 var _ = require('../../../utils/_');
+var ApprovalStatusIcons = require('../../shared/ApprovalStatusIcons.jsx');
 
 var MyListingsSidebarFilter = React.createClass({
 
     render: function () {
         return (
             <RadioGroup name="recent-activity-my-listings" onChange={this.props.handleChange}>
-                <Link id="recent-activity-returned" to="my-listings" query={{approvalStatus: "REJECTED"}}>
-                    <label htmlFor="recent-activity-returned" className="label-needs-action">
+                <Link id="recent-activity-returned" to="my-listings" query={{approval_status: "REJECTED"}}>
+                    <label htmlFor="MyListings__listings col-xs-9 col-lg-10 REJECTED" className="label-needs-action">
                         <i className="icon-caret-right"></i>
-                        <i className="icon-exclamation-14"></i>
+                        <ApprovalStatusIcons definedStatus={"REJECTED"} />
                         Returned to Owner
                     </label>
                 </Link>
 
-                <Link id="recent-activity-returned" to="my-listings" query={{approvalStatus: "PENDING"}}>
-                    <label htmlFor="recent-activity-pending" className="label-pending">
+                <Link id="recent-activity-returned" to="my-listings" query={{approval_status: "PENDING"}}>
+                    <label htmlFor="MyListings__listings col-xs-9 col-lg-10 PENDING"className="label-pending">
                         <i className="icon-caret-right"></i>
-                        <i className="icon-loader-14"></i>
+                        <ApprovalStatusIcons definedStatus={"PENDING"} />
                         Pending Review
                     </label>
                 </Link>
 
-                <Link id="recent-activity-returned" to="my-listings" query={{approvalStatus: "APPROVED"}}>
-                    <label htmlFor="recent-activity-published" className="label-published">
+                <Link id="recent-activity-returned" to="my-listings" query={{approval_status: "APPROVED"}}>
+                    <label htmlFor="MyListings__listings col-xs-9 col-lg-10 APPROVED" className="label-published">
                         <i className="icon-caret-right"></i>
-                        <i className="icon-thumbs-up-14"></i>
+                        <ApprovalStatusIcons definedStatus={"APPROVED"} />
                         Published
+                    </label>
+                </Link>
+
+                <Link id="recent-activity-pending-deletion" to="my-listings" query={{approval_status: "PENDING_DELETION"}}>
+                    <label htmlFor="my-listings-filter-pending-delete" className="label-pending-delete">
+                        <i className="icon-caret-right"></i>
+                        <ApprovalStatusIcons definedStatus={"PENDING_DELETION"} />
+                        Pending Deletion
                     </label>
                 </Link>
             </RadioGroup>
@@ -48,7 +57,7 @@ var AllListingsSidebarFilter = React.createClass({
                 <Link id="recent-activity-returned" to="all-listings" query={{approval_status: "APPROVED_ORG"}}>
                     <label htmlFor="recent-activity-returned" className="label-needs-action">
                         <i className="icon-caret-right"></i>
-                        <i className="icon-exclamation-14"></i>
+                        <ApprovalStatusIcons definedStatus={"APPROVED_ORG"} userType={"admin"}/>
                         Pending Review
                     </label>
                 </Link>
@@ -56,7 +65,7 @@ var AllListingsSidebarFilter = React.createClass({
                 <Link id="recent-activity-returned" to="all-listings" query={{approval_status: "PENDING"}}>
                     <label htmlFor="recent-activity-pending" className="label-pending">
                         <i className="icon-caret-right"></i>
-                        <i className="icon-loader-14"></i>
+                        <ApprovalStatusIcons definedStatus={"PENDING"} userType={"admin"}/>
                         Pending Organization Review
                     </label>
                 </Link>
@@ -64,7 +73,7 @@ var AllListingsSidebarFilter = React.createClass({
                 <Link id="recent-activity-returned" to="all-listings" query={{approval_status: "APPROVED"}}>
                     <label htmlFor="recent-activity-published" className="label-published">
                         <i className="icon-caret-right"></i>
-                        <i className="icon-thumbs-up-14"></i>
+                        <ApprovalStatusIcons definedStatus={"APPROVED"} userType={"admin"}/>
                         Published
                     </label>
                 </Link>
@@ -72,15 +81,23 @@ var AllListingsSidebarFilter = React.createClass({
                 <Link id="recent-activity-returned" to="all-listings" query={{approval_status: "REJECTED"}}>
                     <label htmlFor="recent-activity-returned" className="label-rejected">
                         <i className="icon-caret-right"></i>
-                        <i className="icon-reload-14"></i>
+                        <ApprovalStatusIcons definedStatus={"REJECTED"} userType={"admin"}/>
                         Returned to Owner
+                    </label>
+                </Link>
+
+                <Link id="recent-activity-pending-deletion" to="all-listings" query={{approval_status: "PENDING_DELETION"}}>
+                    <label htmlFor="recent-activity-pending-deletion" className="label-pending-deletion">
+                        <i className="icon-caret-right"></i>
+                        <ApprovalStatusIcons definedStatus={"PENDING_DELETION"} userType={"admin"}/>
+                        Pending Deletion
                     </label>
                 </Link>
 
                 <Link id="recent-activity-deleted" to="all-listings" query={{approval_status: "DELETED"}}>
                     <label htmlFor="recent-activity-deleted" className="label-deleted">
                         <i className="icon-caret-right"></i>
-                        <i className="icon-trash-blue"></i>
+                        <ApprovalStatusIcons definedStatus={"DELETED"} userType={"admin"}/>
                         Deleted
                     </label>
                 </Link>
@@ -96,43 +113,51 @@ var OrgListingsSidebarFilter = React.createClass({
     render: function () {
         return (
             <RadioGroup name="recent-activity-org-listings" onChange={this.props.handleChange}>
-                <Link id="recent-activity-pending" to="org-listings" query={{approvalStatus: "PENDING"}} params={{org: this.props.org.title}}>
+                <Link id="recent-activity-pending" to="org-listings" query={{approval_status: "PENDING"}} params={{org: this.props.org.shortName}}>
                     <label htmlFor="recent-activity-org-pending" className="label-needs-action">
-                        <i className="icon-exclamation-14"></i>
+                        <ApprovalStatusIcons definedStatus={"PENDING"} userType={"orgSteward"}/>
                         Pending { this.props.org.shortName } Review
                         <i className="icon-caret-right"></i>
                     </label>
                 </Link>
 
-                <Link id="recent-activity-pending" to="org-listings" query={{approvalStatus: "APPROVED_ORG"}} params={{org: this.props.org.title}}>
+                <Link id="recent-activity-pending" to="org-listings" query={{approval_status: "APPROVED_ORG"}} params={{org: this.props.org.shortName}}>
                     <label htmlFor="recent-activity-org-pending" className="label-pending">
-                        <i className="icon-loader-14"></i>
+                        <ApprovalStatusIcons definedStatus={"APPROVED_ORG"}/>
                         Organization Approved
                         <i className="icon-caret-right"></i>
                     </label>
                 </Link>
 
-                <Link id="recent-activity-published" to="org-listings" query={{approvalStatus: "APPROVED"}} params={{org: this.props.org.title}}>
+                <Link id="recent-activity-published" to="org-listings" query={{approval_status: "APPROVED"}} params={{org: this.props.org.shortName}}>
                     <label htmlFor="recent-activity-org-published" className="label-published">
-                        <i className="icon-thumbs-up-14"></i>
+                        <ApprovalStatusIcons definedStatus={"APPROVED"}/>
                         Published
                         <i className="icon-caret-right"></i>
                     </label>
                 </Link>
 
-                <Link id="recent-activity-returned" to="org-listings" query={{approvalStatus: "REJECTED"}} params={{org: this.props.org.title}}>
+                <Link id="recent-activity-returned" to="org-listings" query={{approval_status: "REJECTED"}} params={{org: this.props.org.shortName}}>
                     <label htmlFor="recent-activity-org-returned" className="label-rejected">
-                        <i className="icon-reload-14"></i>
+                        <ApprovalStatusIcons definedStatus={"REJECTED"}/>
                         Returned to Owner
                         <i className="icon-caret-right"></i>
                     </label>
                 </Link>
 
-                <Link id="recent-activity-deleted" to="org-listings" query={{approvalStatus: "DELETED"}} params={{org: this.props.org.title}}>
+                <Link id="recent-activity-deleted" to="org-listings" query={{approval_status: "DELETED"}} params={{org: this.props.org.shortName}}>
                     <label htmlFor="recent-activity-org-deleted" className="label-deleted">
-                        <i className="icon-reload-14"></i>
+                        <ApprovalStatusIcons definedStatus={"DELETED"}/>
                         Deleted
                         <i className="icon-caret-right"></i>
+                    </label>
+                </Link>
+
+                <Link id="recent-activity-pending-deletion" to="org-listings" query={{approval_status: "PENDING_DELETION"}} params={{org: this.props.org.shortName}}>
+                    <label htmlFor="recent-activity-org-pending-deletion" className="label-pending-deletion">
+                        <i className="icon-caret-right"></i>
+                        Pending Deletion
+                        <ApprovalStatusIcons definedStatus={"PENDING_DELETION"}/>
                     </label>
                 </Link>
             </RadioGroup>

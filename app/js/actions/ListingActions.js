@@ -9,7 +9,12 @@ var ListingActions = createActions({
     fetchAllListingsAtOnce: null,
     fetchCounts: null,
     fetchAllChangeLogs: null,
-    fetchStorefrontListings: null,
+    fetchAllChangeLogsByID: null,
+    fetchStorefrontListings: null, //depricated
+    fetchFeaturedListings: null,
+    fetchRecentListings: null,
+    fetchMostPopularListings: null,
+    fetchRecommendedListings: null,
 
     fetchById: null,
 
@@ -22,6 +27,10 @@ var ListingActions = createActions({
     fetchReviews: null,
     saveReview: null,
     deleteReview: null,
+    saveReviewResponse: null,
+    deleteReviewResponse: null,
+
+    fetchSimilar: null,
 
     launch: null,
     save: null,
@@ -33,7 +42,12 @@ var ListingActions = createActions({
     approve: null,
     approveByOrg: null,
     setFeatured: null,
-    deleteListing: null
+    deleteListing: null,
+    pendingDelete: null,
+    approveDelete: null,
+    undelete: null,
+    giveFeedback: null,
+    deleteFeedback: null
 });
 
 ListingActions.listingChangeCompleted = Reflux.createAction();

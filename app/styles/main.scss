@@ -105,14 +105,13 @@ a:focus {
 }
 
 @import 'w2ui';
-@import 'select2';
 @import 'loadmask';
 @import 'load-more';
 @import 'carousel';
 @import 'header';
 @import 'listing/search-listing-tile';
 @import 'listing/admin-owner-listing-tile';
-@import 'featured-listings';
+@import 'new-listings';
 @import 'discovery';
 @import 'quickview';
 @import 'create-edit';
@@ -227,8 +226,8 @@ button.btn.image-remove {
 =   Approval Status Indicators =
 ==============================*/
 
-.label-draft, .label-pending, .label-needs-action, .label-published, .label-rejected {
-    @extend .icons;
+.label-draft, .label-pending, .label-needs-action, .label-published, .label-rejected, .label-pending-delete {
+    @extend .icons !optional;
     font-family: 'Ubuntu';
     font-weight: 400;
 
@@ -396,7 +395,9 @@ body > div.classBanner {
 .icon-reload-14 {
     @extend .icon-reload-14-blueDark;
 }
-
+.icon-delete-14 {
+    @extend .icon-delete-14-redOrangeDark;
+}
 .icon-exclamation-12 {
     @extend .icon-exclamation-12-redOrangeDark;
 }
@@ -410,6 +411,9 @@ body > div.classBanner {
 }
 .icon-reload-12 {
     @extend .icon-reload-12-blueDark;
+}
+.icon-delete-12 {
+    @extend .icon-delete-12-redOrangeDark;
 }
 
 
@@ -426,7 +430,8 @@ $icons: (
     icon-cross-10-grayDark: icon-cross-10-blueDark,
     icon-cross-14-grayDark: icon-cross-14-blueDark,
     icon-cross-16-grayDark: icon-cross-16-blueDark,
-    icon-cross-18-grayDark: icon-cross-18-blueDark
+    icon-cross-18-grayDark: icon-cross-18-blueDark,
+    icon-thumbs-up-14-grayDark: icon-thumbs-up-14-white
 );
 
 
@@ -484,4 +489,95 @@ $icons: (
   overflow-y: scroll;
   overflow-x: hidden;
   word-wrap:break-word;
+}
+
+.rating-text {
+    font-size: 12px;
+}
+
+.SelectBox.sortBy {
+    border: 1px solid #dbdcdd;
+    width: 190px;
+    border-radius: 0;
+    box-shadow: none;
+    height:27px;
+    float: right;
+    display: inline-block;
+    top: 5px;
+
+    > button {
+        padding-top: 4px;
+        height: 27px;
+    }
+
+    > .react-select-box {
+
+        > .react-select-box-label {
+            font-size: inherit;
+            font-weight: 400;
+            line-height: 19px;
+            color: $gray-dark;
+
+            & .react-select-box-empty {
+                color: $gray-dark;
+            }
+        }
+    }
+
+    > .react-select-box::after {
+        top: 8px;
+    }
+
+    > .react-select-box-options {
+        margin: 0;
+        border-radius: 0;
+        box-shadow: none;
+        border: 0;
+        background: $gray-lightest;
+        width: 100%;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    > .react-select-box-clear {
+        top: 20px;
+        background-color: $white;
+
+        &:before{
+            background-color: transparent;
+            @extend .icon-cross-14-grayDark;
+            content: ' ';
+        }
+
+    }
+
+}
+
+.message-queue {
+    z-index: 1060;
+
+    .message-item {
+        max-width: 520px;
+        margin: 0 auto 20px auto;
+
+        .message {
+            font-weight: bold;
+        }
+
+        .timestamp span {
+            padding-left: 10px;
+        }
+    }
+
+    .hide-button {
+        background: none;
+        border: none;
+        padding-left: 10px;
+    }
+
+    .icon-cross-16 {
+        background-position: 89.42% 35.58%;
+    }
 }

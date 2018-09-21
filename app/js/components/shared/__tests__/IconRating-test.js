@@ -38,7 +38,7 @@ describe('IconRating', function () {
                 this.setState({ currentRating: rating });
             },
             render: function () {
-                return <IconRating currentRating={this.state.currentRating} />
+                return <IconRating currentRating={this.state.currentRating} />;
             }
         });
         var testComponent = TestUtils.renderIntoDocument(<TestComponent currentRating={1}/>);

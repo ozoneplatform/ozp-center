@@ -6,15 +6,18 @@ var ActiveState = require('../../mixins/ActiveStateMixin');
 var IconRating = require('../shared/IconRating.jsx');
 var CenterLaunchLink = require('../CenterLaunchLink.jsx');
 var BookmarkButton = require('../BookmarkButton.jsx');
+var OzpAnalytics = require('../../analytics/ozp-analytics');
+var { listingMessages } = require('ozp-react-commons/constants/messages');
 
 var ListingTile = React.createClass({
 
     mixins: [Navigation, CurrentPath, ActiveState],
 
     statics: {
-        fromArray: function (array) {
+        fromArray: function (array, from) {
+            if(!from) from = '';
             return array.map(function(listing, i) {
-                return <ListingTile listing={listing} key={`${listing.id}.${i}`}/>;
+                return <ListingTile from={from} listing={listing} key={`${listing.id}.${i}`}/>;
             });
         },
         renderLimitedTiles: function(display, mostPopular) {
@@ -27,38 +30,62 @@ var ListingTile = React.createClass({
         }
     },
 
+    handleClick: function(from, title) {
+      if(from){
+        if(from == listingMessages['recommender.recommended'])
+          OzpAnalytics.trackRecommender(listingMessages['recommender.recommended'], title);
+      }
+    },
+
+    goToReviews: function(e){
+        var href = this.makeHref(this.getActiveRoutePath(), null, {
+            listing: this.props.listing.id,
+            action: 'view',
+            tab: 'reviews'
+        });
+        window.location = href;
+        e.stopPropagation();
+    },
+
     render: function () {
         var listing = this.props.listing;
+
         var name = listing.title;
         var description = listing.descriptionShort && listing.descriptionShort.substr(0, 140);
         var imageLargeUrl;
         var avgRate = listing.avgRate;
         var agencyShort = listing.agencyShort;
+        var totalVotes = listing.totalReviews;
+
+        imageLargeUrl = listing.imageLargeUrl;
+
         var href = this.makeHref(this.getActiveRoutePath(), null, {
             listing: listing.id,
             action: 'view',
             tab: 'overview'
         });
 
-        imageLargeUrl = listing.imageLargeUrl;
-
         return (
-            <li className="listing SearchListingTile">
+            <div className="listing SearchListingTile">
                 <a className="listing-link"  href={ href }>
-                    {/* Empty link - css will make it cover entire <li>*/}
+                    {/* Empty link - css will make it cover entire <div>*/}
                     <span className="hidden-span">{listing.title}</span>
                 </a>
                 <img alt={`${listing.title} app tile`} src={ imageLargeUrl } />
                 <section className="slide-up">
                     <p className="title">{ name }</p>
-                    <IconRating
-                        {...this.props}
-                        className="icon-rating"
-                        viewOnly
-                        currentRating = { avgRate }
-                        toggledClassName="icon-star-filled-yellow"
-                        untoggledClassName="icon-star-filled-grayLighter"
-                        halfClassName="icon-star-half-filled-yellow" />
+                    <a className="clickable-rating" onClick={this.goToReviews}>
+                        <IconRating
+                            {...this.props}
+                            className="icon-rating"
+                            viewOnly
+                            currentRating = { avgRate }
+                            toggledClassName="icon-star-filled-yellow"
+                            untoggledClassName="icon-star-filled-grayLighter"
+                            halfClassName="icon-star-half-filled-yellow"
+                            totalVotes={totalVotes}
+                        />
+                    </a>
                     {
                         agencyShort &&
                         <span className="company">
@@ -71,7 +98,7 @@ var ListingTile = React.createClass({
                     <p className="description">{ description }</p>
                     { this.renderActions() }
                 </section>
-            </li>
+            </div>
         );
     },
 

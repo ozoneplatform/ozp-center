@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react');
+var Reflux = require('reflux');
 var { Navigation } = require('react-router');
 var Sidebar = require('./RecentActivitySidebar.jsx');
 var ListingActions = require('../../../actions/ListingActions');
@@ -16,7 +17,8 @@ var RecentActivity = React.createClass({
     mixins: [
         Navigation,
         ActiveState,
-        SystemStateMixin
+        SystemStateMixin,
+        Reflux.listenTo(ListingActions.fetchAllChangeLogsFailed, 'onFetchAllChangeLogsFailed')
     ],
 
     getInitialState: function () {
@@ -26,11 +28,13 @@ var RecentActivity = React.createClass({
     },
 
     componentDidMount: function () {
+        this.refs.loadMore.initLoad();
         this.fetchAllChangeLogsIfEmpty();
         this.listenTo(PaginatedChangeLogStore, this.onChangeLogsReceived);
     },
 
     onLoadMore: function() {
+        this.refs.loadMore.initLoad();
         ListingActions.fetchAllChangeLogs(this.state.currentUser);
     },
 
@@ -44,6 +48,7 @@ var RecentActivity = React.createClass({
             changeLogs: data,
             hasMore: hasMore
         });
+        this.refs.loadMore.loadSuccess();
     },
 
     createLink: function (changeLog) {
@@ -53,6 +58,7 @@ var RecentActivity = React.createClass({
             'ADD_RELATED_TO_ITEM',
             'REMOVE_RELATED_TO_ITEM',
             'REJECTED',
+            'PENDING_DELETION',
             'TAG_CREATED',
             'DELETED'
         ];
@@ -67,8 +73,9 @@ var RecentActivity = React.createClass({
                 'DISABLED' : 'View',
                 'CREATED' : 'View Draft',
                 'APPROVED_ORG' : 'Review Listing',
+                'REVIEWED' : 'View',
                 'REVIEW_EDITED' : 'View',
-                'REVIEW_DELETED' : 'View',
+                'REVIEW_DELETED' : 'View'
             };
 
             var href = this.makeHref(this.getActiveRoutePath(), this.getParams(), {
@@ -76,6 +83,13 @@ var RecentActivity = React.createClass({
                 action: 'view',
                 tab: 'overview'
             });
+            if (changeLog.action === "REVIEWED" || changeLog.action === "REVIEW_EDITED"){
+                href = this.makeHref(this.getActiveRoutePath(), this.getParams(), {
+                    listing: changeLog.listing.id,
+                    action: 'view',
+                    tab: 'reviews'
+                });
+            }
 
             if (!this.state.currentUser.isAdmin()) {
                 linkMap.APPROVED_ORG = 'View';
@@ -102,6 +116,10 @@ var RecentActivity = React.createClass({
             ListingActions.fetchAllChangeLogs(this.state.currentUser);
         }
         this.onChangeLogsReceived();
+    },
+
+    onFetchAllChangeLogsFailed() {
+        this.refs.loadMore.loadError();
     },
 
     renderChangeLogs: function () {
@@ -133,14 +151,13 @@ var RecentActivity = React.createClass({
     render: function () {
         var hasMore = this.state.hasMore || false;
         var logs = this.renderChangeLogs();
-        //console.log(logs);
 
         return (
             <div className="RecentActivity row">
                 <div className="RecentActivity__Sidebar col-xs-5 col-lg-4"><Sidebar /></div>
                 <div className="RecentActivity__Content col-xs-7 col-lg-8">
                     <h3>Recent Activity</h3>
-                        <LoadMore className="RecentActivity__activities all"
+                        <LoadMore ref="loadMore" className="RecentActivity__activities all"
                                   hasMore={hasMore} onLoadMore={this.onLoadMore}>
                             { logs }
                         </LoadMore>
@@ -148,7 +165,6 @@ var RecentActivity = React.createClass({
             </div>
         );
     }
-
 
 });
 

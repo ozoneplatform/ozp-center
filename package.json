@@ -1,6 +1,6 @@
 {
   "name": "center-ui",
-  "version": "1.1.42",
+  "version": "1.1.114",
   "repository": {
     "type": "git",
     "url": "https://github.com/ozoneplatform/ozp-center.git"
@@ -27,7 +27,6 @@
     "babel-core": "^6.8.0",
     "babel-loader": "^6.2.4",
     "babel-runtime": "^6.6.1",
-    "caroufredsel": "git://github.com/ozone-utils/caroufredsel",
     "chai": "1.10.0",
     "coffee-script": "1.8.0",
     "conventional-changelog": "0.0.11",
@@ -93,11 +92,11 @@
     "exports-loader": "0.6.2",
     "humps": "git://github.com/domchristie/humps.git",
     "icons": "git://github.com/ozoneplatform/ozp-icons",
-    "jquery": "^2.2.0",
+    "jquery": "~3.2.0",
     "lodash-amd": "2.4.1",
     "magnific-popup": "^0.9.9",
     "marked": "^0.3.5",
-    "moment": "2.9.0",
+    "moment": "2.11.2",
     "object-assign": "1.0.0",
     "object-db": "^1.2.4",
     "ozp-react-commons": "git://github.com/ozoneplatform/ozp-react-commons#master",

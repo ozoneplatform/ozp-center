@@ -10,10 +10,15 @@
     vertical-align: top;
 }
 
+.AdminOwnerListingTile__img--disabled{
+    opacity: 0.4;
+}
+
 .MyListings__listings.all .AdminOwnerListingTile,
 .MyListings__listings.IN_PROGRESS .AdminOwnerListingTile.draft,
 .MyListings__listings.REJECTED .AdminOwnerListingTile.needs-action,
 .MyListings__listings.PENDING .AdminOwnerListingTile.pending,
+.MyListings__listings.PENDING_DELETION .AdminOwnerListingTile.pending-delete,
 .MyListings__listings.APPROVED .AdminOwnerListingTile.published {
     display: inline-block;
 }
@@ -77,7 +82,7 @@
 
 .AdminOwnerListingTile__actionMenu {
     position: absolute;
-
+    z-index: 1;
     top: 0px;
     right: 0px;
     border: none;
@@ -134,31 +139,16 @@
         text-align: center;
         @include text-overflow();
     }
-}
 
-.AdminOwnerListingTile.pending .approvalStatus {
-    @extend .icon-loader-14-blueDark;
-    color: $blue-dark;
-}
+    > .lockStyle {
+        position: absolute;
+        top: 0;
+        left: 18px;
+    }
 
-.AdminOwnerListingTile.published .approvalStatus {
-    @extend .icon-thumbs-up-14-greenDark;
-    color: $green-dark;
-}
-
-.AdminOwnerListingTile.needs-action .approvalStatus {
-    @extend .icon-exclamation-14-redOrangeDark;
-}
-
-.AdminOwnerListingTile.draft .approvalStatus {
-    @extend .icon-paper-14-grayDark;
-}
-
-.AdminOwnerListingTile.rejected .approvalStatus {
-    @extend .icon-reload-14-blueDark;
-    color: $blue-dark;
-}
-.AdminOwnerListingTile.deleted .approvalStatus {
-    @extend .icon-trash-12-blueDarker;
-    color: $gray-dark;
+    > .iconStyle {
+        position: absolute;
+        top: 0;
+        left: 0px;
+    }
 }

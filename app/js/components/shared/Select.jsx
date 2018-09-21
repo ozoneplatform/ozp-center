@@ -11,7 +11,11 @@ var Select = React.createClass({
 
     _renderOptions() {
         return this.props.options.map(function (value) {
-            return <option key={value} value={value}>{value}</option>;
+                    // if the array has objects with key values
+            if(value.key)
+                return <option key={value.key} value={value.key}>{value.value}</option>;
+            else
+                return <option key={value} value={value}>{value}</option>;
         });
     },
 

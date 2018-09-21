@@ -18,6 +18,7 @@ var DeleteConfirmation = React.createClass({
     propTypes: {
         errorMessage: React.PropTypes.string,
         onHidden: React.PropTypes.func,
+        onCancel: React.PropTypes.func,
         onDelete: React.PropTypes.func.isRequired
     },
 
@@ -28,28 +29,74 @@ var DeleteConfirmation = React.createClass({
     },
 
     getInitialState: function () {
-        return {};
+        return {
+            showJustificationError: false
+        };
     },
 
     render: function () {
         var kind = this.props.kind,
             title = this.props.title,
             onDelete = this.props.onDelete,
-            errorMessage = this.props.errorMessage;
+            onCancel = this.props.onCancel,
+            errorMessage = this.props.errorMessage,
+            requireJustification = this.props.requireJustification,
+            showJustificationError = this.state.showJustificationError;
+
+        var content = <div>
+        { !requireJustification &&
+            <strong>
+                Are you sure that you would like to delete the {kind}{title}?
+            </strong>
+        }
+        { requireJustification &&
+            <div>
+                <strong>
+                    Please enter a reason for deleting the {kind}{title}
+                </strong>
+                <div className="form-group">
+                    <textarea ref="justification" name="description" className="form-control" placeholder="Description" rows="4"></textarea>
+                </div>
+            </div>
+        }
+        { showJustificationError &&
+            <p className="text-danger">You must enter a reason</p>
+        }
+        <button className="btn btn-default" data-dismiss="modal" onClick={onCancel}>Cancel</button>
+        <button className="btn btn-danger" onClick={this.onDeleteClick}>Delete</button></div>;
+
+        if (errorMessage) {
+            content = <div>
+                <div className="alert alert-danger">{errorMessage}</div>
+                <button className="btn btn-default" data-dismiss="modal">OK</button>
+            </div>;
+        }
 
         return (
             <Modal ref="modal" className="DeleteConfirmation" size="small" onHidden={this.props.onHidden}>
-                <button className="close corner" data-dismiss="modal"><i className="icon-cross-16"></i></button>
-                {
-                    errorMessage && <div className="alert alert-danger">{errorMessage}</div>
-                }
-                <strong>
-                    Are you sure that you would like to delete the {kind} &quot;{title}&quot;?
-                </strong>
-                <button className="btn btn-default" data-dismiss="modal">Cancel</button>
-                <button className="btn btn-danger" onClick={onDelete}>Delete</button>
+                {content}
             </Modal>
         );
+    },
+
+    onDeleteClick: function() {
+        var onDelete = this.props.onDelete,
+            requireJustification = this.props.requireJustification;
+
+        if (requireJustification) {
+            var justification = $(this.refs.justification.getDOMNode()).val();
+
+            if (justification) {
+                onDelete(justification);
+                this.setState({ showJustificationError: false });
+            }
+            else {
+                this.setState({ showJustificationError: true });
+            }
+        }
+        else {
+            onDelete();
+        }
     },
 
     close: function () {
@@ -89,6 +136,15 @@ var ListingDeleteConfirmation = React.createClass({
     },
 
     onDeleteComplete: function () {
+        sweetAlert({
+            title: "Deletion complete",
+            text: "The listing has been deleted.",
+            type: "info",
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "ok",
+            closeOnConfirm: true,
+            html: false
+        });
         this.close();
     },
 
@@ -97,11 +153,11 @@ var ListingDeleteConfirmation = React.createClass({
         if (!listing) {
             return null;
         }
-        var title = listing.title;
+        var title = ' "' + listing.title + '"';
 
         return (
             <DeleteConfirmation ref="modal" kind="listing" title={title}
-                errorMessage={this.state.errorMessage}
+                errorMessage={this.state.errorMessage} requireJustification={true}
                 onHidden={this.onHidden} onDelete={this.onDelete}/>
         );
     },
@@ -111,20 +167,35 @@ var ListingDeleteConfirmation = React.createClass({
     },
 
     close: function () {
-        this.refs.modal.close();
+        if(this.refs.modal)
+            this.refs.modal.close();
         if (this.getActiveRoute().name === 'edit') {
             this.transitionTo('my-listings');
         }
     },
 
     onHidden: function () {
-        this.transitionTo(this.getActiveRoutePath(), {listingId: this.state.listing.id});
+        if(this.getActiveRoute().name ==='org-listings'){
+          var url = document.URL
+          var urlSplit = url.split("?");
+          location.replace(urlSplit[0])
+        }
+        else if (this.getActiveRoute().name === 'edit'){
+          url = document.URL
+          urlSplit = url.split("?");
+          location.replace(urlSplit[0])
+        }
+        else{
+          this.transitionTo('my-listings');
+        }
     },
 
-    onDelete: function () {
+    onDelete: function (justification) {
         var listing = this.getListing();
 
-        ListingActions.deleteListing(listing);
+        if (justification) {
+            ListingActions.deleteListing(listing, justification);
+        }
     }
 });
 

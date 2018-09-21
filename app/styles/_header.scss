@@ -22,6 +22,8 @@
 		border-left: 1px solid $gray-lighter;
 		margin-bottom: 0;
 		padding: 0 2px;
+        	background-color: $white;
+        	line-height: 0;
 
 		> .form-control {
 		    position: relative;
@@ -90,8 +92,8 @@
 
 .react-select-box {
     &:before {
-        @extend .icons;
-        @extend .icon-caret-down;
+        @extend .icons !optional;
+        @extend .icon-caret-down !optional;
 
         border-left: 0;
         padding-top: 7px;
@@ -173,6 +175,7 @@
         > .react-select-box-label {
             font-size: inherit;
             font-weight: 400;
+            line-height: 19px;
             color: $gray-dark;
 
             & .react-select-box-empty {
@@ -239,7 +242,7 @@
     }
 }
 
-.react-select-box-container.SelectBox__Types.react-select-box-multi.react-select-box-empty.open, 
+.react-select-box-container.SelectBox__Types.react-select-box-multi.react-select-box-empty.open,
 .react-select-box-container.SelectBox__Organizations.react-select-box-multi.react-select-box-empty.open {
     > .react-select-box {
       background: $gray-lightest;
@@ -272,4 +275,23 @@
             @extend .icon-cross-14-blueDark;
         }
     }
+}
+
+.tt-menu {
+  padding: 15px 0px !important;
+  line-height: 1.5;
+}
+
+.tt-suggestion {
+  border-left: 4px solid transparent;
+  padding: 5px 65px;
+}
+
+.tt-suggestion:hover {
+    color:#087399;
+    border-left: 4px solid #009DD3;
+}
+
+.tt-cursor {
+    background-color: #eeeeef;
 }

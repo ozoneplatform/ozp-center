@@ -29,11 +29,58 @@ var AuthorLink = React.createClass({
 var ActionChangeLog = React.createClass({
     render: function() {
         var changeLog = this.props.changeLog;
+
         return (
             <div>
                 <AuthorLink author={changeLog.author} />
                 <span> { changeLog.action.toLowerCase() } </span>
                 { this.props.listingName }
+            </div>
+        );
+    }
+});
+
+var DeletionChangeLog = React.createClass({
+    render: function() {
+        var changeLog = this.props.changeLog;
+        var details = 'Details: ' + changeLog.description;
+        var id = uuid();
+
+        return (
+            <div>
+                <div>
+                    <AuthorLink author={changeLog.author} />
+                    <span> deleted { this.props.listingName }</span>
+                </div>
+                <a data-toggle="collapse" data-target={ '#' + id } onClick={ this.toggleIcon }>
+                    <i className="icon-plus-10-blueDark"></i> Feedback
+                </a>
+                <ul id={ id } className="collapse list-unstyled ListingActivity__Changes">
+                    <li>{ details }</li>
+                </ul>
+            </div>
+        );
+    }
+});
+
+var PendingDeletionChangeLog = React.createClass({
+    render: function() {
+        var changeLog = this.props.changeLog;
+        var details = 'Details: ' + changeLog.description;
+        var id = uuid();
+
+        return (
+            <div>
+                <div>
+                    <AuthorLink author={changeLog.author} />
+                    <span> submitted { this.props.listingName } for deletion</span>
+                </div>
+                <a data-toggle="collapse" data-target={ '#' + id } onClick={ this.toggleIcon }>
+                    <i className="icon-plus-10-blueDark"></i> Feedback
+                </a>
+                <ul id={ id } className="collapse list-unstyled ListingActivity__Changes">
+                    <li>{ details }</li>
+                </ul>
             </div>
         );
     }
@@ -149,14 +196,27 @@ var ModifiedChangeLog = React.createClass({
     }
 });
 
+var ReviewedChangeLog = React.createClass({
+    render: function() {
+        var changeLog = this.props.changeLog;
+        return (
+            <div>
+                <AuthorLink author={changeLog.author} />
+                <span> reviewed </span>
+                 { this.props.listingName }
+            </div>
+        );
+    }
+});
+
 var ReviewEditedChangeLog = React.createClass({
     render: function() {
         var changeLog = this.props.changeLog;
         return (
             <div>
                 <AuthorLink author={changeLog.author} />
-                <span> edited </span>
-                { (changeLog.changeDetails[0] === undefined) ? ' ' : changeLog.changeDetails[0].fieldName } in { this.props.listingName }
+                <span> edited review for </span>
+                { this.props.listingName }
             </div>
         );
     }
@@ -202,11 +262,13 @@ var ChangeLog = React.createClass({
         'CREATED' : ActionChangeLog,
         'OUTSIDE' : SetToChangeLog,
         'INSIDE' : SetToChangeLog,
-        'DELETED' : ActionChangeLog,
+        'DELETED' : DeletionChangeLog,
         'REJECTED' : RejectedChangeLog,
         'APPROVED_ORG' : OrgApprovalChangeLog,
+        'REVIEWED' : ReviewedChangeLog,
         'REVIEW_EDITED' : ReviewEditedChangeLog,
         'REVIEW_DELETED' : ReviewDeletedChangeLog,
+        'PENDING_DELETION' : PendingDeletionChangeLog
     },
 
     getListingName: function() {
@@ -240,8 +302,9 @@ var ChangeLog = React.createClass({
             link = this.props.children[1];
         }
 
-        var time = timeAgo(this.props.changeLog.activityDate);
-        var Handler = this.actionMapAdmin[this.props.changeLog.action];
+        var changeLog = this.props.changeLog;
+        var time = changeLog ? timeAgo(changeLog.activityDate) : null;
+        var Handler = changeLog ? this.actionMapAdmin[changeLog.action] : null;
         if(!Handler) {
             Handler = GenericLegacyChangeLog;
         }
@@ -253,7 +316,7 @@ var ChangeLog = React.createClass({
                     </div>
                     <div className={this.props.showListingName ? "col-md-10" : "col-md-9"}>
                         { icon }
-                        < Handler changeLog={ this.props.changeLog } listingName={ this.getListingName() } />
+                        { changeLog ? < Handler changeLog={ changeLog } listingName={ this.getListingName() } /> : null }
                         { link }
                     </div>
                 </div>

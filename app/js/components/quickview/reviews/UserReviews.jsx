@@ -5,6 +5,8 @@ var IconRating = require('../../shared/IconRating.jsx');
 var _ = require('../../../utils/_');
 var TimeAgo = require('../../shared/TimeAgo.jsx');
 var OzpAnalytics = require('../../../analytics/ozp-analytics');
+var ReviewResponses = require('./ReviewResponses.jsx');
+var SubmitResponse = require('./SubmitResponse.jsx');
 
 var UserReview = React.createClass({
 
@@ -17,18 +19,43 @@ var UserReview = React.createClass({
         onEdit: React.PropTypes.func.isRequired
     },
 
+    getInitialState: function() {
+        return {
+            isResponding: false
+        }
+    },
+
     isEditAllowed: function () {
-        var { review, user, listing } = this.props;
-        return (
-            user.isAdmin() ||
-            (review.author.id === user.id ) ||
-            user.isOrgSteward(listing.agency)
-        );
+        var listingOrg = this.props.listing.agencyShort;
+        var currentUser = this.props.user;
+        var reviewer = this.props.review.author.id;
+
+        if(currentUser.id == reviewer || currentUser.highestRole == "APPS_MALL_STEWARD" || (currentUser.stewardedOrganizations.indexOf(listingOrg) !== -1)){
+            return true;
+        }
+        return false;
+    },
+
+    onResponseCompleted: function() {
+        this.setState({
+            isResponding: false
+        });
+    },
+
+    isRespondAllowed: function() {
+        var {review, user, listing} = this.props;
+    },
+
+    respondToReview: function() {
+        this.setState({
+            isResponding: !this.state.isResponding
+        });
     },
 
     render: function () {
-        var { review, onEdit } = this.props;
-        var time = review.editedDate || review.createdDate || "";
+        var { review, onEdit, listing, user } = this.props;
+        var time = review.createdDate || "";
+
         return (
             <li className="Review">
                 <IconRating currentRating = { review.rate } viewOnly={true} />
@@ -38,7 +65,10 @@ var UserReview = React.createClass({
                     this.isEditAllowed() &&
                         <i className="icon-pencil" onClick={ _.partial(onEdit, review) }></i>
                 }
+                <i className="icon-feedback-12-grayDark" onClick={this.respondToReview}></i>
                 <p className="Review__text">{ review.text }</p>
+                { this.state.isResponding && <SubmitResponse review={review} listing={listing} responded={this.onResponseCompleted}/> }
+                <ReviewResponses responses={review.reviewResponses} listing={listing} user={user} review={review}/>
             </li>
         );
     }

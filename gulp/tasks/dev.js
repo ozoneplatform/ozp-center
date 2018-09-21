@@ -12,6 +12,7 @@ gulp.task('dev', ['sass', 'copy', 'config', 'fonts', 'images', 'svg', 'jqueryUnd
     // Start a webpack-dev-server
     var server = new WebpackDevServer(webpack(devConfig), {
         publicPath: "/dist/assets",
+        quiet: true,
         stats: {
             colors: true
         }
@@ -29,6 +30,6 @@ gulp.task('dev', ['sass', 'copy', 'config', 'fonts', 'images', 'svg', 'jqueryUnd
 
     // refersh app manually
     function reloadApp () {
-        server.io.sockets.emit('ok');
+       // server.io.sockets.emit('ok');
     }
 });

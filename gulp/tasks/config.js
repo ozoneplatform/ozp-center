@@ -1,10 +1,10 @@
 var gulp = require('gulp');
-var preprocess = require('gulp-preprocess');
+var rename = require('gulp-rename');
+var template = require('gulp-template');
 
-gulp.task('config', function() {
-    return gulp.src(['node_modules/ozp-react-commons/app/OzoneConfig.js'])
-        .pipe(preprocess({
-            context: { APP_TITLE: process.env.APP_TITLE || 'AppsMall Center'}
-        }))
+gulp.task('config', function () {
+    return gulp.src([ 'templates/OzoneConfig.js.ejs' ])
+        .pipe(template({ env: process.env }))
+        .pipe(rename('OzoneConfig.js'))
         .pipe(gulp.dest('dist'));
 });

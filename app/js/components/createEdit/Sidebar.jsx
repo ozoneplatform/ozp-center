@@ -88,7 +88,7 @@ var Reminders = React.createClass({
                 </p>
                 <p className="questions">
                     <strong>If you have any questions</strong> during the submission process,
-                    please contact your organizations steward.
+                    please contact your organization's steward.
                     <a className="stewards-link" onClick={this.showStewardsModal}>
                         View list of organization stewards
                     </a>

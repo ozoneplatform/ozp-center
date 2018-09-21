@@ -102,6 +102,100 @@
             font-size: 2em;
         }
     }
+
+    button.up-arrow {
+        padding: 0;
+        cursor: pointer;
+        background: transparent;
+        border: 0;
+        position: absolute;
+        top: 7px;
+        font-size: 2em;
+    }
+    button.down-arrow {
+        padding: 0;
+        cursor: pointer;
+        background: transparent;
+        border: 0;
+        position: absolute;
+        top: 9px;
+        left: 72px;
+        font-size: 2em;
+    }
+
+    .switch {
+        position: relative;
+        width: 54px;
+    }
+
+    .switch-checkbox {
+        display: none;
+    }
+
+    .switch-label {
+        display: inline-block;
+        overflow: hidden;
+        cursor: pointer;
+        border-radius: 20px;
+        background-color: #487a4b;
+    }
+
+    .switch-inner {
+        display: block;
+        width: 200%;
+        margin-left: -100%;
+        transform: 0.4s;
+    }
+
+    .switch-inner:before, .switch-inner:after {
+        display: block;
+        float: left;
+        width: 50%;
+        height: 20px;
+        padding: 0;
+        line-height: 19px;
+        font-size: 11px;
+        color: #FFFFFF;
+        font-family: inherit;;
+        font-weight: bold;
+        box-sizing: border-box;
+    }
+
+    .switch-inner:before {
+        content: "ON";
+        padding-left: 10px;
+        color: #FFFFFF;
+    }
+
+    .switch-inner:after {
+        content: "OFF";
+        padding-right: 10px;
+        color: #FFFFFF;
+        background-color: #ccc;
+        text-align: right;
+    }
+
+    .switch-slider {
+        display: block;
+        width: 12px;
+        margin: 4px;
+        background: #FFFFFF;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 34px;
+        border-radius: 20px;
+        transition: 0.4s;
+    }
+
+    .switch-checkbox:checked + .switch-label .switch-inner {
+        margin-left: 0;
+    }
+
+    .switch-checkbox:checked + .switch-label .switch-slider {
+        right: 0px;
+    }
+
 }
 
 .CreateEdit__titlebar {
@@ -130,6 +224,12 @@
 
     .delete-button {
         width: 75px;
+    }
+    .pendDelete-button {
+        width: 150px;
+    }
+    .undelete-button {
+        width: 80px;
     }
 }
 
@@ -327,9 +427,9 @@ div.col-md-4 > .form-group >span.image-container.image-present {
 
 .switchExplain {
     @extend .small;
+    position: absolute;
     display: inline-block;
     padding-left: 10px;
-    padding-top: 3px;
 }
 
 /*==============================
@@ -391,4 +491,21 @@ div.col-md-4 > .form-group >span.image-container.image-present {
 .topsecret-yellow {
    background-color: #FFFF00 ;
    color: #000;
+}
+
+.FOUOwarning {
+    background-color: #ffa500;
+    color: #ffffff;
+    border-color: #b1264e;
+    border-radius: 4px;
+    padding: 5px;
+    font-weight: 300;
+}
+
+@-moz-document url-prefix(){
+  input[id$="inputElement.smallIcon"], input[id$="inputElement.largeIcon"],
+  input[id$="inputElement.bannerIcon"], input[id$="inputElement.featuredBannerIcon"]{
+    padding-top: 2px !important;
+    padding-bottom: 35px !important;
+  }
 }

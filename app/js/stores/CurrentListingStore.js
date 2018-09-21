@@ -19,6 +19,7 @@ var { ImageApi } = require('../webapi/Image');
 var { API_URL } = require('ozp-react-commons/OzoneConfig');
 
 var _listing = null;
+var _listingId = null;
 var _submitting = false;
 
 var imageErrors = {screenshots: []};
@@ -121,17 +122,19 @@ var CurrentListingStore = createStore({
     listenables: [
         Object.assign({}, CreateEditActions, {
             systemUpdated: SystemStore,
-            cacheUpdated: GlobalListingStore
+            cacheUpdated: GlobalListingStore,
+            similarUpdated: ListingActions.fetchSimilarCompleted
         }),
-        { profileUpdate: SelfStore }
+        { profileUpdate: SelfStore, saveResponseFailed: ListingActions.saveReviewResponseFailed }
     ],
 
     currentUser: null,
 
     refreshListing: function (listing) {
         revokeAllObjectURLs();
-
         _listing = listing;
+        if(listing.id)
+            _listingId = listing.id;
         _submitting = false;
         var validation = this.doValidation();
         this.trigger({
@@ -150,12 +153,37 @@ var CurrentListingStore = createStore({
     },
 
     onCacheUpdated: function () {
-        if (_listing && _listing.id) {
-            var listing = GlobalListingStore.getById(_listing.id);
-            if (listing) {
-                this.refreshListing(cloneDeep(listing));
+        if (_listingId) {
+            var newListing = GlobalListingStore.getById(_listingId);
+            if(newListing){
+                this.refreshListing(newListing);
             }
         }
+    },
+
+    onSimilarUpdated: function (){
+        this.trigger();
+    },
+
+    onSaveResponseFailed: function(error) {
+        var errorMessage = "Try again later.";
+        
+        if (error.status == 400) {
+            errorMessage = "Cannot create duplicate review";
+        } else
+            if (error.status == 403) {
+                errorMessage = "Permission Denied";
+            }
+
+        sweetAlert({
+            title: "Error",
+            text: errorMessage,
+            type: "error",
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "ok",
+            closeOnConfirm: true,
+            html: false
+        });
     },
 
     onProfileUpdate: function(profileData) {
@@ -300,35 +328,36 @@ var CurrentListingStore = createStore({
     },
 
     getReviews: function () {
-        return GlobalListingStore.getReviewsForListing(_listing);
+        var reviews = GlobalListingStore.getReviewsForListing(_listing);
+        return reviews;
+    },
+
+    getSimilar: function () {
+        var similar = GlobalListingStore.getSimilarForListing(_listing.id);
+        return similar;
     },
 
     loadListing: function (id) {
-        var deferred = $.Deferred(),
-            promise = deferred.promise(),
-            intId = parseInt(id, 10);
-
+        var deferred = $.Deferred();
+        var promise = deferred.promise();
+        var   intId = parseInt(id, 10);
+        _listingId = id;
+        var newListing;
         if (id) {
-            if (_listing && _listing.id === intId) {
-                this.trigger({listing: _listing});
-                return deferred.resolve(_listing);
+            if (!_listing || !_listing.id != _listingId){
+                newListing = GlobalListingStore.getById(id) || new Listing({ owners: [this.currentUser] });
+                this.refreshListing(newListing);
+                deferred.resolve(newListing);
             }
-
-            var listing = GlobalListingStore.getCache()[id];
-            if (listing) {
-                this.refreshListing(cloneDeep(listing));
+            else {
+                this.onCacheUpdated();
                 deferred.resolve(_listing);
-            } else {
-                ListingApi.getById(id).then(l => {
-                    this.refreshListing(cloneDeep(l));
-                    deferred.resolve(_listing);
-                });
             }
         } else {
-            this.refreshListing(new Listing({ owners: [this.currentUser] }));
-            deferred.resolve(_listing);
+            newListing = new Listing({ owners: [this.currentUser] });
+            this.refreshListing(newListing);
+            deferred.resolve(newListing);
         }
-
         return promise;
     },
 

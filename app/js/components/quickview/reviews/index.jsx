@@ -16,6 +16,7 @@ var CurrentListingStore = require('../../../stores/CurrentListingStore');
 var SystemStateMixin = require('../../../mixins/SystemStateMixin');
 var ListingActions = require('../../../actions/ListingActions');
 var SelfStore = require('ozp-react-commons/stores/SelfStore');
+var LoadIndicator = require('ozp-react-commons/components/LoadIndicator.jsx');
 
 var RatingProgressBar = React.createClass({
     mixins: [React.addons.PureRenderMixin],
@@ -59,6 +60,7 @@ var ReviewsTab = React.createClass({
 
     mixins: [
         Reflux.listenTo(ListingActions.fetchReviewsCompleted, 'onFetchItemCommentsCompleted'),
+        Reflux.listenTo(ListingActions.fetchReviewsFailed, 'onFetchItemCommentsFailed'),
         SystemStateMixin
     ],
 
@@ -73,11 +75,14 @@ var ReviewsTab = React.createClass({
     getState: function () {
         var currentUser = SelfStore.getDefaultData().currentUser;
         var reviews = CurrentListingStore.getReviews();
+
         if (!reviews) {
             return {
                 reviews: reviews,
                 reviewBeingEdited: null,
-                currentUserReview: null
+                currentUserReview: null,
+                loading: true,
+                loadingError: false
             };
         }
         var updates = {
@@ -110,6 +115,10 @@ var ReviewsTab = React.createClass({
                 <section className="col-xs-3 col-left">
                     { this.renderReviewFilters() }
                 </section>
+                {(this.state.loading) ?
+                    <LoadIndicator showError={this.state.loadingError}
+                        errorMessage="Error Getting Reviews"
+                    /> : <div>
                 <section className="col-xs-5" tabIndex="0">
                     <UserReviews
                         listing={ listing }
@@ -133,6 +142,8 @@ var ReviewsTab = React.createClass({
                     }
                 </section>
             </div>
+            }
+            </div>
         );
     },
 
@@ -146,6 +157,18 @@ var ReviewsTab = React.createClass({
 
     onFetchItemCommentsCompleted: function () {
         this.setState(this.getState());
+        this.setState({
+            loading: false,
+            loadingError: false
+        });
+    },
+
+    onFetchItemCommentsFailed: function () {
+        this.setState(this.getState());
+        this.setState({
+            loading: false,
+            loadingError: true
+        });
     },
 
     renderReviewFilters: function () {

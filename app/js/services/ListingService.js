@@ -8,6 +8,8 @@ var ListingActions = require('../actions/ListingActions');
 var PaginatedListingsStore = require('../stores/PaginatedListingsStore');
 var UnpaginatedListingsStore = require('../stores/UnpaginatedListingsStore');
 
+require('sweetalert');
+
 function updateListingProperty(propName, value, listing) {
     var data = _.cloneDeep(listing);
     data[propName] = value;
@@ -64,8 +66,8 @@ ListingActions.fetchAllListingsAtOnce.listen(function (filter) {
         });
 
         _.assign(opts, {
-            offset: 0,
-            limit: 999
+            offset: filter.offset || 0,
+            limit: filter.limit || 999
         });
     }
 
@@ -107,8 +109,32 @@ ListingActions.fetchAllChangeLogs.listen(function (profile, filter) {
         });
 });
 
-ListingActions.fetchStorefrontListings.listen(function() {
+ListingActions.fetchStorefrontListings.listen(function() { //depricated
     ListingApi.getStorefrontListings().then(ListingActions.fetchStorefrontListingsCompleted);
+});
+
+ListingActions.fetchFeaturedListings.listen(function() {
+    ListingApi.getFeaturedListings()
+        .then(ListingActions.fetchFeaturedListingsCompleted)
+        .fail(ListingActions.fetchFeaturedListingsFailed);
+});
+
+ListingActions.fetchRecentListings.listen(function() {
+    ListingApi.getRecentListings()
+        .then(ListingActions.fetchRecentListingsCompleted)
+        .fail(ListingActions.fetchRecentListingsFailed);
+});
+
+ListingActions.fetchMostPopularListings.listen(function() {
+    ListingApi.getMostPopularListings()
+        .then(ListingActions.fetchMostPopularListingsCompleted)
+        .fail(ListingActions.fetchMostPopularListingsFailed);
+});
+
+ListingActions.fetchRecommendedListings.listen(function() {
+    ListingApi.getRecommendedListings()
+    .then(ListingActions.fetchRecommendedListingsCompleted)
+    .fail(ListingActions.fetchRecommendedListingsFailed);
 });
 
 ListingActions.fetchById.listen(function (id) {
@@ -145,15 +171,39 @@ ListingActions.fetchById.listen(function (id) {
     });
 })();
 
+ListingActions.fetchChangeLogs.listen(function (listingId, filter) {
+  var PaginatedChangeLogByIDStore = require('../stores/PaginatedChangeLogByIDStore');
 
-ListingActions.fetchChangeLogs.listen(function (listingId) {
-    ListingApi.getChangeLogs(listingId)
-        .then(ListingActions.fetchChangeLogsCompleted.bind(null, listingId));
+  var paginatedList = PaginatedChangeLogByIDStore.getChangeLogsByID(),
+      opts = {},
+      nextLink;
+
+  if (paginatedList) {
+      paginatedList.expectPage();
+      nextLink = paginatedList.nextLink;
+  }
+  else {
+      _.assign(opts, {
+          offset: 0,
+          limit: PAGINATION_MAX
+      });
+  }
+
+  ListingApi
+      .getChangeLogs(listingId, nextLink, opts)
+      .then(function (response) {
+          ListingActions.fetchAllChangeLogsByIDCompleted(filter, response);
+      });
 });
 
 
 ListingActions.fetchOwnedListings.listen(function (profile) {
     ListingApi.getOwnedListings(profile).then(ListingActions.fetchOwnedListingsCompleted);
+});
+
+ListingActions.fetchSimilar.listen(function (listingId) {
+    ListingApi.getSimilarListings(listingId)
+        .then(ListingActions.fetchSimilarCompleted.bind(null, listingId));
 });
 
 
@@ -183,9 +233,50 @@ ListingActions.deleteReview.listen(function (listing, review) {
         .fail(_.partial(ListingActions.deleteReviewFailed, listing, review));
 });
 
-ListingActions.launch.listen(function (listing) {
+ListingActions.saveReviewResponse.listen(function (listing, review) {
+    ListingApi.saveReviewResponse(listing.id, review)
+        .then(function (response) {
+            ListingActions.fetchById(listing.id);
+            ListingActions.fetchReviews(listing);
+            ListingActions.saveReviewResponseCompleted(listing, response);
+            OzpAnalytics.trackListingReview(listing.title, listing.agencyShort);
+        })
+        .fail(function(response) {
+            ListingActions.saveReviewResponseFailed(response);
+        });
+});
+
+ListingActions.launch.listen(function (listing, timeout) {
     OzpAnalytics.trackEvent('Applications', listing.title, listing.agencyShort);
-    window.open(listing.launchUrl);
+
+    if (timeout) {
+        var application;
+
+        setTimeout(function() {
+            application = window.open(listing.launchUrl);
+
+            if (application == null || typeof(application) == 'undefined') {
+                swal({
+                    title: "Pop-up blocked",
+                    text: "Click 'Launch Application' to open manually",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonText: "Launch Application",
+                    cancelButtonText: "Cancel",
+                    closeOnConfirm: true,
+                    closeOnCancel: true
+                },
+                function(isConfirm){
+                    if (isConfirm) {
+                        window.open(listing.launchUrl);
+                    }
+                });
+            }
+        }, 3000);
+    } else {
+        window.open(listing.launchUrl);
+    }
+
 });
 
 ListingActions.save.listen(function (data) {
@@ -198,14 +289,14 @@ ListingActions.save.listen(function (data) {
     ListingApi
         .save(data)
         .then(ListingActions.saveCompleted.bind(null, isNew))
-        .then(ListingActions.listingChangeCompleted)
+        .then(() => ListingActions.listingChangeCompleted(data))
         .fail(ListingActions.saveFailed);
 });
 
 ListingActions.reject.listen(function (listingId, description) {
     ListingApi.rejectListing(listingId, description)
         .then(ListingActions.rejectCompleted)
-        .then(ListingActions.listingChangeCompleted);
+        .then(() => ListingActions.listingChangeCompleted);
 });
 
 ListingActions.enable.listen(setEnabled.bind(null, true));
@@ -213,6 +304,18 @@ ListingActions.disable.listen(setEnabled.bind(null, false));
 
 ListingActions.enableBookmarked.listen(setEnabledBookmarked.bind(null, true));
 ListingActions.disableBookmarked.listen(setEnabledBookmarked.bind(null, false));
+
+ListingActions.pendingDelete.listen(function (listing, description) {
+    //OzpAnalytics.trackListingApproval(listing.title, listing.agencyShort);
+    var data = _.cloneDeep(listing);
+    data.approvalStatus = "PENDING_DELETION";
+    data.isEnabled = false;
+
+    ListingApi.pendDeleteListing(listing.id, description)
+        .then(ListingActions.pendingDeleteCompleted.bind(null, data))
+        .then(() => ListingActions.listingChangeCompleted(data))
+        .fail(ListingActions.pendingDeleteFailed);
+});
 
 ListingActions.approve.listen(function (listing) {
     OzpAnalytics.trackListingApproval(listing.title, listing.agencyShort);
@@ -224,11 +327,42 @@ ListingActions.approveByOrg.listen(function (listing) {
     updateListingProperty('approvalStatus', 'APPROVED_ORG', listing);
 });
 
-ListingActions.deleteListing.listen(function (listing) {
-    ListingApi.del(listing.id)
+ListingActions.undelete.listen(function (listing) {
+    //OzpAnalytics.trackListingApproval(listing.title, listing.agencyShort);
+    //updateListingProperty('approvalStatus', 'PENDING', listing);
+    var data = _.cloneDeep(listing);
+    data.approvalStatus = "PENDING";
+    data.isEnabled=true;
+    ListingApi.save(data)
+    .then(ListingActions.undeleteCompleted.bind(null, data))
+    .then(() => ListingActions.listingChangeCompleted(data))
+    .fail(ListingActions.pendingDeleteFailed);
+});
+
+ListingActions.deleteListing.listen(function (listing, description) {
+    listing.isEnabled = false;
+    listing.status = 'DELETED';
+    listing.approvalStatus = 'DELETED';
+    ListingApi.del(listing.id, description)
         .then(ListingActions.deleteListingCompleted.bind(null, listing))
-        .then(ListingActions.listingChangeCompleted)
+        .then(() => ListingActions.listingChangeCompleted(listing))
         .fail(ListingActions.deleteListingFailed);
+});
+
+ListingActions.giveFeedback.listen(function (listing, thumbs) {
+    ListingApi.giveFeedback(listing, thumbs)
+        .then(function (response) {
+            ListingActions.giveFeedbackCompleted(listing.id, thumbs);
+        })
+        .fail(ListingActions.giveFeedbackFailed);
+});
+
+ListingActions.deleteFeedback.listen(function (listing) {
+    ListingApi.deleteFeedback(listing)
+        .then(function (response) {
+            ListingActions.deleteFeedbackCompleted(listing.id);
+        })
+        .fail(ListingActions.deleteFeedbackFailed);
 });
 
 ListingActions.setFeatured.listen(updateListingProperty.bind(null, 'isFeatured'));

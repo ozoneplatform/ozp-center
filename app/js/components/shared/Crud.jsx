@@ -192,12 +192,12 @@ var Crud = React.createClass({
 
     renderDeleteConfirmation: function () {
         var kind = this.props.title.toLowerCase();
-        var title = this.props.getDisplayName(this.getSelectedRecord());
+        var title = ' "' + this.props.getDisplayName(this.getSelectedRecord()) + '"';
 
         return (
             <DeleteConfirmation ref="modal" kind={ kind } title={ title }
                 errorMessage={this.state.errorMessage}
-                onHidden={this.resetState} onDelete={this.onDelete} />
+                onHidden={this.resetState} onDelete={(this.props.removeUser ? this.onRemoveUser : this.onDelete)} />
         );
     },
 
@@ -210,7 +210,9 @@ var Crud = React.createClass({
     },
 
     getUrlWithoutParams: function () {
-        return this.props.url.replace(/\?.*/, '');
+        var url = this.props.url.replace(/\?.*/, '');
+        url = url.replace(/\/$/, '');
+        return url;
     },
 
     //Retrieve form data process a create, using a potentially custom function
@@ -269,6 +271,25 @@ var Crud = React.createClass({
             dataType: 'json',
             contentType: 'application/json',
             data: JSON.stringify(humps.decamelizeKeys(data))
+        })
+        .done(this.reload)
+        .fail(this.handleError);
+    },
+
+    onRemoveUser: function () {
+        var id = this.getSelectedId();
+
+        var newUserInfo = {
+            "stewardedOrganizations": [],
+            "user":{ "groups":[{"name":"USER"}] }
+            };
+
+        $.ajax({
+            url: `${this.getUrlWithoutParams()}/${id}/`,
+            type: 'put',
+            dataType: 'json',
+            data: JSON.stringify(humps.decamelizeKeys(newUserInfo)),
+            contentType: 'application/json'
         })
         .done(this.reload)
         .fail(this.handleError);

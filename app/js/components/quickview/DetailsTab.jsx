@@ -8,8 +8,8 @@ var { Link } = require('react-router');
 
 var PubSub = require('browser-pubsub');
 var tourCh = new PubSub('tour');
-
 var ProfileLink = require('../profile/ProfileLink.jsx');
+var NotifyOwners = require('./NotifyOwners.jsx');
 
 var DetailsTab = React.createClass({
 
@@ -19,14 +19,27 @@ var DetailsTab = React.createClass({
 
     getDefaultProps() {
         return {
-          refresh: false
+            refresh: false
         };
-      },
+    },
+
+    getInitialState: function () {
+        return{
+            isResponding: false,
+            currentUser:this.props.currentUser
+        }
+    },
 
     componentDidMount: function() {
-      tourCh.publish({
-        detailsLoaded: true
-      });
+
+        var currentHash = window.location.hash.substr(1);
+        this.setState({
+            isResponding: (currentHash.substr(currentHash.indexOf('isResponding='))).split('=')[1]
+        });
+
+        tourCh.publish({
+            detailsLoaded: true
+        });
     },
 
     render: function () {
@@ -39,7 +52,10 @@ var DetailsTab = React.createClass({
         var versionNumber = this.props.listing.versionName;
         var categories = this.props.listing.categories.join(', ');
         var tags = this.props.listing.tags;
-        var requirements = this.props.listing.requirements;
+        var tagsObject = this.props.listing.tagsObject;
+        var usage_requirements = this.props.listing.usage_requirements;
+        var system_requirements = this.props.listing.system_requirements;
+        var currentUser = this.state;
 
         return (
             <div className="tab-pane active quickview-details row" tabIndex="0">
@@ -59,7 +75,11 @@ var DetailsTab = React.createClass({
                     </section>
                     <section>
                         <h5>Usage Requirements</h5>
-                        <p className="forceWrap">{ requirements }</p>
+                        <p className="forceWrap">{ usage_requirements }</p>
+                    </section>
+                    <section>
+                        <h5>System Requirements</h5>
+                        <p className="forceWrap">{ system_requirements }</p>
                     </section>
                 </div>
                 <div className="col-xs-4">
@@ -68,10 +88,10 @@ var DetailsTab = React.createClass({
                         <p>
                             <p><label>Type:</label><span> { type }</span></p>
 
-                            <p className="forceWrap"><label>URL:</label><span> <a className="forceWrap" href={URL}>{ URL }</a></span></p>
+                            <p className="forceWrap"><label>URL:</label><span> <a className="forceWrap" href={URL} target="_blank">{ URL } </a></span></p>
 
                             <p><label>Categories:</label><span> { categories ? categories : <EmptyFieldValue inline /> }</span></p>
-                            <p><label>Tags:</label><span> {this.renderTags(this) }</span></p>
+                            <p className="forceWrap"><label>Tags:</label><span> {this.renderTags(this) }</span></p>
                             <p><label>Last Updated:</label><span> { updatedDate }</span></p>
                             <p><label>Version Number:</label><span> { versionNumber } </span></p>
                         </p>
@@ -81,36 +101,28 @@ var DetailsTab = React.createClass({
                 <div className="col-xs-4 col-right">
                     <section>
                         <h5>Ownership Information</h5>
-                        <p>
-                        <p><label>Owner(s):</label>{ this.renderOwners() }</p>
-                        <p><label>Associated Organization</label></p>
-                        <p className="col-xs-offset-1">{ organization }</p>
-                        { this.renderGovSponser() }
-                        </p>
+                        <div>
+                            <p><label>Owner(s):</label> <i className="icon-feedback-12-grayDark" onClick={this.renderCommentBox}></i> </p>
+                            <p>{ this.renderOwners() } </p>
+                            <p>{ this.state.isResponding && <NotifyOwners listing={this.props.listing} user={currentUser} responded={this.onResponseCompleted}/> }</p>
+                            <p><label>Associated Organization</label></p>
+                            <p className="col-xs-offset-1">{ organization }</p>
+                            { this.renderGovSponser() }
+                        </div>
                     </section>
-
                 </div>
             </div>
         );
     },
 
     renderTags:function(that){
-        var tags= that.props.listing.tags;
-        return tags.map(function (tags) {
-          var URL= CENTER_URL + '#/home/' + tags;
+        var tags = that.props.listing.tagsObject;
+        return tags.map(function (tags, i) {
+          var URL= CENTER_URL + '#/home/////' + tags.name + '/' + tags.id;
           return(
-                       <Link to="home" className='tag' params={{
-                          searchString: tags,
-                          categories: '',
-                          type: '',
-                            org: ''
-                          }} onClick={that.handLinkClick} >{tags}  </Link>
+            <a href={URL} key={`renderTags.${i}`} onClick={function(){window.location.href=URL; window.location.reload();}}>{tags.name} </a>
           );
         });
-    },
-
-    handLinkClick (e) {
-        location.reload();
     },
 
     renderOwners: function () {
@@ -118,7 +130,7 @@ var DetailsTab = React.createClass({
             return owners.map(function (owner, i) {
               if(owner.displayName !== "Masked Display Name"){
                 return (
-                    <p className="listing-owner" key={`renderOwners.${i}`}>
+                    <p className="listing-owner col-xs-offset-1" key={`renderOwners.${i}`}>
                         <span> </span>
                         <ProfileLink profileId={owner.id}>
                             {owner.displayName}
@@ -127,6 +139,18 @@ var DetailsTab = React.createClass({
                 );
               }
             });
+    },
+
+    onResponseCompleted: function() {
+        this.setState({
+            isResponding: false
+        });
+    },
+
+    renderCommentBox :function() {
+        this.setState({
+            isResponding: !this.state.isResponding
+        });
     },
 
     renderIntents: function () {

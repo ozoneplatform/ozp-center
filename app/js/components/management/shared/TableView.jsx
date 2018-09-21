@@ -2,6 +2,7 @@
 
 var UnpaginatedListingsStore = require('../../../stores/UnpaginatedListingsStore');
 var ListingActions = require('../../../actions/ListingActions');
+var { ListingApi } = require('../../../webapi/Listing');
 
 var React = require('react');
 var Reflux = require('reflux');
@@ -10,13 +11,16 @@ var { PropTypes } = React;
 var { Navigation } = require('react-router');
 var ActiveState = require('../../../mixins/ActiveStateMixin');
 
+var LoadMask = require('../../LoadMask.jsx');
+
 var moment = require('moment');
 
 var TableView = React.createClass({
-
     mixins: [
         Reflux.listenTo(UnpaginatedListingsStore, 'onStoreChanged'),
         Reflux.listenTo(ListingActions.listingChangeCompleted, 'onListingChangeCompleted'),
+        Reflux.listenTo(ListingActions.fetchAllListingsAtOnce, 'onFetchAllListingsAtOnce'),
+        Reflux.listenTo(ListingActions.fetchAllListingsAtOnceCompleted, 'onFetchAllListingsAtOnceCompleted'),
         Navigation,
         ActiveState
     ],
@@ -29,9 +33,22 @@ var TableView = React.createClass({
         showOrg: PropTypes.bool
     },
 
+    getInitialState: function () {
+        return {
+            loading: false
+        };
+    },
+
     render: function () {
-        return this.transferPropsTo(
-            <div ref="grid"></div>
+        var props = this.props;
+
+        return (
+            <div>
+                { this.state.loading &&
+                    <LoadMask/>
+                }
+                <div ref="grid" {...props} ></div>
+            </div>
         );
     },
 
@@ -40,6 +57,8 @@ var TableView = React.createClass({
     },
 
     componentDidMount: function () {
+        this.props.filter.limit = 24;
+        this.props.filter.offset = 0;
         var thisTable = this;
         this.grid = $(this.refs.grid.getDOMNode()).w2grid({
             name: 'grid',
@@ -53,19 +72,69 @@ var TableView = React.createClass({
                 toolbarSearch: true,
                 toolbarReload: false,
                 toolbarColumns: true,
-                toolbarSave: true
+                toolbarSave: false
             },
+
             buttons: {
                 save : {
                     caption: w2utils.lang('Export to csv'),
                     icon: 'icon-save-grayDark'
                 }
             },
+            limit:this.props.filter.limit,
+            url:'placeholder',
+            onRequest: function(event){
+                event.preventDefault();
+                if(event.postData.cmd === 'get-records'){
+                    if (thisTable.props.filter.limit + thisTable.props.filter.offset < this.total){
+                        thisTable.props.filter.offset += thisTable.props.filter.limit;
+                    } else if (this.total > 0)
+                        return;
+                    UnpaginatedListingsStore.filterChange(thisTable.props.filter);
+                }
+                return;
+            },
+            onSort: function(event){
+
+                thisTable.props.filter.offset = 0;
+                this.offset = 0;
+                var sortData = this.sortData[0];
+                var ascending = true;
+
+                if(sortData){
+                    ascending = sortData.direction === 'asc' ? false:true;
+                }
+                thisTable.props.filter.ordering = thisTable.convertToServerPropName(event.field, ascending);
+                UnpaginatedListingsStore.filterChange(thisTable.props.filter);
+            },
+            onSearch: function (event){
+                thisTable.props.filter.offset = 0;
+                thisTable.props.filter.search = event.searchValue;
+                this.searchData = event.searchData;
+                if(!event.searchData.length || !event.searchData[0].value.replace(/\s/g,'')){
+                    event.searchValue = '';
+                    delete thisTable.props.filter.search;
+                    //these twho are needed to prevent the search clear icon from showing
+                    this.last.multi = false;
+                    this.searchData = [];
+                }
+                this.last.search = event.searchValue
+                UnpaginatedListingsStore.filterChange(thisTable.props.filter);
+
+                event.preventDefault();
+                var str = [event.searchValue];
+                $(this.box).find('.w2ui-grid-data > div').w2marker(str);
+            },
+            onLoad: function(event){
+                this.url = 'placeholder'
+                event.preventDefault();
+            },
             columns: this.getColumns(),
             records: [],
 
             /* eslint-disable no-unused-vars */
             onSubmit: function (event) {
+                event.preventDefault();
             /* eslint-enable no-unused-vars */
                 var records = this.records.map( function (record) {
                     var owners = '';
@@ -95,7 +164,7 @@ var TableView = React.createClass({
                 event.preventDefault();
                 event.stopPropagation();
                 var target = event.originalEvent.target;
-                if (this.columns[event.column].field==="featured") {
+                if (this.columns[event.column] && this.columns[event.column].field==="featured") {
                     if (target.type==='checkbox') {
                         if(thisTable.props.isAdmin && thisTable.props.isAdmin===true){
                             var listing = thisTable.getUnpaginatedList().data.filter(
@@ -109,12 +178,16 @@ var TableView = React.createClass({
                 }
             }
         });
-        this.fetchAllListingsIfEmpty();
+
+        if(this.grid && !this.grid.records.length){
+            this.props.filter.offset = 0;
+            this.grid.offset = 0;
+            thisTable.onStoreChanged();
+        }
     },
 
     getColumns: function () {
         var thisTable = this;
-
         var columns = [];
 
         columns.push(
@@ -141,13 +214,8 @@ var TableView = React.createClass({
             },
             { field: 'owners', caption: 'Owners', sortable: true, size: '10%',
                 render: function (record) {
-                    var owners = '';
-                    record.owners.forEach ( function (owner, index) {
-                        if (index) {
-                            owners += '; ';
-                        }
-                        owners += owner.displayName;
-                    });
+                    var ownerArray = _.pluck(record.owners,'displayName').sort();
+                    var owners = ownerArray.join('; ');
                     return owners;
                 }
             });
@@ -157,7 +225,7 @@ var TableView = React.createClass({
         }
 
         columns.push(
-            { field: 'private', caption: 'Private', size: '10%',
+            { field: 'private', caption: 'Private', sortable: true, size: '10%',
               render: function (record) {
                   if (record.private) {
                       return '<i class="icon-lock-blue"></i> Private';
@@ -178,7 +246,7 @@ var TableView = React.createClass({
                 }
             },
             { field: 'enabled', caption: 'Enabled', sortable: true, size: '5%'},
-            { field: 'featured', caption: 'Featured', sortable: true, size: '5%',
+            { field: 'featured', caption: 'Featured', sortable: false, size: '5%',
                 render: function (record) {
                     if (thisTable.props.isAdmin===true) {
                       if(record.featured !== null){
@@ -223,9 +291,11 @@ var TableView = React.createClass({
 
                         actions = '<label class="AdminOwnerListingTable__actionMenu">';
 
+                    if(status === 'DELETED'){
+                      return null;
+                    }
                     actions += '<a key="link" href="'+editHref+'" title="Edit"><i class="icon-pencil-12-blueDark"/></a>';
-                    if(status !== 'DELETED'){
-                    if (status === 'APPROVED') {
+                    if (status === 'APPROVED' || status === 'PENDING_DELETION') {
                         actions += '<a key="view" href="'+overviewHref+'" title="View"><i class="icon-eye-12-blueDark"/></a>';
                     } else {
                         actions += '<a key="prev" href="'+overviewHref+'" title="Preview"><i class="icon-eye-12-blueDark"/></a>';
@@ -234,15 +304,12 @@ var TableView = React.createClass({
                     if (status === 'REJECTED') {
                         actions += '<a key="feedback" href="'+feedbackHref+'" title="Feedback"><i class="icon-feedback-12-blueDark"/></a>';
                     }
-
-                    actions += '<a key="del" href="'+deleteHref+'" title="Delete"><i class="icon-trash-12-blueDark"/></a>';
+                    if (status !== 'PENDING_DELETION'){
+                        actions += '<a key="del" href="'+deleteHref+'" title="Delete"><i class="icon-trash-12-blueDark"/></a>';
+                    }
                     actions += '</label>';
                     return actions;
-                    }
-                    else{
-                      return null;
-                    }
-                }
+                  }
             }
         );
         return columns;
@@ -262,25 +329,20 @@ var TableView = React.createClass({
             displayStatus = "Returned";
         }else if (status === "DELETED") {
             displayStatus = "Deleted";
+        }else if (status === "PENDING_DELETION") {
+            displayStatus = "Pending Deletion";
         }
         return displayStatus;
     },
 
     getUnpaginatedList: function () {
-        return UnpaginatedListingsStore.getListingsByFilter(this.props.filter);
-    },
-
-    fetchAllListingsIfEmpty: function () {
-        var listings = this.getUnpaginatedList();
-        if (!listings || listings==='undefined') {
-            ListingActions.fetchAllListingsAtOnce(this.props.filter);
-        }
-        this.onStoreChanged();
+        var results = UnpaginatedListingsStore.getListingsByFilter(this.props.filter);
+        return results;
     },
 
     onStoreChanged: function () {
+        var me = this;
         var unpaginatedList = this.getUnpaginatedList();
-
         if (!unpaginatedList) {
             return;
         }
@@ -288,8 +350,7 @@ var TableView = React.createClass({
         var {data, counts } = unpaginatedList;
 
         var records = data.map( function (listing) {
-            if(listing.approvalStatus !== 'DELETED'){
-              return {
+            var result = {
                   recid: listing.id,
                   title: listing.title,
                   owners: listing.owners,
@@ -303,29 +364,20 @@ var TableView = React.createClass({
                   private: listing.isPrivate,
                   securityMarking: listing.securityMarking
               };
+            if(listing.approvalStatus === 'DELETED'){
+              result.enabled = null;
+              result.featured = null;
             }
-            else{
-              return {
-                  recid: listing.id,
-                  title: listing.title,
-                  owners: listing.owners,
-                  organization: listing.agency ? listing.agency : '',
-                  comments: listing.whatIsNew ? listing.whatIsNew : '',
-                  status: listing.approvalStatus,
-                  updated: listing.editedDate,
-                  enabled: null,
-                  featured: null,
-                  actions: null,
-                  private: listing.isPrivate,
-                  securityMarking: listing.securityMarking
-              };
-            }
+
+            return result;
+
         });
 
         if (this.grid) {
-            this.grid.clear();
+            this.grid.total = counts.total;
             this.grid.records = records;
             this.grid.refresh();
+            this.grid.requestComplete('success','get-records', function(){});
         }else{
             "warn";
         }
@@ -334,7 +386,23 @@ var TableView = React.createClass({
     },
 
     onListingChangeCompleted: function () {
-        ListingActions.fetchAllListingsAtOnce(this.props.filter);
+        this.props.filter.offset = 0;
+        this.offset = 0;
+
+        // trigger a store refresh to sync table info/counts with listing change
+        UnpaginatedListingsStore.filterChange(this.props.filter);
+    },
+
+    onFetchAllListingsAtOnce: function () {
+       this.setState({
+            loading: true
+       });
+    },
+
+    onFetchAllListingsAtOnceCompleted: function () {
+       this.setState({
+            loading: false
+       });
     },
 
     JSONToCSVConvertor: function (JSONData, ReportTitle, ShowLabel) {
@@ -380,6 +448,24 @@ var TableView = React.createClass({
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+    },
+    convertToServerPropName: function(prop, ascending){
+        var prefix = '';
+        if(!ascending){
+            prefix = '-';
+        }
+        switch (prop){
+            case 'recid': return prefix + 'id';
+            case 'organization': return prefix + 'agency__title'
+            case 'status': return prefix + 'approval_status';
+            case 'enabled': return prefix + 'is_enabled';
+            //case 'featured': return prefix + 'is_featured';
+            case 'private': return prefix + 'is_private';
+            case 'owners': return prefix + 'owners__display_name';
+            case 'securityMarking': return prefix + 'security_marking';
+            case 'updated': return prefix + 'edited_date';
+            default: return prefix + prop;
+        }
     }
 });
 

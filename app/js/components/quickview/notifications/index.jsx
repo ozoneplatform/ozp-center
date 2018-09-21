@@ -10,6 +10,7 @@ var LoadMore = require('../../shared/LoadMore.jsx');
 var ActiveNotificationsStore = require('../../../stores/ActiveNotificationStore.js');
 var PastNotificationsStore = require('../../../stores/PastNotificationStore.js');
 var NotificationActions = require('../../../actions/NotificationActions.js');
+var LoadIndicator = require('ozp-react-commons/components/LoadIndicator.jsx');
 
 var ActiveNotifications = React.createClass({
     mixins: [
@@ -20,7 +21,9 @@ var ActiveNotifications = React.createClass({
         var notificationList = ActiveNotificationsStore.getNotifications();
         return {
             notifications: notificationList.data,
-            hasMore: notificationList.hasMore
+            hasMore: notificationList.hasMore,
+            loading: true,
+            loadingError: false
         };
     },
 
@@ -34,6 +37,10 @@ var ActiveNotifications = React.createClass({
 
     componentDidMount() {
       NotificationActions.fetchActiveById(this.props.listing.id);
+      this.setState({
+          loading: false,
+          loadingError: false
+      });
     },
 
     render() {
@@ -44,7 +51,12 @@ var ActiveNotifications = React.createClass({
         return (
             <div>
                 <h4 style={{marginTop: 0}}>Active Notifications</h4>
-                { notificationComponents }
+                {(!this.state.loading) ?
+                    <LoadIndicator showError={this.state.loadingError}
+                        errorMessage="Error Getting Notifications"
+                    /> :
+                notificationComponents
+            }
             </div>
         );
     }
@@ -56,10 +68,12 @@ var PastNotifications = React.createClass({
     ],
 
     getState() {
-        var notificationList = this.notifications();
+        var notificationList = PastNotificationsStore.getNotifications();
         return {
             notifications: notificationList.data,
-            hasMore: notificationList.hasMore
+            hasMore: notificationList.hasMore,
+            loading: true,
+            loadingError: false
         };
     },
 
@@ -71,30 +85,28 @@ var PastNotifications = React.createClass({
         this.setState(this.getState());
     },
 
-    notifications: function () {
-        return PastNotificationsStore.getNotifications();
-    },
-
-    fetchMore() {
-        var { hasMore } = this.state;
-        if (hasMore) {
-            NotificationActions.fetchPastById(this.notifications(), this.props.listing.id);
-        }
-    },
-
     componentDidMount() {
-        if (!this.state.notifications || this.state.notifications.length === 0) {
-            this.fetchMore();
-        }
+      NotificationActions.fetchPastById(this.props.listing.id);
+      this.setState({
+          loading: false,
+          loadingError: false
+      });
     },
 
     render() {
+        var notificationComponents = PastNotification.fromArray(this.state.notifications);
+        if (!notificationComponents || notificationComponents.length === 0) {
+            notificationComponents = <span>There are no past notifications.</span>;
+        }
         return (
             <div>
                 <h4 style={{marginTop: 0}}>Past Notifications</h4>
-                <LoadMore hasMore={this.state.hasMore} onLoadMore={this.fetchMore}>
-                    { PastNotification.fromArray(this.state.notifications, this.props.listing.id) }
-                </LoadMore>
+                {(!this.state.loading) ?
+                    <LoadIndicator showError={this.state.loadingError}
+                        errorMessage="Error Getting Notifications"
+                    /> :
+                notificationComponents
+            }
             </div>
         );
     }

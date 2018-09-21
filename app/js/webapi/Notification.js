@@ -35,6 +35,17 @@ module.exports = {
         }).then((x) => this.parse(humps.camelizeKeys(x)));
     },
 
+    delete(id) {
+        return $.ajax({
+            url: `${API_URL}/api/notification/` + id + '/',
+            type: 'delete',
+            dataType: 'json',
+            contentType: 'application/json'
+        }).then((response) => {
+            return id;
+        });
+    },
+
     fetchActive() {
         return $.getJSON(`${API_URL}/api/notifications/pending/?offset=0&limit=${PAGINATION_MAX}`)
             .then((response) => {
@@ -55,11 +66,11 @@ module.exports = {
       });
     },
 
-    fetchPast(url, id) {
-        url = url || `${API_URL}/api/notifications/expired/?offset=0&limit=${PAGINATION_MAX}`;
+    fetchPast(id) {
+        var url = `${API_URL}/api/notifications/expired/?offset=0&limit=${PAGINATION_MAX}`;
 
         if (id) {
-          url += `&id=${id}`;
+          url += `&listing=${id}`;
         }
         return $.getJSON(url)
             .then((response) => new PaginatedResponse(humps.camelizeKeys(response), this.parse));

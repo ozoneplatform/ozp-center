@@ -1,9 +1,14 @@
 'use strict';
 
 var React = require('react');
+var Reflux = require('reflux');
 var _ = require('../../utils/_');
 
+var CategorySubscriptionActions = require('ozp-react-commons/actions/CategorySubscriptionActions');
+var CategorySubscriptionStore = require('ozp-react-commons/stores/CategorySubscriptionStore');
+
 var Sidebar = React.createClass({
+    mixins: [Reflux.connect(CategorySubscriptionStore, "categorySubscriptionStore"), Reflux.listenerMixin],
 
     propTypes: {
         isSearching: React.PropTypes.bool.isRequired,
@@ -14,21 +19,41 @@ var Sidebar = React.createClass({
 
     getInitialState() {
         return {
-            categories: []
+            categories: [],
+            tags: []
         };
     },
 
     componentWillMount: function(){
+
       if(this.props.initCategories){
         this.setState({categories: this.props.initCategories});
+      }
+      if(this.props.initTags){
+        this.setState({tags: this.props.initTags});
       }
     },
 
     onHomeClick() {
         this.state.categories.length = 0;
+        this.state.tags.length = 0;
         this.forceUpdate();
 
         this.props.onGoHome();
+    },
+
+    onSubscribeClick(event, category) {
+        CategorySubscriptionActions.subscribeToCategory(category.id);
+        event.stopPropagation();
+    },
+
+    onUnsubscribeClick(event, category) {
+        this.state.categorySubscriptionStore.forEach(function(element) {
+            if (element.entity_id == category.id && element.entity_type == "category") {
+                CategorySubscriptionActions.unsubscribeToCategory(element);
+            }
+        });
+        event.stopPropagation();
     },
 
     onSelect(category) {
@@ -60,16 +85,26 @@ var Sidebar = React.createClass({
                 'facet-group-item': true
             });
 
+            var categoryLink = <span className="subscribe"> | <a onClick={ (e) => {me.onSubscribeClick(e, category)} } >Subscribe</a></span>;
+            if (me.state.categorySubscriptionStore && me.state.categorySubscriptionStore.length > 0) {
+                me.state.categorySubscriptionStore.forEach(function(element) {
+                    if (element.entity_description == category.title) {
+                        categoryLink = <span className="subscribe"> | <a onClick={ (e) => {me.onUnsubscribeClick(e, category)} }>Unsubscribe</a></span>;
+                    }
+                });
+            }
+
             return (
                 <li className={ classes } key={`${category.title}.${i}`} onClick={ me.onSelect.bind(null, category) }>
                     {category.title}
+                    {categoryLink}
                 </li>
             );
         });
     },
 
     render() {
-        var isBrowsing = this.props.isSearching || this.state.categories.length;
+        var isBrowsing = this.props.isSearching || this.state.categories.length || this.state.tags.length;
 
         var homeLinkClasses = React.addons.classSet({
             'active': !isBrowsing,
@@ -81,7 +116,7 @@ var Sidebar = React.createClass({
                 <ul id="tourstop-center-home" className="list-unstyled facet-group">
                     <li className={ homeLinkClasses } id="home" onClick={ this.onHomeClick }><i className="icon-shopping"></i> Center Home</li>
                 </ul>
-                <h3 className="offscreen"> Center sidebar categories </h3>
+                <h3 className="offscreen"> Application Categories List </h3>
                 <ul id="tourstop-center-categories" className="list-unstyled facet-group" tabIndex="0">
                     { this.renderCategories() }
                 </ul>

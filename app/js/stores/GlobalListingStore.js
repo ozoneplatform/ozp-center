@@ -5,10 +5,11 @@ var ListingActions = require('../actions/ListingActions');
 var {listingCreated} = require('../actions/CreateEditActions');
 
 var _listingsCache = {};
-var _listingsByOwnerCache = {};
+var _listingsByOwnerCache = [];
 var _allListings = [];
 var _changeLogsCache = {};
 var _reviewsCache = {};
+var _similarCache = {};
 
 function updateCache (listings) {
     listings.forEach(function (listing) {
@@ -17,23 +18,17 @@ function updateCache (listings) {
         if (prev) {
             listing.changeLogs = prev.changeLogs;
         }
-
-        _listingsCache[listing.id] = listing;
-
-        listing.owners.forEach(function (owner) {
-            var cachedListings = _listingsByOwnerCache[owner.username] || [];
-
-            cachedListings = cachedListings.filter(function (l) {
-                return l.id !== listing.id;
-            });
-
-            _listingsByOwnerCache[owner.username] = cachedListings.concat([listing]);
-        });
+            _listingsCache[listing.id] = listing;
     });
+}
+
+function updateOwnerCache (listings) {
+    _listingsByOwnerCache = listings;
 }
 
 function updateCacheFromPaginatedResponse (listingsAsPaginatedResponse) {
     var listings = listingsAsPaginatedResponse.getItemAsList();
+
     updateCache(listings);
 }
 
@@ -43,10 +38,24 @@ var GlobalListingStore = Reflux.createStore({
     * Update local listingsCache when new data is fetched
     **/
     init: function () {
+        //depricated
         this.listenTo(ListingActions.fetchStorefrontListingsCompleted, function(storefront) {
             updateCache(storefront.featured);
             updateCache(storefront.newArrivals);
             updateCache(storefront.mostPopular);
+            updateCache(storefront.recommended);
+        });
+        this.listenTo(ListingActions.fetchFeaturedListingsCompleted, function(listings) {
+            updateCache(listings);
+        });
+        this.listenTo(ListingActions.fetchRecentListingsCompleted, function(listings) {
+            updateCache(listings);
+        });
+        this.listenTo(ListingActions.fetchMostPopularListingsCompleted, function(listings) {
+            updateCache(listings);
+        });
+        this.listenTo(ListingActions.fetchRecommendedListingsCompleted, function(listings) {
+            updateCache(listings);
         });
         this.listenTo(ListingActions.searchCompleted, updateCacheFromPaginatedResponse);
         this.listenTo(ListingActions.fetchAllListingsCompleted, function (filter, response) {
@@ -63,8 +72,13 @@ var GlobalListingStore = Reflux.createStore({
             _reviewsCache[id] = reviews;
             this.trigger();
         });
-        this.listenTo(ListingActions.fetchOwnedListingsCompleted, (x)=>{
-            updateCache(x);
+        this.listenTo(ListingActions.fetchSimilarCompleted, function (id, similar){
+            _similarCache[id] = similar;
+            this.trigger();
+        });
+        this.listenTo(ListingActions.fetchOwnedListingsCompleted, (listings)=>{
+            updateOwnerCache(listings);
+            this.trigger();
         });
         this.listenTo(ListingActions.saveCompleted, function (isNew, listing) {
             updateCache([listing]);
@@ -81,27 +95,39 @@ var GlobalListingStore = Reflux.createStore({
             ListingActions.fetchChangeLogs(listing.id);
             this.trigger();
         });
+        this.listenTo(ListingActions.pendingDeleteCompleted, function (data) {
+            var listing = data;
+            listing.owners.forEach(function (owner) {
+                var ownedListings = _listingsByOwnerCache.filter(function (item) {
+                    return item.id !== listing.id;
+                });
+                _listingsByOwnerCache = ownedListings;
+            });
+            ListingActions.fetchChangeLogs(listing.id);
+            this.trigger();
+        });
         this.listenTo(ListingActions.fetchByIdCompleted, function (data) {
+            data.isPartialListing = false;
             updateCache([data]);
             this.trigger();
         });
         this.listenTo(ListingActions.deleteListingCompleted, function (data) {
-            var listing = _listingsCache[data.id];
+            var listing = data;
 
             listing.owners.forEach(function (owner) {
-                var ownedListings = _listingsByOwnerCache[owner.username].filter(function (item) {
+                var ownedListings = _listingsByOwnerCache.filter(function (item) {
                     return item.id !== listing.id;
                 });
-                _listingsByOwnerCache[owner.username] = ownedListings;
+                _listingsByOwnerCache = ownedListings;
             });
-
+            ListingActions.fetchChangeLogs(listing.id);
             this.trigger();
         });
 
     },
 
     getById: function (id) {
-        if (!_listingsCache[id]) {
+        if (!_listingsCache[id] || _listingsCache[id].isPartialListing === true){
             ListingActions.fetchById(id);
             return null;
         }
@@ -113,7 +139,7 @@ var GlobalListingStore = Reflux.createStore({
     },
 
     getByOwner: function (profile) {
-        return _listingsByOwnerCache[profile.username];
+        return _listingsByOwnerCache;
     },
 
     getAllListings: function () {
@@ -134,6 +160,14 @@ var GlobalListingStore = Reflux.createStore({
             return null;
         }
         return _reviewsCache[listing.id];
+    },
+
+    getSimilarForListing: function (id) {
+        if(!_similarCache[id]) {
+            ListingActions.fetchSimilar(id);
+            return null;
+        }
+        return _similarCache[id];
     }
 
 });
