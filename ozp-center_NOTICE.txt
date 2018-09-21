@@ -46,24 +46,24 @@ License: MIT License
 Copyright (c) 2011-2015 Jake Luer jake@alogicalparadox.com
 
 CoffeeScript
-http://coffeescript.org/ 
+http://coffeescript.org/
 License: MIT License
 Copyright (c) 2009-2015 Jeremy Ashkenas
 
 conventional-changelog": "0.0.11",
 https://github.com/ajoslin/conventional-changelog
 BSD
-Andrew Joslin https://github.com/ajoslin 
+Andrew Joslin https://github.com/ajoslin
 
 css-loader": "0.9.1",
 https://github.com/webpack/css-loader
 License: MIT License
-Webpack Module Bundler 
+Webpack Module Bundler
 
 File loader for Webpack
 https://github.com/webpack/file-loader
 License: MIT License
-Webpack Module Bundler 
+Webpack Module Bundler
 
 FS
 https://www.nuget.org/packages/FS/0.0.2
@@ -99,7 +99,7 @@ gulp-filter
 https://github.com/sindresorhus/gulp-filter
 License: The MIT License
 Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
-    
+
 gulp-flatten
 https://github.com/armed/gulp-flatten
 License: The MIT License
@@ -121,7 +121,7 @@ License: The MIT License
 Copyright (c) 2014 Jason Sandmeyer
 
 gulp-replace
-https://github.com/lazd/gulp-replace  
+https://github.com/lazd/gulp-replace
 License: The MIT License
 Copyright (c) 2013 Larry Davis
 
@@ -168,27 +168,27 @@ Pete Hunt
 Karma
 https://github.com/karma-runner/karma
 License: MIT License
-Copyright © 2011-2014 Google, Inc. 
+Copyright © 2011-2014 Google, Inc.
 
 Karma Chrome Launcher
 https://github.com/karma-runner/karma-chrome-launcher
 License: MIT License
-Copyright © 2011-2013 Google, Inc. 
+Copyright © 2011-2013 Google, Inc.
 
 Karma Firefox Launcher
 https://github.com/karma-runner/karma-firefox-launcher/blob/master/LICENSE
 License: MIT License
-Copyright © 2011-2013 Google, Inc. 
+Copyright © 2011-2013 Google, Inc.
 
 Karma Mocha
 https://github.com/karma-runner/karma-mocha
 License: MIT License
-Copyright © 2011-2013 Google, Inc. 
+Copyright © 2011-2013 Google, Inc.
 
 Karma Phantomjs Launcher
 https://github.com/karma-runner/karma-phantomjs-launcher
 License: MIT License
-Copyright © 2011-2013 Google, Inc. 
+Copyright © 2011-2013 Google, Inc.
 
 Karma Sourcemap Loader
 https://github.com/demerzel3/karma-sourcemap-loader/blob/master/LICENSE
@@ -257,7 +257,7 @@ License: MIT License
 Copyright © 2012-2014 Tobias Koppers
 
 
- 
+
 
 
 Dependencies
@@ -268,7 +268,7 @@ License: MIT Licesnse
 Cole Bemis
 
 bootstrap-sass
-https://github.com/ozone-development/ozp-bootstrap-sass/blob/master/LICENSE
+https://github.com/ozoneplatform/ozp-bootstrap-sass/blob/master/LICENSE
 Copyright (c) 2013 Twitter, Inc
 License: MIT Licesnse
 
@@ -294,7 +294,7 @@ Copyright (c) Sindre Sorhus <sindresorhus@gmail.com> (sindresorhus.com)
 License: MIT License
 
 ozp-react-commons
-https://github.com/ozone-development/ozp-react-commons/blob/master/LICENSE
+https://github.com/ozoneplatform/ozp-react-commons/blob/master/LICENSE
 License: Apache 2.0 License
 
 react

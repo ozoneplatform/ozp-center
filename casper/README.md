@@ -15,7 +15,7 @@ You need both PhantomJS and CasperJS. Follow the instructions
 
 First, clone ozp-center:
 
-`git clone https://github.com/ozone-development/ozp-center.git`
+`git clone https://github.com/ozoneplatform/ozp-center.git`
 
 Next, navigate to `ozp-center/casper` and, to run the tests on ci-latest, run:
 

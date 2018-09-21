@@ -1,3 +1,6 @@
+## Interested in becoming a contributor? 
+Fork the code for this repository. Make your changes and submit a pull request. The Ozone team will review your pull request and evaluate if it should be part of the project. For more information on the patch process please review the Patch Process at https://ozone.nextcentury.com/patch_process.
+
 # Center UI [![Build Status][travis-image]][travis-url]
 
 Center UI built on [React](http://facebook.github.io/react/), [Gulp](http://gulpjs.com/) and [Webpack](http://webpack.github.io/).
@@ -12,7 +15,7 @@ npm install -g gulp
 First clone the repo. Install module dependencies.
 
 ```
-git clone https://github.com/ozone-development/ozp-center.git
+git clone https://github.com/ozoneplatform/ozp-center.git
 cd ozp-center
 npm install
 ```
@@ -24,7 +27,3 @@ See `scripts` key in `package.json` for all options.
 * `npm start` implements an http server and a live reload server.
 * `npm run build` generates production build at ./dist directory with minified versions of JS and CSS. Contents of ./dist directory can then be copied to a web server.
 * `npm run deployGhPages` runs a build with demo configs and deploys ./dist to github pages.
-
-[travis-url]: https://travis-ci.org/ozone-development/ozp-center
-[travis-image]: https://travis-ci.org/ozone-development/ozp-center.svg
-
