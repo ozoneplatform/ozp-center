@@ -24,6 +24,7 @@ var ImageInput = React.createClass({
      * Override render from InputMixin to include the image tag
      */
     render: function () {
+        var removeImage = this.props.removeImage ? this.props.removeImage : this.removeImage;
         var labelClasses = classSet({ 'input-optional': this.props.optional }),
             props = _.omit(this.getInputProps(), 'value'),
             imageContainerClasses = classSet({
@@ -43,7 +44,7 @@ var ImageInput = React.createClass({
                 }
                 { cloneWithProps(this.renderInput(), props) }
                 <span className={imageContainerClasses}>
-                    <button onClick={this.removeImage} className="btn image-remove">
+                    <button onClick={removeImage} className="btn image-remove">
                         <i className="icon-trash" />
                         </button>
                     <img alt="" ref="image" className="image-preview"
@@ -69,7 +70,6 @@ var ImageInput = React.createClass({
         if(value.type === 'image/gif' || value.type === 'image/png' || value.type === 'image/jpeg'){
           if ( value.size <= 1024000){
             this.props.setter(value);
-
             this.setState({changedSinceUpdate: true});
           }
           else{
@@ -126,6 +126,10 @@ var ImageInput = React.createClass({
         //save, but not on a failure, so check serverError too
         if (!newProps.value || newProps.serverError) {
             this.setState({changedSinceUpdate: false});
+        }
+
+        if(newProps.imageUri !== this.props.imageUri) {
+            this.setState({'imageUri': newProps.imageUri});
         }
     },
 

@@ -108,6 +108,10 @@ var InputMixin = {
         return false;
     },
 
+    componentWillReceiveProps(props) {
+        this.setState({ value: props.value })
+    },
+
     getClasses: function () {
         return classSet({
             'form-group': true,
@@ -146,6 +150,9 @@ var InputMixin = {
     getInputProps: function () {
         var value = this.getValue ? this.getValue(this.props.value) : (this.state.value || this.props.value);
         var onChange = this.onChange ? this.onChange : this._onChange;
+        if(this.props.onChange)
+            onChange = this.props.onChange;
+        // onChange = this.props.onChange ? this.props.onChange : this._onChange;
         var onBlur = this.onBlur ? this.onBlur : this._onBlur;
         var onFocus = this.onFocus ? this.onFocus : this._onFocus;
 

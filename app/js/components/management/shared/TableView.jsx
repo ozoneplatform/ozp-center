@@ -163,16 +163,29 @@ var TableView = React.createClass({
             onClick: function (event) {
                 event.preventDefault();
                 event.stopPropagation();
+                var listing = null;
                 var target = event.originalEvent.target;
                 if (this.columns[event.column] && this.columns[event.column].field==="featured") {
                     if (target.type==='checkbox') {
                         if(thisTable.props.isAdmin && thisTable.props.isAdmin===true){
-                            var listing = thisTable.getUnpaginatedList().data.filter(
+                            listing = thisTable.getUnpaginatedList().data.filter(
                                 function (listing) {
                                     return parseInt(listing.id) === parseInt(event.recid);
                                 }
                             )[0];
                             ListingActions.setFeatured(target.checked, listing);
+                        }
+                    }
+                }
+                if (this.columns[event.column] && this.columns[event.column].field==="exportable") {
+                    if (target.type==='checkbox') {
+                        if(thisTable.props.isAdmin && thisTable.props.isAdmin===true){
+                            listing = thisTable.getUnpaginatedList().data.filter(
+                                function (listing) {
+                                    return parseInt(listing.id) === parseInt(event.recid);
+                                }
+                            )[0];
+                            ListingActions.setExportable(target.checked, listing);
                         }
                     }
                 }
@@ -257,6 +270,29 @@ var TableView = React.createClass({
                         }
                     } else {
                         if (record.featured) {
+                            return '<input type="checkbox" disabled="true" checked/>';
+                        } else {
+                            return '<input type="checkbox" disabled="false" />';
+                        }
+                    }
+                  }
+                  else{
+                    return '<input type="checkbox" style= "display:none" disabled="true" checked/>';
+                  }
+                }
+
+            },
+            { field: 'exportable', caption: 'Exportable', sortable: false, size: '5%',
+                render: function (record) {
+                    if (thisTable.props.isAdmin===true) {
+                      if(record.exportable !== null){
+                        if (record.exportable) {
+                            return '<input type="checkbox" checked/>';
+                        } else {
+                            return '<input type="checkbox" />';
+                        }
+                    } else {
+                        if (record.exportable) {
                             return '<input type="checkbox" disabled="true" checked/>';
                         } else {
                             return '<input type="checkbox" disabled="false" />';
@@ -360,6 +396,7 @@ var TableView = React.createClass({
                   updated: listing.editedDate,
                   enabled: listing.isEnabled ? "Enabled" : "Disabled",
                   featured: listing.isFeatured,
+                  exportable: listing.isExportable,
                   actions: null,
                   private: listing.isPrivate,
                   securityMarking: listing.securityMarking
@@ -367,6 +404,7 @@ var TableView = React.createClass({
             if(listing.approvalStatus === 'DELETED'){
               result.enabled = null;
               result.featured = null;
+              result.exportable = null;
             }
 
             return result;
@@ -459,6 +497,7 @@ var TableView = React.createClass({
             case 'organization': return prefix + 'agency__title'
             case 'status': return prefix + 'approval_status';
             case 'enabled': return prefix + 'is_enabled';
+            case 'exportable': return prefix + 'is_exportable';
             //case 'featured': return prefix + 'is_featured';
             case 'private': return prefix + 'is_private';
             case 'owners': return prefix + 'owners__display_name';

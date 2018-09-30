@@ -60,11 +60,13 @@ function iconFileInputFactory(initialImageUri, imageError, existingImageId, type
             return (
                 <div className="form-group">
                     <label>
-                        <span>Icon<small className="text-muted"> (optional)</small></span>
+                        <span>Icon</span>
+                        {/* <span>Icon<small className="text-muted"> (optional)</small></span> */}
                     </label>
                     <ImageInput
                         imageUri={this.state.imageUri} value={this.state.value}
-                        setter={this.onChange} serverError={this.state.imageError} />
+                        setter={this.onChange} serverError={this.state.imageError}
+                        />
                 </div>
             );
         }
@@ -102,12 +104,10 @@ var Intents = React.createClass({
             },
             structIcon: function(data){
                 data = data.map(function(intent) {
+
                     var iconObj = {
-                        accessControl: {
-                            title: intent.icon.accessControl.title
-                        },
                         id: intent.icon.id,
-                        url: intent.icon.url
+                        url: intent.icon.url,
                     };
 
                     var structIntent = {
@@ -127,8 +127,8 @@ var Intents = React.createClass({
             grid: {
                 columns: [
                     { field: 'label', caption: 'Label', size: '10%' },
-                    { field: 'action', caption: 'Action', size: '45%' },
-                    { field: 'mediaType', caption: 'Type', size: '45%' },
+                    { field: 'action', caption: 'Action', size: '35%' },
+                    { field: 'mediaType', caption: 'Type', size: '35%' },
                     { field: 'icon', caption: 'Icon', size: '50px',
                         render: function (record) {
                             return record.icon ?
@@ -201,11 +201,8 @@ var Intents = React.createClass({
 
             intentSaveFunction(Object.assign({}, data, {
                 icon: {
-                  accessControl: {
-                    title: "UNCLASSIFIED"
-                  },
-                  id: iconId,
-                  url: `${API_URL}/api/image/${iconId}`
+                    id: iconId,
+                    url: `${API_URL}/api/image/${iconId}`
                 },
                 iconId: iconId,
                 iconInput: undefined

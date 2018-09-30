@@ -51,8 +51,6 @@ var DetailsTab = React.createClass({
         var updatedDate = this.props.listing.editedDate;
         var versionNumber = this.props.listing.versionName;
         var categories = this.props.listing.categories.join(', ');
-        var tags = this.props.listing.tags;
-        var tagsObject = this.props.listing.tagsObject;
         var usage_requirements = this.props.listing.usage_requirements;
         var system_requirements = this.props.listing.system_requirements;
         var currentUser = this.state;
@@ -96,6 +94,7 @@ var DetailsTab = React.createClass({
                             <p><label>Version Number:</label><span> { versionNumber } </span></p>
                         </p>
                     </section>
+                    { this.renderCustomFields() }
                     { this.renderIntents() }
                 </div>
                 <div className="col-xs-4 col-right">
@@ -123,6 +122,47 @@ var DetailsTab = React.createClass({
             <a href={URL} key={`renderTags.${i}`} onClick={function(){window.location.href=URL; window.location.reload();}}>{tags.name} </a>
           );
         });
+    },
+
+    getCustomFieldDisplayNames: function () {
+        var listingTypeFields = this.props.listing.listingType.customFields || [];
+        var allTypeFields = this.props.system.customFieldsAll || [];
+        var fields = listingTypeFields.concat(allTypeFields);
+
+        var fieldTitles = {};
+        for (var field of fields) {
+            fieldTitles[field.id] = field.displayName;
+        }
+        return fieldTitles;
+    },
+
+    renderCustomFields: function () {
+        var fieldValues = this.props.listing.customFields;
+        var displayNamesById = this.getCustomFieldDisplayNames();
+
+        var customFieldsList = fieldValues.map(function (fieldValue, i) {
+            if (fieldValue.value === null || fieldValue.value === undefined || fieldValue.value === "") {
+                return null;
+            }
+
+            var displayName = displayNamesById[fieldValue.customField] || "Unknown";
+
+            return (
+                <p key={fieldValue.id}>
+                    <label>{displayName}:</label>
+                    <span>{fieldValue.value}</span>
+                </p>
+            );
+        });
+
+        return (
+            <section>
+                <h5>Custom Fields</h5>
+                <p>
+                    { fieldValues.length ? customFieldsList : <EmptyFieldValue /> }
+                </p>
+            </section>
+        );
     },
 
     renderOwners: function () {

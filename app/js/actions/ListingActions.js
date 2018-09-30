@@ -15,6 +15,7 @@ var ListingActions = createActions({
     fetchRecentListings: null,
     fetchMostPopularListings: null,
     fetchRecommendedListings: null,
+    fetchCustomFields: null,
 
     fetchById: null,
 
@@ -37,6 +38,7 @@ var ListingActions = createActions({
     reject: null,
     enable: null,
     disable: null,
+    setExportable: null,
     enableBookmarked: null,
     disableBookmarked: null,
     approve: null,

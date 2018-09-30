@@ -4,6 +4,18 @@ if (!Object.assign) {
     Object.assign = require('object-assign');
 }
 
+/**
+ * Polyfill for String.startsWith
+ *
+ * Source:
+ * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/startsWith#Polyfill
+ */
+if (!String.prototype.startsWith) {
+    String.prototype.startsWith = function(search, pos) {
+        return this.substr(!pos || pos < 0 ? 0 : +pos, search.length) === search;
+    };
+}
+
 require('./services');
 require('console-polyfill');
 
@@ -114,31 +126,29 @@ SelfStore.listen(_.once(function(profileData) {
 ProfileActions.fetchSelf();
 
 function initPiwik() {
-  var _paq = window._paq || [];
-  _paq.push(['trackPageView']);
-  _paq.push(['enableLinkTracking']);
+    var _paq = window._paq || [];
+    _paq.push(['trackPageView']);
+    _paq.push(['enableLinkTracking']);
 
-    (function() {
-      var d = document,
-      g = d.createElement('script'),
-      s = d.getElementsByTagName('script')[0],
-      u = METRICS_URL;
+    var d = document,
+    g = d.createElement('script'),
+    s = d.getElementsByTagName('script')[0],
+    u = METRICS_URL;
 
-      _paq.push(['setTrackerUrl', u+'piwik.php']);
-      _paq.push(['setSiteId', 1]);
+    _paq.push(['setTrackerUrl', u+'piwik.php']);
+    _paq.push(['setSiteId', 1]);
 
-      g.type='text/javascript';
-      g.async=true;
-      g.defer=true;
-      g.src=u+'piwik.js';
-      s.parentNode.insertBefore(g,s);
-    })();
+    g.type='text/javascript';
+    g.async=true;
+    g.defer=true;
+    g.src=u+'piwik.js';
+    s.parentNode.insertBefore(g,s);
 
     window._paq = _paq;
 }
 
-if(PIWIK_ANALYTICS) {
-  initPiwik();
+if (PIWIK_ANALYTICS) {
+    initPiwik();
 }
 
 require('tour');

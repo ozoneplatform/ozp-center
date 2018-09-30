@@ -58,6 +58,13 @@
     }
 }
 
+#create-edit-custom-fields > h2 {
+    margin-top: 30px;
+    padding-top: 30px;
+    border-top: 2px solid $gray-lightest;
+    padding-bottom: 15px;
+}
+
 #create-edit-basic-information {
     padding-top: 0px;
     border-top: none;
@@ -504,7 +511,7 @@ div.col-md-4 > .form-group >span.image-container.image-present {
 
 @-moz-document url-prefix(){
   input[id$="inputElement.smallIcon"], input[id$="inputElement.largeIcon"],
-  input[id$="inputElement.bannerIcon"], input[id$="inputElement.featuredBannerIcon"]{
+  input[id$="inputElement.bannerIcon"], input[id$="inputElement.featuredBannerIcon"], input[type$="file"],{
     padding-top: 2px !important;
     padding-bottom: 35px !important;
   }

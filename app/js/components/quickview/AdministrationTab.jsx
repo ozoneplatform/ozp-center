@@ -72,6 +72,35 @@ var EnabledControl = React.createClass({
     }
 });
 
+
+var ExportableControl = React.createClass({
+    onChange: function (evt) {
+        PaginatedChangeLogByIDStore.resetChangeLogByIDStore();
+
+        ListingActions.setExportable(evt.target.checked, this.props.listing);
+
+    },
+
+    shouldComponentUpdate: function (newProps) {
+        return newProps.listing.isExportable !== this.props.isExportable;
+    },
+
+    render: function () {
+        var listing = this.props.listing,
+            id = 'exportableControl',
+            external = listing.isExportable,
+            title = 'Export to Affiliated Stores',
+            description = 'This listing is ' + (external ? '' : 'not') + ' visible to external affiliated stores';
+
+        return (
+            <Toggle title={title} label="Enabled" className="exportable-toggle" id={id}
+                description={description}
+                checked={external}
+                onChange={this.onChange}/>
+        );
+    }
+});
+
 var FeaturedControl = React.createClass({
     onChange1: function (evt) {
         PaginatedChangeLogByIDStore.resetChangeLogByIDStore();
@@ -225,10 +254,12 @@ var AdministrationTab = React.createClass({
                         <EnabledControl key="enabled" listing={this.props.listing} />;
                 controls = isAdmin ? [
                         enabledControl,
-                        <FeaturedControl key="featured" listing={this.props.listing} />
+                        <FeaturedControl key="featured" listing={this.props.listing} />,
+                        <ExportableControl key="exportable" listing={this.props.listing} />
                     ] : [enabledControl];
                 statusClass = 'published';
                 break;
+
 
             case 'Pending, Organization':
                 if (isStewardOfOrg) {

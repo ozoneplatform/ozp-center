@@ -21,6 +21,7 @@ var FeaturedListings = require('./FeaturedListings.jsx');
 var Carousel = require('../carousel/index.jsx');
 var Types = require('./Types.jsx');
 var Organizations = require('./Organizations.jsx');
+var ExportableListings = require('./ExportableListings.jsx');
 var DetailedQuery = require('./DetailedQuery.jsx');
 var ActiveStateMixin = require('../../mixins/ActiveStateMixin');
 
@@ -36,7 +37,7 @@ var GlobalListingStore = require('../../stores/GlobalListingStore');
 var timeout;
 
 
-var FILTERS = ['categories', 'type', 'agency', 'tags'];
+var FILTERS = ['categories', 'type', 'agency', 'tags', 'exportable'];
 var sortOptions = [
     {option: 'Newest', searchParam: '-approved_date'},
     {option: 'Title: A to Z', searchParam: 'title'},
@@ -68,6 +69,7 @@ var Discovery = React.createClass({
             initialMostPopularTiles: 12,
             queryString: this.state ? this.state.queryString : '',
             categories: this.state ? this.state.categories : [],
+            exportable: this.state ? this.state.exportable : '',
             tags: this.state ? this.state.tags : [],
             tagId: this.state ? this.state.tagId : [],
             type: this.state ? this.state.type : [],
@@ -155,6 +157,12 @@ var Discovery = React.createClass({
         this.setState({ agency });
     },
 
+    onExportableChange(exportable) {
+        this.resetSearchState();
+        const value = exportable === null ? '' : exportable;
+        this.setState({exportable: value });
+    },
+
     onSortChange(order) {
         var me = this;
         if (order != this.state.ordering) {
@@ -174,6 +182,7 @@ var Discovery = React.createClass({
             !_.isEqual(this.state.tags, prevState.tags)||
             !_.isEqual(this.state.type, prevState.type) ||
             !_.isEqual(this.state.agency, prevState.agency) ||
+            !_.isEqual(this.state.exportable, prevState.exportable) ||
             !_.isEqual(this.state.currentOffset, prevState.currentOffset) ||
             !_.isEqual(this.state.ordering, prevState.ordering)) {
             this.search();
@@ -228,7 +237,7 @@ var Discovery = React.createClass({
                 <Header>
                 <form id="tourstop-center-search" className="col-xs-9 col-lg-10" ref="form" role="search">
                   <div className="row">
-                    <div className="form-group Search col-sm-6 col-xs-4">
+                    <div className="form-group Search col-sm-3 col-xs-4">
                       <i className="icon-search"></i>
 
                       <input ref="search" type="text" className="form-control"
@@ -242,6 +251,7 @@ var Discovery = React.createClass({
                     </div>
                     <Types value={this.state.type} onChange={this.onTypeChange} />
                     <Organizations value={this.state.agency} onChange={this.onOrganizationChange} />
+                    <ExportableListings value={this.state.exportable} onChange={this.onExportableChange} />
                   </div>
                 </form>
                 </Header>
@@ -335,6 +345,9 @@ var Discovery = React.createClass({
         if(this.context.getCurrentParams().tags){
           this.onTagsChange(this.state.initTags);
         }
+        if(this.context.getCurrentParams().exportable){
+          this.onExportableChange(this.state.exportable);
+        }
     },
 
 
@@ -361,7 +374,8 @@ var Discovery = React.createClass({
             type: [],
             agency: [],
             tags: [],
-            tagId: []
+            tagId: [],
+            exportable: ''
         });
     },
 
@@ -411,7 +425,7 @@ var Discovery = React.createClass({
     },
 
     search() {
-        var { type, agency } = this.state;
+        var { type, agency, exportable } = this.state;
         var combinedObj = _.assign(
             { search: this.state.queryString,
               offset: this.state.currentOffset,
@@ -420,12 +434,12 @@ var Discovery = React.createClass({
               tagId: this.state.tagId,
               limit: this.state.limit
             },
-            { type, agency });
+            { type, agency, exportable });
 
         if (this.state.ordering) {
             combinedObj = _.assign(combinedObj, {
                 ordering: this.state.ordering
-            },{ type, agency });
+            },{ type, agency, exportable });
         }
 
         ListingActions.search(_.assign(combinedObj));
@@ -603,7 +617,7 @@ var Discovery = React.createClass({
             </div>
         }
 
-        var searchLink = `${CENTER_URL}/#/home/${encodeURIComponent(this.state.queryString)}/${(this.state.categories.length) ? encodeURIComponent(this.state.categories.toString()).replace(/%2C/g,'+') : ''}/${(this.state.type.length) ? encodeURIComponent(this.state.type.toString()).replace(/%2C/g,'+') : ''}/${(this.state.agency.length) ? encodeURIComponent(this.state.agency.toString()).replace(/%2C/g,'+') : ''}/${(this.state.tags.length) ? encodeURIComponent(this.state.tags.toString()).replace(/%2C/g,'+') : ''}/${(this.state.tagId.length) ? encodeURIComponent(this.state.tagId.toString()).replace(/%2C/g,'+') : ''}`;
+        var searchLink = `${CENTER_URL}/#/home/${encodeURIComponent(this.state.queryString)}/${(this.state.categories.length) ? encodeURIComponent(this.state.categories.toString()).replace(/%2C/g,'+') : ''}/${(this.state.exportable.length) ? encodeURIComponent(this.state.exportable.toString()).replace(/%2C/g,'+') : ''}/${(this.state.type.length) ? encodeURIComponent(this.state.type.toString()).replace(/%2C/g,'+') : ''}/${(this.state.agency.length) ? encodeURIComponent(this.state.agency.toString()).replace(/%2C/g,'+') : ''}/${(this.state.tags.length) ? encodeURIComponent(this.state.tags.toString()).replace(/%2C/g,'+') : ''}/${(this.state.tagId.length) ? encodeURIComponent(this.state.tagId.toString()).replace(/%2C/g,'+') : ''}`;
 
         return (
             <section className="Discovery__SearchResults">

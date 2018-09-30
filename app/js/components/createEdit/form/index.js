@@ -1,6 +1,7 @@
 module.exports = {
     InputMixin: require('./InputMixin.jsx'),
     ListInput: require('./ListInput.jsx'),
+    CustomFieldInput: require('./CustomFieldInput.jsx'),
     Select2Input: require('./Select2Input.jsx'),
     Select2Mixin: require('./Select2Mixin'),
     Select2TagInput: require('./Select2TagInput.jsx'),

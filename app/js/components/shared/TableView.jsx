@@ -81,6 +81,8 @@ var TableView = React.createClass({
         if (this.props.sortKey==="!enabled") { enabledIcon = <i className="headerSortIcon icon-caret-up-blueDark"/>; }
         if (this.props.sortKey==="featured") { featuredIcon = <i className="headerSortIcon icon-caret-down-14-blueDark"/>; }
         if (this.props.sortKey==="!featured") { featuredIcon = <i className="headerSortIcon icon-caret-up-blueDark"/>; }
+        if (this.props.sortKey==="exportable") { exportableIcon = <i className="headerSortIcon icon-caret-down-14-blueDark"/>; }
+        if (this.props.sortKey==="!exportable") { exportableIcon = <i className="headerSortIcon icon-caret-up-blueDark"/>; }
 
         switch (type) {
         case "name":
@@ -99,6 +101,8 @@ var TableView = React.createClass({
             return <th className="enabledColumn" key="enabled" onClick={this.onSort.bind(this, "enabled")}>Enabled {enabledIcon}</th>;
         case "featured":
             return <th className="featuredColumn" key="featured" onClick={this.onSort.bind(this, "featured")}>Featured {featuredIcon}</th>;
+        case "exportable":
+            return <th className="exportableColumn" key="exportable" onClick={this.onSort.bind(this, "exportable")}>Exportable {exportableIcon}</th>;
         case "actions":
             return <th className="actionsColumn" key="actions">Actions</th>;
         case "buffer":
@@ -125,7 +129,7 @@ var TableView = React.createClass({
         if (columns) {
             columns = columns.split(',');
         } else {
-            columns = ["name", "owner", "comments", "status", "updated", "enabled", "featured", "actions", "buffer"];
+            columns = ["name", "owner", "comments", "status", "updated", "enabled", "featured", "exportable", "actions", "buffer"];
             sessionStorage.setItem(this.props.saveKey, columns);
         }
 

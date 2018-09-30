@@ -13,6 +13,8 @@ var Sidebar = require('../shared/Sidebar.jsx');
 var ApprovalStatusFilter = require('../shared/ApprovalStatusFilter.jsx');
 var EnabledFilter = require('../shared/EnabledFilter.jsx');
 
+var ExportableFilter = require('../shared/ExportableFilter.jsx');
+
 var LoadMore = require('../shared/LoadMore.jsx');
 var TableView = require('../shared/TableView.jsx');
 
@@ -131,6 +133,7 @@ var OrgListings = React.createClass({
                         {toggleSwitch}
                         <ApprovalStatusFilter role={ UserRole.ORG_STEWARD } { ...sidebarFilterOptions } />
                         <EnabledFilter { ...sidebarFilterOptions } />
+                        <ExportableFilter role={UserRole.ORG_STEWARD} { ...sidebarFilterOptions } />
                     </Sidebar>
                 </div>
                 { this.renderListings() }
