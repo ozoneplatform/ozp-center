@@ -204,6 +204,16 @@ function validate (instance, options, type) {
     return {isValid: validation.isValid(), errors: errors, firstError: firstError};
 }
 
+function validateCustomFields (validation, instance) {
+    for(var i = 0; i < instance.customFields.length; i++) {
+        if(instance.customFields[i].required && (!instance.customFields[i].value || instance.customFields[i].value.trim() === "")) {
+            var path = `customFields.${instance.customFields[i].customField}`;
+            validation.errors[path] = true;
+            validation.isValid = false;
+        }
+    }
+}
+
 function validateDraft (instance, options) {
     var validation = validate(instance, options, ListingDraft);
 
@@ -212,6 +222,8 @@ function validateDraft (instance, options) {
     copyImageValidations(validation);
 
     checkMarkings(validation, instance);
+
+    validateCustomFields(validation, instance);
 
     return validation;
 }
@@ -223,7 +235,10 @@ function validateFull (instance, options) {
     validateContacts(validation, instance);
     validation.errors.contacts = !hasRequiredContactTypes(requiredContactTypes, instance.contacts);
 
+    validateCustomFields(validation, instance);
+
     copyImageValidations(validation);
+
     return validation;
 }
 

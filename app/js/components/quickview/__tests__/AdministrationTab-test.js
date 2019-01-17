@@ -118,4 +118,68 @@ describe('AdministrationTab', function () {
         );
         expect($(adminTab.getDOMNode()).find('.review-listing')[0]).to.not.exist();
     });
+
+    it('renders Exportable to Affiliated stores button if the user is an admin or a listing owner',
+      function () {
+        var AdministrationTab = require('../AdministrationTab.jsx');
+
+        var adminTab = TestUtils.renderIntoDocument(
+                <AdministrationTab currentUser={{highestRole: 'APPS_MALL_STEWARD'}} />
+        );
+
+        expect($(adminTab.getDOMNode()).find('.exportable-toggle')[0]).to.exist();
+
+        adminTab = TestUtils.renderIntoDocument(
+                <AdministrationTab currentUser={{highestRole: 'USER'}} />
+        );
+
+        expect($(adminTab.getDOMNode()).find('.exportable-toggle')[0]).to.not.exist();
+    )},
+
+    it('calls ListingAction.isExportable when the Exportable toggle is clicked', function () {
+        var setExportableSpy = sinon.spy(),
+            AdministrationTab =
+                    require('inject?../../actions/ListingActions!../AdministrationTab.jsx')({
+                '../../actions/ListingActions': {
+                    setExportable: setExportableSpy,
+                    enable: sinon.spy(),
+                    disable: sinon.spy()
+                }
+            }),
+            listing = {isExportable: false};
+
+        var adminTab = TestUtils.renderIntoDocument(
+                <AdministrationTab listing={listing}
+                    currentUser={{highestRole: 'APPS_MALL_STEWARD'}} />
+        );
+
+        var node = adminTab.getDOMNode(),
+
+        checkbox = node.querySelector('.exportable-toggle input[type=checkbox]');
+
+        expect(checkbox.checked).to.be.false();
+        checkbox.checked = true;
+        TestUtils.Simulate.change(checkbox, {target: checkbox});
+
+        expect(setExportableSpy.calledOnce).to.be.ok();
+        expect(setExportableSpy.calledWith(true, listing)).to.be.true();
+
+        listing.isExportable = true;
+
+        adminTab = TestUtils.renderIntoDocument(
+                <AdministrationTab listing={listing}
+                    currentUser={{highestRole: 'APPS_MALL_STEWARD'}} />
+        );
+
+        node = adminTab.getDOMNode();
+
+        checkbox = node.querySelector('.exportable-toggle input[type=checkbox]');
+
+        expect(checkbox.checked).to.be.true();
+        checkbox.checked = false;
+        TestUtils.Simulate.change(checkbox, {target: checkbox});
+
+        expect(setExportableSpy.calledTwice).to.be.ok();
+        expect(setExportableSpy.calledWith(false, listing)).to.be.true();
+    });
 });

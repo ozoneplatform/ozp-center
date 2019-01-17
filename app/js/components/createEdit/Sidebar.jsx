@@ -39,9 +39,13 @@ var SidebarGroup = React.createClass({
     },
 
     render: function() {
-        var group = this.props.group,
-            links = group.links.map(l => <SidebarLink key={l.href} link={l} />),
-            inputId = `sidebar-${group.title.replace(/\s/g, '-')}`;
+        var group = this.props.group;
+        var inputId = `sidebar-${group.title.replace(/\s/g, '-')}`;
+
+        var links = group.links.map(l => {
+            var elem = $("#" + l.id);
+            return !elem.length ? null : (<SidebarLink key={l.href} link={l}/>);
+        });
 
         return (
             <li className="link-group">

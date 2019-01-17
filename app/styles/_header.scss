@@ -155,7 +155,7 @@
     }
 }
 
-.SelectBox__Types, .SelectBox__Organizations {
+.SelectBox__Types, .SelectBox__Organizations, .SelectBox__exportable {
     border-radius: 0;
     box-shadow: none;
     border-left: 1px solid $gray-lighter;
@@ -222,7 +222,8 @@
 
 }
 
-.SelectBox__Types.open, .react-select-box-empty.SelectBox__Types.open,.SelectBox__Organizations.open, .react-select-box-empty.SelectBox__Organizations.open,  {
+.SelectBox__Types.open, .react-select-box-empty.SelectBox__Types.open,.SelectBox__Organizations.open, .react-select-box-empty.SelectBox__Organizations.open,
+.SelectBox__exportable.open, .react-select-box-container.SelectBox__exportable.open  {
     > .react-select-box {
         border-top: 4px solid $blue;
         background: $gray-lightest;
@@ -243,7 +244,8 @@
 }
 
 .react-select-box-container.SelectBox__Types.react-select-box-multi.react-select-box-empty.open,
-.react-select-box-container.SelectBox__Organizations.react-select-box-multi.react-select-box-empty.open {
+.react-select-box-container.SelectBox__Organizations.react-select-box-multi.react-select-box-empty.open,
+.react-select-box-container.SelectBox__exportable.open{
     > .react-select-box {
       background: $gray-lightest;
       color: $blue;
@@ -260,10 +262,10 @@
     > .react-select-box-clear {
         top: 17px;
         background-color: $gray-lightest;
-
+        content: ' ';
         &:before{
             @extend .icon-cross-14-grayDark;
-            content: '';
+            content: ' ';
             top: 18px;
             left: -1px;
         }

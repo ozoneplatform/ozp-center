@@ -176,7 +176,7 @@ var Quickview = React.createClass({
                             <div className="tabs-container" key="tabs-container">
                             { this.renderTabs(tabs, listing.id) }
                                 <div className="tab-content" >
-                                    <ActiveRouteHandler currentUser={currentUser} listing={listing} shown ={shown} />
+                                    <ActiveRouteHandler currentUser={currentUser} listing={listing} shown={shown} system={this.props.system} />
                                 </div>
                             </div>
                         ]

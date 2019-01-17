@@ -19,6 +19,8 @@ function updateListingProperty(propName, value, listing) {
 var setEnabled = updateListingProperty.bind(null, 'isEnabled');
 var setEnabledBookmarked = updateListingProperty.bind(null, 'isBookmarked');
 
+var setExportable = updateListingProperty.bind(null, 'isExportable');
+
 ListingActions.fetchAllListings.listen(function (filter) {
     var paginatedList = PaginatedListingsStore.getListingsByFilter(filter),
         opts = {},
@@ -81,6 +83,11 @@ ListingActions.fetchCounts.listen(function () {
     ListingApi
         .getCounts()
         .then(_.partial(ListingActions.fetchCountsCompleted));
+});
+
+ListingActions.fetchCustomFields.listen(function(listing_type_id) {
+        ListingApi.getCustomFieldsForType(listing_type_id)
+            .then(ListingActions.fetchCustomFieldsCompleted);
 });
 
 ListingActions.fetchAllChangeLogs.listen(function (profile, filter) {
@@ -366,3 +373,4 @@ ListingActions.deleteFeedback.listen(function (listing) {
 });
 
 ListingActions.setFeatured.listen(updateListingProperty.bind(null, 'isFeatured'));
+ListingActions.setExportable.listen(updateListingProperty.bind(null, 'isExportable'));

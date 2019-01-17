@@ -11,6 +11,9 @@ var SystemStateMixin = require('../../../mixins/SystemStateMixin');
 var Sidebar = require('../shared/Sidebar.jsx');
 var ApprovalStatusFilter = require('../shared/ApprovalStatusFilter.jsx');
 var EnabledFilter = require('../shared/EnabledFilter.jsx');
+
+var ExportableFilter = require('../shared/ExportableFilter.jsx');
+
 var OrgFilter = require('../shared/OrgFilter.jsx');
 
 var LoadMore = require('../shared/LoadMore.jsx');
@@ -118,6 +121,7 @@ var AllListings = React.createClass({
                         {toggleSwitch}
                         <ApprovalStatusFilter role={ UserRole.APPS_MALL_STEWARD } { ...sidebarFilterOptions } />
                         <EnabledFilter { ...sidebarFilterOptions } />
+                        <ExportableFilter role={ UserRole.APPS_MALL_STEWARD } { ...sidebarFilterOptions } />
                         <OrgFilter { ...sidebarFilterOptions } />
                     </Sidebar>
                 </div>

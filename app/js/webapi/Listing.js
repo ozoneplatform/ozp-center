@@ -15,25 +15,25 @@ var FIELDS = [
     'width', 'totalRate5','totalVotes', 'totalReviews', 'state', 'tags', 'tagsObject', 'type','uuid', 'usage_requirements', 'system_requirements', 'singleton',
     'versionName', 'imageLargeUrl', 'imageSmallUrl', 'imageMediumUrl', 'imageXlargeUrl',
     'launchUrl', 'company', 'whatIsNew', 'owners', 'agency', 'agencyShort', 'rejection',
-    'isEnabled', 'categories', 'releaseDate', 'editedDate', 'intents', 'docUrls', 'approvalStatus',
+    'isEnabled', 'isExportable', 'categories', 'releaseDate', 'editedDate', 'intents', 'docUrls', 'approvalStatus',
     'isFeatured', 'smallIconId', 'largeIconId', 'bannerIconId', 'featuredBannerIconId',
     'currentRejection', 'isPrivate', 'securityMarking', 'smallIconMarking',
-    'largeIconMarking', 'bannerIconMarking', 'featuredBannerIconMarking', 'isBookmarked', 'certIssues', 'feedback'
+    'largeIconMarking', 'bannerIconMarking', 'featuredBannerIconMarking', 'isBookmarked', 'certIssues', 'feedback',
+    'customFields'
 ];
 
 // These don't have the icons, access_control
 var SAVE_FORMAT_FIELDS = [
     'agency', 'approval_status', 'approved_date', 'avg_rate', 'categories', 'contacts',
-    'description', 'description_short', 'doc_urls', 'id', 'intents', 'is_enabled', 'is_featured',
+    'description', 'description_short', 'doc_urls', 'id', 'intents', 'is_enabled', 'is_exportable', 'is_featured',
     'is_private', 'last_activity', 'launch_url', 'listing_type', 'owners', 'required_listings',
     'usage_requirements', 'system_requirements', 'screenshots', 'singleton', 'tags', 'title', 'total_comments', 'total_rate1',
     'total_rate2', 'total_rate3', 'total_rate4', 'total_rate5', 'total_votes', 'total_reviews', 'unique_name',
     'version_name', 'what_is_new', 'small_icon', 'large_icon', 'banner_icon', 'large_banner_icon',
-    'security_marking', 'is_bookmarked'
+    'security_marking', 'is_bookmarked', 'custom_fields'
 ];
 
 function Listing (json) {
-
     if (!(this instanceof Listing)) {
         throw new Error("This object must be created with new");
     }
@@ -64,6 +64,7 @@ function Listing (json) {
         this.categories = _.map(json.categories, 'title') || [];
         this.tags = _.map(json.tags, 'name') || [];
         this.tagsObject = _.map(json.tags) || [];
+        this.customFields = _.map(json.customFields) || [];
         this.agency = json.agency ? json.agency.title : json.agencyTitle || "";
         this.agencyShort = json.agency ? json.agency.shortName : json.agencyShortName || "";
         this.owners = _.map(json.owners, function (o) {
@@ -112,15 +113,17 @@ function Listing (json) {
         this.categories = json.categories || [];
         this.tags = json.tags || [];
         this.tagsObject = json.tags || [];
+        this.customFields = json.customFields || [];
         this.agency = json.agency || "";
         this.agencyShort = json.agencyShort || "";
         this.intents = json.intents || [];
         this.contacts = this.contacts || [];
         this.type = json.type || "";
         this.title = json.title || "";
-
-
     }
+
+    this.customFieldsObject = mapCustomFields(json.customFields);
+    this.listingType = json.listingType;
 
     this.screenshots = this.screenshots || [];
     this.docUrls = this.docUrls || [];
@@ -133,8 +136,19 @@ function Listing (json) {
     return this;
 }
 
+function mapCustomFields(customFields) {
+    return _.map(customFields, function (obj) {
+        return {
+            displayName: obj.customField.displayName,
+            id: obj.customField.id,
+            value: obj.value,
+            description: obj.customField.description
+        };
+    }) || [];
+}
 
 Listing.prototype.saveFormat = function() {
+
 
     var saveFormat = humps.decamelizeKeys(this);
 
@@ -150,6 +164,7 @@ Listing.prototype.saveFormat = function() {
     saveFormat.listing_type = {};
     saveFormat.listing_type.title = saveFormat.type;
     saveFormat.categories = _.map(saveFormat.categories, x => { return {"title": x}; });
+    saveFormat.custom_fields = _.map(saveFormat.custom_fields, x => { return x; });
     saveFormat.tags = _.map(saveFormat.tags, x => { return {"name": x}; });
     saveFormat.unique_name = saveFormat.uuid;
 
@@ -276,6 +291,13 @@ var ListingApi = {
             });
     },
 
+    getExportableListings: function() {
+        return $.getJSON(API_URL + '/api/storefront/exportable/').then(
+            resp => {
+                return _.map(resp.exportable, this.newListing);
+            });
+    },
+
     getRecentListings: function() {
         return $.getJSON(API_URL + '/api/storefront/recent/').then(
             resp => {
@@ -337,8 +359,10 @@ var ListingApi = {
     },
 
     save: function (data) {
+
         var listing = new Listing(data);
         data = listing.saveFormat();
+
 
         var method = data.id ? 'PUT' : 'POST';
         var url = API_URL + '/api/listing/';
@@ -533,6 +557,14 @@ var ListingApi = {
         return $.ajax({
             type: 'DELETE',
             url: API_URL + '/api/listing/' + id + '/feedback/' + id + '/',
+            contentType: 'application/json'
+        });
+    },
+
+    getCustomFieldsForType: function(type_id) {
+        return $.ajax({
+            type: 'GET',
+            url: API_URL + '/api/listingtype/' + type_id + '/',
             contentType: 'application/json'
         });
     }

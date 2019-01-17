@@ -13,7 +13,8 @@ var Select2Mixin = {
         var $input = $(this.refs.input.getDOMNode()),
             select2 = $input.select2(this.getSelect2Options()).data('select2');
 
-        $input.on('change', this.onChange);
+        var changeFunc = this.props.onChange ? this.props.onChange : this.onChange;
+        $input.on('change', changeFunc);
         $input.on('select2-blur', this._onBlur);
         $input.select2('val', this.props.value);
 

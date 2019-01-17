@@ -8,7 +8,7 @@ var { approvalStatus } = require('ozp-react-commons/constants');
 var CurrentListingStore = require('../../stores/CurrentListingStore');
 var CreateEditActions = require('../../actions/CreateEditActions');
 var { Navigation } = require('react-router');
-
+var { API_URL } = require('ozp-react-commons/OzoneConfig');
 var NavBar = require('../NavBar/index.jsx');
 var Sidebar = require('./Sidebar.jsx');
 var { classSet } = React.addons;
@@ -25,12 +25,16 @@ var {
     ImageInput,
     Select2Input,
     Select2TagInput,
+    CustomFieldInput,
     TextAreaInput,
     OwnerInput,
     Toggle,
     MarkingInput
 } = require('./form');
 
+var ResourceForm = require('./ResourceForm.jsx');
+var ScreenshotForm = require('./ScreenshotForm.jsx');
+var ContactForm = require('./ContactForm.jsx');
 
 var savingMessages = {
     images: 'Uploading Images...',
@@ -153,6 +157,10 @@ var formLinks = {
     contacts: {
         title: 'Contacts',
         id: 'create-edit-contacts'
+    },
+    customFields: {
+        title: 'Custom Fields',
+        id: 'create-edit-custom-fields'
     }
 };
 
@@ -169,7 +177,8 @@ var formLinkGroups = [{
         formLinks.categories,
         formLinks.tags,
         formLinks.description,
-        formLinks.descriptionShort
+        formLinks.descriptionShort,
+        formLinks.customFields
     ]
 }, {
     link: formLinks.listingDetails,
@@ -204,147 +213,31 @@ var formLinkGroups = [{
     ]
 }];
 
+function getOptionsWithPKForSystemObject(items) {
+    return items.map(item => {
+
+        return { pk: item.id, id: item.title, text: item.title, custom_fields: item.custom_fields };
+    });
+}
 
 //TODO
-function getOptionsForSystemObject (items) {
+function getOptionsForSystemObject(items) {
     return items.map(item => {
         return { id: item.title, text: item.title };
     });
 }
 
-function getOptionsForNamedSystemObject (items) {
-    return items.map(item => {
-        return { id: item.name, text: item.name };
-    });
-}
 
-function getOptionsForSimpleLists (items) {
+function getOptionsForSimpleLists(items) {
     return items.map(item => {
         return { id: item, text: item };
     });
 }
 
-// On the edit listing page, these are the wells users input the 'Type of Resource' and the resources 'URL'
-var ResourceForm = React.createClass({
-    mixins: [ ValidatedFormMixin ],
-
-    render: function () {
-        return (
-            <div className="well listItemRow">
-                <div className="clear"></div>
-                <div className="col-md-2">
-                <div><strong>Resource<br /> <span className="resourceNum">{this.props.count+1}</span></strong></div>
-                </div>
-                <div className="col-md-4">
-                <TextInput { ...this.getFormComponentProps('name') }/>
-                </div>
-                <div className="col-md-4">
-                <TextInput { ...this.getFormComponentProps('url') }/>
-                </div>
-                <div className="col-md-2">
-                <button type="button" className="close" onClick={ this.props.removeHandler }>
-                    <span aria-hidden="true"><i className="icon-cross-14"></i></span><span className="sr-only">Remove</span>
-                </button>
-                </div>
-                <div className="clear"></div>
-            </div>
-        );
-    }
-});
-
-// On the edit listing page, these are the Screenshot wells users input the 'Preview Image' and the 'Full Size Image'
-var ScreenshotForm = React.createClass({
-    mixins: [ ValidatedFormMixin ],
-
-    componentDidUpdate: function(prev) {
-        this.props.value.order = this.props.count;
-    },
-
-    shouldComponentUpdate: function(newProps) {
-        return (newProps.value === this.props.value) ||
-            newProps.value.smallImageId == null ||
-            newProps.value.largeImageId == null;
-    },
-
-    render: function () {
-        var up_arrow = <button type="button" onClick={this.props.reorderUpHandler} className="up-arrow"><i className="icon-caret-up"></i></button>;
-        var down_arrow = <button type="button" onClick={this.props.reorderDownHandler} className="down-arrow"><i className="icon-caret-down-14"></i></button>;
-
-        return (
-            <div className="listItemRow" ref="listItemRow" >
-                <div className="clear"></div>
-                <div className="col-md-2 dragBox">
-                <div><strong>Screenshot<br /> <span className="screenshotNum">{this.props.count+1 }</span></strong></div>
-                {this.props.value && this.props.total-1 == this.props.count ? null : down_arrow}
-                {this.props.value && this.props.count != 0 ? up_arrow : null}
-                </div>
-
-                <div className="col-md-4">
-                    <ImageInput { ...this.getFormComponentProps('smallImage') }
-                                imageUri={this.props.value.smallImageUrl}
-                                serverError={this.props.imageErrors.smallImage} />
-                    <MarkingInput id={this.props.value.smallImageMarking}
-                                  { ...this.getFormComponentProps('smallImageMarking') }
-                                  aria-label="Classification and Control Marking"/>
-                </div>
-
-                <div className="col-md-4">
-                    <ImageInput { ...this.getFormComponentProps('largeImage') }
-                                imageUri={this.props.value.largeImageUrl}
-                                serverError={this.props.imageErrors.largeImage} />
-                    <MarkingInput id={this.props.value.largeImageMarking}
-                                  { ...this.getFormComponentProps('largeImageMarking') }
-                                  aria-label="Classification and Control Marking"/>
-                          </div>
-
-                <div className="col-md-2">
-                    <button type="button" className="close" onClick={this.props.removeHandler}>
-                        <span aria-hidden="true"><i className="icon-cross-16"></i></span><span className="sr-only">Remove</span>
-                    </button>
-                </div>
-
-                <div className="clear"></div>
-                <div className="col-md-2">
-                    <div><br/></div>
-                </div>
-
-                <div className="col-md-8">
-                    <TextAreaInput { ...this.getFormComponentProps('description') } id="description" label="Description:" charLimit="160"  optional/>
-                </div>
-
-                <div className="clear"></div>
-            </div>
-        );
-    }
-});
-
-var ContactForm = React.createClass({
-    mixins: [ require('../../mixins/SystemStateMixin'), ValidatedFormMixin ],
-    render: function () {
-
-        var baseKey = this.props.value.type + '.' + this.props.baseKey;
-
-        return (
-            <div className="well">
-                <button type="button" className="close" onClick={this.props.removeHandler}>
-                    <span aria-hidden="true"><i className="icon-cross-14"></i></span><span className="sr-only">Clear</span>
-                </button>
-                <Select2Input { ...this.getFormComponentProps('type') }
-                              options={ getOptionsForNamedSystemObject(this.state.system.contactTypes) }
-                              key={`${baseKey}.type`} />
-                <TextInput { ...this.getFormComponentProps('name') } key={`${baseKey}.name`} />
-                <TextInput { ...this.getFormComponentProps('organization') } key={`${baseKey}.organization`} optional />
-                <TextInput { ...this.getFormComponentProps('email') } key={`${baseKey}.email`} />
-                <TextInput { ...this.getFormComponentProps('securePhone') } key={`${baseKey}.securePhone`} />
-                <TextInput { ...this.getFormComponentProps('unsecurePhone') } key={`${baseKey}.unsecurePhone`} />
-            </div>
-        );
-    }
-});
-
 // This is the whole form for all the other createEdit createClass forms
 var ListingForm = React.createClass({
-    mixins: [ ValidatedFormMixin, State],
+
+    mixins: [ValidatedFormMixin, State],
 
     getInitialState: () => ({ currentNavTarget: null }),
 
@@ -353,21 +246,41 @@ var ListingForm = React.createClass({
         var system = this.props.system;
         var organizations = system.organizations.map((x) => x.shortName);
 
+        var customFieldSetter = field => {
+            var customFieldsObject = this.props.value.customFieldsObject;
+            var customFields = this.props.value.customFields;
+
+            var updated = false;
+            for (var i = 0; i < customFields.length; i++) {
+                if (customFields[i].customField === field.id) {
+                    this.props.value.customFields[i].value = field.value;
+                    this.props.value.customFieldsObject[i].value = field.value;
+                    updated = true;
+                    break;
+                }
+            }
+
+            if (!updated) {
+                this.props.value.customFieldsObject.push(field);
+                this.props.value.customFields.push({ customField: field.id, value: field.value });
+            }
+        };
+
         var ownerSetter = usernames => {
             this.props.requestChange(['owners'], usernames.map(u => {
                 return { username: u };
             }));
         };
 
-
-        var p = this.getFormComponentProps;
+        var formProps = this.getFormComponentProps;
         var f = formLinks;
 
-        var decodedUrl = (()=>{
-            var durl = p('launchUrl');
+        var decodedUrl = (() => {
+            var durl = formProps('launchUrl');
             durl.value = (durl.value) ? decodeURI(durl.value) : '';
             return durl;
         })();
+
         ///TODO uncomment alert and return and comment form return to cause the alert to display with no changes to the form allowed to be made
         /*
         sweetAlert({
@@ -386,119 +299,177 @@ var ListingForm = React.createClass({
             <form ref="form" className="CreateEdit__form col-xs-9 col-lg-10">
                 <h2 id={f.basicInformation.id}>Basic Information</h2>
 
-                <MarkingInput id={f.securityMarking.id} { ...p('securityMarking') } aria-label={p('securityMarking').description}/>
+                <MarkingInput id={f.securityMarking.id}
+                              {...formProps('securityMarking')}
+                              aria-label={formProps('securityMarking').description}/>
 
-                <TextInput id={f.title.id} { ...p('title') } aria-label={p('title').description}/>
-                <Select2Input id={f.type.id} { ...p('type') }
-                    options={ getOptionsForSystemObject(system.types) }/>
-                <Select2Input id={f.categories.id} { ...p('categories') } multiple
-                    options={ getOptionsForSystemObject(system.categories) }/>
-                <Select2TagInput id={f.tags.id} showFOUOwarning="true" { ...p('tags') } multiple/>
-                <TextAreaInput id={f.description.id} { ...p('description') } rows="6"/>
-                <TextAreaInput id={f.descriptionShort.id} { ...p('descriptionShort') } charLimit="100" rows="3"/>
+                <TextInput id={f.title.id}
+                           {...formProps('title')}
+                           aria-label={formProps('title').description}/>
 
-                <h2 id={f.listingDetails.id} >Listing Details</h2>
-                <TextInput id={f.versionNumber.id} { ...p('versionName') }/>
-                <TextInput id={f.launchUrl.id} { ...decodedUrl }/>
+                <Select2Input id={f.type.id}
+                              {...formProps('type')}
+                              options={getOptionsWithPKForSystemObject(system.types)}/>
+
+                <Select2Input id={f.categories.id}
+                              {...formProps('categories')}
+                              options={getOptionsForSystemObject(system.categories)}
+                              multiple/>
+
+                <Select2TagInput id={f.tags.id}
+                                 showFOUOwarning="true"
+                                 {...formProps('tags')}
+                                 multiple/>
+
+                <TextAreaInput id={f.description.id}
+                               {...formProps('description')}
+                               rows="6"/>
+
+                <TextAreaInput id={f.descriptionShort.id}
+                               {...formProps('descriptionShort')}
+                               charLimit="100"
+                               rows="3"/>
+
+                <CustomFieldInput user={this.props.currentUser}
+                                  errors={this.props.errors}
+                                  customFieldsAll={system.customFieldsAll}
+                                  warnings={this.props.warnings}
+                                  customFieldDefs={this.state.customFieldDefs}
+                                  customFieldsObject={this.props.value['customFieldsObject']}
+                                  {...this.props}
+                                  types={system.types}
+                                  listing_type={this.props.value['type']}
+                                  id={f.customFields.id}
+                                  listing={this.props.value}
+                                  listingTypes={this.props.system.types}
+                                  {...formProps('customFields')} />
+
+                <h2 id={f.listingDetails.id}>Listing Details</h2>
+
+                <TextInput id={f.versionNumber.id} {...formProps('versionName')}/>
+
+                <TextInput id={f.launchUrl.id} {...decodedUrl}/>
 
                 <Toggle toggleId="privateListing"
-                    explanation={['This web application/widget is visible to all agencies in the community',
-                                    'This web application/widget is only visible to your agency']}
-                    id={f.isPrivate.id} { ...p('isPrivate') } />
+                        explanation={['This web application/widget is visible to all agencies in the community',
+                            'This web application/widget is only visible to your agency']}
+                        id={f.isPrivate.id} {...formProps('isPrivate')} />
 
-                <TextAreaInput id={f.usage_requirements.id} { ...p('usage_requirements') } rows="5"/>
-                <TextAreaInput id={f.system_requirements.id} { ...p('system_requirements') } rows="5"/>
+                <TextAreaInput id={f.usage_requirements.id} {...formProps('usage_requirements')} rows="5"/>
 
-                <TextAreaInput id={f.whatsNew.id} { ...p('whatIsNew') } rows="3" optional/>
-                <Select2Input id={f.intents.id} { ...p('intents') }  multiple options={
+                <TextAreaInput id={f.system_requirements.id} {...formProps('system_requirements')} rows="5"/>
+
+                <TextAreaInput id={f.whatsNew.id} {...formProps('whatIsNew')} rows="3" optional/>
+
+                <Select2Input id={f.intents.id} {...formProps('intents')} multiple options={
                     this.props.system.intents.map(intent => {
                         return { id: intent.action, text: intent.action };
                     })
-                } optional />
-            <Toggle toggleId="singletonListing"
-                  explanation={['Multiple instances of this web application/widget can be launched in webtop',
-                    'Only one instance of this web application/widget can be launched in webtop']}
-                  id={f.singleton.id} { ...p('singleton') } />
-                <h2 id={f.resources.id} > Resources </h2>
-                <ListInput { ...this.getSubFormProps('docUrls') }
-                    itemForm={ ResourceForm } optional/>
+                } optional/>
+
+                <Toggle toggleId="singletonListing"
+                        explanation={['Multiple instances of this web application/widget can be launched in webtop',
+                            'Only one instance of this web application/widget can be launched in webtop']}
+                        id={f.singleton.id} {...formProps('singleton')} />
+
+                <h2 id={f.resources.id}> Resources </h2>
+
+                <ListInput {...this.getSubFormProps('docUrls')}
+                           itemForm={ResourceForm} optional/>
 
                 <h2 id={f.graphics.id}>Graphics</h2>
 
-                <ImageInput id={f.smallIcon.id} { ...p('smallIcon') }
-                    imageUri={this.props.value.imageSmallUrl}
-                    serverError={this.props.imageErrors.smallIcon} />
-                <MarkingInput id={f.smallIcon.markingId} { ...p('smallIconMarking') }
-                              aria-label={p('smallIconMarking').description}/>
+                <ImageInput id={f.smallIcon.id}
+                            {...formProps('smallIcon')}
+                            imageUri={this.props.value.imageSmallUrl}
+                            serverError={this.props.imageErrors.smallIcon}/>
 
-                <ImageInput id={f.largeIcon.id} { ...p('largeIcon') }
-                    imageUri={this.props.value.imageMediumUrl}
-                    serverError={this.props.imageErrors.largeIcon} />
-                <MarkingInput id={f.largeIcon.markingId} { ...p('largeIconMarking') }
-                              aria-label={p('largeIconMarking').description}/>
+                <MarkingInput id={f.smallIcon.markingId} {...formProps('smallIconMarking')}
+                              aria-label={formProps('smallIconMarking').description}/>
 
-                <ImageInput id={f.bannerIcon.id} { ...p('bannerIcon') }
-                    imageUri={this.props.value.imageLargeUrl}
-                    serverError={this.props.imageErrors.bannerIcon} />
-                <MarkingInput id={f.bannerIcon.markingId} { ...p('bannerIconMarking') }
-                              aria-label={p('bannerIconMarking').description}/>
+                <ImageInput id={f.largeIcon.id}
+                            {...formProps('largeIcon')}
+                            imageUri={this.props.value.imageMediumUrl}
+                            serverError={this.props.imageErrors.largeIcon}/>
 
-                <ImageInput id={f.featuredBannerIcon.id} { ...p('featuredBannerIcon') }
-                    imageUri={this.props.value.imageXlargeUrl}
-                    serverError={this.props.imageErrors.featuredBannerIcon} />
-                <MarkingInput id={f.featuredBannerIcon.markingId} { ...p('featuredBannerIconMarking') }
-                              aria-label={p('featuredBannerIconMarking').description}/>
+                <MarkingInput id={f.largeIcon.markingId}
+                              {...formProps('largeIconMarking')}
+                              aria-label={formProps('largeIconMarking').description}/>
 
-                <ListInput id={f.screenshots.id} { ...this.getSubFormProps('screenshots') }
-                    itemForm={ ScreenshotForm }/>
+                <ImageInput id={f.bannerIcon.id}
+                            {...formProps('bannerIcon')}
+                            imageUri={this.props.value.imageLargeUrl}
+                            serverError={this.props.imageErrors.bannerIcon}/>
+
+                <MarkingInput id={f.bannerIcon.markingId}
+                              {...formProps('bannerIconMarking')}
+                              aria-label={formProps('bannerIconMarking').description}/>
+
+                <ImageInput id={f.featuredBannerIcon.id}
+                            {...formProps('featuredBannerIcon')}
+                            imageUri={this.props.value.imageXlargeUrl}
+                            serverError={this.props.imageErrors.featuredBannerIcon}/>
+
+                <MarkingInput id={f.featuredBannerIcon.markingId}
+                              {...formProps('featuredBannerIconMarking')}
+                              aria-label={formProps('featuredBannerIconMarking').description}/>
+
+                <ListInput id={f.screenshots.id} {...this.getSubFormProps('screenshots')}
+                           itemForm={ScreenshotForm}/>
 
                 <h2 id={f.ownersAndContacts.id}>Owner Information and Contacts</h2>
-                <Select2Input id={f.orgs.id} { ...p('agencyShort') }
-                    options={ getOptionsForSimpleLists(organizations) }/>
-                <OwnerInput id={f.owners.id} { ...p('owners') } listing={listing}
-                    ownerSetter={ownerSetter} />
-                <ListInput id={f.contacts.id} { ...this.getSubFormProps('contacts') }
-                    itemForm={ ContactForm }/>
 
-                <div className="space" style={{'height':'400px'}}>&#32;</div>
+                <Select2Input id={f.orgs.id}
+                              {...formProps('agencyShort')}
+                              options={getOptionsForSimpleLists(organizations)}/>
+
+                <OwnerInput id={f.owners.id}
+                            {...formProps('owners')}
+                            listing={listing}
+                            ownerSetter={ownerSetter}/>
+
+                <ListInput id={f.contacts.id}
+                           {...this.getSubFormProps('contacts')}
+                           itemForm={ContactForm}/>
+
+                <div className="space" style={{ 'height': '400px' }}>&#32;</div>
             </form>
         );
     },
 
-    componentWillReceiveProps: function() {
+    componentWillReceiveProps: function () {
         this.setState({ currentNavTarget: this.getQuery().el });
     },
 
-    componentDidMount: function() {
+    componentDidMount: function () {
         this.setState({ currentNavTarget: this.getQuery().el });
-        var listing = this.props.value.certIssues
-        if (listing && listing.length > 0){
-          sweetAlert({
-            title: "Warning!",
-            text: "The following users in in the owner field have invalid certificates <font color='red'><b>" + listing + " </b></font>please remove these owners or notify them of this issue. You will be unable to save your listing until these changes have been made.",
-            type: "error",
-            confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Ok",
-            closeOnConfirm: true,
-            html: true
-          });
-          listing=[];
-          this.setState({ currentNavTarget: 'create-edit-owners'});
+        var listing = this.props.value.certIssues;
+        if (listing && listing.length > 0) {
+            sweetAlert({
+                title: "Warning!",
+                text: "The following users in in the owner field have invalid certificates <font color='red'><b>" + listing + " </b></font>please remove these owners or notify them of this issue. You will be unable to save your listing until these changes have been made.",
+                type: "error",
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Ok",
+                closeOnConfirm: true,
+                html: true
+            });
+            listing = [];
+            this.setState({ currentNavTarget: 'create-edit-owners' });
         }
-
     },
 
-    componentDidUpdate: function(prevProps, prevState) {
+    componentDidUpdate: function (prevProps, prevState) {
         var elId = this.state.currentNavTarget || 'notyetset';
         if (elId !== 'notyetset' && prevState.currentNavTarget !== elId) {
 
-            var element         = $(`#${elId}`),
-                form            = $(this.refs.form.getDOMNode()),
-                firstFormChild  = form.find(':first-child');
+            var element = $(`#${elId}`),
+                form = $(this.refs.form.getDOMNode()),
+                firstFormChild = form.find(':first-child');
 
             if (element) {
                 var elementOffset = element.offset().top,
-                    formOffset    = firstFormChild.offset().top;
+                    formOffset = firstFormChild.offset().top;
 
                 form.animate({
                     scrollTop: elementOffset - formOffset
@@ -508,13 +479,13 @@ var ListingForm = React.createClass({
     }
 }); // End ListingForm
 
-function transitionToMyListings (transition) {
+function transitionToMyListings(transition) {
     transition.redirect('my-listings');
 }
 
 var CreateEditPage = React.createClass({
 
-    mixins: [ Reflux.connect(CurrentListingStore), Navigation, State ],
+    mixins: [Reflux.connect(CurrentListingStore), Navigation, State],
 
     statics: {
         UNSAVED_MESSAGE: 'You have unsaved information, are you sure you want to leave this page?',
@@ -534,8 +505,7 @@ var CreateEditPage = React.createClass({
 
             if (loadedListing && loadedListing.id === listingId) {
                 checkPermission();
-            }
-            else {
+            } else {
                 CurrentListingStore.loadListing(listingId)
                     .done(checkPermission)
                     .fail(myListingsTransition);
@@ -563,7 +533,7 @@ var CreateEditPage = React.createClass({
             activeId: null,
             hasChanges: false,
             scrollToError: false,
-            imageErrors: {screenshots: []},
+            imageErrors: { screenshots: [] },
             certIssues: [],
             timestamp: Date.now(),
             isValid: true
@@ -603,7 +573,7 @@ var CreateEditPage = React.createClass({
         lastUpdate: React.PropTypes.string.isRequired
     },
 
-    getChildContext: function() {
+    getChildContext: function () {
         var lastUpdateState = this.state.lastUpdate || 'initial';
         return { lastUpdate: `${lastUpdateState}` };
     },
@@ -619,13 +589,13 @@ var CreateEditPage = React.createClass({
 
             /* jshint ignore:start */
             sweetAlert({
-              title: "Could not save!",
-              text: "Your listing could not be saved because you have errors!",
-              type: "error",
-              confirmButtonColor: "#DD6B55",
-              confirmButtonText: "show errors",
-              closeOnConfirm: true,
-              html: false
+                title: "Could not save!",
+                text: "Your listing could not be saved because you have errors!",
+                type: "error",
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "show errors",
+                closeOnConfirm: true,
+                html: false
             });
             /* jshint ignore:end */
 
@@ -635,49 +605,50 @@ var CreateEditPage = React.createClass({
         }
     },
 
-    handleFormScroll: function(){
-        var that                = this,
-            form                = $(this.refs.form.getDOMNode()),
-            lastScrolledPast    = null, // Track this so we don't update state unessisarly
-            buffer              = 35.01; // Just past the set value for a click
+    handleFormScroll: function () {
+        var lastScrolledPast = null;
+        var form = $(this.refs.form.getDOMNode());
 
-        form.children('h2').each(function() {
-            if ($(this).offset().top < (form.offset().top + buffer)){
-                lastScrolledPast = $(this).context;
+        form.children('h2').each(function () {
+            var section = $(this);
+            if (section.offset().top < (form.offset().top + 35.01)) {
+                lastScrolledPast = section[0].id;
             }
         });
 
-        if(!that.state.activeId){
-            that.setState({activeId: formLinks.basicInformation.id});
+        if (!this.state.activeId) {
+            this.setState({ activeId: formLinks.basicInformation.id });
         }
 
-        if(lastScrolledPast.id !== that.state.activeId){
-            that.setState({activeId: lastScrolledPast.id});
+        if (lastScrolledPast && lastScrolledPast !== this.state.activeId) {
+            this.setState({ activeId: lastScrolledPast });
         }
     },
 
     componentDidUpdate: function () {
-        if (this.state.hasChanges){
-          window.addEventListener("beforeunload",this.newPage);
-        }else{
-          window.removeEventListener("beforeunload",this.newPage);
+        if (this.state.hasChanges) {
+            window.addEventListener("beforeunload", this.newPage);
+        } else {
+            window.removeEventListener("beforeunload", this.newPage);
         }
         if (this.state.scrollToError && !this.state.isValid) {
             this.scrollToError(this.state.firstError);
         }
 
-        var that = this,
-            scrollTimer;
+        var that = this;
+        var scrollTimer;
 
         // Let's setup a timer so we don't check scroll more often than nessisary.
         // 20ms Seems to be a good mix between responsiveness and performance
         // requestAnimationFrame may also be a future option. Will come back to after
         // testing has been done.
-        $(this.refs.form.getDOMNode()).on('scroll', function(){
-            if (scrollTimer) { clearTimeout(scrollTimer); }
-            scrollTimer = setTimeout(function() {
-               that.handleFormScroll();
-           }, 20);
+        $(this.refs.form.getDOMNode()).on('scroll', function () {
+            if (scrollTimer) {
+                clearTimeout(scrollTimer);
+            }
+            scrollTimer = setTimeout(function () {
+                that.handleFormScroll();
+            }, 20);
         });
     },
 
@@ -688,7 +659,7 @@ var CreateEditPage = React.createClass({
         var main = $('#main');
         main.addClass('create-edit-open');
 
-        this.listenTo(CreateEditActions.resetForm, ()=>{
+        this.listenTo(CreateEditActions.resetForm, () => {
             this.setState({ timestamp: Date.now() });
         });
 
@@ -706,13 +677,12 @@ var CreateEditPage = React.createClass({
         msg = resp.banner_icon ? 'Small Banner ' + resp.banner_icon.security_marking[0].toLowerCase() : msg;
         msg = resp.large_banner_icon ? 'Large Banner ' + resp.large_banner_icon.security_marking[0].toLowerCase() : msg;
 
-        if(resp.non_field_errors){
-          if(resp.non_field_errors == "Permissions are invalid for current owner profile"){
-            msg= 'One of the listed owners cannot be added as a listing Owner.';
-          }
-          else{
-            msg = resp.non_field_errors;
-          }
+        if (resp.non_field_errors) {
+            if (resp.non_field_errors == "Permissions are invalid for current owner profile") {
+                msg = 'One of the listed owners cannot be added as a listing Owner.';
+            } else {
+                msg = resp.non_field_errors;
+            }
         }
 
         if (resp.screenshots) {
@@ -745,19 +715,20 @@ var CreateEditPage = React.createClass({
     componentWillUnmount: function () {
         var main = $('#main');
         main.removeClass('create-edit-open');
-        window.removeEventListener("beforeunload",this.newPage);
+        window.removeEventListener("beforeunload", this.newPage);
     },
 
     // Ensures agency title corresponds to the short name selected by the user
     lookupAgencyTitle: function (listing) {
         if (listing && listing.agencyShort) {
             var title = _.find(this.props.system.organizations,
-                               { 'shortName': listing.agencyShort } ).title;
+                { 'shortName': listing.agencyShort }).title;
             listing.agency = title;
         }
     },
-    newPage: function(event){
-       event.returnValue = "You have unsaved changes on this page. If you continue all changes will be lost."
+
+    newPage: function (event) {
+        event.returnValue = "You have unsaved changes on this page. If you continue all changes will be lost."
     },
 
     render: function () {
@@ -779,7 +750,7 @@ var CreateEditPage = React.createClass({
         };
 
         var status = approvalStatus[listing.approvalStatus];
-        var { IN_PROGRESS, REJECTED,PENDING_DELETION, DRAFT} = approvalStatus;
+        var { IN_PROGRESS, REJECTED, PENDING_DELETION, DRAFT } = approvalStatus;
         var showSubmit = [IN_PROGRESS, REJECTED].some(s => s === status);
         var showUndelete = [PENDING_DELETION].some(s => s === status);
         var inProgress = [IN_PROGRESS].some(s => s === status);
@@ -789,8 +760,10 @@ var CreateEditPage = React.createClass({
         var saveText = showSave ? 'icon-save-white' : 'icon-check-white';
         var savingText = savingMessages[this.state.saveStatus];
         var idString = listing ? listing.id ? listing.id.toString() : '' : '';
-        var currentUser = this.props.currentUser
-        var owners = listing.owners.map(function (owner) {return owner.username;});
+        var currentUser = this.props.currentUser;
+        var owners = listing.owners.map(function (owner) {
+            return owner.username;
+        });
 
         var formProps = assign({},
             pick(this.state, ['errors', 'warnings', 'messages', 'firstError']),
@@ -803,7 +776,6 @@ var CreateEditPage = React.createClass({
                 imageErrors: this.state.imageErrors
             }
         );
-
 
 
         var deleteHref = this.makeHref(this.getActiveRoutePath(), this.getParams(), {
@@ -824,15 +796,15 @@ var CreateEditPage = React.createClass({
             <div className="CreateEdit__titlebar">
                 <div className="btn-toolbar" role="group">
                     <div className="btn-group" role="group">
-                        <button type="button" tabIndex="0" className={ classSet(saveBtnClasses) }
-                                onClick={ this.onSave }>
+                        <button type="button" tabIndex="0" className={classSet(saveBtnClasses)}
+                                onClick={this.onSave}>
                             <span className="create-edit-button">Save</span>
                             <i className={saveText}></i>
                         </button>
                         {
                             showPreview &&
                             <button className="btn btn-default tool"
-                                    onClick={ this.onPreview }>
+                                    onClick={this.onPreview}>
                                 <span className="create-edit-button">Preview</span>
                                 <i className="icon-eye-grayDark"> </i>
                             </button>
@@ -852,24 +824,24 @@ var CreateEditPage = React.createClass({
                             </a>
                         }
                         {
-                          showUndelete && (_.contains(owners, currentUser.username) || currentUser.isAdmin()) &&
-                          <a href={undeleteHref} className="btn btn-default tool undelete-button">
-                              <span className="create-edit-button">Undelete</span>
-                              <i className="icon-trash-grayDark"></i>
-                          </a>
+                            showUndelete && (_.contains(owners, currentUser.username) || currentUser.isAdmin()) &&
+                            <a href={undeleteHref} className="btn btn-default tool undelete-button">
+                                <span className="create-edit-button">Undelete</span>
+                                <i className="icon-trash-grayDark"></i>
+                            </a>
                         }
                         {
                             showSubmit &&
                             <button className="btn btn-default tool"
-                                    onClick={ this.onSubmit }>
+                                    onClick={this.onSubmit}>
                                 <span className="create-edit-button">Submit</span>
                                 <i className="icon-cloud-upload-grayDark"> </i>
                             </button>
                         }
-                        </div>
+                    </div>
                     <div className="btn-group" tabIndex="0" role="group">
                         <a type="button" className="btn-link btn myListings" onClick={this.onClose}>
-                                Listing Management
+                            Listing Management
                         </a>
                     </div>
                 </div>
@@ -879,30 +851,30 @@ var CreateEditPage = React.createClass({
 
         var makeFormLink = elId => `#/edit/${idString}?el=${encodeURIComponent(elId)}`;
 
-        var links = formLinkGroups.map(function(g) {
-                var link = g.link;
+        var links = formLinkGroups.map(function (g) {
+            var link = g.link;
 
-                return {
-                    title: link.title,
-                    id: link.id,
-                    href: makeFormLink(link.id),
-                    links: g.links.map(l => ({
-                        title: l.title,
-                        id: l.id,
-                        href: makeFormLink(l.id)
-                    }))
-                };
-            });
+            return {
+                title: link.title,
+                id: link.id,
+                href: makeFormLink(link.id),
+                links: g.links.map(l => ({
+                    title: l.title,
+                    id: l.id,
+                    href: makeFormLink(l.id)
+                }))
+            };
+        });
 
         return (
             <div className="create-edit">
-                <NavBar />
+                <NavBar/>
                 {header}
                 <section className="create-edit-body">
                     <Sidebar groups={links} activeId={this.state.activeId || this.getQuery().el}/>
-                    <ListingForm key={this.state.timestamp} ref="form" { ...formProps }  />
+                    <ListingForm key={this.state.timestamp} ref="form" {...formProps}  />
                 </section>
-                { savingText && <LoadMask message={savingText} /> }
+                {savingText && <LoadMask message={savingText}/>}
             </div>
         );
     }

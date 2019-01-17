@@ -38,6 +38,7 @@ var ConfigApi = {
         return $.getJSON(API_URL + '/api/metadata/').then(function(response) {
             response = humps.camelizeKeys(response);
             return {
+                customFieldsAll: response.customFieldsAllTypes,
                 categories: response.categories,
                 types: response.listingTypes,
                 intents: response.intents,

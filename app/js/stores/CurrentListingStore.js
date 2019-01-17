@@ -84,7 +84,6 @@ function updateImageUri(obj, path, imageUri) {
 }
 
 function updateValue(obj, path, value) {
-
     if (path.length === 1) {
         obj[path[0]] = value;
     } else {
@@ -203,6 +202,9 @@ var CurrentListingStore = createStore({
             this.updateImage(propertyPath, value);
         }
 
+        if (propertyPath.indexOf('customFields') > -1) {
+            this.updateCustomFieldImages(_listing, propertyPath, value);
+        }
         var validation = this.doValidation();
         this.trigger({
             listing: _listing,
@@ -211,6 +213,31 @@ var CurrentListingStore = createStore({
             warnings: validation.warnings,
             imageErrors: imageErrors
         });
+    },
+
+    updateCustomFieldImages: function (listing, propertyPath, value) {
+        var prop = propertyPath[0];
+
+        if (propertyPath.length === 1) {
+            for(var i = 0; i < value.length; i++) {
+                if(value[i].value instanceof File) {
+                    listing.customFields[i]['file'] = value[i].value;
+
+                    var uri = window.URL && window.Blob && value[i].value instanceof Blob ?
+                        URL.createObjectURL(value[i].value) : undefined;
+
+                    var urlProp = 'imageUri',
+                        oldUri = listing.customFields[i][urlProp];
+
+                    //if the existing URL is already a temp object URL, revoke it
+                    revokeObjectURL(oldUri);
+                    listing.customFields[i][urlProp] = uri;
+                    listing.customFields[i]['value'] = uri;
+                    //unset the server-assigned id
+                    listing.customFields[i][prop + 'Id'] = null;
+                }
+            }
+        }
     },
 
     updateImage: function(propertyPath, value) {
@@ -258,7 +285,6 @@ var CurrentListingStore = createStore({
         this.saveImages().then(function() {
             me.trigger({saveStatus: 'listing'});
             var validation = me.doValidation();
-
             if(!validation.isValid) {
                 Object.assign(_listing, oldListingData);
                 me.trigger(Object.assign({saveStatus: null}, validation));
@@ -375,6 +401,9 @@ var CurrentListingStore = createStore({
                 var index = parseInt(property[1]);
                 markingLabel = property[2] + 'Marking';
                 promise = image && _listing.screenshots[index][markingLabel] ? ImageApi.save(image, marking) : null;
+            } else if (property[0] === 'customFields') {
+                var cfindex = parseInt(property[1]);
+                promise = image && _listing.customFields[cfindex] ? ImageApi.save(image, marking) : null;
             } else {
                 markingLabel = property + 'Marking';
                 promise = image && _listing[markingLabel] ? ImageApi.save(image, marking) : null;
@@ -391,9 +420,18 @@ var CurrentListingStore = createStore({
         imageErrors = {screenshots: []};
 
         var me = this,
-            {smallIcon, largeIcon, bannerIcon, featuredBannerIcon, screenshots,
+            {smallIcon, largeIcon, bannerIcon, featuredBannerIcon, screenshots, customFields,
              smallIconMarking, largeIconMarking, bannerIconMarking, featuredBannerIconMarking} = _listing,
 
+            customFieldPromises = _.flatten(customFields.map(
+                (x, i) => {
+                    var promises = [];
+                    if(x.file && x.file instanceof File) {
+                     return optionalPromise(x.file, ['customFields', i, 'customField'], 'UNCLASSIFIED');
+                    }
+
+                }
+            )),
             smallIconPromise = optionalPromise(smallIcon, 'smallIcon', smallIconMarking),
             largeIconPromise = optionalPromise(largeIcon, 'largeIcon', largeIconMarking),
             bannerIconPromise = optionalPromise(bannerIcon, 'bannerIcon', bannerIconMarking),
@@ -401,17 +439,18 @@ var CurrentListingStore = createStore({
                 optionalPromise(featuredBannerIcon, 'featuredBannerIcon', featuredBannerIconMarking),
 
             screenshotPromises = _.flatten(screenshots.map(
-                (s, i) => [
-                    optionalPromise(s.smallImage, ['screenshots', i, 'smallImage'], s.smallImageMarking),
-                    optionalPromise(s.largeImage, ['screenshots', i, 'largeImage'], s.largeImageMarking)
-                ]
+                (s, i) => {
+                 var arr = [optionalPromise(s.smallImage, ['screenshots', i, 'smallImage'], s.smallImageMarking),
+                    optionalPromise(s.largeImage, ['screenshots', i, 'largeImage'], s.largeImageMarking)];
+                 return arr;
+                }
             )),
             promises = [
                 smallIconPromise,
                 largeIconPromise,
                 bannerIconPromise,
                 featuredBannerIconPromise
-            ].concat(screenshotPromises);
+            ].concat(screenshotPromises).concat(customFieldPromises);
 
         return $.when(...promises).then(me.handleImageSaveResponses.bind(me));
     },
@@ -426,6 +465,9 @@ var CurrentListingStore = createStore({
             featuredBannerIconResponse,
             ...screenshotResponseFlatList) {
 
+        var screenshotLength = _listing.screenshots.length * 2;
+        var customFieldResponseFlatList = screenshotResponseFlatList.slice(screenshotLength);
+        screenshotResponseFlatList = screenshotResponseFlatList.slice(0,screenshotLength);
             //screenshot responses grouped into twos
         var screenshotResponsePairs =
                 _.values(_.groupBy(screenshotResponseFlatList, (x, i) => Math.floor(i/2))),
@@ -435,6 +477,9 @@ var CurrentListingStore = createStore({
                     return { smallImageResponse: tuple[0], largeImageResponse: tuple[1] };
                 });
 
+        var customFieldResponses = customFieldResponseFlatList.map(function(obj) {
+            return obj;
+        });
         if (smallIconResponse) {
             smallIconResponse = JSON.parse(smallIconResponse);
             _listing.smallIcon = null;
@@ -459,6 +504,17 @@ var CurrentListingStore = createStore({
             _listing.featuredBannerIconId = featuredBannerIconResponse.id;
             _listing[listingIconPropertyUrlMap.largeBannerIcon] = API_URL + '/api/image/' +
                 _listing.featuredBannerIconId;
+        }
+
+
+        var existing_custom_fields = _listing.customFields;
+
+        for(var i = 0; i < existing_custom_fields.length; i++) {
+            if(existing_custom_fields[i].imageUri) {
+                var parsed = customFieldResponses[i] ? JSON.parse(customFieldResponses[i]) : null;
+                existing_custom_fields[i].imageURL = API_URL + '/api/image/' + parsed.id;
+                existing_custom_fields[i].value = existing_custom_fields[i].imageURL;
+            }
         }
 
         _listing.screenshots =

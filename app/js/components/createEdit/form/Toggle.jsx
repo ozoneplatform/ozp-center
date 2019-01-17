@@ -9,10 +9,14 @@ var Toggle = React.createClass({
     };
   },
   render: function () {
-      var isEnabled = this.state.value ? 'Enabled ' : 'Disabled ';
+      var isEnabled = this.props.value ? 'Enabled ' : 'Disabled ';
       var fullExplanation = isEnabled + this.props.explanation[1];
-      if (!this.state.value) {
+      if (!this.props.value) {
           fullExplanation = isEnabled + this.props.explanation[0];
+      }
+
+      if(!this.props.setCb) {
+          this.props.setCb = this.handleToggle;
       }
 
       return (
@@ -20,7 +24,7 @@ var Toggle = React.createClass({
               <label className="switchLabel">{this.props.label}</label><br />
               <p className="small">{this.props.description}</p>
 
-                  <input ref="checkbox" type="checkbox" className="switch-checkbox" id={this.props.toggleId} defaultChecked={this.props.value} onChange={()=>{this.handleToggle();}}/>
+                  <input ref="checkbox" type="checkbox" className="switch-checkbox" id={this.props.toggleId} defaultChecked={this.props.value} onChange={this.props.setCb}/>
                   <label className=" switch switch-label" htmlFor={this.props.toggleId}>
                       <span className="switch-inner"></span>
                       <span className="switch-slider"></span>
